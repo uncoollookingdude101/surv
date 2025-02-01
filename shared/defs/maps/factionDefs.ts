@@ -194,7 +194,7 @@ const mapDef = {
                 {
                     role: "leader",
                     circleIdx: 0,
-                    wait: 50,
+                    wait: 5,
                 },
                 {
                     role: () =>

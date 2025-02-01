@@ -156,7 +156,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             alive: "player-star.img",
             dead: "skull-leader.img",
         },
-        perks: ["leadership"],
+        perks: ["leadership","aoe_heal", "self_revive","firepower","takedown","splinter", "steelskin","hunted","flak_jacket","explosive","bonus_assault","windwalk","scavenger_adv","endless_ammo","small_arms","fabricate","inspiration","final_bugle","gotw","targeting","tree_climbing"],
         defaultItems: createDefaultItems({
             weapons: [
                 (teamcolor: TeamColor) =>
@@ -167,7 +167,7 @@ export const RoleDefs: Record<string, RoleDef> = {
                         },
                         teamcolor,
                     ),
-                { type: "flare_gun", ammo: 1 },
+                { type: "pkp", ammo:200, fillInv:true },
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
@@ -186,9 +186,21 @@ export const RoleDefs: Record<string, RoleDef> = {
                     [TeamColor.Red]: "outfitRedLeader",
                     [TeamColor.Blue]: "outfitBlueLeader",
                 })[teamcolor],
-            scope: "8xscope",
+            scope: "15xscope",
             inventory: {
+                frag: 12,
+                smoke: 10,
+                strobe: 1,
+                mirv: 2,
+                bandage: 30,
+                healthkit: 4,
+                soda: 15,
+                painkiller: 4,
+                "1xscope": 1,
+                "2xscope": 1,
+                "4xscope": 1,
                 "8xscope": 1,
+                "15xscope": 1,
             },
         }),
     },
