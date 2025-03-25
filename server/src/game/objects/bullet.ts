@@ -535,7 +535,7 @@ export class Bullet {
 
                     let multiplier = 1;
                     if (isHighValueTarget) {
-                        multiplier *= 1.25;
+                        multiplier *= 1.5;
                     }
 
                     this.bulletManager.damages.push({

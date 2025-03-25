@@ -211,7 +211,7 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         name: "MIRV Grenade",
         type: "throwable",
         quality: 0,
-        explosionType: "explosion_mirv_mini",
+        explosionType: "explosion_bomb_iron",
         inventoryOrder: 99,
         cookable: true,
         noPotatoSwap: true,

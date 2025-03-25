@@ -16,7 +16,10 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/node": "^20.17.1",
-    "typescript": "^5.6.3"
+    "@types/node": "^20.17.19",
+    "typescript": "^5.7.3"
+  },
+  "pnpm": {
+  "onlyBuiltDependencies": ["@biomejs/biome", "@taufik-nurrohman/color-picker"]
   }
 }

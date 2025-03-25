@@ -719,6 +719,7 @@ const SkinDefs = {
     }),
     helmet03_moon: defineSkin("helmet03", {
         name: "Tsukuyomi no Kabuto",
+        role:"moon",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
@@ -740,6 +741,7 @@ const SkinDefs = {
     }),
     helmet03_lt_aged: defineSkin("helmet03", {
         name: "Lieutenant Helmet",
+        role: "lieutenant2",
         perk: "firepower",
         skinImg: {
             baseTint: 0xffffff,
@@ -835,6 +837,22 @@ const SkinDefs = {
     helmet04_medic: defineSkin("helmet04", {
         name: "Medic Helmet",
         noDrop: true,
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-medic.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-medic.img",
+            scale: 0.3,
+            rot: 0.5 * Math.PI,
+        },
+    }),
+    helmet04_medic2: defineSkin("helmet04", {
+        name: "Aged Medic Helmet",
+        role:"medic2",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

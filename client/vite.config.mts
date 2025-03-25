@@ -54,7 +54,7 @@ const AdsVars = {
 
 if (!Config.client.AIP_ID) {
     for (const key in AdsVars) {
-        AdsVars[key] = "";
+        AdsVars[key as keyof typeof AdsVars] = "";
     }
 }
 

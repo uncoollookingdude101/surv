@@ -34,9 +34,9 @@ export const Config = {
     apiKey: "Kongregate Sucks",
 
     modes: [
-        { mapName: "faction", teamMode: TeamMode.Solo, enabled: true },
-        { mapName: "main", teamMode: TeamMode.Duo, enabled: true },
-        { mapName: "main", teamMode: TeamMode.Squad, enabled: true },
+        { mapName: "woods", teamMode: TeamMode.Solo, enabled: false },
+        { mapName: "main_summer", teamMode: TeamMode.Duo, enabled: true },
+        { mapName: "faction", teamMode: TeamMode.Squad, enabled: false},
     ],
 
     regions: {},
