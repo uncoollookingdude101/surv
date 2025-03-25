@@ -285,6 +285,7 @@ export class Obstacle extends BaseGameObject {
         if (this.health === 0 || !this.destructible) return;
 
         if (params.damageType === DamageType.Player) {
+        
             let armorPiercing = false;
             let stonePiercing = false;
 
@@ -347,6 +348,14 @@ export class Obstacle extends BaseGameObject {
         if (params.source instanceof Player && params.source.hasPerk("scavenger")) {
             loot.push({
                 tier: "tier_world",
+                min: 1,
+                max: 1,
+                props: {},
+            });
+        }
+        if (params.source instanceof Player && params.source.hasPerk("scavenger_adv")) {
+            loot.push({
+                tier: "tier_scavenger_adv",
                 min: 1,
                 max: 1,
                 props: {},

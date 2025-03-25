@@ -12,6 +12,8 @@ export interface ThrowableDef {
     fuseTime: number;
     aimDistance: number;
     rad: number;
+    stonePiercing?: boolean;
+    armorPiercing?: boolean;
     throwPhysics: {
         playerVelMult: number;
         velZ: number;
@@ -151,6 +153,8 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         fuseTime: 4,
         aimDistance: 0,
         rad: 1,
+        stonePiercing:true,
+        armorPiercing: true,
         throwPhysics: {
             playerVelMult: 0.6,
             velZ: 5,
@@ -221,6 +225,8 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         fuseVariance: 0.3,
         aimDistance: 0,
         rad: 1,
+        stonePiercing:true,
+        armorPiercing: true,
         throwPhysics: {
             playerVelMult: 0.6,
             velZ: 5,
@@ -660,8 +666,10 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         destroyNonCollidables: true,
         playerCollision: true,
         fuseTime: 999,
-        aimDistance: 32,
+        aimDistance: 50,
         rad: 1,
+        stonePiercing: true,
+        armorPiercing: true,
         throwPhysics: {
             playerVelMult: 0,
             velZ: 3,
@@ -711,8 +719,10 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         destroyNonCollidables: true,
         playerCollision: true,
         fuseTime: 999,
-        aimDistance: 32,
+        aimDistance: 50,
         rad: 0.1,
+        stonePiercing: true,
+        armorPiercing: true,
         throwPhysics: {
             playerVelMult: 0,
             velZ: 3,
@@ -762,6 +772,8 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         fuseTime: 4,
         aimDistance: 0,
         rad: 1,
+        stonePiercing: true,
+        armorPiercing: true,
         throwPhysics: {
             playerVelMult: 0.6,
             velZ: 0,

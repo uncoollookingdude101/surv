@@ -66,7 +66,7 @@ export function generateTerrain(
     const { shoreVariation } = GameConfig.map;
     const { grassVariation } = GameConfig.map;
 
-    const seededRand = util.seededRand(seed);
+    const seededRand: (min: number, max: number) => number = util.seededRand(seed);
 
     // First generate a shore path that separates the island from water.
     const ll = v2.create(shoreInset, shoreInset);

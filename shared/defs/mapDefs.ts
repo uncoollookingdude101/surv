@@ -127,6 +127,9 @@ export interface MapDef {
         bagSizes: Record<string, number[]>;
         bleedDamage: number;
         bleedDamageMult: number;
+        player: {
+            moveSpeed: number;
+        };
     };
     lootTable: Record<
         string,

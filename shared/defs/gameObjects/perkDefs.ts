@@ -2,6 +2,10 @@ export const PerkProperties = {
     leadership: {
         scale: 0.25,
     },
+    gotw:{
+        scale: 0.25,
+        damageReduction: 0.25,
+    },
     steelskin: {
         scale: 0.4,
         damageReduction: 0.5,
@@ -11,12 +15,13 @@ export const PerkProperties = {
         damageReduction: 0.1,
         explosionDamageReduction: 0.9,
     },
-    smallArms: {
+    small_arms: {
         scale: -0.25,
     },
     splinter: {
-        mainDamageMulti: 0.6,
-        splitsDamageMulti: 0.45,
+        mainDamageMulti: 0.7
+        ,
+        splitsDamageMulti: 0.5,
     },
     trick_size: {
         scale: 0.25,
@@ -32,7 +37,7 @@ export const PerkProperties = {
         "12gauge": ["treat_12g"],
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
-    ammoBonusDamageMulti: 1.08,
+    ammoBonusDamageMulti: 1.2,
 };
 
 export interface PerkDef {

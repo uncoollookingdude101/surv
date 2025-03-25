@@ -10,6 +10,8 @@ import {
     SCOPE_LEVELS,
     type ScopeDef,
 } from "../../../../shared/defs/gameObjects/gearDefs";
+import { PerkDefs } from "../../../../shared/defs/gameObjects/perkDefs";
+import { GearDefs } from "../../../../shared/defs/gameObjects/gearDefs";
 import type { GunDef } from "../../../../shared/defs/gameObjects/gunDefs";
 import { type MeleeDef, MeleeDefs } from "../../../../shared/defs/gameObjects/meleeDefs";
 import type { OutfitDef } from "../../../../shared/defs/gameObjects/outfitDefs";
@@ -390,6 +392,24 @@ export class PlayerBarn {
 
 export class Player extends BaseGameObject {
     override readonly __type = ObjectType.Player;
+    helmetPerk: string | null = null;
+    setHelmetPerk(perk: string) {
+        this.helmetPerk = perk;
+    }
+equip(item: string, amount: number) {
+    if (GearDefs[item] && 'perk' in GearDefs[item]) {
+        const gearDef = GearDefs[item] as { perk: string };
+        console.log('PerkDefs[gearDef.perk].type', PerkDefs[gearDef.perk].type);
+        this.setHelmetPerk(PerkDefs[gearDef.perk].type);
+    }
+  // ...
+  if (item === 'helmet' && this.helmetPerk) {
+    console.log('Applying perk:', this.helmetPerk);
+    this.addPerk(this.helmetPerk, false);
+    this.helmetPerk = null;
+  }
+  // ...
+}
 
     bounds = collider.createAabbExtents(
         v2.create(0, 0),
@@ -438,6 +458,7 @@ export class Player extends BaseGameObject {
      * set true if any member on the team changes health or disconnects
      */
     groupStatusDirty = false;
+    
 
     setGroupStatuses() {
         if (!this.game.isTeamMode) return;
@@ -684,7 +705,7 @@ export class Player extends BaseGameObject {
     handleKillLeaderRole(): void {
         if (this.isKillLeader) return;
         if (this.game.map.mapDef.gameMode.sniperMode) {
-            this.role = "kill_leader";
+            this.role = "the_hunted";
             this.setDirty();
         }
         this.isKillLeader = true;
@@ -708,10 +729,16 @@ export class Player extends BaseGameObject {
 
         switch (role) {
             case "bugler":
+                this.boost=100;
                 break;
             case "leader":
+                this.boost=100;
+                break;
+            case "leader2":
+                this.boost=100;
                 break;
             case "lieutenant":
+                this.boost=100;
                 break;
             case "last_man":
                 this.health = 100;
@@ -719,8 +746,10 @@ export class Player extends BaseGameObject {
                 this.giveHaste(GameConfig.HasteType.Windwalk, 5);
                 break;
             case "grenadier":
+                this.boost=100;
                 break;
             case "medic":
+                this.boost=100;
                 // TODO: this should be based on aoe_heal perk not role
                 this.game.playerBarn.medics.push(this);
                 break;
@@ -2545,7 +2574,7 @@ export class Player extends BaseGameObject {
         this.doAction(
             item,
             GameConfig.Action.UseItem,
-            (this.hasPerk("aoe_heal") ? 0.75 : 1) * itemDef.useTime,
+            (this.hasPerk("field_medic") ? 0.5 : 1) * itemDef.useTime,
         );
     }
 
@@ -3210,7 +3239,7 @@ export class Player extends BaseGameObject {
                 }
                 break;
             case "outfit":
-                if (this.role == "leader") {
+                if (this.role == "sb") {
                     amountLeft = 1;
                     pickupMsg.type = net.PickupMsgType.BetterItemEquipped;
                     break;
@@ -3712,6 +3741,13 @@ export class Player extends BaseGameObject {
         const isOnWater = this.game.map.isOnWater(this.pos, this.layer);
         if (isOnWater) this.speed -= GameConfig.player.waterSpeedPenalty;
 
+        if (isOnWater) {
+            if (this.hasPerk("tree_climbing")) {
+                this.speed *= 1.5; // 50% faster on water
+            } else {
+                this.speed -= GameConfig.player.waterSpeedPenalty;
+            }
+        }
         // increase speed when adrenaline is above 50%
         if (this.boost >= 50) {
             this.speed += GameConfig.player.boostMoveSpeed;
@@ -3749,3 +3785,4 @@ export class Player extends BaseGameObject {
         this.game.sendSocketMsg(this.socketId, buffer);
     }
 }
+console.log('Calling equip method...');

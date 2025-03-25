@@ -156,7 +156,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             alive: "player-star.img",
             dead: "skull-leader.img",
         },
-        perks: ["leadership","aoe_heal", "self_revive","firepower","takedown","splinter", "steelskin","hunted","explosive","bonus_assault","windwalk","scavenger_adv","endless_ammo","small_arms","fabricate","inspiration","final_bugle","gotw","targeting","tree_climbing"],
+        perks: ["leadership", "self_revive","firepower","takedown","splinter", "steelskin","hunted","explosive","bonus_assault","windwalk","scavenger_adv","endless_ammo","small_arms","fabricate","inspiration","final_bugle","gotw","targeting","tree_climbing","field_medic"],
         defaultItems: createDefaultItems({
             weapons: [
                 (teamcolor: TeamColor) =>
@@ -171,7 +171,7 @@ export const RoleDefs: Record<string, RoleDef> = {
                         getTeamWeapon(
                             {
                                 [TeamColor.Red]: { type: "pkp", ammo: 0, fillInv: true },
-                                [TeamColor.Blue]: { type: "scorpion",ammo:0, fillInv:true }
+                                [TeamColor.Blue]: { type: "saiga",ammo:0, fillInv:true }
                             },
                             teamcolor,
                         ),
@@ -179,7 +179,7 @@ export const RoleDefs: Record<string, RoleDef> = {
                     getTeamWeapon(
                         {
                             [TeamColor.Red]: { type: "pan", ammo: 0 },
-                            [TeamColor.Blue]: { type: "pan", ammo: 0 },
+                            [TeamColor.Blue]: { type: "bayonet", ammo: 0 },
                         },
                         teamcolor,
                     ),
@@ -424,6 +424,41 @@ export const RoleDefs: Record<string, RoleDef> = {
         killFeed: { dead: true, color: "#12ff00" },
         sound: { dead: "leader_dead_01" },
         perks: ["gotw", "windwalk"],
+    },
+    lieutenant2: {
+        type: "role",
+        announce: false,
+        killFeed: { dead: false},
+        sound: { assign: "lt_assigned_01" },
+        perks: ["firepower"]
+    },
+    marksman2: {
+        type: "role",
+        announce: false,
+        killFeed: { dead: false},
+        sound: { assign: "lt_assigned_01" },
+        perks: ["targeting","takedown"]
+    },
+    leader2: {
+        type: "role",
+        announce: false,
+        killFeed: { dead: false},
+        sound: { assign: "lt_assigned_01" },
+        perks: ["leadership","bonus_assault"]
+    },
+    medic2: {
+        type: "role",
+        announce: false,
+        killFeed: { dead: false},
+        sound: { assign: "lt_assigned_01" },
+        perks: ["field_medic","self_revive"],
+    },
+    moon: {
+        type: "role",
+        announce: false,
+        killFeed: { dead: false},
+        sound: { assign: "lt_assigned_01" },
+        perks: ["endless_ammo"],
     },
     kill_leader: {
         type: "role",

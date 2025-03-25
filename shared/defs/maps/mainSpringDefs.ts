@@ -1,6 +1,8 @@
 import { util } from "../../utils/util";
 import type { MapDef } from "../mapDefs";
 import { Main } from "./baseDefs";
+import { Savannah } from "./savannahDefs";
+import { Woods } from "./woodsDefs";
 
 const mapDef = {
     assets: {

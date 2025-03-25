@@ -70,6 +70,9 @@ export const Main: MapDef = {
         bagSizes: {},
         bleedDamage: 2,
         bleedDamageMult: 1,
+        player: {
+            moveSpeed: 12,
+        }
     },
     /* STRIP_FROM_PROD_CLIENT:START */
     // NOTE: this loot table is not the original one so its not accurate
@@ -79,11 +82,38 @@ export const Main: MapDef = {
         tier_world: [
             { name: "tier_guns", count: 1, weight: 0.29 }, // TODO get more data on this from original
             { name: "tier_ammo", count: 1, weight: 0.04 }, // ?
-            { name: "tier_scopes", count: 1, weight: 0.15 }, // ?
+            { name: "tier_scopes", count: 1, weight: 0.2 }, // ?
             { name: "tier_armor", count: 1, weight: 0.1 }, // ?
             { name: "tier_medical", count: 1, weight: 0.17 }, // ?
             { name: "tier_throwables", count: 1, weight: 0.05 }, // ?
             { name: "tier_packs", count: 1, weight: 0.09 }, // ?
+        ],
+        tier_scavenger_adv: [
+            { name: "m9", count: 1, weight: 3 }, 
+            { name: "ots38_dual", count: 1, weight: 3 }, 
+            { name: "p30l_dual", count: 1, weight: 3 }, 
+            { name: "saiga", count: 1, weight: 3 }, 
+            { name: "deagle", count: 1, weight: 3 }, 
+            { name: "vector", count: 1, weight: 3 }, 
+            { name: "scorpion", count: 1, weight: 3 }, 
+            { name: "m4a1", count: 1, weight: 3 },
+            { name: "garand", count: 1, weight: 3 },
+            { name: "grozas", count: 1, weight: 3 },
+            { name: "flare_gun", count: 1, weight: 2 },
+            { name: "awc", count: 1, weight: 1 },
+            { name: "scarssr", count: 1, weight: 2 },
+            { name: "pkp", count: 1, weight: 2 },
+            { name: "m249", count: 1, weight: 2 },
+            { name: "sv98", count: 1, weight: 1 },
+            { name: "pan", count: 1, weight: 2 },
+            { name: "8xscope", count: 1, weight: 3 },
+            { name: "15xscope", count: 1, weight: 1 },
+            { name: "mirv", count: 2, weight: 3 },
+            { name: "outfitGhillie", count: 1, weight: 1 },
+            { name: "painkiller", count: 1, weight: 3 },
+            { name: "helmet03", count: 1, weight: 3 },
+            { name: "chest03", count: 1, weight: 3 },
+            { name: "backpack03", count: 1, weight: 3 },
         ],
         tier_surviv: [
             { name: "tier_scopes", count: 1, weight: 0.15 }, // TODO get more data on this from original
@@ -247,10 +277,9 @@ export const Main: MapDef = {
             { name: "vss", count: 1, weight: 0.05 }, // !
         ],
         tier_police: [
-            { name: "scar", count: 1, weight: 0.5 },
-            { name: "helmet03", count: 1, weight: 0.15 },
-            { name: "chest03", count: 1, weight: 0.1 },
-            { name: "backpack03", count: 1, weight: 0.25 },
+            { name: "helmet03", count: 1, weight: 0.75 },
+            { name: "chest03", count: 1, weight: 0.5 },
+            { name: "backpack03", count: 1, weight: 1 },
         ],
         tier_ring_case: [
             { name: "grozas", count: 1, weight: 0.75 }, // ?
@@ -330,7 +359,7 @@ export const Main: MapDef = {
             { name: "outfitKeyLime", count: 1, weight: 0.15 }, // ?
             { name: "outfitWoodland", count: 1, weight: 0.1 }, // ?
             { name: "outfitCamo", count: 1, weight: 0.1 }, // ?
-            { name: "outfitGhillie", count: 1, weight: 0.01 }, // ?
+            { name: "outfitGhillie", count: 1, weight: 0.05 }, // ?
         ],
         tier_islander_outfit: [{ name: "outfitIslander", count: 1, weight: 1 }],
         tier_imperial_outfit: [{ name: "outfitImperial", count: 1, weight: 1 }],
@@ -368,6 +397,7 @@ export const Main: MapDef = {
             { name: "usas", count: 1, weight: 1 }, // ?
             { name: "p30l_dual", count: 1, weight: 1 }, // ?
         ],
+        tier_airdrop_perk:[],
         tier_airdrop_ammo: [
             { name: "9mm", count: 30, weight: 3 },
             { name: "762mm", count: 30, weight: 3 },
@@ -397,7 +427,7 @@ export const Main: MapDef = {
             { name: "", count: 1, weight: 24 }, // ?
             { name: "4xscope", count: 1, weight: 5 }, // ?
             { name: "8xscope", count: 1, weight: 1 }, // ?
-            { name: "15xscope", count: 1, weight: 0.02 }, // ?
+            { name: "15xscope", count: 1, weight: 0.2 }, // ?
         ],
         tier_katanas: [
             { name: "katana", count: 1, weight: 4 }, // ?

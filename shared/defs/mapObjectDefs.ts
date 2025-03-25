@@ -6565,7 +6565,7 @@ function createPoliceStation<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 1,
             },
             {
-                type: randomObstacleType({ locker_01: 8, locker_02: 1 }),
+                type: randomObstacleType({ locker_01: 1, locker_02: 1 }),
                 pos: v2.create(33, 4.15),
                 scale: 1,
                 ori: 2,
@@ -6577,13 +6577,13 @@ function createPoliceStation<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 1,
             },
             {
-                type: randomObstacleType({ locker_01: 8, locker_02: 1 }),
+                type: randomObstacleType({ locker_01: 1, locker_02: 1 }),
                 pos: v2.create(33, 20.85),
                 scale: 1,
                 ori: 0,
             },
             {
-                type: randomObstacleType({ locker_01: 8, locker_02: 1 }),
+                type: randomObstacleType({ locker_01: 1, locker_02: 1 }),
                 pos: v2.create(38, 20.85),
                 scale: 1,
                 ori: 0,
@@ -6595,13 +6595,13 @@ function createPoliceStation<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 0,
             },
             {
-                type: randomObstacleType({ locker_01: 8, locker_02: 1 }),
+                type: randomObstacleType({ locker_01: 1, locker_02: 1 }),
                 pos: v2.create(40.85, 7.5),
                 scale: 1,
                 ori: 3,
             },
             {
-                type: randomObstacleType({ locker_01: 8, locker_02: 1 }),
+                type: randomObstacleType({ locker_01: 1, locker_02: 1 }),
                 pos: v2.create(40.85, 17.5),
                 scale: 1,
                 ori: 3,
@@ -6613,13 +6613,13 @@ function createPoliceStation<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 1,
             },
             {
-                type: randomObstacleType({ locker_01: 8, locker_02: 1 }),
+                type: randomObstacleType({ locker_01: 1, locker_02: 1 }),
                 pos: v2.create(38, 11.35),
                 scale: 1,
                 ori: 0,
             },
             {
-                type: randomObstacleType({ locker_01: 8, locker_02: 1 }),
+                type: randomObstacleType({ locker_01: 1, locker_02: 1 }),
                 pos: v2.create(33, 13.65),
                 scale: 1,
                 ori: 2,
@@ -8621,10 +8621,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         loot: [
             autoLoot("flare_gun", 1),
-            autoLoot("strobe", 1),
-            autoLoot("strobe", 1),
-            autoLoot("strobe", 1),
-            autoLoot("strobe", 1),
+            autoLoot("mirv", 1),
+            autoLoot("mirv", 1),
+            autoLoot("mirv", 1),
+            autoLoot("mirv", 1),
         ],
         hitParticle: "blackChip",
         map: { display: false, color: 7025920, scale: 0.85 },
@@ -8816,6 +8816,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-couch-03.img" },
     }),
     crate_01: createCrate({}),
+    crate_01a: createCrate({loot:[autoLoot("pkp", 1, 1),]}),
+    crate_01b: createCrate({loot:[autoLoot("chest03", 1, 1),]}),
+    crate_01c: createCrate({loot:[autoLoot("backpack03", 1, 1),]}),
     crate_01x: createCrate({ img: { sprite: "map-crate-01x.img" } }),
     crate_02: createCrate({
         health: 140,
@@ -8865,8 +8868,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         health: 140,
         loot: [
             autoLoot("m1014", 1, 1),
-            autoLoot("helmet03_lt_aged", 1, 1),
-            autoLoot("outfitRedLeaderAged", 1, 1),
+            autoLoot("helmet03_marksman2", 1, 1),
+            autoLoot("8xscope", 1, 1),
             autoLoot("machete_taiga", 1, 1),
         ],
         map: { display: true, color: 13369344 },
@@ -9034,6 +9037,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_airdrop_melee", 1, 1),
             tierLoot("tier_airdrop_ammo", 3, 3),
             tierLoot("tier_airdrop_throwables", 1, 1),
+            tierLoot("tier_airdrop_perk", 1, 1),
         ],
         map: { display: false },
         img: {
@@ -9192,13 +9196,12 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_medical", 12, 15),
             tierLoot("tier_airdrop_scopes", 6, 8),
             tierLoot("tier_airdrop_faction_outfits", 1, 2),
-            tierLoot("tier_airdrop_faction_melee", 3, 4),
             tierLoot("tier_airdrop_ammo", 10, 12),
             tierLoot("tier_airdrop_throwables", 6, 8),
             tierLoot("tier_katanas", 1, 1),
-            autoLoot("strobe", 1),
-            autoLoot("strobe", 1),
-            autoLoot("strobe", 1),
+            autoLoot("mirv", 1),
+            autoLoot("mirv", 1),
+            autoLoot("mirv", 1),
         ],
         map: { display: false },
         img: {
@@ -9267,8 +9270,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     crate_21: createCrate({
         health: 140,
         loot: [
-            tierLoot("tier_guns", 1, 2),
-            tierLoot("tier_snipers", 1, 1),
+            tierLoot("tier_cloud_01", 1, 1),
             tierLoot("tier_cloud_02", 1, 1),
             tierLoot("tier_perks", 1, 1),
         ],
@@ -9280,10 +9282,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     crate_21b: createCrate({
         health: 140,
         loot: [
-            tierLoot("tier_guns", 1, 2),
-            tierLoot("tier_snipers", 1, 1),
             tierLoot("tier_cloud_02", 1, 1),
-            tierLoot("tier_perks", 1, 1),
         ],
         map: { display: false, color: 18799, scale: 0.875 },
         terrain: { grass: true, beach: false },
@@ -9307,7 +9306,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [
             autoLoot("an94", 1, 1),
             autoLoot("helmet03_lt_aged", 1, 1),
-            autoLoot("outfitBlueLeaderAged", 1, 1),
+            autoLoot("8xscope", 1, 1),
             autoLoot("kukri_trad", 1, 1),
         ],
         map: { display: true, color: 32511 },
@@ -12539,19 +12538,19 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 1,
             },
             {
-                type: "crate_01",
+                type: "crate_01a",
                 pos: v2.create(0, 4.75),
                 scale: 0.9,
                 ori: 0,
             },
             {
-                type: "crate_01",
+                type: "crate_01b",
                 pos: v2.create(3, 0.5),
                 scale: 0.9,
                 ori: 0,
             },
             {
-                type: "crate_01",
+                type: "crate_01c",
                 pos: v2.create(-3, 0.5),
                 scale: 0.9,
                 ori: 0,
@@ -13502,7 +13501,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                     container_01: 1,
                     container_02: 1,
                     container_03: 1,
-                    container_06: 0.08,
+                    container_06: 0.25,
                 }),
                 pos: v2.create(-37.5, 38),
                 scale: 1,
@@ -17646,9 +17645,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: randomObstacleType({
-                    case_01: 1,
-                    case_02: 0.025,
-                    chest_02: 1,
+                    case_03: 1,
                 }),
                 pos: v2.create(2.5, 0),
                 scale: 1,
@@ -24454,7 +24451,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 0,
             },
             {
-                type: randomObstacleType({ case_03: 1, chest_02: 9 }),
+                type: randomObstacleType({ case_03: 1 }),
                 pos: v2.create(16.5, 0.25),
                 scale: 1,
                 ori: 0,
@@ -28598,6 +28595,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         ceilingSprite: "map-building-container-ceiling-01.img",
         loot_spawner_01: "loot_tier_sv98",
         loot_spawner_02: "loot_tier_scopes_sniper",
+        loot_spawner_03: "tier_police",
     }),
     loot_tier_1: {
         type: "loot_spawner",

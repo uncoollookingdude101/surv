@@ -13,6 +13,7 @@ export interface ExplosionDef {
     teamDamage?: boolean;
     freezeAmount?: number; //unused atm in favor of gameconfig constant
     freezeDuration?: number; //how long to slow down player on hit
+    stonePiercing?: boolean;
 }
 
 export const ExplosionDefs: Record<string, ExplosionDef> = {
@@ -78,23 +79,25 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
     },
     explosion_rounds: {
         type: "explosion",
-        damage: 3,
+        damage: 5,
         obstacleDamage: 15,
         rad: { min: 0.75, max: 1 },
         shrapnelCount: 0,
         shrapnelType: "shrapnel_usas",
         explosionEffectType: "rounds",
         decalType: "decal_rounds_explosion",
+        stonePiercing: true,
     },
     explosion_rounds_sg: {
         type: "explosion",
-        damage: 3,
+        damage: 5,
         obstacleDamage: 15,
         rad: { min: 0.75, max: 1 },
         shrapnelCount: 0,
         shrapnelType: "shrapnel_usas",
         explosionEffectType: "rounds_sg",
         decalType: "decal_rounds_explosion",
+        stonePiercing: true,
     },
     explosion_mirv: {
         type: "explosion",
@@ -186,17 +189,21 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "",
         explosionEffectType: "potato_cannonball",
         decalType: "decal_frag_small_explosion",
+        stonePiercing: true,
     },
     explosion_potato_smgshot: {
         type: "explosion",
         damage: 13,
-        obstacleDamage: 1.25,
+        obstacleDamage: 1.5,
         teamDamage: false,
         rad: { min: 1.25, max: 1.75 },
         shrapnelCount: 0,
         shrapnelType: "",
         explosionEffectType: "potato_smgshot",
-        decalType: "",
+        decalType: "decal_potato_explosion",
+        freezeAmount: 3,
+        freezeDuration: 0.5,
+        stonePiercing: true,
     },
     explosion_bomb_iron: {
         type: "explosion",
@@ -207,5 +214,6 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "shrapnel_bomb_iron",
         explosionEffectType: "bomb_iron",
         decalType: "decal_bomb_iron_explosion",
+        stonePiercing: true,
     },
 };
