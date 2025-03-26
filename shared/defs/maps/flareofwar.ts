@@ -2,7 +2,6 @@ import { GameConfig } from "../../gameConfig";
 import { util } from "../../utils/util";
 import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
-import { Main } from "./baseDefs";
 import { Desert } from "./desertDefs";
 
 const flareofwarDef = {
@@ -59,23 +58,13 @@ const flareofwarDef = {
     lootTable: {
         tier_guns: [
             { name: "flare_gun", count: 1, weight: 14.5 },
-            {name: "flare_gun_dual",count: 1,weight: 0.25,},
+            { name: "flare_gun_dual", count: 1, weight: 0.25 },
         ],
-        tier_airdrop_uncommon: [
-            { name: "flare_gun", count: 1, weight: 0.5 },
-        ],
-        tier_airdrop_rare: [
-            { name: "flare_gun", count: 1, weight: 6 },
-        ],
-        tier_ammo: [
-            { name: "flare", count: 1, weight: 3 },
-        ],
-        tier_ammo_crate: [
-            { name: "flare", count: 1, weight: 1 },
-        ],
-        tier_airdrop_ammo: [
-            { name: "flare", count: 1, weight: 3 },
-        ],
+        tier_airdrop_uncommon: [{ name: "flare_gun", count: 1, weight: 0.5 }],
+        tier_airdrop_rare: [{ name: "flare_gun", count: 1, weight: 6 }],
+        tier_ammo: [{ name: "flare", count: 1, weight: 3 }],
+        tier_ammo_crate: [{ name: "flare", count: 1, weight: 1 }],
+        tier_airdrop_ammo: [{ name: "flare", count: 1, weight: 3 }],
         tier_airdrop_outfits: [
             { name: "", count: 1, weight: 20 },
             { name: "outfitMeteor", count: 1, weight: 5 },
@@ -102,16 +91,12 @@ const flareofwarDef = {
             { name: "4xscope", count: 1, weight: 0.5 },
             { name: "8xscope", count: 1, weight: 0.25 },
         ],
-        tier_hatchet: [
-            { name: "flare_gun", count: 1, weight: 1 },
-        ],
+        tier_hatchet: [{ name: "flare_gun", count: 1, weight: 1 }],
         tier_throwables: [
             { name: "smoke", count: 1, weight: 1 },
             { name: "strobe", count: 1, weight: 0.2 },
         ],
-        tier_airdrop_throwables: [
-            { name: "strobe", count: 1, weight: 1 },
-        ],
+        tier_airdrop_throwables: [{ name: "strobe", count: 1, weight: 1 }],
     },
     mapGen: {
         map: {

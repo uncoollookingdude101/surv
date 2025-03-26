@@ -33,8 +33,8 @@ const mapDef = {
                         airstrikeZoneRad: 50,
                         wait: 1.5,
                         delay: 1,
-                        },
                     },
+                },
 
                 { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
@@ -47,9 +47,9 @@ const mapDef = {
                 {
                     circleIdx: 4,
                     wait: 1,
-                    options: { 
+                    options: {
                         type: GameConfig.Plane.Airdrop,
-                        airdropType: "airdrop_crate_04", 
+                        airdropType: "airdrop_crate_04",
                     },
                 },
             ],
@@ -63,9 +63,9 @@ const mapDef = {
         bleedDamageMult: 1,
         player: {
             moveSpeed: 50,
-        }
+        },
     },
-        
+
     assets: {
         audio: [
             { name: "club_music_01", channel: "ambient" },
@@ -80,17 +80,17 @@ const mapDef = {
             { name: "log_03", channel: "sfx" },
             { name: "log_04", channel: "sfx" },
             { name: "piano_music_01", channel: "ambient" },
-            ],
+        ],
         atlases: [
-            "gradient", 
-            "loadout", 
-            "shared", 
-            "main", 
+            "gradient",
+            "loadout",
+            "shared",
+            "main",
             "savannah",
             "woods",
             "desert",
             "halloween",
-            "faction"
+            "faction",
         ],
     },
     lootTable: {
@@ -134,7 +134,7 @@ const mapDef = {
             { name: "scout_elite", count: 1, weight: 1.5 },
             { name: "mosin", count: 1, weight: 0.75 },
             { name: "model94", count: 1, weight: 3 },
-            { name: "awc", count: 1, weight: 0.1 }, 
+            { name: "awc", count: 1, weight: 0.1 },
         ],
         tier_guns: [
             { name: "famas", count: 1, weight: 0.9 },
@@ -250,9 +250,7 @@ const mapDef = {
             { name: "scout_elite", count: 1, weight: 1.5 },
             { name: "vss", count: 1, weight: 1.5 }, // !
         ],
-        tier_saloon: [
-            { name: "flare_gun_dual", count: 2, weight: 1 },
-        ],
+        tier_saloon: [{ name: "flare_gun_dual", count: 2, weight: 1 }],
         tier_outfits: [
             { name: "outfitCobaltShell", count: 1, weight: 0.2 }, // ?
             { name: "outfitKeyLime", count: 1, weight: 0.15 }, // ?
@@ -302,19 +300,20 @@ const mapDef = {
                 { weight: 0.21, widths: [16] },
                 { weight: 0.09, widths: [16, 8] },
                 { weight: 1, widths: [16, 8, 4] },
-                { weight: 1e-4, widths: [16, 16, 8, 6, 4],},
+                { weight: 1e-4, widths: [16, 16, 8, 6, 4] },
             ],
             smoothness: 0.45,
             spawnCabins: true,
             masks: [],
         },
         customSpawnRules: {
-            locationSpawns: [                {
-                type: "logging_complex_01",
-                pos: v2.create(0.5, 0.5),
-                rad: 200,
-                retryOnFailure: true,
-            },
+            locationSpawns: [
+                {
+                    type: "logging_complex_01",
+                    pos: v2.create(0.5, 0.5),
+                    rad: 200,
+                    retryOnFailure: true,
+                },
             ],
             placeSpawns: ["desert_town_01", "desert_town_02"],
         },
@@ -383,12 +382,10 @@ const mapDef = {
             },
         ],
         randomSpawns: [],
-        spawnReplacements: [
-            {tree_01: "tree_12"},
-        ],
+        spawnReplacements: [{ tree_01: "tree_12" }],
         importantSpawns: [
             "desert_town_01",
-            "desert_town_02", 
+            "desert_town_02",
             "river_town_02",
             "logging_complex_01",
             "teapavilion_01w",

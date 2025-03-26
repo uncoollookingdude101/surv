@@ -948,8 +948,6 @@ const SkinDefs = {
     }),
 };
 
-
-
 // Shared with the client; move them somewhere
 export const GEAR_TYPES = ["chest", "helmet", "backpack"] as const;
 export const SCOPE_LEVELS = Object.keys(ScopeDefs);

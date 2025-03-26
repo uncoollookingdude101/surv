@@ -8882,9 +8882,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-couch-03.img" },
     }),
     crate_01: createCrate({}),
-    crate_01a: createCrate({loot:[autoLoot("pkp", 1, 1),]}),
-    crate_01b: createCrate({loot:[autoLoot("chest03", 1, 1),]}),
-    crate_01c: createCrate({loot:[autoLoot("backpack03", 1, 1),]}),
+    crate_01a: createCrate({ loot: [autoLoot("pkp", 1, 1)] }),
+    crate_01b: createCrate({ loot: [autoLoot("chest03", 1, 1)] }),
+    crate_01c: createCrate({ loot: [autoLoot("backpack03", 1, 1)] }),
     crate_01x: createCrate({ img: { sprite: "map-crate-01x.img" } }),
     crate_02: createCrate({
         health: 140,
@@ -9348,9 +9348,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     crate_21b: createCrate({
         health: 140,
-        loot: [
-            tierLoot("tier_cloud_02", 1, 1),
-        ],
+        loot: [tierLoot("tier_cloud_02", 1, 1)],
         map: { display: false, color: 18799, scale: 0.875 },
         terrain: { grass: true, beach: false },
         img: { sprite: "map-crate-21.img" },
@@ -10058,7 +10056,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     potato_03: createPotato({ img: { sprite: "map-potato-03.img" } }),
     power_box_01: createControlPanel({}),
     pumpkin_01: createPumpkin({
-        loot: [tierLoot("tier_outfits_halloween", 1, 1), tierLoot("tier_pumpkin_candy", 1, 1)],
+        loot: [
+            tierLoot("tier_outfits_halloween", 1, 1),
+            tierLoot("tier_pumpkin_candy", 1, 1),
+        ],
     }),
     pumpkin_02: createPumpkin({
         health: 140,

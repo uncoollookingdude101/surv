@@ -14,11 +14,11 @@ import {
     SCOPE_LEVELS,
     type ScopeDef,
 } from "../../../../shared/defs/gameObjects/gearDefs";
-import { PerkDefs } from "../../../../shared/defs/gameObjects/perkDefs";
 import { GearDefs } from "../../../../shared/defs/gameObjects/gearDefs";
 import type { GunDef } from "../../../../shared/defs/gameObjects/gunDefs";
 import { type MeleeDef, MeleeDefs } from "../../../../shared/defs/gameObjects/meleeDefs";
 import type { OutfitDef } from "../../../../shared/defs/gameObjects/outfitDefs";
+import { PerkDefs } from "../../../../shared/defs/gameObjects/perkDefs";
 import { PerkProperties } from "../../../../shared/defs/gameObjects/perkDefs";
 import type { RoleDef } from "../../../../shared/defs/gameObjects/roleDefs";
 import type { ThrowableDef } from "../../../../shared/defs/gameObjects/throwableDefs";
@@ -466,20 +466,20 @@ export class Player extends BaseGameObject {
     setHelmetPerk(perk: string) {
         this.helmetPerk = perk;
     }
-equip(item: string, amount: number) {
-    if (GearDefs[item] && 'perk' in GearDefs[item]) {
-        const gearDef = GearDefs[item] as { perk: string };
-        console.log('PerkDefs[gearDef.perk].type', PerkDefs[gearDef.perk].type);
-        this.setHelmetPerk(PerkDefs[gearDef.perk].type);
+    equip(item: string, amount: number) {
+        if (GearDefs[item] && "perk" in GearDefs[item]) {
+            const gearDef = GearDefs[item] as { perk: string };
+            console.log("PerkDefs[gearDef.perk].type", PerkDefs[gearDef.perk].type);
+            this.setHelmetPerk(PerkDefs[gearDef.perk].type);
+        }
+        // ...
+        if (item === "helmet" && this.helmetPerk) {
+            console.log("Applying perk:", this.helmetPerk);
+            this.addPerk(this.helmetPerk, false);
+            this.helmetPerk = null;
+        }
+        // ...
     }
-  // ...
-  if (item === 'helmet' && this.helmetPerk) {
-    console.log('Applying perk:', this.helmetPerk);
-    this.addPerk(this.helmetPerk, false);
-    this.helmetPerk = null;
-  }
-  // ...
-}
 
     bounds = collider.createAabbExtents(
         v2.create(0, 0),
@@ -528,7 +528,6 @@ equip(item: string, amount: number) {
      * set true if any member on the team changes health or disconnects
      */
     groupStatusDirty = false;
-    
 
     setGroupStatuses() {
         if (!this.game.isTeamMode) return;
@@ -830,7 +829,7 @@ equip(item: string, amount: number) {
                 this.giveHaste(GameConfig.HasteType.Windwalk, 5);
                 break;
             case "medic":
-                this.boost=100;
+                this.boost = 100;
                 // TODO: this should be based on aoe_heal perk not role
                 this.game.playerBarn.medics.push(this);
                 break;
@@ -4452,4 +4451,4 @@ equip(item: string, amount: number) {
         this.game.sendSocketMsg(this.socketId, buffer);
     }
 }
-console.log('Calling equip method...');
+console.log("Calling equip method...");

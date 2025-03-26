@@ -361,7 +361,6 @@ export const UnlockDefs: Record<string, UnlockDef> = {
             "emote_logocloud",
             "emote_logotwins",
 
-            
             ...new Set([
                 ..._allowedOutfits,
                 ..._allowedMeleeSkins,
@@ -370,7 +369,6 @@ export const UnlockDefs: Record<string, UnlockDef> = {
                 ...Object.keys(CrosshairDefs),
                 ...PassDefs.pass_survivr1.items.map((item) => item.item),
             ]),
-            
         ],
     },
     unlock_new_account: {

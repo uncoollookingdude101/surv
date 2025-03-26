@@ -154,25 +154,46 @@ export const RoleDefs: Record<string, RoleDef> = {
             alive: "player-star.img",
             dead: "skull-leader.img",
         },
-        perks: ["leadership", "self_revive","firepower","takedown","splinter", "steelskin","hunted","explosive","bonus_assault","windwalk","scavenger_adv","endless_ammo","small_arms","fabricate","inspiration","final_bugle","gotw","targeting","tree_climbing","field_medic"],
+        perks: [
+            "leadership",
+            "self_revive",
+            "firepower",
+            "takedown",
+            "splinter",
+            "steelskin",
+            "hunted",
+            "explosive",
+            "bonus_assault",
+            "windwalk",
+            "scavenger_adv",
+            "endless_ammo",
+            "small_arms",
+            "fabricate",
+            "inspiration",
+            "final_bugle",
+            "gotw",
+            "targeting",
+            "tree_climbing",
+            "field_medic",
+        ],
         defaultItems: createDefaultItems({
             weapons: [
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "awc",ammo:0, fillInv: true },
-                            [TeamColor.Blue]: { type: "saiga",ammo:0, fillInv: true },
+                            [TeamColor.Red]: { type: "awc", ammo: 0, fillInv: true },
+                            [TeamColor.Blue]: { type: "saiga", ammo: 0, fillInv: true },
                         },
                         teamcolor,
                     ),
-                    (teamcolor: TeamColor) =>
-                        getTeamWeapon(
-                            {
-                                [TeamColor.Red]: { type: "pkp", ammo: 0, fillInv: true },
-                                [TeamColor.Blue]: { type: "saiga",ammo:0, fillInv:true }
-                            },
-                            teamcolor,
-                        ),
+                (teamcolor: TeamColor) =>
+                    getTeamWeapon(
+                        {
+                            [TeamColor.Red]: { type: "pkp", ammo: 0, fillInv: true },
+                            [TeamColor.Blue]: { type: "saiga", ammo: 0, fillInv: true },
+                        },
+                        teamcolor,
+                    ),
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
@@ -245,7 +266,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             alive: "player-medic.img",
             dead: "skull-leader.img",
         },
-        perks: ["aoe_heal", "self_revive","endless_ammo"],
+        perks: ["aoe_heal", "self_revive", "endless_ammo"],
         defaultItems: createDefaultItems({
             weapons: [
                 { type: "spas12", ammo: 5, fillInv: true },
@@ -258,7 +279,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             chest: "chest03",
             inventory: {
                 "15xscope": 1,
-                bandage:30,
+                bandage: 30,
                 healthkit: 4,
                 painkiller: 4,
                 soda: 15,

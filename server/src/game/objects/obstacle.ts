@@ -342,7 +342,6 @@ export class Obstacle extends BaseGameObject {
         if (this.health === 0 || !this.destructible) return;
 
         if (params.damageType === DamageType.Player) {
-        
             let armorPiercing = false;
             let stonePiercing = false;
 

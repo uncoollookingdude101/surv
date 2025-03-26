@@ -72,7 +72,7 @@ export const Main: MapDef = {
         bleedDamageMult: 1,
         player: {
             moveSpeed: 12,
-        }
+        },
     },
     /* STRIP_FROM_PROD_CLIENT:START */
     // NOTE: this loot table is not the original one so its not accurate
@@ -89,13 +89,13 @@ export const Main: MapDef = {
             { name: "tier_packs", count: 1, weight: 0.09 }, // ?
         ],
         tier_scavenger_adv: [
-            { name: "m9", count: 1, weight: 3 }, 
-            { name: "ots38_dual", count: 1, weight: 3 }, 
-            { name: "p30l_dual", count: 1, weight: 3 }, 
-            { name: "saiga", count: 1, weight: 3 }, 
-            { name: "deagle", count: 1, weight: 3 }, 
-            { name: "vector", count: 1, weight: 3 }, 
-            { name: "scorpion", count: 1, weight: 3 }, 
+            { name: "m9", count: 1, weight: 3 },
+            { name: "ots38_dual", count: 1, weight: 3 },
+            { name: "p30l_dual", count: 1, weight: 3 },
+            { name: "saiga", count: 1, weight: 3 },
+            { name: "deagle", count: 1, weight: 3 },
+            { name: "vector", count: 1, weight: 3 },
+            { name: "scorpion", count: 1, weight: 3 },
             { name: "m4a1", count: 1, weight: 3 },
             { name: "garand", count: 1, weight: 3 },
             { name: "grozas", count: 1, weight: 3 },
@@ -422,7 +422,7 @@ export const Main: MapDef = {
             { name: "pkp", count: 1, weight: 0.3 }, // ?
             { name: "m249", count: 1, weight: 0.3 }, // ?
         ],
-        tier_airdrop_perk:[],
+        tier_airdrop_perk: [],
         tier_airdrop_ammo: [
             { name: "9mm", count: 30, weight: 3 },
             { name: "762mm", count: 30, weight: 3 },
