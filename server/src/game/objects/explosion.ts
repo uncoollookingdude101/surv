@@ -100,7 +100,12 @@ export class ExplosionBarn {
                     this.damageObject(explosion, collision);
                 }
 
-                if (obj.__type === ObjectType.Obstacle && obj.collidable) break;
+                if (
+                    obj.__type === ObjectType.Obstacle &&
+                    obj.collidable &&
+                    obj.__id !== explosion.ignoreObstacleId
+                )
+                    break;
             }
         }
 
@@ -148,14 +153,12 @@ export class ExplosionBarn {
         }
 
         if (obj.__type == ObjectType.Player) {
-            if (def.freezeAmount && def.freezeDuration) {
-                const isSourceTeammate =
-                    explosion.source &&
-                    explosion.source.__type == ObjectType.Player &&
-                    explosion.source.teamId == obj.teamId;
-                if (!isSourceTeammate) {
-                    obj.dropRandomLoot();
-
+            const isSourceTeammate =
+                explosion.source &&
+                explosion.source.__type == ObjectType.Player &&
+                explosion.source.teamId == obj.teamId;
+            if (!isSourceTeammate) {
+                if (def.freezeAmount && def.freezeDuration) {
                     const playerRot = Math.atan2(obj.dir.y, obj.dir.x);
                     const collRot = -Math.atan2(collision.dir.y, collision.dir.x);
 
@@ -164,6 +167,13 @@ export class ExplosionBarn {
 
                     obj.freeze(ori, def.freezeDuration);
                 }
+                if (def.dropRandomLoot) {
+                    obj.dropRandomLoot();
+                }
+            }
+
+            if (explosion.type === "explosion_potato_smgshot") {
+                obj.incrementFat();
             }
         }
 
@@ -194,6 +204,7 @@ export class ExplosionBarn {
         mapSourceType = "",
         damageType: number = GameConfig.DamageType.Player,
         source?: GameObject,
+        ignoreObstacleId?: number,
     ) {
         const def = GameObjectDefs[type];
         assert(def.type === "explosion", `Invalid explosion with type ${type}`);
@@ -207,6 +218,7 @@ export class ExplosionBarn {
             mapSourceType,
             damageType,
             source,
+            ignoreObstacleId,
         };
         this.explosions.push(explosion);
         this.newExplosions.push(explosion);
@@ -222,4 +234,5 @@ interface Explosion {
     mapSourceType: string;
     damageType: number;
     source?: GameObject;
+    ignoreObstacleId?: number;
 }

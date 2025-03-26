@@ -5,16 +5,27 @@ import type { Player } from "./objects/player";
 export class Group {
     hash: string;
     groupId: number;
-    allDeadOrDisconnected = true; //only set to false when first player is added to the group
+    allDeadOrDisconnected = true; // only set to false when first player is added to the group
     players: Player[] = [];
     livingPlayers: Player[] = [];
     autoFill: boolean;
+
+    /**
+     * for normal modes, the first player in the group to spawn, all groupmate spawn positions will be relative to the spawn leader
+     *
+     * for cobalt mode, since everyone technically spawns in the intermediary bunker while stuck on the perk select menu, this represents
+     * the first player in the group to get a **real** spawn after selecting a perk
+     */
+    spawnLeader?: Player;
 
     maxPlayers: number;
     reservedSlots = 0;
 
     canJoin(players: number) {
-        return this.maxPlayers - this.reservedSlots - players >= 0;
+        return (
+            this.maxPlayers - this.reservedSlots - players >= 0 &&
+            !this.allDeadOrDisconnected
+        );
     }
 
     constructor(hash: string, groupId: number, autoFill: boolean, maxPlayers: number) {
@@ -77,7 +88,7 @@ export class Group {
      */
     checkAllDeadOrDisconnected(player: Player) {
         const alivePlayers = this.players.filter(
-            (p) => (!p.dead || !p.disconnected) && p !== player,
+            (p) => !p.dead && !p.disconnected && p !== player,
         );
         return alivePlayers.length <= 0;
     }
@@ -130,14 +141,5 @@ export class Group {
         const newIndex =
             currentPlayerIndex == 0 ? alivePlayers.length - 1 : currentPlayerIndex - 1;
         return alivePlayers[newIndex];
-    }
-
-    addGameOverMsg(winningTeamId: number = -1) {
-        for (const p of this.players) {
-            p.addGameOverMsg(winningTeamId);
-            for (const spectator of p.spectators) {
-                spectator.addGameOverMsg(winningTeamId);
-            }
-        }
     }
 }

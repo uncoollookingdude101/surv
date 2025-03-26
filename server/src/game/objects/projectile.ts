@@ -10,7 +10,9 @@ import { type Vec2, v2 } from "../../../../shared/utils/v2";
 import type { Game } from "../game";
 import { BaseGameObject } from "./gameObject";
 
-const gravity = 10;
+// 10.5 is based on the distance a potato cannon projectile traveled before hitting the floor
+// and exploding, from recorded packets from the original game
+const gravity = 10.5;
 
 export class ProjectileBarn {
     projectiles: Projectile[] = [];
@@ -64,6 +66,8 @@ export class Projectile extends BaseGameObject {
 
     posZ: number;
     dir: Vec2;
+    initialDir: Vec2;
+
     type: string;
 
     rad: number;
@@ -77,6 +81,12 @@ export class Projectile extends BaseGameObject {
     dead = false;
 
     obstacleBellowId = 0;
+
+    strobe?: {
+        strobeTicker: number;
+        airstrikesLeft: number;
+        airstrikeTicker: number;
+    };
 
     constructor(
         game: Game,
@@ -98,6 +108,7 @@ export class Projectile extends BaseGameObject {
         this.fuseTime = fuseTime;
         this.damageType = damageType;
         this.dir = v2.normalizeSafe(vel);
+        this.initialDir = v2.copy(this.dir);
 
         const def = GameObjectDefs[type] as ThrowableDef;
         this.velZ = def.throwPhysics.velZ;
@@ -108,15 +119,57 @@ export class Projectile extends BaseGameObject {
         );
     }
 
+    updateStrobe(dt: number): void {
+        if (!this.strobe) return;
+
+        if (this.strobe.strobeTicker > 0) {
+            this.strobe.strobeTicker -= dt;
+
+            if (this.strobe.strobeTicker <= 0) {
+                this.game.playerBarn.addEmote(0, this.pos, "ping_airstrike", true);
+                this.game.planeBarn.addAirStrike(this.pos, this.dir, this.playerId);
+                this.strobe.airstrikesLeft--;
+                this.strobe.airstrikeTicker = 0.85;
+            }
+        }
+
+        if (this.strobe.airstrikesLeft == 0) return;
+
+        //airstrikes cannot drop until the strobe ticker is finished
+        if (this.strobe.strobeTicker >= 0) return;
+
+        if (this.strobe.airstrikeTicker > 0) {
+            this.strobe.airstrikeTicker -= dt;
+
+            if (this.strobe.airstrikeTicker <= 0) {
+                //the position can only be "past" the strobe
+                //meaning that the random direction can be a MAX of 90 degrees offset from the regular direction so it doesnt go backwards
+                const randomDir = v2.rotate(
+                    this.dir,
+                    util.random(-Math.PI / 2, Math.PI / 2),
+                );
+                const pos = v2.add(this.pos, v2.mul(randomDir, 7));
+                this.game.planeBarn.addAirStrike(pos, this.initialDir, this.playerId);
+                this.strobe.airstrikesLeft--;
+                this.strobe.airstrikeTicker = 0.85;
+            }
+        }
+    }
+
     update(dt: number) {
+        if (this.strobe) {
+            this.updateStrobe(dt);
+        }
+
         const def = GameObjectDefs[this.type] as ThrowableDef;
         //
         // Velocity
         //
         if (!def.forceMaxThrowDistance) {
-            //velocity needs to stay constant to reach max throw dist
+            // velocity needs to stay constant to reach max throw dist
             this.vel = v2.mul(this.vel, 1 / (1 + dt * (this.posZ != 0 ? 1.2 : 2)));
         }
+        const posOld = v2.copy(this.pos);
         this.pos = v2.add(this.pos, v2.mul(this.vel, dt));
 
         //
@@ -147,10 +200,21 @@ export class Projectile extends BaseGameObject {
                     this.pos,
                     this.rad,
                 );
-                if (intersection) {
+                const lineIntersection = collider.intersectSegment(
+                    obj.collider,
+                    posOld,
+                    this.pos,
+                );
+
+                if (intersection || lineIntersection) {
                     if (obj.height >= height && obj.__id !== this.obstacleBellowId) {
+                        let damage = 1;
+                        if (def.destroyNonCollidables && !obj.collidable) {
+                            damage = 999;
+                        }
+
                         obj.damage({
-                            amount: 1,
+                            amount: damage,
                             damageType: this.damageType,
                             gameSourceType: this.type,
                             mapSourceType: "",
@@ -159,20 +223,30 @@ export class Projectile extends BaseGameObject {
 
                         if (obj.dead || !obj.collidable) continue;
 
-                        this.pos = v2.add(
-                            this.pos,
-                            v2.mul(intersection.dir, intersection.pen),
-                        );
+                        if (lineIntersection) {
+                            this.pos = v2.add(
+                                lineIntersection.point,
+                                v2.mul(lineIntersection.normal, this.rad + 0.1),
+                            );
+                        } else if (intersection) {
+                            this.pos = v2.add(
+                                this.pos,
+                                v2.mul(intersection.dir, intersection.pen + 0.1),
+                            );
+                        }
 
                         if (def.explodeOnImpact) {
                             this.explode();
                         } else {
                             const len = v2.length(this.vel);
                             const dir = v2.div(this.vel, len);
-                            const normal = intersection.dir;
+                            const normal = intersection
+                                ? intersection.dir
+                                : lineIntersection!.normal;
                             const dot = v2.dot(dir, normal);
-                            const newDir = v2.add(v2.mul(normal, dot * -2), this.dir);
-                            this.vel = v2.mul(newDir, len * 0.2);
+                            const newDir = v2.add(v2.mul(normal, dot * -2), dir);
+                            this.vel = v2.mul(newDir, len * 0.3);
+                            this.dir = v2.normalizeSafe(this.vel);
                         }
                     } else if (obj.collidable) {
                         this.obstacleBellowId = obj.__id;
@@ -191,6 +265,8 @@ export class Projectile extends BaseGameObject {
         }
 
         this.game.map.clampToMapBounds(this.pos, this.rad);
+
+        if (this.destroyed) return;
 
         const originalLayer = this.layer;
         this.checkStairs(objs, this.rad);
@@ -219,6 +295,36 @@ export class Projectile extends BaseGameObject {
         }
     }
 
+    /**
+     * only used for bomb_iron projectiles, they CANNOT explode inside indestructable buildings
+     */
+    canBombIronExplode(): boolean {
+        const coll = collider.createCircle(this.pos, this.rad);
+        const objs = this.game.grid.intersectCollider(coll);
+
+        for (const obj of objs) {
+            if (obj.__type != ObjectType.Building) continue;
+            if (!util.sameLayer(obj.layer, this.layer)) continue;
+            if (obj.wallsToDestroy < Infinity) continue; //building is destructable and bomb irons can explode on it
+            for (let i = 0; i < obj.zoomRegions.length; i++) {
+                const zoomRegion = obj.zoomRegions[i];
+
+                if (
+                    zoomRegion.zoomIn &&
+                    coldet.testCircleAabb(
+                        this.pos,
+                        this.rad,
+                        zoomRegion.zoomIn.min,
+                        zoomRegion.zoomIn.max,
+                    )
+                ) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     explode() {
         if (this.dead) return;
         this.dead = true;
@@ -242,6 +348,11 @@ export class Projectile extends BaseGameObject {
             }
         }
 
+        if (this.type == "bomb_iron" && !this.canBombIronExplode()) {
+            this.destroy();
+            return;
+        }
+
         const explosionType = def.explosionType;
         if (explosionType) {
             const source = this.game.objectRegister.getById(this.playerId);
@@ -253,6 +364,7 @@ export class Projectile extends BaseGameObject {
                 "",
                 this.damageType,
                 source,
+                this.obstacleBellowId,
             );
         }
         this.destroy();

@@ -1,5 +1,8 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "files": {
+    "ignore": ["client/atlas-builder/out/*.json"]
+  },
   "organizeImports": {
     "enabled": true
   },
@@ -32,7 +35,8 @@
   "formatter": {
     "indentWidth": 4,
     "indentStyle": "space",
-    "lineWidth": 90
+    "lineWidth": 90,
+    "ignore": ["package.json"]
   },
   "vcs": {
     "enabled": true,

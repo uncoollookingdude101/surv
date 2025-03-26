@@ -9,9 +9,9 @@ import { util } from "../../../shared/utils/util";
 import { type Vec2, v2 } from "../../../shared/utils/v2";
 import type { AudioManager } from "../audioManager";
 import type { Camera } from "../camera";
+import type { DebugOptions } from "../config";
 import { debugLines } from "../debugLines";
-import { device } from "../device";
-import type { Ctx, DebugOptions } from "../game";
+import type { Ctx } from "../game";
 import type { Map } from "../map";
 import type { Renderer } from "../renderer";
 import type { Emitter, ParticleBarn } from "./particles";
@@ -100,14 +100,14 @@ export class Obstacle implements AbstractObject {
         this.sprite.visible = false;
     }
 
-    init() {
+    m_init() {
         this.isNew = false;
         this.smokeEmitter = null;
         this.sprite.visible = false;
         this.img = "";
     }
 
-    free() {
+    m_free() {
         this.sprite.visible = false;
         this.sprite.parent?.removeChild(this.sprite);
         if (this.door?.casingSprite) {
@@ -120,7 +120,7 @@ export class Obstacle implements AbstractObject {
         }
     }
 
-    updateData(
+    m_updateData(
         data: ObjectData<ObjectType.Obstacle>,
         fullUpdate: boolean,
         isNew: boolean,
@@ -452,8 +452,8 @@ export class Obstacle implements AbstractObject {
         const rot = this.isDoor ? this.door.interpRot : this.rot;
         const scale = this.scale;
 
-        const screenPos = camera.pointToScreen(pos);
-        const screenScale = camera.pixels(scale * this.imgScale);
+        const screenPos = camera.m_pointToScreen(pos);
+        const screenScale = camera.m_pixels(scale * this.imgScale);
 
         this.sprite.position.set(screenPos.x, screenPos.y);
         this.sprite.scale.set(screenScale, screenScale);
@@ -466,18 +466,21 @@ export class Obstacle implements AbstractObject {
         this.sprite.rotation = -rot;
 
         if (this.isDoor && this.door?.casingSprite) {
-            const casingPos = camera.pointToScreen(
+            const casingPos = camera.m_pointToScreen(
                 v2.add(this.door.closedPos, this.door.casingSprite.posOffset),
             );
-            const casingScale = camera.pixels(scale * this.door.casingSprite.imgScale);
+            const casingScale = camera.m_pixels(scale * this.door.casingSprite.imgScale);
             this.door.casingSprite.position.set(casingPos.x, casingPos.y);
             this.door.casingSprite.scale.set(casingScale, casingScale);
             this.door.casingSprite.rotation = -rot;
             this.door.casingSprite.visible = !this.dead;
         }
 
-        if (device.debug && debug.obstacles && util.sameLayer(layer, this.layer)) {
-            debugLines.addCollider(this.collider, 0xff0000, 0);
+        if (IS_DEV && debug.render.obstacles && util.sameLayer(layer, this.layer)) {
+            const def = MapObjectDefs[this.type] as ObstacleDef;
+
+            const color = def.collidable ? 0xff0000 : 0xffff00;
+            debugLines.addCollider(this.collider, color, 0.1);
         }
     }
 }

@@ -1,9 +1,4 @@
 {
-  "private": true,
-  "dependencies": {
-    "earcut": "^3.0.1"
-  },
-  "devDependencies": {
-    "@types/earcut": "^3.0.0"
-  }
+  "name": "@survev/shared",
+  "private": true
 }

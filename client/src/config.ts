@@ -2,12 +2,44 @@ import { util } from "../../shared/utils/util";
 import loadout from "./ui/loadouts";
 import type { Locale } from "./ui/localization";
 
+const defaultDebugConfig = {
+    spectatorMode: false,
+    overrideZoom: false,
+    cull: false,
+    render: {
+        enabled: false,
+        players: false,
+        obstacles: false,
+        loot: false,
+        explosions: false,
+        rivers: false,
+        buildings: {
+            buildingBounds: false,
+            obstacleBounds: false,
+            bridge: false,
+            waterEdge: false,
+            ceiling: false,
+            floors: false,
+        },
+        structures: {
+            buildingBounds: false,
+            obstacleBounds: false,
+            bridge: false,
+            waterEdge: false,
+            stairs: false,
+        },
+    },
+};
+
+export type DebugOptions = typeof defaultDebugConfig;
+
 const defaultConfig = {
     muteAudio: false,
     masterVolume: 1,
     soundVolume: 1,
     musicVolume: 1,
     highResTex: true,
+    interpolation: true,
     screenShake: true,
     anonPlayerNames: false,
     touchMoveStyle: "anywhere" as "locked" | "anywhere",
@@ -29,6 +61,9 @@ const defaultConfig = {
     sessionCookie: "" as string | null,
     binds: "",
     version: 1,
+    /* STRIP_FROM_PROD_CLIENT:START */
+    debug: defaultDebugConfig,
+    /* STRIP_FROM_PROD_CLIENT:END */
 };
 
 export type ConfigType = typeof defaultConfig;

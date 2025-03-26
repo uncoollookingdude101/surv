@@ -39,7 +39,6 @@ type DefaultItems = {
     helmet: string | ((teamcolor: TeamColor) => string);
     chest: string;
     outfit: string | ((teamcolor: TeamColor) => string);
-    scope: string;
     inventory: {
         "9mm": number;
         "762mm": number;
@@ -112,7 +111,6 @@ function createDefaultItems<T extends DefaultItems>(e: DeepPartial<T>): T {
         helmet: "",
         chest: "",
         outfit: "",
-        scope: "1xscope",
         // perks: [] as Array<{ type: string; droppable?: boolean }>,
         inventory: {
             "9mm": 0,
@@ -234,7 +232,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet03_lt",
             chest: "chest03",
-            scope: "4xscope",
             inventory: {
                 "4xscope": 1,
             },
@@ -300,9 +297,8 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet03_marksman",
             chest: "chest03",
-            scope: "4xscope",
             inventory: {
-                "4xscope": 1,
+                "8xscope": 1,
             },
         }),
     },
@@ -322,7 +318,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet03_recon",
             chest: "chest03",
-            scope: "4xscope",
             inventory: {
                 "4xscope": 1,
                 soda: 6,
@@ -345,7 +340,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet03_grenadier",
             chest: "chest03",
-            scope: "4xscope",
             inventory: {
                 mirv: 8,
                 frag: 12,
@@ -369,7 +363,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet03_bugler",
             chest: "chest03",
-            scope: "4xscope",
             inventory: {
                 "4xscope": 1,
             },
@@ -380,7 +373,16 @@ export const RoleDefs: Record<string, RoleDef> = {
         announce: true,
         killFeed: { assign: true },
         sound: { assign: "last_man_assigned_01" },
-        perks: ["leadership","aoe_heal", "self_revive","firepower","takedown","splinter", "steelskin","hunted","flak_jacket","explosive","bonus_assault","windwalk","scavenger_adv","endless_ammo","small_arms","fabricate","inspiration","final_bugle","gotw","targeting","tree_climbing"],
+        perks: [
+            "steelskin",
+            "splinter",
+            () =>
+                util.weightedRandom([
+                    { type: "takedown", weight: 4.5 },
+                    { type: "windwalk", weight: 1 },
+                    { type: "field_medic", weight: 1 },
+                ]).type,
+        ],
         defaultItems: createDefaultItems({
             weapons: [
                 { type: "", ammo: 0 },
@@ -487,6 +489,12 @@ export const RoleDefs: Record<string, RoleDef> = {
     },
     healer: {
         type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitMedic",
+            inventory: {
+                healthkit: 1,
+            },
+        }),
         announce: false,
         sound: { assign: "spawn_01" },
         perks: ["field_medic", "windwalk"],
@@ -499,6 +507,10 @@ export const RoleDefs: Record<string, RoleDef> = {
     },
     tank: {
         type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitTank",
+            chest: "chest01",
+        }),
         announce: false,
         sound: { assign: "spawn_01" },
         perks: ["steelskin", "endless_ammo"],
@@ -511,6 +523,12 @@ export const RoleDefs: Record<string, RoleDef> = {
     },
     sniper: {
         type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitSniper",
+            inventory: {
+                "2xscope": 1,
+            },
+        }),
         announce: false,
         sound: { assign: "spawn_01" },
         perks: ["chambered", "takedown"],
@@ -523,6 +541,12 @@ export const RoleDefs: Record<string, RoleDef> = {
     },
     scout: {
         type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitScout",
+            inventory: {
+                soda: 1,
+            },
+        }),
         announce: false,
         sound: { assign: "spawn_01" },
         perks: ["small_arms", "tree_climbing"],
@@ -535,6 +559,10 @@ export const RoleDefs: Record<string, RoleDef> = {
     },
     demo: {
         type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitDemo",
+            backpack: "backpack01",
+        }),
         announce: false,
         sound: { assign: "spawn_01" },
         perks: ["fabricate", "flak_jacket"],
@@ -547,6 +575,12 @@ export const RoleDefs: Record<string, RoleDef> = {
     },
     assault: {
         type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitAssault",
+            inventory: {
+                bandage: 5,
+            },
+        }),
         announce: false,
         sound: { assign: "spawn_01" },
         perks: ["firepower", "bonus_assault"],

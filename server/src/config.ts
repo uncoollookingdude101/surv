@@ -43,6 +43,8 @@ export const Config = {
 
     debug: {
         spawnMode: "default",
+        allowBots: !isProduction,
+        allowEditMsg: !isProduction,
     },
 
     rateLimitsEnabled: isProduction,
@@ -65,6 +67,7 @@ export const Config = {
         time: 10,
     },
 
+    defaultItems: {},
     gameConfig: {},
 } satisfies ConfigType as ConfigType;
 
@@ -107,6 +110,7 @@ type DeepPartial<T> = T extends object
 interface ServerConfig {
     host: string;
     port: number;
+    proxyIPHeader?: string;
 
     /**
      * HTTPS/SSL options. Not used if running locally or with nginx.
@@ -183,7 +187,12 @@ export interface ConfigType {
         spawnMode: "default" | "fixed";
         // spawn pos for fixed, defaults to map center if not set
         spawnPos?: Vec2;
+        allowBots: boolean;
+        allowEditMsg: boolean;
     };
+
+    // overrides for default items; doesn't apply to bots
+    defaultItems: DeepPartial<(typeof GameConfig)["player"]["defaultItems"]>;
 
     /**
      * Game config overrides

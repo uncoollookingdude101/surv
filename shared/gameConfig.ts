@@ -107,7 +107,11 @@ export enum Input {
 }
 
 export const GameConfig = {
-    protocolVersion: 78,
+    // started with 1000 to distinguish us from the original surviv protocol
+    // the protocol we originated from was 78
+    // remember to bump this every time a serialization function is changed
+    // or a definition item added, removed or moved
+    protocolVersion: 1002,
     Input,
     EmoteSlot,
     WeaponSlot,
@@ -149,6 +153,7 @@ export const GameConfig = {
         bleedTickRate: 1,
         downedMoveSpeed: 4,
         downedRezMoveSpeed: 2,
+        downedDamageBuffer: 0.1, //time buffer after being downed where a player can't take damage
         keepZoomWhileDowned: false,
         reviveDuration: 8,
         reviveRange: 5,
@@ -167,6 +172,7 @@ export const GameConfig = {
         spectateDeadTimeout: 2,
         killLeaderMinKills: 3,
         minSpawnRad: 25,
+        perkModeRoleSelectDuration: 20,
 
         /* STRIP_FROM_PROD_CLIENT:START */
         defaultItems: {

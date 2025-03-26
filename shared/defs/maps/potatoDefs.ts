@@ -1,9 +1,10 @@
 import { GameConfig } from "../../gameConfig";
 import { util } from "../../utils/util";
+import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
-import { Main } from "./baseDefs";
+import { Main, type PartialMapDef } from "./baseDefs";
 
-const mapDef = {
+const mapDef: PartialMapDef = {
     mapId: 4,
     desc: {
         name: "Potato",
@@ -25,7 +26,7 @@ const mapDef = {
             { name: "log_11", channel: "sfx" },
             { name: "log_12", channel: "sfx" },
         ],
-        atlases: ["gradient", "loadout", "shared", "potato"],
+        atlases: ["gradient", "loadout", "shared", "main", "potato"],
     },
     biome: {
         colors: {
@@ -140,10 +141,26 @@ const mapDef = {
             { name: "chest03", count: 1, weight: 1 },
             { name: "backpack03", count: 1, weight: 1 },
         ],
-        tier_ring_case: [{ name: "potato_cannon", count: 1, weight: 1 }],
-        tier_airdrop_rare: [{ name: "potato_cannon", count: 1, weight: 1 }],
+        tier_ring_case: [
+            { name: "potato_cannon", count: 1, weight: 1 },
+            { name: "spud_gun", count: 1, weight: 0.1 },
+        ],
+        tier_airdrop_rare: [
+            { name: "potato_cannon", count: 1, weight: 1 },
+            { name: "spud_gun", count: 1, weight: 0.1 },
+        ],
     },
     mapGen: {
+        customSpawnRules: {
+            locationSpawns: [
+                {
+                    type: "shilo_01",
+                    pos: v2.create(0.5, 0.5),
+                    rad: 50,
+                    retryOnFailure: true,
+                },
+            ],
+        },
         densitySpawns: [
             {
                 stone_01: 350,
@@ -171,13 +188,15 @@ const mapDef = {
         ],
         fixedSpawns: [
             {
+                shilo_01: 1,
                 warehouse_01: 2,
                 house_red_01: { small: 3, large: 4 },
                 house_red_02: { small: 3, large: 4 },
                 barn_01: { small: 1, large: 3 },
                 barn_02: 1,
-                hut_01: 4,
+                hut_01: 3,
                 hut_02: 1,
+                hut_03: 1,
                 shack_03a: 2,
                 shack_03b: { small: 2, large: 3 },
                 greenhouse_01: 1,

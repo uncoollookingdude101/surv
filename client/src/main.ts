@@ -306,8 +306,8 @@ class Application {
                 this.ambience.onGameStart();
             };
             const onQuit = (errMsg?: string) => {
-                if (this.game!.updatePass) {
-                    this.pass.scheduleUpdatePass(this.game!.updatePassDelay);
+                if (this.game!.m_updatePass) {
+                    this.pass.scheduleUpdatePass(this.game!.m_updatePassDelay);
                 }
                 this.game!.free();
                 this.errorMessage = this.localization.translate(errMsg || "");
@@ -736,7 +736,7 @@ class Application {
         this.teamMenu.update(dt);
 
         // Game update
-        if (this.game?.initialized && this.game.playing) {
+        if (this.game?.initialized && this.game.m_playing) {
             if (this.active) {
                 this.setAppActive(false);
                 this.setPlayLockout(true);

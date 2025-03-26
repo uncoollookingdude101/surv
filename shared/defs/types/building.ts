@@ -153,10 +153,13 @@ export interface BuildingDef {
     floor_images?: FloorImage[];
     ceiling_images?: Array<{
         sprite: string;
+        pos?: Vec2;
+        rot?: number;
         scale: number;
         alpha: number;
         tint: number;
     }>;
+    teamId?: number;
 }
 
 export interface FloorImage {

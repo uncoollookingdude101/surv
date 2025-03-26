@@ -3,6 +3,7 @@ import stripBlockPlugin from "vite-plugin-strip-block";
 import { version } from "../package.json";
 import { Config } from "../server/src/config";
 import { GIT_VERSION } from "../server/src/utils/gitRevision";
+import { codefendPlugin } from "./vite-plugins/codefendPlugin";
 
 export const SplashThemes = {
     main: {
@@ -66,9 +67,11 @@ export default defineConfig(({ mode }) => {
         ...AdsVars,
     };
 
+    const isDev = mode === "development";
+
     const regions = {
         ...Config.regions,
-        ...(mode === "development"
+        ...(isDev
             ? {
                   local: {
                       https: false,
@@ -82,11 +85,12 @@ export default defineConfig(({ mode }) => {
     return {
         base: "",
         build: {
+            target: "es2022",
             chunkSizeWarningLimit: 2000,
             rollupOptions: {
                 output: {
                     assetFileNames(assetInfo) {
-                        if (assetInfo.name?.endsWith(".css")) {
+                        if (assetInfo.names[0]?.endsWith(".css")) {
                             return "css/[name]-[hash][extname]";
                         }
                         return "assets/[name]-[hash][extname]";
@@ -97,15 +101,12 @@ export default defineConfig(({ mode }) => {
                         if (id.includes("node_modules")) {
                             return "vendor";
                         }
-                        if (id.includes("shared")) {
-                            return "shared";
-                        }
                     },
                 },
             },
         },
         resolve: {
-            extensions: [".js", ".ts"],
+            extensions: [".ts", ".js"],
         },
         define: {
             GAME_REGIONS: regions,
@@ -120,21 +121,22 @@ export default defineConfig(({ mode }) => {
             }),
             MENU_MUSIC: JSON.stringify(selectedTheme.MENU_MUSIC),
             AIP_PLACEMENT_ID: JSON.stringify(Config.client.AIP_PLACEMENT_ID),
+            IS_DEV: isDev,
         },
-        plugins: [
-            mode !== "development"
-                ? stripBlockPlugin({
+        plugins: !isDev
+            ? [
+                  codefendPlugin(),
+                  stripBlockPlugin({
                       start: "STRIP_FROM_PROD_CLIENT:START",
                       end: "STRIP_FROM_PROD_CLIENT:END",
-                  })
-                : undefined,
-        ],
+                  }),
+              ]
+            : undefined,
         json: {
             stringify: true,
         },
         server: {
             port: 3000,
-            strictPort: true,
             host: "0.0.0.0",
             proxy: {
                 "/api": {
@@ -152,7 +154,6 @@ export default defineConfig(({ mode }) => {
         },
         preview: {
             port: 3000,
-            strictPort: true,
             host: "0.0.0.0",
             proxy: {
                 "/api": {

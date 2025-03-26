@@ -14,8 +14,8 @@ import { Config } from "./config";
 import {
     HTTPRateLimit,
     WebSocketRateLimit,
-    checkForBadWords,
     getIp,
+    validateUserName,
 } from "./utils/serverHelpers";
 
 export interface TeamSocketData {
@@ -86,7 +86,13 @@ export class TeamMenu {
             upgrade(res, req, context) {
                 res.onAborted((): void => {});
 
-                const ip = getIp(res);
+                const ip = getIp(res, req, Config.apiServer.proxyIPHeader);
+
+                if (!ip) {
+                    teamMenu.server.logger.warn(`Invalid IP Found`);
+                    res.end();
+                    return;
+                }
 
                 if (httpRateLimit.isRateLimited(ip) || wsRateLimit.isIpRateLimited(ip)) {
                     res.writeStatus("429 Too Many Requests");
@@ -246,15 +252,6 @@ export class TeamMenu {
         }
     }
 
-    cleanUserName(name: string): string {
-        if (!name || typeof name !== "string") return "Player";
-        name = name.trim();
-        if (checkForBadWords(name) || !name || name.length > 16) {
-            return "Player";
-        }
-        return name;
-    }
-
     validateMsg(msg: ClientToServerTeamMsg) {
         assert(typeof msg.type === "string");
 
@@ -321,7 +318,7 @@ export class TeamMenu {
 
         switch (type) {
             case "create": {
-                const name = this.cleanUserName(parsedMessage.data.playerData.name);
+                const name = validateUserName(parsedMessage.data.playerData.name);
 
                 const player: RoomPlayer = {
                     name,
@@ -370,7 +367,7 @@ export class TeamMenu {
                     break;
                 }
 
-                const name = this.cleanUserName(parsedMessage.data.playerData.name);
+                const name = validateUserName(parsedMessage.data.playerData.name);
 
                 const player = {
                     name,
@@ -387,7 +384,7 @@ export class TeamMenu {
                 break;
             }
             case "changeName": {
-                const newName = this.cleanUserName(parsedMessage.data.name);
+                const newName = validateUserName(parsedMessage.data.name);
                 const room = this.rooms.get(localPlayerData.roomUrl)!;
                 const player = room.players.find(
                     (p) => p.socketData === localPlayerData,
@@ -436,7 +433,7 @@ export class TeamMenu {
                     data: {},
                 };
                 this.sendResponse(response, pToKick);
-                //player is removed and new room state is sent when the socket is inevitably closed after the kick
+                // player is removed and new room state is sent when the socket is inevitably closed after the kick
                 break;
             }
             case "keepAlive": {

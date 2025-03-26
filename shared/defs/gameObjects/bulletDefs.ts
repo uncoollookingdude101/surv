@@ -172,7 +172,7 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
     bullet_scarssr: {
         type: "bullet",
-        damage: 60,
+        damage: 81,
         obstacleDamage: 1.5,
         falloff: 0.85,
         distance: 200,
@@ -291,7 +291,7 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
     bullet_m9: {
         type: "bullet",
-        damage: 12,
+        damage: 14,
         obstacleDamage: 1,
         falloff: 0.7,
         speed: 85,
@@ -304,7 +304,7 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
     bullet_m9_cursed: {
         type: "bullet",
-        damage: 12,
+        damage: 14,
         obstacleDamage: 1,
         falloff: 0.7,
         speed: 85,
@@ -383,7 +383,7 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
     bullet_m1911: {
         type: "bullet",
-        damage: 14,
+        damage: 16,
         obstacleDamage: 1,
         falloff: 0.7,
         speed: 80,
@@ -687,21 +687,8 @@ export const BaseDefs: Record<string, BulletDef> = {
         maxFlareScale: 2,
         skipCollision: true,
     },
-    bullet_potato: {
-        type: "bullet",
-        damage: 0,
-        obstacleDamage: 1,
-        falloff: 1,
-        distance: 1,
-        speed: 100,
-        variance: 0,
-        shrapnel: false,
-        tracerColor: "invis",
-        tracerWidth: 0,
-        tracerLength: 1.2,
-        skipCollision: true,
-    },
-    bullet_bugle: {
+    //used for guns that shoot projectiles since they still technically have to shoot a bullet of some kind
+    bullet_invis: {
         type: "bullet",
         damage: 0,
         obstacleDamage: 1,

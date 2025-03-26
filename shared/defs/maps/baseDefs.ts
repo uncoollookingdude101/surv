@@ -394,8 +394,11 @@ export const Main: MapDef = {
         ],
         tier_airdrop_mythic: [
             { name: "scarssr", count: 1, weight: 1 }, // ?
-            { name: "usas", count: 1, weight: 1 }, // ?
+            { name: "usas", count: 1, weight: 0.5 }, // ?
             { name: "p30l_dual", count: 1, weight: 1 }, // ?
+            { name: "awc", count: 1, weight: 0.1 }, // ?
+            { name: "pkp", count: 1, weight: 0.3 }, // ?
+            { name: "m249", count: 1, weight: 0.3 }, // ?
         ],
         tier_airdrop_perk:[],
         tier_airdrop_ammo: [
@@ -438,6 +441,13 @@ export const Main: MapDef = {
         tier_saloon: [
             { name: "vector45", count: 1, weight: 1 },
             { name: "mkg45", count: 1, weight: 1 },
+        ],
+        tier_cattle_crate: [
+            { name: "m1a1", count: 1, weight: 1 },
+            { name: "model94", count: 1, weight: 1 },
+            { name: "colt45", count: 1, weight: 1 },
+            { name: "outfitVerde", count: 1, weight: 0.1 },
+            { name: "outfitDesertCamo", count: 1, weight: 0.1 },
         ],
         tier_pumpkin_perks: [{ name: "halloween_mystery", count: 1, weight: 1 }],
         tier_xp_uncommon: [
@@ -485,6 +495,34 @@ export const Main: MapDef = {
             { name: "treat_762", count: 1, weight: 1 },
             { name: "treat_super", count: 1, weight: 0.1 },
         ],
+        tier_faction_outfits: [
+            { name: "outfitVerde", count: 1, weight: 1 },
+            { name: "outfitWoodland", count: 1, weight: 1 },
+            { name: "outfitKeyLime", count: 1, weight: 1 },
+            { name: "outfitCamo", count: 1, weight: 1 },
+        ],
+        tier_airdrop_faction_outfits: [{ name: "outfitGhillie", count: 1, weight: 1 }],
+        tier_airdrop_faction_melee: [{ name: "pan", count: 1, weight: 1 }],
+        tier_perks: [
+            { name: "firepower", count: 1, weight: 1 },
+            { name: "windwalk", count: 1, weight: 1 },
+            { name: "endless_ammo", count: 1, weight: 1 },
+            { name: "steelskin", count: 1, weight: 1 },
+            { name: "splinter", count: 1, weight: 1 },
+            { name: "small_arms", count: 1, weight: 1 },
+            { name: "takedown", count: 1, weight: 1 },
+            { name: "field_medic", count: 1, weight: 1 },
+            { name: "tree_climbing", count: 1, weight: 1 },
+            { name: "scavenger", count: 1, weight: 1 },
+            { name: "chambered", count: 1, weight: 1 },
+            { name: "martyrdom", count: 1, weight: 1 },
+            { name: "self_revive", count: 1, weight: 1 },
+            { name: "bonus_9mm", count: 1, weight: 1 },
+        ],
+        tier_potato_perks: [
+            { name: "", count: 1, weight: 25 },
+            { name: "tier_perks", count: 1, weight: 1 },
+        ],
     },
     mapGen: {
         map: {
@@ -509,6 +547,7 @@ export const Main: MapDef = {
                     },
                 ],
                 smoothness: 0.45,
+                spawnCabins: true,
                 masks: [],
             },
         },
@@ -550,9 +589,6 @@ export const Main: MapDef = {
             medium: "bridge_md_structure_01",
             large: "bridge_lg_structure_01",
             xlarge: "",
-        },
-        riverCabins: {
-            cabin_01: 3,
         },
         customSpawnRules: {
             locationSpawns: [
@@ -633,3 +669,11 @@ export const Main: MapDef = {
     },
     /* STRIP_FROM_PROD_CLIENT:END */
 };
+
+type DeepPartial<T> = T extends object
+    ? {
+          [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;
+
+export type PartialMapDef = DeepPartial<MapDef>;

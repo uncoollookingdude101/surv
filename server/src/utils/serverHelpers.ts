@@ -1,4 +1,6 @@
-import type { HttpResponse } from "uWebSockets.js";
+import { isIP } from "net";
+import type { HttpRequest, HttpResponse } from "uWebSockets.js";
+import { Constants } from "../../../shared/net/net";
 import { Config } from "../config";
 
 /**
@@ -81,20 +83,33 @@ export function readPostedJSON<T>(
 
 // credits: https://github.com/Blank-Cheque/Slurs
 const badWordsFilter = [
-    /(s[a4]nd)?n[ila4o10íĩî|!][gq]{1,2}(l[e3]t|[e3]r|[a4]|n[o0]g)?s?/,
-    /f[a@4](g{1,2}|qq)([e3i1líĩî|!o0]t{1,2}(ry|r[i1líĩî|!]e)?)?/,
-    /k[il1y]k[e3](ry|rie)?s?/,
-    /tr[a4]n{1,2}([i1líĩî|!][e3]|y|[e3]r)s?/,
-    /c[o0]{2}ns?/,
-    /ch[i1líĩî|!]nks?/,
+    /(s[a4]nd)?n[ila4o10íĩî|!][gq]{1,2}(l[e3]t|[e3]r|[a4]|n[o0]g)?s?/i,
+    /f[a@4](g{1,2}|qq)([e3i1líĩî|!o0]t{1,2}(ry|r[i1líĩî|!]e)?)?/i,
+    /k[il1y]k[e3](ry|rie)?s?/i,
+    /tr[a4]n{1,2}([i1líĩî|!][e3]|y|[e3]r)s?/i,
+    /c[o0]{2}ns?/i,
+    /ch[i1líĩî|!]nks?/i,
 ];
 
-export function checkForBadWords(name: string) {
-    name = name.toLowerCase();
+export function validateUserName(name: string) {
+    if (!name || typeof name !== "string") return "Player";
+
+    name = name
+        .trim()
+        .substring(0, Constants.PlayerNameMaxLen)
+        // remove extended ascii etc
+        .replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, "");
+
+    if (!name.length) return "Player";
+
+    const santized = name.replace(/[^a-zA-Z0-9|$|@]|\^/g, "");
+
     for (const regex of badWordsFilter) {
-        if (name.match(regex)) return true;
+        if (name.match(regex) || santized.match(regex)) {
+            return "Player";
+        }
     }
-    return false;
+    return name;
 }
 
 const textDecoder = new TextDecoder();
@@ -102,11 +117,13 @@ const textDecoder = new TextDecoder();
 /**
  * Get an IP from an uWebsockets HTTP response
  */
-export function getIp(res: HttpResponse) {
-    const ip = textDecoder.decode(res.getRemoteAddressAsText());
-    const proxyIp = textDecoder.decode(res.getProxiedRemoteAddressAsText());
-    // proxy ip should be an empty string when not proxied
-    return proxyIp || ip;
+export function getIp(res: HttpResponse, req: HttpRequest, proxyHeader?: string) {
+    const ip = proxyHeader
+        ? req.getHeader(proxyHeader)
+        : textDecoder.decode(res.getRemoteAddressAsText());
+
+    if (!ip || isIP(ip) == 0) return undefined;
+    return ip;
 }
 
 // modified version of https://github.com/uNetworking/uWebSockets.js/blob/master/examples/RateLimit.js

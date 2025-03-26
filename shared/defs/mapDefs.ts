@@ -37,7 +37,19 @@ export const MapDefs = {
     flare: Flare,
 } satisfies Record<string, MapDef>;
 
-export type Atlas = "gradient" | "loadout" | "shared" | "main";
+export type Atlas =
+    | "gradient"
+    | "loadout"
+    | "shared"
+    | "main"
+    | "desert"
+    | "faction"
+    | "halloween"
+    | "potato"
+    | "snow"
+    | "woods"
+    | "cobalt"
+    | "savannah";
 
 export interface MapDef {
     mapId: number;
@@ -124,6 +136,14 @@ export interface MapDef {
                 wait: number;
             }>;
         };
+        unlocks?: {
+            timings: Array<{
+                type: string; //can either be a building with the door(s) to unlock OR the door itself, no support for structures yet
+                stagger: number; //only for buildings with multiple unlocks, will stagger the unlocks instead of doing them all at once
+                circleIdx: number;
+                wait: number;
+            }>;
+        };
         bagSizes: Record<string, number[]>;
         bleedDamage: number;
         bleedDamageMult: number;
@@ -169,6 +189,7 @@ export interface MapDef {
                     pos: Vec2;
                     rad: number;
                 }>;
+                spawnCabins: boolean;
             };
         };
         places: Array<{
@@ -180,7 +201,6 @@ export interface MapDef {
             large: string;
             xlarge: string;
         };
-        riverCabins: Record<string, number>;
         customSpawnRules: {
             locationSpawns: Array<{
                 type: string;

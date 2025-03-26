@@ -11,9 +11,9 @@ export interface ExplosionDef {
     explosionEffectType: string;
     decalType: string;
     teamDamage?: boolean;
-    freezeAmount?: number; //unused atm in favor of gameconfig constant
-    freezeDuration?: number; //how long to slow down player on hit
-    stonePiercing?: boolean;
+    freezeAmount?: number; // unused atm in favor of gameconfig constant
+    freezeDuration?: number; // how long to slow down player on hit
+    dropRandomLoot?: boolean;
 }
 
 export const ExplosionDefs: Record<string, ExplosionDef> = {
@@ -86,7 +86,6 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "shrapnel_usas",
         explosionEffectType: "rounds",
         decalType: "decal_rounds_explosion",
-        stonePiercing: true,
     },
     explosion_rounds_sg: {
         type: "explosion",
@@ -97,7 +96,6 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "shrapnel_usas",
         explosionEffectType: "rounds_sg",
         decalType: "decal_rounds_explosion",
-        stonePiercing: true,
     },
     explosion_mirv: {
         type: "explosion",
@@ -140,6 +138,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         decalType: "decal_snowball_explosion",
         freezeAmount: 3,
         freezeDuration: 0.5,
+        dropRandomLoot: true,
     },
     explosion_snowball_heavy: {
         type: "explosion",
@@ -152,6 +151,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         decalType: "decal_snowball_explosion",
         freezeAmount: 3,
         freezeDuration: 1,
+        dropRandomLoot: true,
     },
     explosion_potato: {
         type: "explosion",
@@ -165,6 +165,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         decalType: "decal_potato_explosion",
         freezeAmount: 3,
         freezeDuration: 0.5,
+        dropRandomLoot: true,
     },
     explosion_potato_heavy: {
         type: "explosion",
@@ -178,6 +179,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         decalType: "decal_potato_explosion",
         freezeAmount: 3,
         freezeDuration: 1,
+        dropRandomLoot: true,
     },
     explosion_potato_cannonball: {
         type: "explosion",
@@ -189,7 +191,6 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "",
         explosionEffectType: "potato_cannonball",
         decalType: "decal_frag_small_explosion",
-        stonePiercing: true,
     },
     explosion_potato_smgshot: {
         type: "explosion",
@@ -200,10 +201,9 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelCount: 0,
         shrapnelType: "",
         explosionEffectType: "potato_smgshot",
-        decalType: "decal_potato_explosion",
+        decalType: "",
         freezeAmount: 3,
-        freezeDuration: 0.5,
-        stonePiercing: true,
+        freezeDuration: 1,
     },
     explosion_bomb_iron: {
         type: "explosion",
@@ -214,6 +214,5 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "shrapnel_bomb_iron",
         explosionEffectType: "bomb_iron",
         decalType: "decal_bomb_iron_explosion",
-        stonePiercing: true,
     },
 };

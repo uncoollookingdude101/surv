@@ -29,6 +29,29 @@ export const PerkProperties = {
     final_bugle: {
         scaleOnDeath: 0.2,
     },
+    broken_arrow: {
+        bonusAirstrikes: 2,
+    },
+    fabricate: {
+        refillInterval: 12, // means refill every x seconds
+        giveInterval: 0.08, // interval between each grenade being given until the backpack is full
+    },
+    gotw: {
+        scale: 0.25,
+        healthRegen: 0.5, // per second
+    },
+    field_medic: {
+        speedBoost: 1.5,
+    },
+    tree_climbing: {
+        waterSpeedBoost: 2,
+    },
+    bonus_9mm: {
+        spreadMul: 1.1,
+    },
+    rare_potato: {
+        quality: 1,
+    },
     // map of ammo type to perk that boosts that ammo
     ammoBonuses: {
         "9mm": ["treat_9mm", "bonus_9mm"],
