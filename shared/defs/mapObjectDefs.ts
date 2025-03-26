@@ -8687,8 +8687,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         loot: [
             autoLoot("flare_gun", 1),
-            autoLoot("mirv", 1),
-            autoLoot("mirv", 1),
+            autoLoot("strobe", 1),
+            autoLoot("strobe", 1),
             autoLoot("mirv", 1),
             autoLoot("mirv", 1),
         ],
@@ -10058,7 +10058,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     potato_03: createPotato({ img: { sprite: "map-potato-03.img" } }),
     power_box_01: createControlPanel({}),
     pumpkin_01: createPumpkin({
-        loot: [tierLoot("tier_outfits", 1, 1), tierLoot("tier_pumpkin_candy", 1, 1)],
+        loot: [tierLoot("tier_outfits_halloween", 1, 1), tierLoot("tier_pumpkin_candy", 1, 1)],
     }),
     pumpkin_02: createPumpkin({
         health: 140,

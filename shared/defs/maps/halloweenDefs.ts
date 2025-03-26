@@ -143,7 +143,7 @@ const mapDef: PartialMapDef = {
                 count: 1,
                 weight: 0.05,
             },
-            { name: "tier_outfits", count: 1, weight: 0 },
+            { name: "tier_outfits_halloween", count: 1, weight: 0 },
         ],
         tier_container: [
             { name: "tier_guns", count: 1, weight: 0.29 },

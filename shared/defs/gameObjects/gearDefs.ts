@@ -698,7 +698,6 @@ const SkinDefs = {
     helmet03_forest: defineSkin("helmet03", {
         name: "Shishigami no Kabuto",
         role: "woods_king",
-        noDrop: "true",
         mapIndicator: {
             sprite: "player-king-woods.img",
             tint: 65280,
@@ -721,8 +720,7 @@ const SkinDefs = {
     }),
     helmet03_moon: defineSkin("helmet03", {
         name: "Tsukuyomi no Kabuto",
-        role:"moon",
-        noDrop: "true",
+        perk: "endless_ammo",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
@@ -744,9 +742,7 @@ const SkinDefs = {
     }),
     helmet03_lt_aged: defineSkin("helmet03", {
         name: "Lieutenant Helmet",
-        role: "lieutenant2",
         perk: "firepower",
-        noDrop:"true",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
@@ -792,8 +788,7 @@ const SkinDefs = {
     }),
     helmet03_marksman2: defineSkin("helmet03", {
         name: "Marksman Helmet",
-        role: "marksman2",
-        noDrop: true,
+        perk: "targeting",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
@@ -873,8 +868,7 @@ const SkinDefs = {
     }),
     helmet04_medic2: defineSkin("helmet04", {
         name: "Aged Medic Helmet",
-        role:"medic2",
-        noDrop: true,
+        perk: "field_medic",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
@@ -938,8 +932,7 @@ const SkinDefs = {
     }),
     helmet04_leader2: defineSkin("helmet04", {
         name: "Leader Helmet",
-        role:"leader2",
-        noDrop: true,
+        perk: "bonus_assault",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

@@ -439,7 +439,10 @@ export class Obstacle extends BaseGameObject {
                 props: {},
             });
         }
-        if (params.source instanceof Player && params.source.hasPerk("scavenger_adv")) {
+        if (
+            params.source?.__type === ObjectType.Player &&
+            params.source.hasPerk("scavenger_adv")
+        ) {
             loot.push({
                 tier: "tier_scavenger_adv",
                 min: 1,

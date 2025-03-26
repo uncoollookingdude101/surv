@@ -2,10 +2,6 @@ export const PerkProperties = {
     leadership: {
         scale: 0.25,
     },
-    gotw:{
-        scale: 0.25,
-        damageReduction: 0.25,
-    },
     steelskin: {
         scale: 0.4,
         damageReduction: 0.5,
@@ -19,8 +15,7 @@ export const PerkProperties = {
         scale: -0.25,
     },
     splinter: {
-        mainDamageMulti: 0.7
-        ,
+        mainDamageMulti: 0.7,
         splitsDamageMulti: 0.5,
     },
     trick_size: {

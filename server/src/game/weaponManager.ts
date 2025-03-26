@@ -683,12 +683,12 @@ export class WeaponManager {
 
         let damageMult = 1;
         if (hasSplinter) {
-            damageMult *= PerkProperties.splinter.mainDamageMult;
+            damageMult *= PerkProperties.splinter.mainDamageMulti;
         }
 
         const saturated = this.isBulletSaturated(itemDef.ammo);
         if (saturated) {
-            damageMult *= PerkProperties.ammoBonusDamageMult;
+            damageMult *= PerkProperties.ammoBonusDamageMulti;
         }
 
         if (shouldApplyChambered) {
@@ -820,7 +820,7 @@ export class WeaponManager {
                     sParams.lastShot = false;
                     sParams.shotFx = false;
                     sParams.trailSmall = true;
-                    sParams.damageMult *= PerkProperties.splinter.splitsDamageMult;
+                    sParams.damageMult *= PerkProperties.splinter.splitsDamageMulti;
 
                     this.player.game.bulletBarn.fireBullet(sParams);
                     //

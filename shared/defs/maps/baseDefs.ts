@@ -114,6 +114,7 @@ export const Main: MapDef = {
             { name: "helmet03", count: 1, weight: 3 },
             { name: "chest03", count: 1, weight: 3 },
             { name: "backpack03", count: 1, weight: 3 },
+            { name: "usas", count: 1, weight: 1 },
         ],
         tier_surviv: [
             { name: "tier_scopes", count: 1, weight: 0.15 }, // TODO get more data on this from original
@@ -360,6 +361,27 @@ export const Main: MapDef = {
             { name: "outfitWoodland", count: 1, weight: 0.1 }, // ?
             { name: "outfitCamo", count: 1, weight: 0.1 }, // ?
             { name: "outfitGhillie", count: 1, weight: 0.05 }, // ?
+        ],
+        tier_outfits_halloween: [
+            { name: "outfitBarrel", count: 1, weight: 1 },
+            { name: "outfitWoodBarrel", count: 1, weight: 1 },
+            { name: "outfitStone", count: 1, weight: 1 },
+            { name: "outfitTree", count: 1, weight: 1 },
+            { name: "outfitStump", count: 1, weight: 1 },
+            { name: "outfitBush", count: 1, weight: 1 },
+            { name: "outfitLeafPile", count: 1, weight: 1 },
+            { name: "outfitCrate", count: 1, weight: 1 },
+            { name: "outfitTable", count: 1, weight: 1 },
+            { name: "outfitSoviet", count: 1, weight: 1 },
+            { name: "outfitOven", count: 1, weight: 1 },
+            { name: "outfitRefrigerator", count: 1, weight: 1 },
+            { name: "outfitVending", count: 1, weight: 1 },
+            { name: "outfitPumpkin", count: 1, weight: 1 },
+            { name: "outfitWoodpile", count: 1, weight: 1 },
+            { name: "outfitToilet", count: 1, weight: 1 },
+            { name: "outfitBushRiver", count: 1, weight: 1 },
+            { name: "outfitCrab", count: 1, weight: 1 },
+            { name: "outfitStumpAxe", count: 1, weight: 1 },
         ],
         tier_islander_outfit: [{ name: "outfitIslander", count: 1, weight: 1 }],
         tier_imperial_outfit: [{ name: "outfitImperial", count: 1, weight: 1 }],

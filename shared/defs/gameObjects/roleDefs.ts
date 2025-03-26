@@ -191,7 +191,6 @@ export const RoleDefs: Record<string, RoleDef> = {
                     [TeamColor.Red]: "outfitRedLeader",
                     [TeamColor.Blue]: "outfitBlueLeader",
                 })[teamcolor],
-            scope: "15xscope",
             inventory: {
                 "1xscope": 1,
                 "2xscope": 1,
@@ -257,7 +256,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet04_medic",
             chest: "chest03",
-            scope: "15xscope",
             inventory: {
                 "15xscope": 1,
                 bandage:30,
@@ -413,7 +411,6 @@ export const RoleDefs: Record<string, RoleDef> = {
                     teamcolor,
                 ),
             chest: "chest04",
-            scope: "15xscope",
             inventory: {
                 mirv: 8,
                 "8xscope": 1,
@@ -426,41 +423,6 @@ export const RoleDefs: Record<string, RoleDef> = {
         killFeed: { dead: true, color: "#12ff00" },
         sound: { dead: "leader_dead_01" },
         perks: ["gotw", "windwalk"],
-    },
-    lieutenant2: {
-        type: "role",
-        announce: false,
-        killFeed: { dead: false},
-        sound: { assign: "lt_assigned_01" },
-        perks: ["firepower"]
-    },
-    marksman2: {
-        type: "role",
-        announce: false,
-        killFeed: { dead: false},
-        sound: { assign: "lt_assigned_01" },
-        perks: ["targeting","takedown"]
-    },
-    leader2: {
-        type: "role",
-        announce: false,
-        killFeed: { dead: false},
-        sound: { assign: "lt_assigned_01" },
-        perks: ["leadership","bonus_assault"]
-    },
-    medic2: {
-        type: "role",
-        announce: false,
-        killFeed: { dead: false},
-        sound: { assign: "lt_assigned_01" },
-        perks: ["field_medic","self_revive"],
-    },
-    moon: {
-        type: "role",
-        announce: false,
-        killFeed: { dead: false},
-        sound: { assign: "lt_assigned_01" },
-        perks: ["endless_ammo"],
     },
     kill_leader: {
         type: "role",
