@@ -1,8 +1,8 @@
+import { GameConfig } from "../../gameConfig";
 import { util } from "../../utils/util";
+import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
 import { Main } from "./baseDefs";
-import { v2 } from "../../utils/v2";
-import { GameConfig } from "../../gameConfig";
 const mapDef = {
     desc: {
         name: "Savannah",
@@ -12,59 +12,59 @@ const mapDef = {
     gameMode: {
         maxPlayers: 80,
         killLeaderEnabled: true,
-        sniperMode:true,
+        sniperMode: true,
     },
-        gameConfig: {
-            planes: {
-                timings: [
-                    {circleIdx: 1,wait: 5,options: { type: GameConfig.Plane.Airdrop },},
-                    {circleIdx: 1,wait: 5,options: { type: GameConfig.Plane.Airdrop },},
-                    {circleIdx: 1,wait: 5,options: { type: GameConfig.Plane.Airdrop },},
-                    {
-                        circleIdx: 1,
-                        wait: 8,
-                        options: {
-                            type: GameConfig.Plane.Airstrike,
-                            numPlanes: [
-                                { count: 3, weight: 3 },
-                                { count: 4, weight: 1 },
-                                { count: 5, weight: 0.1 },
-                            ],
-                            airstrikeZoneRad: 50,
-                            wait: 1.5,
-                            delay: 1,
+    gameConfig: {
+        planes: {
+            timings: [
+                { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
+                {
+                    circleIdx: 1,
+                    wait: 8,
+                    options: {
+                        type: GameConfig.Plane.Airstrike,
+                        numPlanes: [
+                            { count: 3, weight: 3 },
+                            { count: 4, weight: 1 },
+                            { count: 5, weight: 0.1 },
+                        ],
+                        airstrikeZoneRad: 50,
+                        wait: 1.5,
+                        delay: 1,
                         },
                     },
 
-                    {circleIdx: 2,wait: 10,options: { type: GameConfig.Plane.Airdrop },},
-                    {circleIdx: 2,wait: 10,options: { type: GameConfig.Plane.Airdrop },},
-                    {circleIdx: 2,wait: 10,options: { type: GameConfig.Plane.Airdrop },},
+                { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
 
-                    {circleIdx: 3,wait: 2,options: { type: GameConfig.Plane.Airdrop },},
-                    {circleIdx: 3,wait: 2,options: { type: GameConfig.Plane.Airdrop },},
-                    {circleIdx: 3,wait: 2,options: { type: GameConfig.Plane.Airdrop },},
+                { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
 
-                    {
-                        circleIdx: 4,
-                        wait: 1,
-                        options: { 
-                            type: GameConfig.Plane.Airdrop,
-                            airdropType: "airdrop_crate_04", 
-                        },
+                {
+                    circleIdx: 4,
+                    wait: 1,
+                    options: { 
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_04", 
                     },
-                ],
-                crates: [
-                    { name: "airdrop_crate_01", weight: 2 },
-                    { name: "airdrop_crate_02", weight: 1 },
-                ],
-            },
-            bagSizes: {},
-            bleedDamage: 2,
-            bleedDamageMult: 1,
-            player: {
-                moveSpeed: 50,
-            }
+                },
+            ],
+            crates: [
+                { name: "airdrop_crate_01", weight: 2 },
+                { name: "airdrop_crate_02", weight: 1 },
+            ],
         },
+        bagSizes: {},
+        bleedDamage: 2,
+        bleedDamageMult: 1,
+        player: {
+            moveSpeed: 50,
+        }
+    },
         
     assets: {
         audio: [
@@ -81,12 +81,20 @@ const mapDef = {
             { name: "log_04", channel: "sfx" },
             { name: "piano_music_01", channel: "ambient" },
             ],
-        atlases: ["gradient", "loadout", "shared", "main", "savannah","woods","desert","halloween","faction"],
+        atlases: [
+            "gradient", 
+            "loadout", 
+            "shared", 
+            "main", 
+            "savannah",
+            "woods",
+            "desert",
+            "halloween",
+            "faction"
+        ],
     },
     lootTable: {
-        tier_club_melee: [
-            { name: "pan", count: 1, weight: 1 },
-        ],
+        tier_club_melee: [{ name: "pan", count: 1, weight: 1 }],
         tier_throwables: [
             { name: "frag", count: 2, weight: 1 }, // !
             { name: "smoke", count: 1, weight: 1 },

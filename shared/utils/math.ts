@@ -1,4 +1,4 @@
-import earcut from "earcut";
+import { earcut } from "./earcut";
 import { assert } from "./util";
 import { type Vec2, v2 } from "./v2";
 
