@@ -26,13 +26,11 @@ const mapDef = {
                     options: {
                         type: GameConfig.Plane.Airstrike,
                         numPlanes: [
-                            { count: 3, weight: 3 },
-                            { count: 4, weight: 1 },
-                            { count: 5, weight: 0.1 },
+                            { count: 20, weight: 1 },
                         ],
-                        airstrikeZoneRad: 50,
-                        wait: 1.5,
-                        delay: 1,
+                        airstrikeZoneRad: 150,
+                        wait: 0.5,
+                        delay: 0.5,
                     },
                 },
 
@@ -58,11 +56,12 @@ const mapDef = {
                 { name: "airdrop_crate_02", weight: 1 },
             ],
         },
-        bagSizes: {},
+        bagSizes: {
+            strobe: [2, 4, 6, 10],
+        },
         bleedDamage: 2,
         bleedDamageMult: 1,
         player: {
-            moveSpeed: 50,
         },
     },
 
@@ -99,11 +98,10 @@ const mapDef = {
             { name: "frag", count: 2, weight: 1 }, // !
             { name: "smoke", count: 1, weight: 1 },
             { name: "mirv", count: 2, weight: 0.5 },
-            { name: "strobe", count: 1, weight: 0.1 },
+            { name: "strobe", count: 1, weight: 0.5 },
         ],
         tier_airdrop_throwables: [
-            { name: "strobe", count: 1, weight: 0.5 },
-            { name: "mirv", count: 2, weight: 1 },
+            { name: "strobe", count: 1, weight: 1 },
         ],
         loot_tier_sv98: [
             { name: "sv98", count: 1, weight: 1 },
@@ -205,6 +203,7 @@ const mapDef = {
             { name: "self_revive", count: 1, weight: 1 },
             { name: "bonus_9mm", count: 1, weight: 1 },
             { name: "flak_jacket", count: 1, weight: 1 },
+            { name: "fabricate", count: 1, weight: 1 },
         ],
         tier_hatchet_melee: [
             { name: "helmet04_leader2", count: 1, weight: 5 }, // ?
@@ -221,7 +220,6 @@ const mapDef = {
             { name: "", count: 1, weight: 5 }, // ?
             { name: "tier_katanas", count: 1, weight: 3 }, // ?
             { name: "naginata", count: 1, weight: 1 }, // ?
-            { name: "helmet03_moon", count: 1, weight: 10 }, // ?
         ],
         tier_airdrop_perk: [
             { name: "splinter", count: 1, weight: 1 },
@@ -234,9 +232,11 @@ const mapDef = {
             { name: "awc", count: 1, weight: 1 },
             { name: "pkp", count: 1, weight: 1 },
             { name: "m249", count: 1, weight: 1 },
-            { name: "m4a1", count: 1, weight: 4 },
-            { name: "scorpion", count: 1, weight: 5 }, // ?
+            { name: "m4a1", count: 1, weight: 1 },
+            { name: "scorpion", count: 1, weight: 1 },
             { name: "usas", count: 1, weight: 1 },
+            { name: "potato_smg", count: 1, weight: 1 },
+            { name: "potato_cannon", count: 1, weight: 1 },
         ],
         tier_airdrop_uncommon: [
             { name: "scar", count: 1, weight: 0.75 },
@@ -259,15 +259,20 @@ const mapDef = {
             { name: "outfitGhillie", count: 1, weight: 0.05 }, // ?
         ],
         tier_eye_block: [
-            { name: "flare_gun", count: 1, weight: 1 },
-            { name: "painkiller", count: 1, weight: 1 },
-            { name: "m4a1", count: 1, weight: 1 },
+            { name: "flare_gun", count: 1, weight: 2 },
+            { name: "painkiller", count: 1, weight: 2 },
+            { name: "m4a1", count: 1, weight: 2 },
             { name: "m249", count: 1, weight: 1 },
             { name: "awc", count: 1, weight: 1 },
             { name: "pkp", count: 1, weight: 1 },
-            { name: "strobe", count: 1, weight: 1 },
+            { name: "strobe", count: 1, weight: 2 },
             { name: "tier_airdrop_perk", count: 1, weight: 1 },
         ],
+        tier_helm_special: [
+            { name: "helmet03_moon1", count: 1, weight: 2 },
+            { name: "helmet03_moon2", count: 1, weight: 0.5 },
+            { name: "helmet03_moon3", count: 1, weight: 1 },
+        ]
     },
     biome: {
         colors: {
@@ -335,7 +340,7 @@ const mapDef = {
                 container_03: 7,
                 container_04: 7,
                 shack_01: 9,
-                outhouse_01: 8,
+                outhouse_01: 10,
                 loot_tier_1: 50,
                 loot_tier_beach: 7,
                 cache_pumpkin_01: 30,
@@ -343,8 +348,8 @@ const mapDef = {
         ],
         fixedSpawns: [
             {
-                kopje_patch_01: 4,
-                savannah_patch_01: 5,
+                kopje_patch_01: 5,
+                savannah_patch_01: 7,
                 desert_town_01: 1,
                 desert_town_02: 1,
                 river_town_02: 1,
@@ -366,16 +371,16 @@ const mapDef = {
                 bunker_structure_03: 1,
                 bunker_structure_04: 1,
                 bunker_structure_05: 1,
-                warehouse_complex_01: 2,
+                warehouse_complex_01: 1,
                 mansion_structure_01: 2,
                 police_01: 1,
-                bank_01: 3,
+                bank_01: 2,
                 chest_01: 3,
                 chest_03: { odds: 0.2 },
                 mil_crate_02: { odds: 0.25 },
                 tree_02: 5,
-                teahouse_complex_01su: 3,
-                stone_04: 15,
+                teahouse_complex_01su: 4,
+                stone_04: 20,
                 club_complex_01: 2,
                 greenhouse_02: 2,
                 logging_complex_02: 5,
@@ -391,6 +396,7 @@ const mapDef = {
             "teapavilion_01w",
             "police_01",
             "logging_complex_02",
+            "kopje_patch_01",
         ],
     },
     /* STRIP_FROM_PROD_CLIENT:END */

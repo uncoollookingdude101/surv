@@ -8689,8 +8689,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("flare_gun", 1),
             autoLoot("strobe", 1),
             autoLoot("strobe", 1),
-            autoLoot("mirv", 1),
-            autoLoot("mirv", 1),
+            autoLoot("strobe", 1),
+            autoLoot("strobe", 1),
         ],
         hitParticle: "blackChip",
         map: { display: false, color: 7025920, scale: 0.85 },
@@ -8698,7 +8698,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     case_06: createCase({
         health: 140,
         img: { sprite: "map-case-chrys-01.img" },
-        loot: [tierLoot("tier_chest", 2, 3), tierLoot("tier_chrys_case", 1, 1)],
+        loot: [tierLoot("tier_chest", 2, 3), tierLoot("tier_chrys_case", 1, 1), tierLoot("tier_helm_special", 1, 1)],
         hitParticle: "blackChip",
         map: { display: false, color: 7025920, scale: 0.85 },
     }),
@@ -9084,6 +9084,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_airdrop_melee", 1, 1),
             tierLoot("tier_airdrop_ammo", 3, 3),
             tierLoot("tier_airdrop_throwables", 1, 1),
+            tierLoot("tier_perks", 1, 1)
         ],
         map: { display: false },
         img: {
@@ -10767,6 +10768,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_shotguns", 2, 3),
             tierLoot("tier_lmgs", 2, 3),
             autoLoot("outfitWoodland", 1),
+            autoLoot("flare_gun", 1),
         ],
         map: { color: 7817749, scale: 3 },
         img: {
@@ -13743,8 +13745,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                     container_01: 1,
                     container_02: 1,
                     container_03: 1,
-                    container_05: 2,
-                    container_06: 0.08,
+                    container_05: 1,
+                    container_06: 0.5,
                     "": 0.75,
                 }),
                 pos: v2.create(-6, -29),

@@ -720,7 +720,39 @@ const SkinDefs = {
     }),
     helmet03_moon: defineSkin("helmet03", {
         name: "Tsukuyomi no Kabuto",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-moon.img",
+            spriteScale: 0.3,
+        },
+    }),
+    helmet03_moon1: defineSkin("helmet03", {
+        name: "Tsukuyomi no Kabuto",
         perk: "endless_ammo",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-moon.img",
+            spriteScale: 0.3,
+        },
+    }),
+    helmet03_moon2: defineSkin("helmet03", {
+        name: "Tsukuyomi no Kabuto",
+        perk: "splinter",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-moon.img",
+            spriteScale: 0.3,
+        },
+    }),
+    helmet03_moon3: defineSkin("helmet03", {
+        name: "Tsukuyomi no Kabuto",
+        perk: "explosive",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

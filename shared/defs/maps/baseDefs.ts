@@ -90,6 +90,7 @@ export const Main: MapDef = {
         ],
         tier_scavenger_adv: [
             { name: "m9", count: 1, weight: 3 },
+            { name: "strobe", count: 1, weight: 3 },
             { name: "ots38_dual", count: 1, weight: 3 },
             { name: "p30l_dual", count: 1, weight: 3 },
             { name: "saiga", count: 1, weight: 3 },
@@ -545,6 +546,7 @@ export const Main: MapDef = {
             { name: "", count: 1, weight: 25 },
             { name: "tier_perks", count: 1, weight: 1 },
         ],
+        tier_helm_special: [],
     },
     mapGen: {
         map: {

@@ -25,7 +25,7 @@ export const PerkProperties = {
         scaleOnDeath: 0.2,
     },
     broken_arrow: {
-        bonusAirstrikes: 2,
+        bonusAirstrikes: 4,
     },
     fabricate: {
         refillInterval: 12, // means refill every x seconds
@@ -33,7 +33,7 @@ export const PerkProperties = {
     },
     gotw: {
         scale: 0.25,
-        healthRegen: 0.5, // per second
+        healthRegen: 1, // per second
     },
     field_medic: {
         speedBoost: 1.5,
