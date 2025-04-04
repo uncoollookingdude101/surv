@@ -25,9 +25,7 @@ const mapDef = {
                     wait: 8,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [
-                            { count: 20, weight: 1 },
-                        ],
+                        numPlanes: [{ count: 20, weight: 1 }],
                         airstrikeZoneRad: 150,
                         wait: 0.5,
                         delay: 0.5,
@@ -61,8 +59,7 @@ const mapDef = {
         },
         bleedDamage: 2,
         bleedDamageMult: 1,
-        player: {
-        },
+        player: {},
     },
 
     assets: {
@@ -100,9 +97,7 @@ const mapDef = {
             { name: "mirv", count: 2, weight: 0.5 },
             { name: "strobe", count: 1, weight: 0.5 },
         ],
-        tier_airdrop_throwables: [
-            { name: "strobe", count: 1, weight: 1 },
-        ],
+        tier_airdrop_throwables: [{ name: "strobe", count: 1, weight: 1 }],
         loot_tier_sv98: [
             { name: "sv98", count: 1, weight: 1 },
             { name: "awc", count: 1, weight: 0.25 },
@@ -272,7 +267,7 @@ const mapDef = {
             { name: "helmet03_moon1", count: 1, weight: 2 },
             { name: "helmet03_moon2", count: 1, weight: 0.5 },
             { name: "helmet03_moon3", count: 1, weight: 1 },
-        ]
+        ],
     },
     biome: {
         colors: {

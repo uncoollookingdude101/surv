@@ -8743,7 +8743,11 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     case_06: createCase({
         health: 140,
         img: { sprite: "map-case-chrys-01.img" },
-        loot: [tierLoot("tier_chest", 2, 3), tierLoot("tier_chrys_case", 1, 1), tierLoot("tier_helm_special", 1, 1)],
+        loot: [
+            tierLoot("tier_chest", 2, 3),
+            tierLoot("tier_chrys_case", 1, 1),
+            tierLoot("tier_helm_special", 1, 1),
+        ],
         hitParticle: "blackChip",
         map: { display: false, color: 7025920, scale: 0.85 },
     }),
@@ -9129,7 +9133,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_airdrop_melee", 1, 1),
             tierLoot("tier_airdrop_ammo", 3, 3),
             tierLoot("tier_airdrop_throwables", 1, 1),
-            tierLoot("tier_perks", 1, 1)
+            tierLoot("tier_perks", 1, 1),
         ],
         map: { display: false },
         img: {
