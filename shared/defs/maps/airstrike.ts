@@ -1,8 +1,7 @@
 import { util } from "../../utils/util";
+import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
 import { Desert } from "./desertDefs";
-import { v2 } from "../../utils/v2";
-
 import { GameConfig } from "../../gameConfig";
 
 const mapDef = {

@@ -514,7 +514,7 @@ export class Player extends BaseGameObject {
     setHelmetPerk(perk: string) {
         this.helmetPerk = perk;
     }
-    equip(item: string, amount: number) {
+    equip(item: string,_amount: number) {
         if (GearDefs[item] && "perk" in GearDefs[item]) {
             const gearDef = GearDefs[item] as { perk: string };
             console.log("PerkDefs[gearDef.perk].type", PerkDefs[gearDef.perk].type);
