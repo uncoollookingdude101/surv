@@ -139,7 +139,7 @@ const mapDef = {
         tier_throwables: [
             { name: "strobe", count: 2, weight: 1 },
             { name: "smoke", count: 1, weight: 1 },
-        ]
+        ],
     },
     mapGen: {
         map: {
