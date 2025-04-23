@@ -2,11 +2,13 @@ import { desc, eq, lt } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 import { Config } from "../../../config";
+import { validateUserName } from "../../../utils/serverHelpers";
 import type { SaveGameBody } from "../../../utils/types";
 import { server } from "../../apiServer";
 import { databaseEnabledMiddleware, validateParams } from "../../auth/middleware";
 import { db } from "../../db";
 import { bannedIpsTable, ipLogsTable, matchDataTable, usersTable } from "../../db/schema";
+import { sanitizeSlug } from "../user/auth/authUtils";
 
 export const ModerationRouter = new Hono();
 
@@ -205,11 +207,33 @@ ModerationRouter.post(
     validateParams(
         z.object({
             name: z.string(),
+            useAccountSlug: z.boolean().default(false),
         }),
     ),
     async (c) => {
         try {
-            const { name } = c.req.valid("json");
+            const { name, useAccountSlug } = c.req.valid("json");
+
+            let userId: string | null = null;
+
+            if (useAccountSlug) {
+                const user = await db.query.usersTable.findFirst({
+                    where: eq(usersTable.slug, name),
+                    columns: {
+                        id: true,
+                    },
+                });
+
+                if (!user?.id) {
+                    return c.json(
+                        {
+                            message: `User not found`,
+                        },
+                        200,
+                    );
+                }
+                userId = user.id;
+            }
 
             const result = await db
                 .select({
@@ -219,7 +243,11 @@ ModerationRouter.post(
                     region: ipLogsTable.region,
                 })
                 .from(ipLogsTable)
-                .where(eq(ipLogsTable.username, name))
+                .where(
+                    userId
+                        ? eq(ipLogsTable.userId, userId)
+                        : eq(ipLogsTable.username, name),
+                )
                 .orderBy(desc(ipLogsTable.createdAt))
                 .limit(10);
 
@@ -266,6 +294,97 @@ ModerationRouter.post("/clear_all_bans", async (c) => {
         return c.json({ error: "An unexpected error occurred." }, 500);
     }
 });
+
+// useful for purging bad names from leaderboards
+ModerationRouter.post(
+    "/set_match_data_name",
+    validateParams(
+        z.object({
+            currentName: z.string(),
+            newName: z.string(),
+        }),
+    ),
+    async (c) => {
+        try {
+            const { currentName, newName } = c.req.valid("json");
+
+            const res = await db
+                .update(matchDataTable)
+                .set({
+                    username: newName,
+                })
+                .where(eq(matchDataTable.username, currentName));
+
+            return c.json({ message: `Updated ${res.rowCount} rows` }, 200);
+        } catch (err) {
+            server.logger.warn("/private/moderation/set_match_data_name:", err);
+            return c.json({ error: "An unexpected error occurred." }, 500);
+        }
+    },
+);
+
+ModerationRouter.post(
+    "/set_account_name",
+    validateParams(
+        z.object({
+            newName: z.string(),
+            currentSlug: z.string(),
+        }),
+    ),
+    async (c) => {
+        try {
+            const { newName, currentSlug } = c.req.valid("json");
+
+            const sanitized = validateUserName(newName);
+
+            if (sanitized.originalWasInvalid) {
+                return c.json({ message: "Invalid new username" }, 200);
+            }
+
+            const newSlug = sanitizeSlug(sanitized.validName);
+
+            const res = await db
+                .update(usersTable)
+                .set({
+                    username: sanitized.validName,
+                    slug: newSlug,
+                })
+                .where(eq(usersTable.slug, currentSlug));
+
+            if (res.rowCount) {
+                return c.json({ message: `Success` }, 200);
+            }
+
+            return c.json({ message: `User not found` }, 400);
+        } catch (err) {
+            server.logger.warn("/private/moderation/set_match_data_name:", err);
+            return c.json({ error: "An unexpected error occurred." }, 500);
+        }
+    },
+);
+
+ModerationRouter.post(
+    "/delete_game",
+    validateParams(
+        z.object({
+            gameId: z.string(),
+        }),
+    ),
+    async (c) => {
+        try {
+            const { gameId } = c.req.valid("json");
+
+            const res = await db
+                .delete(matchDataTable)
+                .where(eq(matchDataTable.gameId, gameId));
+
+            return c.json({ message: `Deleted ${res.rowCount} rows` }, 200);
+        } catch (err) {
+            server.logger.warn("/private/moderation/set_match_data_name:", err);
+            return c.json({ error: "An unexpected error occurred." }, 500);
+        }
+    },
+);
 
 async function banAccount(userId: string, banReason: string) {
     await db

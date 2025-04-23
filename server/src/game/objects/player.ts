@@ -140,16 +140,21 @@ export class PlayerBarn {
         }
         this.game.joinTokens.delete(joinMsg.matchPriv);
 
-        if (joinMsg.protocol !== GameConfig.protocolVersion) {
-            const disconnectMsg = new net.DisconnectMsg();
-            disconnectMsg.reason = "index-invalid-protocol";
-            const stream = new net.MsgStream(new ArrayBuffer(128));
-            stream.serializeMsg(net.MsgType.Disconnect, disconnectMsg);
-            this.game.sendSocketMsg(socketId, stream.getBuffer());
+        if (Config.rateLimitsEnabled) {
+            const count = this.players.filter(
+                (p) =>
+                    p.ip === ip ||
+                    p.findGameIp == joinData.findGameIp ||
+                    (joinData.userId !== null && p.userId === joinData.userId),
+            );
+            if (count.length >= 3) {
+                this.game.closeSocket(socketId, "rate_limited");
+                return;
+            }
+        }
 
-            setTimeout(() => {
-                this.game.closeSocket(socketId);
-            }, 250);
+        if (joinMsg.protocol !== GameConfig.protocolVersion) {
+            this.game.closeSocket(socketId, "index-invalid-protocol");
             return;
         }
 
@@ -2555,7 +2560,9 @@ export class Player extends BaseGameObject {
 
         this.damageTaken += finalDamage;
         if (sourceIsPlayer && params.source !== this) {
-            (params.source as Player).damageDealt += finalDamage;
+            if ((params.source as Player).groupId !== this.groupId) {
+                (params.source as Player).damageDealt += finalDamage;
+            }
             this.lastDamagedBy = params.source as Player;
         }
 
