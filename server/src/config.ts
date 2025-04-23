@@ -35,8 +35,8 @@ export const Config = {
 
     modes: [
         { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: true },
-        { mapName: "potato", teamMode: TeamMode.Duo, enabled: true },
-        { mapName: "faction", teamMode: TeamMode.Squad, enabled: true },
+        { mapName: "airstrike", teamMode: TeamMode.Solo, enabled: true },
+        { mapName: "faction", teamMode: TeamMode.Solo, enabled: true },
     ],
 
     regions: {},
@@ -52,7 +52,7 @@ export const Config = {
     client: {
         AIP_ID: undefined,
         AIP_PLACEMENT_ID: undefined,
-        theme: "main",
+        theme: "faction",
     },
 
     thisRegion: "local",

@@ -6640,6 +6640,26 @@
             "h": 35
           }
         },
+        "gun-m134-01.img": {
+          "frame": {
+            "x": 1254,
+            "y": 74,
+            "w": 50,
+            "h": 138
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 138
+          },
+          "sourceSize": {
+            "w": 50,
+            "h": 138
+          }
+        },
         "gun-famas-01.img": {
           "frame": {
             "x": 263,
@@ -9780,6 +9800,26 @@
             "h": 64
           }
         },
+        "loot-scope-05.img": {
+          "frame": {
+            "x": 1250,
+            "y": 4,
+            "w": 64,
+            "h": 64
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64
+          },
+          "sourceSize": {
+            "w": 64,
+            "h": 64
+          }
+        },
         "loot-shirt-01.img": {
           "frame": {
             "x": 775,
@@ -11366,6 +11406,26 @@
             "y": 1763,
             "w": 57,
             "h": 62
+          },
+          "rotated": false,
+          "trimmed": true,
+          "spriteSourceSize": {
+            "x": 3,
+            "y": 1,
+            "w": 57,
+            "h": 62
+          },
+          "sourceSize": {
+            "w": 64,
+            "h": 64
+          }
+        },
+        "loot-weapon-m134.img": {
+          "frame": {
+            "x": 1314,
+            "y": 3,
+            "w": 64,
+            "h": 64
           },
           "rotated": false,
           "trimmed": true,

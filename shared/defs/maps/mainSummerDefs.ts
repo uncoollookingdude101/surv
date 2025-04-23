@@ -20,17 +20,6 @@ const mapDef = {
                 { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
-                {
-                    circleIdx: 1,
-                    wait: 8,
-                    options: {
-                        type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 20, weight: 1 }],
-                        airstrikeZoneRad: 150,
-                        wait: 0.5,
-                        delay: 0.5,
-                    },
-                },
 
                 { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
@@ -54,28 +43,46 @@ const mapDef = {
                 { name: "airdrop_crate_02", weight: 1 },
             ],
         },
+        unlocks: {
+            timings: [
+                {
+                    type: "bunker_twins_sublevel_01",
+                    stagger: 0.2,
+                    circleIdx: 2,
+                    wait: 40,
+                },
+            ],
+        },
         bagSizes: {
             strobe: [2, 4, 6, 10],
         },
         bleedDamage: 2,
         bleedDamageMult: 1,
-        player: {},
     },
 
     assets: {
         audio: [
-            { name: "club_music_01", channel: "ambient" },
-            { name: "club_music_02", channel: "ambient" },
+            { name: "spawn_01", channel: "ui" },
+            { name: "ping_unlock_01", channel: "ui" },
+            { name: "potato_pickup_01", channel: "ui" },
             {
                 name: "ambient_steam_01",
                 channel: "ambient",
             },
+            { name: "ambient_lab_01", channel: "ambient" },
+            { name: "piano_music_01", channel: "ambient" },
+            { name: "pumpkin_break_01", channel: "sfx" },
+            { name: "potato_01", channel: "sfx" },
+            { name: "potato_02", channel: "sfx" },
+            { name: "club_music_01", channel: "sfx" },
+            { name: "club_music_02", channel: "sfx" },
             { name: "log_11", channel: "sfx" },
             { name: "log_12", channel: "sfx" },
+            { name: "log_13", channel: "sfx" },
+            { name: "log_14", channel: "sfx" },
             { name: "piano_02", channel: "sfx" },
             { name: "log_03", channel: "sfx" },
             { name: "log_04", channel: "sfx" },
-            { name: "piano_music_01", channel: "ambient" },
         ],
         atlases: [
             "gradient",
@@ -87,6 +94,8 @@ const mapDef = {
             "desert",
             "halloween",
             "faction",
+            "potato",
+            "cobalt",
         ],
     },
     lootTable: {
@@ -117,10 +126,7 @@ const mapDef = {
             { name: "m1a1", count: 1, weight: 2 },
             { name: "flare_gun", count: 1, weight: 1 },
         ],
-        tier_ring_case: [
-            { name: "potato_cannon", count: 1, weight: 1 },
-            { name: "potato_smg", count: 1, weight: 1 },
-        ],
+        tier_ring_case: [{ name: "potato_cannon", count: 1, weight: 1 }],
         tier_cloud_01: [
             { name: "sv98", count: 1, weight: 0.5 },
             { name: "blr", count: 1, weight: 2 },
@@ -268,6 +274,40 @@ const mapDef = {
             { name: "helmet03_moon2", count: 1, weight: 0.5 },
             { name: "helmet03_moon3", count: 1, weight: 1 },
         ],
+        tier_police: [
+            { name: "helmet03", count: 1, weight: 0.15 },
+            {
+                name: "helmet03_potato",
+                count: 1,
+                weight: 0.1,
+            },
+            { name: "chest03", count: 1, weight: 0.1 },
+            { name: "backpack03", count: 1, weight: 0.25 },
+        ],
+        tier_airdrop_armor: [
+            { name: "helmet03", count: 1, weight: 1 },
+            {
+                name: "helmet03_potato",
+                count: 1,
+                weight: 0.1,
+            },
+            { name: "chest03", count: 1, weight: 1 },
+            { name: "backpack03", count: 1, weight: 1 },
+        ],
+        tier_armor: [
+            { name: "helmet01", count: 1, weight: 9 },
+            { name: "helmet02", count: 1, weight: 6 },
+            { name: "helmet03", count: 1, weight: 0.2 },
+            {
+                name: "helmet03_potato",
+                count: 1,
+                weight: 0.1,
+            },
+            { name: "chest01", count: 1, weight: 15 },
+            { name: "chest02", count: 1, weight: 6 },
+            { name: "chest03", count: 1, weight: 0.2 },
+        ],
+        tier_class_crate_mythic: [{ name: "30xscope", count: 1, weight: 1 }],
     },
     biome: {
         colors: {
@@ -310,8 +350,32 @@ const mapDef = {
             locationSpawns: [
                 {
                     type: "logging_complex_01",
-                    pos: v2.create(0.5, 0.5),
+                    pos: v2.create(0.25, 0.6),
                     rad: 200,
+                    retryOnFailure: true,
+                },
+                {
+                    type: "shilo_01",
+                    pos: v2.create(0.25, 0.25),
+                    rad: 200,
+                    retryOnFailure: true,
+                },
+                {
+                    type: "river_town_02",
+                    pos: v2.create(0.6, 0.6),
+                    rad: 200,
+                    retryOnFailure: true,
+                },
+                {
+                    type: "greenhouse_01",
+                    pos: v2.create(0.6, 0.25),
+                    rad: 200,
+                    retryOnFailure: true,
+                },
+                {
+                    type: "bunker_structure_09",
+                    pos: v2.create(0.5, 0.5),
+                    rad: 1,
                     retryOnFailure: true,
                 },
             ],
@@ -321,6 +385,9 @@ const mapDef = {
             {
                 tree_01: 170,
                 tree_07: 170,
+                potato_01: 25,
+                potato_02: 25,
+                potato_03: 25,
                 stone_01: 250,
                 barrel_01: 90,
                 silo_01: 12,
@@ -344,6 +411,7 @@ const mapDef = {
         fixedSpawns: [
             {
                 kopje_patch_01: 5,
+                bunker_structure_09: 1,
                 savannah_patch_01: 7,
                 desert_town_01: 1,
                 desert_town_02: 1,
@@ -388,10 +456,10 @@ const mapDef = {
             "desert_town_02",
             "river_town_02",
             "logging_complex_01",
-            "teapavilion_01w",
             "police_01",
             "logging_complex_02",
             "kopje_patch_01",
+            "bunker_structure_09",
         ],
     },
     /* STRIP_FROM_PROD_CLIENT:END */

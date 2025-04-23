@@ -63,6 +63,7 @@ type DefaultItems = {
         "4xscope": number;
         "8xscope": number;
         "15xscope": number;
+        "30xscope": number;
     };
 };
 
@@ -136,6 +137,7 @@ function createDefaultItems<T extends DefaultItems>(e: DeepPartial<T>): T {
             "4xscope": 0,
             "8xscope": 0,
             "15xscope": 0,
+            "30xscope": 0,
         },
     };
     return util.mergeDeep(defaultItems, e || {});
@@ -161,16 +163,12 @@ export const RoleDefs: Record<string, RoleDef> = {
             "takedown",
             "splinter",
             "steelskin",
-            "hunted",
             "explosive",
             "bonus_assault",
             "windwalk",
-            "scavenger_adv",
             "endless_ammo",
             "small_arms",
             "fabricate",
-            "inspiration",
-            "final_bugle",
             "gotw",
             "targeting",
             "tree_climbing",
@@ -181,16 +179,16 @@ export const RoleDefs: Record<string, RoleDef> = {
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "awc", ammo: 0, fillInv: true },
-                            [TeamColor.Blue]: { type: "saiga", ammo: 0, fillInv: true },
+                            [TeamColor.Red]: { type: "m249", ammo: 0, fillInv: true },
+                            [TeamColor.Blue]: { type: "pkp", ammo: 0, fillInv: true },
                         },
                         teamcolor,
                     ),
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "pkp", ammo: 0, fillInv: true },
-                            [TeamColor.Blue]: { type: "saiga", ammo: 0, fillInv: true },
+                            [TeamColor.Red]: { type: "scarssr", ammo: 0, fillInv: true },
+                            [TeamColor.Blue]: { type: "scarssr", ammo: 0, fillInv: true },
                         },
                         teamcolor,
                     ),
@@ -198,7 +196,7 @@ export const RoleDefs: Record<string, RoleDef> = {
                     getTeamWeapon(
                         {
                             [TeamColor.Red]: { type: "pan", ammo: 0 },
-                            [TeamColor.Blue]: { type: "bayonet", ammo: 0 },
+                            [TeamColor.Blue]: { type: "pan", ammo: 0 },
                         },
                         teamcolor,
                     ),
@@ -393,14 +391,22 @@ export const RoleDefs: Record<string, RoleDef> = {
         killFeed: { assign: true },
         sound: { assign: "last_man_assigned_01" },
         perks: [
-            "steelskin",
+            "leadership",
+            "self_revive",
+            "firepower",
+            "takedown",
             "splinter",
-            () =>
-                util.weightedRandom([
-                    { type: "takedown", weight: 4.5 },
-                    { type: "windwalk", weight: 1 },
-                    { type: "field_medic", weight: 1 },
-                ]).type,
+            "steelskin",
+            "explosive",
+            "bonus_assault",
+            "windwalk",
+            "endless_ammo",
+            "small_arms",
+            "fabricate",
+            "gotw",
+            "targeting",
+            "tree_climbing",
+            "field_medic",
         ],
         defaultItems: createDefaultItems({
             weapons: [

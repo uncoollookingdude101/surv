@@ -64,8 +64,8 @@ const mapDef = {
     },
     mapGen: {
         map: {
-            baseWidth: 300,
-            baseHeight: 300,
+            baseWidth: 400,
+            baseHeight: 400,
         },
     },
 };

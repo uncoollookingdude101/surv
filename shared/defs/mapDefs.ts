@@ -1,4 +1,5 @@
 import type { Vec2 } from "../utils/v2";
+import { Airstrike } from "./maps/airstrike";
 import { Main } from "./maps/baseDefs";
 import { Cobalt } from "./maps/cobaltDefs";
 import { Desert } from "./maps/desertDefs";
@@ -35,6 +36,7 @@ export const MapDefs = {
     cobalt: Cobalt,
     turkey: Turkey,
     flare: Flare,
+    airstrike: Airstrike,
 } satisfies Record<string, MapDef>;
 
 export type Atlas =
@@ -147,9 +149,6 @@ export interface MapDef {
         bagSizes: Record<string, number[]>;
         bleedDamage: number;
         bleedDamageMult: number;
-        player: {
-            moveSpeed: number;
-        };
     };
     lootTable: Record<
         string,

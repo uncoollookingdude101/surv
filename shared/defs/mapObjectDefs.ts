@@ -9105,6 +9105,18 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-crate-07.img" },
         sound: { explode: "crate_break_01" },
     }),
+    crate_07as: createCrate({
+        health: 140,
+        loot: [
+            tierLoot("tier_throwables", 2, 3),
+            tierLoot("tier_armor", 2, 3),
+            autoLoot("colt45", 1),
+            autoLoot("4xscope", 1),
+            autoLoot("backpack01", 1),
+        ],
+        img: { sprite: "map-crate-07.img" },
+        sound: { explode: "crate_break_01" },
+    }),
     crate_08: createCrate({
         health: 140,
         loot: [tierLoot("tier_surviv", 2, 3)],
@@ -17627,6 +17639,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         cabin_mount: "gun_mount_02",
         porch_01: "cache_pumpkin_02",
     }),
+    cabin_03: createCabin({
+        cabin_mount: "gun_mount_05",
+    }),
     dock_01: {
         type: "building",
         map: {
@@ -22910,6 +22925,126 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
     },
+    bunker_egg_sublevel_01as: {
+        type: "building",
+        map: { display: false, color: 6707790, scale: 1 },
+        terrain: { grass: true, beach: false },
+        zIdx: 0,
+        floor: {
+            surfaces: [
+                {
+                    type: "bunker",
+                    collision: [
+                        collider.createAabbExtents(v2.create(0, -4.5), v2.create(10, 9)),
+                    ],
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-egg-chamber-floor-01a.img",
+                    pos: v2.create(-0.15, -4.6),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+                {
+                    sprite: "map-bunker-egg-chamber-floor-01b.img",
+                    pos: v2.create(0, 9.24),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+            ],
+        },
+        ceiling: {
+            zoomRegions: [
+                {
+                    zoomIn: collider.createAabbExtents(
+                        v2.create(0, -4.5),
+                        v2.create(10, 9),
+                    ),
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-egg-chamber-ceiling-01.img",
+                    scale: 1,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+            ],
+            vision: { dist: 5, width: 3 },
+        },
+        mapObjects: [
+            {
+                type: "concrete_wall_ext_6",
+                pos: v2.create(0, 11.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(-3.5, 8),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(3.5, 8),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_4",
+                pos: v2.create(-7, 5.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_4",
+                pos: v2.create(7, 5.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_20",
+                pos: v2.create(-10.5, -3),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_20",
+                pos: v2.create(10.5, -3),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_24",
+                pos: v2.create(0, -14.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "house_door_02",
+                pos: v2.create(-2, 5),
+                scale: 1,
+                ori: 3,
+            },
+            {
+                type: "crate_07as",
+                pos: v2.create(0, -4.5),
+                scale: 1,
+                ori: 0,
+                inheritOri: false,
+            },
+            {
+                type: "barrel_01",
+                pos: v2.create(-7, -11),
+                scale: 0.9,
+                ori: 0,
+            },
+        ],
+    },
     bunker_structure_01: {
         type: "structure",
         terrain: { grass: true, beach: false },
@@ -22982,6 +23117,35 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "bunker_egg_sublevel_01sv",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+        ],
+        stairs: [
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(0, 8.4),
+                    v2.create(2, 2.6),
+                ),
+                downDir: v2.create(0, -1),
+            },
+        ],
+        mask: [collider.createAabbExtents(v2.create(0, -3.7), v2.create(10, 9.5))],
+    },
+    bunker_structure_01as: {
+        type: "structure",
+        terrain: { grass: true, beach: false },
+        mapObstacleBounds: [
+            collider.createAabbExtents(v2.create(0, 5), v2.create(7.5, 12.5)),
+        ],
+        layers: [
+            {
+                type: "bunker_egg_01",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+            {
+                type: "bunker_egg_sublevel_01as",
                 pos: v2.create(0, 0),
                 ori: 0,
             },

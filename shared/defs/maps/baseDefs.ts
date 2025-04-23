@@ -70,9 +70,6 @@ export const Main: MapDef = {
         bagSizes: {},
         bleedDamage: 2,
         bleedDamageMult: 1,
-        player: {
-            moveSpeed: 12,
-        },
     },
     /* STRIP_FROM_PROD_CLIENT:START */
     // NOTE: this loot table is not the original one so its not accurate
@@ -279,6 +276,7 @@ export const Main: MapDef = {
             { name: "vss", count: 1, weight: 0.05 }, // !
         ],
         tier_police: [
+            { name: "scar", count: 1, weight: 1 },
             { name: "helmet03", count: 1, weight: 0.75 },
             { name: "chest03", count: 1, weight: 0.5 },
             { name: "backpack03", count: 1, weight: 1 },
@@ -367,7 +365,6 @@ export const Main: MapDef = {
             { name: "outfitBarrel", count: 1, weight: 1 },
             { name: "outfitWoodBarrel", count: 1, weight: 1 },
             { name: "outfitStone", count: 1, weight: 1 },
-            { name: "outfitTree", count: 1, weight: 1 },
             { name: "outfitStump", count: 1, weight: 1 },
             { name: "outfitBush", count: 1, weight: 1 },
             { name: "outfitLeafPile", count: 1, weight: 1 },
@@ -562,7 +559,12 @@ export const Main: MapDef = {
             { name: "", count: 1, weight: 25 },
             { name: "tier_perks", count: 1, weight: 1 },
         ],
-        tier_helm_special: [],
+        tier_helm_special: [{ name: "", count: 1, weight: 1 }],
+        tier_class_crate_mythic: [
+            { name: "explosive", count: 1, weight: 1 },
+            { name: "splinter", count: 1, weight: 1 },
+            { name: "scavager_adv", count: 1, weight: 1 },
+        ],
     },
     mapGen: {
         map: {

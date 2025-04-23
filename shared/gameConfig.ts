@@ -177,7 +177,7 @@ export const GameConfig = {
         /* STRIP_FROM_PROD_CLIENT:START */
         defaultItems: {
             weapons: [
-                { type: "", ammo: 0 },
+                { type: "m134", ammo: 200 },
                 { type: "", ammo: 0 },
                 { type: "fists", ammo: 0 },
                 { type: "", ammo: 0 },
@@ -212,6 +212,7 @@ export const GameConfig = {
                 "4xscope": 0,
                 "8xscope": 0,
                 "15xscope": 0,
+                "30xscope": 0,
             } as Record<string, number>,
         },
         /* STRIP_FROM_PROD_CLIENT:END */
@@ -334,6 +335,7 @@ export const GameConfig = {
             "4xscope": 48,
             "8xscope": 68,
             "15xscope": 104,
+            "30xscope": 168,
         } as Record<string, number>,
         mobile: {
             "1xscope": 32,
@@ -341,6 +343,7 @@ export const GameConfig = {
             "4xscope": 48,
             "8xscope": 64,
             "15xscope": 88,
+            "30xscope": 140,
         } as Record<string, number>,
     },
     bagSizes: {
@@ -367,6 +370,7 @@ export const GameConfig = {
         "4xscope": [1, 1, 1, 1],
         "8xscope": [1, 1, 1, 1],
         "15xscope": [1, 1, 1, 1],
+        "30xscope": [1, 1, 1, 1],
     } as Record<string, number[]>,
     lootRadius: {
         outfit: 1,
