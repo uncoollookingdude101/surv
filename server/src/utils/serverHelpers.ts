@@ -4,6 +4,7 @@ import ProxyCheck, { type IPAddressInfo } from "proxycheck-ts";
 import type { HttpRequest, HttpResponse } from "uWebSockets.js";
 import { Constants } from "../../../shared/net/net";
 import { Config } from "../config";
+import { defaultLogger } from "./logger";
 
 /**
  * Apply CORS headers to a response.
@@ -124,11 +125,7 @@ export function validateUserName(name: string): {
     originalWasInvalid: boolean;
     validName: string;
 } {
-    const randomNumber = Math.random().toString(10).slice(2, 6);
-
-    const defaultName = Config.randomizeDefaultPlayerName
-        ? `Player#${randomNumber}`
-        : "Player";
+    const defaultName = "Player";
 
     if (!name || typeof name !== "string")
         return {
@@ -331,16 +328,16 @@ export async function isBehindProxy(ip: string): Promise<boolean> {
                 case "warning":
                     info = proxyRes[ip];
                     if (proxyRes.status === "warning") {
-                        console.warn(`ProxyCheck warning, res:`, proxyRes);
+                        defaultLogger.warn(`ProxyCheck warning, res:`, proxyRes);
                     }
                     break;
                 case "denied":
                 case "error":
-                    console.error(`Failed to check for ip ${ip}:`, proxyRes);
+                    defaultLogger.error(`Failed to check for ip ${ip}:`, proxyRes);
                     break;
             }
         } catch (error) {
-            console.error(`Proxycheck error:`, error);
+            defaultLogger.error(`Proxycheck error:`, error);
             return true;
         }
     }
@@ -398,35 +395,51 @@ export async function fetchApiServer<
             return res as Res;
         }
 
-        console.warn(`Error fetching API server ${route}`, res.status, res.statusText);
+        defaultLogger.warn(
+            `Error fetching API server ${route}`,
+            res.status,
+            res.statusText,
+        );
     } catch (err) {
-        console.warn(`Error fetching API server ${route}`, err);
+        defaultLogger.error(`Error fetching API server ${route}`, err);
     }
 
     return undefined;
 }
 
-// @TODO: format the errors sent better
-export function logErrorToWebhook(from: "server" | "client", ...messages: any[]) {
+export async function logErrorToWebhook(from: "server" | "client", ...messages: any[]) {
     if (!Config.errorLoggingWebhook) return;
-    try {
-        const payload = {
-            from,
-            region: `[${Config.gameServer.thisRegion.toUpperCase()}]`,
-            timestamp: new Date().toISOString(),
-            messages: messages.map((msg) =>
-                typeof msg === "object" ? JSON.stringify(msg) : String(msg),
-            ),
-        };
 
-        fetch(Config.errorLoggingWebhook, {
+    try {
+        const msg = messages
+            .map((msg) => {
+                if (msg instanceof Error) {
+                    return `\`\`\`${msg.cause}\n${msg.stack}\`\`\``;
+                }
+                if (typeof msg == "object") {
+                    return `\`\`\`json\n${JSON.stringify(msg, null, 2)}\`\`\``;
+                }
+                return `\`${msg}\``;
+            })
+            .join("\n");
+
+        let content = `Error from: \`${from}\`
+Region: \`${Config.gameServer.thisRegion}\`
+Timestamp: \`${new Date().toISOString()}\`
+`;
+        content += msg;
+
+        await fetch(Config.errorLoggingWebhook, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify({
+                content,
+            }),
         });
     } catch (err) {
-        console.warn("Failed to log error to webhook", err);
+        // dont use defaultLogger.error here to not log it recursively :)
+        console.error("Failed to log error to webhook", err);
     }
 }

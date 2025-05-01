@@ -99,7 +99,7 @@ class GameProcess implements GameData {
                             disconnectMsg.reason = msg.reason;
                             const stream = new net.MsgStream(new ArrayBuffer(128));
                             stream.serializeMsg(net.MsgType.Disconnect, disconnectMsg);
-                            socket.send(stream.getBuffer());
+                            socket.send(stream.getBuffer(), true, false);
                         }
 
                         socket.close();
@@ -183,8 +183,8 @@ export class GameProcessManager implements GameManager {
                 });
 
                 if (Date.now() - gameProc.lastMsgTime > 10000) {
-                    this.logger.log(
-                        `Game ${gameProc.id} did not send a message in more 10 seconds, killing`,
+                    this.logger.warn(
+                        `Process ${gameProc.process.pid} - #${gameProc.id.substring(0, 4)} did not send a message in more 10 seconds, killing`,
                     );
                     // sigquit can dump a core of the process
                     // useful for debugging infinite loops
@@ -193,8 +193,8 @@ export class GameProcessManager implements GameManager {
                     gameProc.stopped &&
                     Date.now() - gameProc.stoppedTime > 60000
                 ) {
-                    this.logger.log(
-                        `Game ${gameProc.id} stopped more than a minute ago, killing`,
+                    this.logger.warn(
+                        `Process ${gameProc.process.pid} - #${gameProc.id.substring(0, 4)} stopped more than a minute ago, killing`,
                     );
                     this.killProcess(gameProc);
                 }
@@ -234,6 +234,7 @@ export class GameProcessManager implements GameManager {
             gameProc.process.on("disconnect", () => {
                 this.killProcess(gameProc!);
             });
+            this.logger.info("Created new process with PID", gameProc.process.pid);
         } else {
             this.processById.delete(gameProc.id);
             gameProc.create(id, config);

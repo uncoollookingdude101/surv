@@ -152,15 +152,41 @@ export interface ConfigType {
     processMode: "single" | "multi";
 
     /**
-     * Game performance logging.
+     * Server logger configuration
      */
-    perfLogging: {
-        enabled: boolean;
+    logging: {
         /**
-         * Seconds between each game performance log.
+         * If the logger class should include the date.
+         * Useful to disable it when using logging tools that add a date by default (like journalctl)
          */
-        time: number;
+        logDate: boolean;
+
+        // logging categories enabled
+
+        /**
+         * Information logs
+         */
+        infoLogs: boolean;
+
+        /**
+         * Debug logs, disabled by default on production
+         */
+        debugLogs: boolean;
+
+        /**
+         * Warning logs
+         */
+        warnLogs: boolean;
+
+        /**
+         * Error logs, will also log to a webhook if `errorLoggingWebhook` is set.
+         */
+        errorLogs: boolean;
     };
+    /**
+     * Webhook URL to log errors.
+     */
+    errorLoggingWebhook?: string;
 
     /**
      * PostgreSQL Database configuration, this will enable features like accounts, IP bans, leaderboards etc.
@@ -291,15 +317,10 @@ export interface ConfigType {
     rateLimitsEnabled: boolean;
 
     /**
-     * If default player name should be randomized instead of "Player".
+     * If in-game names should be unique.
      * Useful for banning players.
      */
-    randomizeDefaultPlayerName: boolean;
-
-    /**
-     * Webhook URL to log errors.
-     */
-    errorLoggingWebhook?: string;
+    uniqueInGameNames: boolean;
 
     /**
      * Debugging config for development :)

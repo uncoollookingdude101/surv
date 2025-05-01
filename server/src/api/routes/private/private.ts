@@ -26,36 +26,26 @@ import {
 import { MOCK_USER_ID } from "../user/auth/mock";
 import { ModerationRouter, logPlayerIPs } from "./ModerationRouter";
 
-export const PrivateRouter = new Hono<Context>();
-
-PrivateRouter.use(privateMiddleware);
-
-PrivateRouter.route("/moderation", ModerationRouter);
-
-PrivateRouter.post("/update_region", validateParams(zUpdateRegionBody), (c) => {
-    try {
+export const PrivateRouter = new Hono<Context>()
+    .use(privateMiddleware)
+    .route("/moderation", ModerationRouter)
+    .post("/update_region", validateParams(zUpdateRegionBody), (c) => {
         const { regionId, data } = c.req.valid("json");
 
         server.updateRegion(regionId, data);
         return c.json({}, 200);
-    } catch (err) {
-        server.logger.warn("/private/update_region: Error processing request", err);
-        return c.json({ error: "Error processing request" }, 500);
-    }
-});
-
-PrivateRouter.post(
-    "/set_game_mode",
-    validateParams(
-        z.object({
-            index: z.number(),
-            teamMode: z.nativeEnum(TeamMode).optional(),
-            mapName: z.string().optional(),
-            enabled: z.boolean().optional(),
-        }),
-    ),
-    (c) => {
-        try {
+    })
+    .post(
+        "/set_game_mode",
+        validateParams(
+            z.object({
+                index: z.number(),
+                teamMode: z.nativeEnum(TeamMode).optional(),
+                mapName: z.string().optional(),
+                enabled: z.boolean().optional(),
+            }),
+        ),
+        (c) => {
             const { index, mapName, teamMode, enabled } = c.req.valid("json");
 
             if (!MapDefs[mapName as keyof typeof MapDefs]) {
@@ -77,22 +67,16 @@ PrivateRouter.post(
             });
 
             return c.json({}, 200);
-        } catch (err) {
-            server.logger.warn("set_game_mode Error processing request", err);
-            return c.json({ error: "Error processing request" }, 500);
-        }
-    },
-);
-
-PrivateRouter.post(
-    "/toggle_captcha",
-    validateParams(
-        z.object({
-            enabled: z.boolean(),
-        }),
-    ),
-    (c) => {
-        try {
+        },
+    )
+    .post(
+        "/toggle_captcha",
+        validateParams(
+            z.object({
+                enabled: z.boolean(),
+            }),
+        ),
+        (c) => {
             const { enabled } = c.req.valid("json");
 
             server.captchaEnabled = enabled;
@@ -102,47 +86,35 @@ PrivateRouter.post(
             });
 
             return c.json({ state: enabled }, 200);
-        } catch (err) {
-            server.logger.warn("toggle_captcha Error processing request", err);
-            return c.json({ error: "Error processing request" }, 500);
-        }
-    },
-);
-
-PrivateRouter.post("/save_game", databaseEnabledMiddleware, async (c) => {
-    try {
+        },
+    )
+    .post("/save_game", databaseEnabledMiddleware, async (c) => {
         const data = (await c.req.json()) as SaveGameBody;
 
         const matchData = data.matchData;
 
         if (!matchData.length) {
-            return c.json({ error: "Empty match data" }, 500);
+            return c.json({ error: "Empty match data" }, 400);
         }
 
         await leaderboardCache.invalidateCache(matchData);
 
         await db.insert(matchDataTable).values(matchData);
         await logPlayerIPs(matchData);
-        server.logger.log(`Saved game data for ${matchData[0].gameId}`);
+        server.logger.info(`Saved game data for ${matchData[0].gameId}`);
         return c.json({}, 200);
-    } catch (err) {
-        server.logger.warn("save_game Error processing request", err);
-        return c.json({ error: "Error processing request" }, 500);
-    }
-});
-
-PrivateRouter.post(
-    "/give_item",
-    databaseEnabledMiddleware,
-    validateParams(
-        z.object({
-            item: z.string(),
-            slug: z.string(),
-            source: z.string().default("daddy-has-privileges"),
-        }),
-    ),
-    async (c) => {
-        try {
+    })
+    .post(
+        "/give_item",
+        databaseEnabledMiddleware,
+        validateParams(
+            z.object({
+                item: z.string(),
+                slug: z.string(),
+                source: z.string().default("daddy-has-privileges"),
+            }),
+        ),
+        async (c) => {
             const { item, slug, source } = c.req.valid("json");
 
             const def = GameObjectDefs[item];
@@ -181,24 +153,18 @@ PrivateRouter.post(
             });
 
             return c.json({ success: true }, 200);
-        } catch (err) {
-            server.logger.warn("/private/give_item: Error unlocking item", err);
-            return c.json({}, 500);
-        }
-    },
-);
-
-PrivateRouter.post(
-    "/remove_item",
-    databaseEnabledMiddleware,
-    validateParams(
-        z.object({
-            item: z.string(),
-            slug: z.string(),
-        }),
-    ),
-    async (c) => {
-        try {
+        },
+    )
+    .post(
+        "/remove_item",
+        databaseEnabledMiddleware,
+        validateParams(
+            z.object({
+                item: z.string(),
+                slug: z.string(),
+            }),
+        ),
+        async (c) => {
             const { item, slug } = c.req.valid("json");
 
             const user = await db.query.usersTable.findFirst({
@@ -217,34 +183,22 @@ PrivateRouter.post(
                 .where(and(eq(itemsTable.userId, user.id), eq(itemsTable.type, item)));
 
             return c.json({ success: true }, 200);
-        } catch (err) {
-            server.logger.warn("/private/remove_item: Error removing item", err);
-            return c.json({}, 500);
-        }
-    },
-);
-
-PrivateRouter.post("/clear_cache", async (c) => {
-    try {
+        },
+    )
+    .post("/clear_cache", async (c) => {
         const client = await getRedisClient();
         await client.flushAll();
         return c.json({ success: true }, 200);
-    } catch (err) {
-        server.logger.warn("/private/clear_cache: Error clearing cache", err);
-        return c.json({}, 500);
-    }
-});
-
-PrivateRouter.post(
-    "/test/insert_game",
-    databaseEnabledMiddleware,
-    validateParams(
-        z.object({
-            kills: z.number().catch(1),
-        }),
-    ),
-    async (c) => {
-        try {
+    })
+    .post(
+        "/test/insert_game",
+        databaseEnabledMiddleware,
+        validateParams(
+            z.object({
+                kills: z.number().catch(1),
+            }),
+        ),
+        async (c) => {
             const data = c.req.valid("json");
             const matchData: MatchDataTable = {
                 ...{
@@ -274,9 +228,7 @@ PrivateRouter.post(
             await leaderboardCache.invalidateCache([matchData]);
             await db.insert(matchDataTable).values(matchData);
             return c.json({ success: true }, 200);
-        } catch (err) {
-            server.logger.warn("/private/test/insert_game: Error inserting game", err);
-            return c.json({}, 500);
-        }
-    },
-);
+        },
+    );
+
+export type PrivateRouteApp = typeof PrivateRouter;

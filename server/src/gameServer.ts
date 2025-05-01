@@ -16,6 +16,7 @@ import {
     forbidden,
     getIp,
     isBehindProxy,
+    logErrorToWebhook,
     readPostedJSON,
     returnJson,
 } from "./utils/serverHelpers";
@@ -25,6 +26,14 @@ import {
     type GameSocketData,
     zFindGamePrivateBody,
 } from "./utils/types";
+
+process.on("uncaughtException", async (err) => {
+    console.error(err);
+
+    await logErrorToWebhook("server", "Game server error:", err);
+
+    process.exit(1);
+});
 
 class GameServer {
     readonly logger = new Logger("GameServer");
@@ -88,6 +97,10 @@ class GameServer {
 }
 
 const server = new GameServer();
+
+if (process.env.NODE_ENV !== "production") {
+    server.manager.newGame(Config.modes[0]);
+}
 
 const app = Config.gameServer.ssl
     ? SSLApp({
@@ -296,16 +309,10 @@ setInterval(() => {
     server.sendData();
 }, 20 * 1000);
 
-setInterval(() => {
-    const memoryUsage = process.memoryUsage().rss;
-
-    const perfString = `Memory usage: ${Math.round((memoryUsage / 1024 / 1024) * 100) / 100} MB`;
-
-    server.logger.log(perfString);
-}, 60000);
-
 app.listen(Config.gameServer.host, Config.gameServer.port, () => {
-    server.logger.log(`Survev Game Server v${version} - GIT ${GIT_VERSION}`);
-    server.logger.log(`Listening on ${Config.gameServer.host}:${Config.gameServer.port}`);
-    server.logger.log("Press Ctrl+C to exit.");
+    server.logger.info(`Survev Game Server v${version} - GIT ${GIT_VERSION}`);
+    server.logger.info(
+        `Listening on ${Config.gameServer.host}:${Config.gameServer.port}`,
+    );
+    server.logger.info("Press Ctrl+C to exit.");
 });

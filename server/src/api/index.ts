@@ -38,8 +38,21 @@ export type Context = {
     };
 };
 
+process.on("uncaughtException", async (err) => {
+    console.error(err);
+
+    await logErrorToWebhook("server", "API server error:", err);
+
+    process.exit(1);
+});
+
 const app = new Hono();
 const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
+
+app.onError((err, c) => {
+    server.logger.error(`${c.req.path} Error:`, err);
+    return c.json({ error: "Internal Server Error" }, 500);
+});
 
 app.use(
     "/api/*",
@@ -69,127 +82,122 @@ app.get("/api/site_info", (c) => {
 const findGameRateLimit = new HTTPRateLimit(5, 3000);
 
 app.post("/api/find_game", validateParams(zFindGameBody), async (c) => {
+    const ip = getHonoIp(c, Config.apiServer.proxyIPHeader);
+
+    if (!ip) {
+        return c.json({}, 500);
+    }
+
+    if (findGameRateLimit.isRateLimited(ip)) {
+        return c.json<FindGameResponse>({ error: "rate_limited" }, 429);
+    }
+
+    if (await isBehindProxy(ip)) {
+        return c.json<FindGameResponse>({ error: "behind_proxy" });
+    }
+
     try {
-        const ip = getHonoIp(c, Config.apiServer.proxyIPHeader);
-
-        if (!ip) {
-            return c.json({}, 500);
+        const banData = await isBanned(ip);
+        if (banData) {
+            return c.json<FindGameResponse>({
+                banned: true,
+                reason: banData.reason,
+                permanent: banData.permanent,
+                expiresIn: banData.expiresIn,
+            });
         }
+    } catch (err) {
+        server.logger.error("/api/find_game: Failed to check if IP is banned", err);
+    }
 
-        if (findGameRateLimit.isRateLimited(ip)) {
-            return c.json<FindGameResponse>({ error: "rate_limited" }, 429);
-        }
-
-        if (await isBehindProxy(ip)) {
-            return c.json<FindGameResponse>({ error: "behind_proxy" });
+    const body = c.req.valid("json");
+    if (server.captchaEnabled) {
+        if (!body.turnstileToken) {
+            return c.json<FindGameResponse>({ error: "invalid_captcha" });
         }
 
         try {
-            const banData = await isBanned(ip);
-            if (banData) {
-                return c.json<FindGameResponse>({
-                    banned: true,
-                    reason: banData.reason,
-                    permanent: banData.permanent,
-                    expiresIn: banData.expiresIn,
-                });
-            }
-        } catch (err) {
-            console.error("/api/find_game: Failed to check if IP is banned", err);
-        }
-
-        const body = c.req.valid("json");
-        if (server.captchaEnabled) {
-            if (!body.turnstileToken) {
+            if (!(await verifyTurnsStile(body.turnstileToken, ip))) {
                 return c.json<FindGameResponse>({ error: "invalid_captcha" });
             }
-
-            try {
-                if (!(await verifyTurnsStile(body.turnstileToken, ip))) {
-                    return c.json<FindGameResponse>({ error: "invalid_captcha" });
-                }
-            } catch (err) {
-                console.error("/api/find_game: Failed verifying turnstile: ", err);
-                return c.json<FindGameResponse>({ error: "join_game_failed" }, 500);
-            }
+        } catch (err) {
+            server.logger.error("/api/find_game: Failed verifying turnstile: ", err);
+            return c.json<FindGameResponse>({ error: "invalid_captcha" }, 500);
         }
+    }
 
-        const token = randomUUID();
-        let userId: string | null = null;
+    const token = randomUUID();
+    let userId: string | null = null;
 
-        const sessionId = getCookie(c, "session") ?? null;
+    const sessionId = getCookie(c, "session") ?? null;
 
-        if (sessionId) {
-            try {
-                const account = await validateSessionToken(sessionId);
-                userId = account.user?.id || null;
+    if (sessionId) {
+        try {
+            const account = await validateSessionToken(sessionId);
+            userId = account.user?.id || null;
 
-                if (account.user?.banned) {
-                    userId = null;
-                }
-            } catch (err) {
-                console.error("/api/find_game: Failed to validate session", err);
+            if (account.user?.banned) {
                 userId = null;
             }
+        } catch (err) {
+            server.logger.error("/api/find_game: Failed to validate session", err);
+            userId = null;
         }
-
-        const mode = server.modes[body.gameModeIdx];
-        if (!mode || !mode.enabled) {
-            return c.json<FindGameResponse>({ error: "full" });
-        }
-
-        const data = await server.findGame({
-            region: body.region,
-            version: body.version,
-            mapName: mode.mapName,
-            teamMode: mode.teamMode,
-            autoFill: true,
-            playerData: [
-                {
-                    token,
-                    userId,
-                    ip,
-                },
-            ],
-        });
-
-        if ("error" in data) {
-            return c.json(data);
-        }
-
-        return c.json<FindGameResponse>({
-            res: [
-                {
-                    zone: "",
-                    data: token,
-                    useHttps: data.useHttps,
-                    hosts: data.hosts,
-                    addrs: data.addrs,
-                    gameId: data.gameId,
-                },
-            ],
-        });
-    } catch (err) {
-        server.logger.warn("/api/find_game: Error retrieving body", err);
-        return c.json({}, 500);
     }
+
+    const mode = server.modes[body.gameModeIdx];
+    if (!mode || !mode.enabled) {
+        return c.json<FindGameResponse>({ error: "full" });
+    }
+
+    const data = await server.findGame({
+        region: body.region,
+        version: body.version,
+        mapName: mode.mapName,
+        teamMode: mode.teamMode,
+        autoFill: true,
+        playerData: [
+            {
+                token,
+                userId,
+                ip,
+            },
+        ],
+    });
+
+    if ("error" in data) {
+        return c.json(data);
+    }
+
+    return c.json<FindGameResponse>({
+        res: [
+            {
+                zone: "",
+                data: token,
+                useHttps: data.useHttps,
+                hosts: data.hosts,
+                addrs: data.addrs,
+                gameId: data.gameId,
+            },
+        ],
+    });
 });
 
 app.post(
     "/api/report_error",
     rateLimitMiddleware(5, 60 * 1000),
-    validateParams(z.object({ loc: z.string(), data: z.any() })),
+    validateParams(z.object({ loc: z.string(), error: z.any(), data: z.any() })),
     async (c) => {
-        try {
-            const content = await c.req.json();
-
-            logErrorToWebhook("client", content);
-
-            return c.json({ success: true }, 200);
-        } catch (err) {
-            server.logger.warn("/api/report_error: Invalid request", err);
-            return c.json({ error: "Invalid request" }, 400);
+        const content = await c.req.json();
+        if ("error" in content) {
+            try {
+                content.error = JSON.parse(content.error);
+            } catch {}
         }
+
+        logErrorToWebhook("client", content);
+
+        return c.json({ success: true }, 200);
     },
 );
 
@@ -217,12 +225,12 @@ new Cron("0 0 * * *", async () => {
     try {
         await cleanupOldLogs();
         await deleteExpiredSessions();
-        server.logger.log("Deleted old logs and expired sessions");
+        server.logger.info("Deleted old logs and expired sessions");
     } catch (err) {
-        console.error("Failed to run cleanup script", err);
+        server.logger.error("Failed to run cleanup script", err);
     }
 });
 
-server.logger.log(`Survev API Server v${version} - GIT ${GIT_VERSION}`);
-server.logger.log(`Listening on ${Config.apiServer.host}:${Config.apiServer.port}`);
-server.logger.log("Press Ctrl+C to exit.");
+server.logger.info(`Survev API Server v${version} - GIT ${GIT_VERSION}`);
+server.logger.info(`Listening on ${Config.apiServer.host}:${Config.apiServer.port}`);
+server.logger.info("Press Ctrl+C to exit.");

@@ -178,10 +178,27 @@ export class PlayerBarn {
             layer = 0;
         }
 
+        const originalName = validateUserName(joinMsg.name).validName;
+        let finalName = originalName;
+
+        if (Config.uniqueInGameNames) {
+            let count = 0;
+
+            while (this.game.playerBarn.players.find((p) => p.name === finalName)) {
+                const postFix = `-${++count}`;
+                const trimmed = originalName.substring(
+                    0,
+                    net.Constants.PlayerNameMaxLen - postFix.length,
+                );
+                finalName = trimmed + postFix;
+            }
+        }
+
         const player = new Player(
             this.game,
             pos,
             layer,
+            finalName,
             socketId,
             joinMsg,
             ip,
@@ -221,7 +238,7 @@ export class PlayerBarn {
             group.spawnLeader = player;
         }
 
-        this.game.logger.log(`Player ${player.name} joined`);
+        this.game.logger.info(`Player ${player.name} joined`);
 
         this.newPlayers.push(player);
         this.game.objectRegister.register(player);
@@ -830,7 +847,7 @@ export class Player extends BaseGameObject {
     promoteToRole(role: string) {
         const roleDef = GameObjectDefs[role] as RoleDef;
         if (!roleDef || roleDef.type !== "role") {
-            console.warn(`Invalid role type: ${role}`);
+            this.game.logger.warn(`Invalid role type: ${role}`);
             return;
         }
 
@@ -1224,6 +1241,7 @@ export class Player extends BaseGameObject {
         game: Game,
         pos: Vec2,
         layer: number,
+        name: string,
         socketId: string,
         joinMsg: net.JoinMsg,
         ip: string,
@@ -1236,12 +1254,11 @@ export class Player extends BaseGameObject {
 
         this.layer = layer;
 
+        this.name = name;
         this.socketId = socketId;
         this.ip = ip;
         this.findGameIp = findGameIp;
         this.userId = userId;
-
-        this.name = validateUserName(joinMsg.name).validName;
 
         this.isMobile = joinMsg.isMobile;
 
@@ -1309,27 +1326,6 @@ export class Player extends BaseGameObject {
 
         this.weaponManager.showNextThrowable();
         this.recalculateScale();
-    }
-
-    override serializeFull(): void {
-        if (!this.activeWeapon) {
-            console.error(
-                "Invalid active weapon, curIdx:",
-                this.curWeapIdx,
-                "lastIdx:",
-                this.weaponManager.lastWeaponIdx,
-                "weaps:",
-                this.weapons,
-            );
-            this.weapons[GameConfig.WeaponSlot.Melee].type ||= "fists";
-            this.weaponManager.setCurWeapIndex(
-                GameConfig.WeaponSlot.Melee,
-                undefined,
-                undefined,
-                true,
-            );
-        }
-        super.serializeFull();
     }
 
     update(dt: number): void {
@@ -1801,25 +1797,6 @@ export class Player extends BaseGameObject {
                         this.pickupLoot(closestLoot);
                         break;
                 }
-            }
-
-            // hacky hack to figure out the crash!!
-            if (!this.activeWeapon) {
-                console.error(
-                    "Mobile auto pickup: invalid active weapon, curIdx:",
-                    this.curWeapIdx,
-                    "lastIdx:",
-                    this.weaponManager.lastWeaponIdx,
-                    "weaps:",
-                    this.weapons,
-                );
-                this.weapons[GameConfig.WeaponSlot.Melee].type ||= "fists";
-                this.weaponManager.setCurWeapIndex(
-                    GameConfig.WeaponSlot.Melee,
-                    undefined,
-                    undefined,
-                    true,
-                );
             }
 
             const obstacles = this.getInteractableObstacles();
@@ -2933,7 +2910,7 @@ export class Player extends BaseGameObject {
         this.emoteFromSlot(GameConfig.EmoteSlot.Death);
 
         // Building gore region (club pool)
-        const objs = this.game.grid.intersectCollider(this.collider);
+        const objs = this.game.grid.intersectGameObject(this);
         for (const obj of objs) {
             if (
                 obj.__type === ObjectType.Building &&
@@ -3392,27 +3369,6 @@ export class Player extends BaseGameObject {
                     this.revive(playerToRevive);
                 }
             }
-        }
-
-        // hacky hack to figure out the crash!!
-        if (!this.activeWeapon) {
-            console.error(
-                "InputMsg: invalid active weapon, curIdx:",
-                this.curWeapIdx,
-                "lastIdx:",
-                this.weaponManager.lastWeaponIdx,
-                "weaps:",
-                this.weapons,
-                "inputs:",
-                msg.inputs.map((input) => GameConfig.Input[input]).join(", "),
-            );
-            this.weapons[GameConfig.WeaponSlot.Melee].type ||= "fists";
-            this.weaponManager.setCurWeapIndex(
-                GameConfig.WeaponSlot.Melee,
-                undefined,
-                undefined,
-                true,
-            );
         }
 
         // no exceptions for any perks or roles
@@ -4210,29 +4166,6 @@ export class Player extends BaseGameObject {
 
         if (reloading && this.weapons[this.curWeapIdx].ammo == 0) {
             this.weaponManager.tryReload();
-        }
-
-        // hacky hack to figure out the crash!!
-        if (!this.activeWeapon) {
-            console.error(
-                "DropItemMsg: invalid active weapon, curIdx:",
-                this.curWeapIdx,
-                "lastIdx:",
-                this.weaponManager.lastWeaponIdx,
-                "weaps:",
-                this.weapons,
-                "item:",
-                dropMsg.item,
-                "weapIdx:",
-                dropMsg.weapIdx,
-            );
-            this.weapons[GameConfig.WeaponSlot.Melee].type ||= "fists";
-            this.weaponManager.setCurWeapIndex(
-                GameConfig.WeaponSlot.Melee,
-                undefined,
-                undefined,
-                true,
-            );
         }
     }
 
