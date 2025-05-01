@@ -144,7 +144,8 @@ const mapDef = {
             { name: "glock", count: 1, weight: 1 },
             { name: "m93r", count: 1, weight: 1 },
             { name: "colt45", count: 1, weight: 0.5 },
-            { name: "p30l", count: 1, weight: 0.1 },
+            { name: "p30l", count: 1, weight: 0.25 },
+            { name: "m1100", count: 1, weight: 0.75 },
         ],
         tier_airdrop_rare: [{ name: "deagle", count: 1, weight: 1 }],
         tier_ammo: [
