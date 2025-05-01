@@ -9110,7 +9110,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [
             tierLoot("tier_throwables", 2, 3),
             tierLoot("tier_armor", 2, 3),
-            autoLoot("tier_guns", 4, 4),
+            tierLoot("tier_guns", 4, 4),
             autoLoot("4xscope", 1),
             autoLoot("backpack01", 1),
         ],
