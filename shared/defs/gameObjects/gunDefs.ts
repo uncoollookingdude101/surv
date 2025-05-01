@@ -3418,7 +3418,7 @@ export const GunDefs: Record<string, GunDef> = {
         name: "Flare Gun",
         type: "gun",
         quality: 0,
-        fireMode: "auto",
+        fireMode: "single",
         caseTiming: "shoot",
         ammo: "flare",
         pistol: true,

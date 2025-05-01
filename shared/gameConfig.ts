@@ -177,7 +177,7 @@ export const GameConfig = {
         /* STRIP_FROM_PROD_CLIENT:START */
         defaultItems: {
             weapons: [
-                { type: "m134", ammo: 200 },
+                { type: "", ammo: 0 },
                 { type: "", ammo: 0 },
                 { type: "fists", ammo: 0 },
                 { type: "", ammo: 0 },

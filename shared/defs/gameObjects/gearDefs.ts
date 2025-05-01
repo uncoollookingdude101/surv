@@ -710,7 +710,7 @@ const SkinDefs = {
             baseSprite: "player-helmet-leader.img",
         },
     }),
-    helmet03_forest: defineSkin("helmet03", {
+    helmet03_forest: defineSkin("helmet04", {
         name: "Shishigami no Kabuto",
         role: "woods_king",
         mapIndicator: {

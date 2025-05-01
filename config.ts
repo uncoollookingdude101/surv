@@ -24,14 +24,14 @@ export function getConfig(isProduction: boolean, dir: string) {
             thisRegion: "local",
         },
         vite: {
-            host: "127.0.0.1",
+            host: "0.0.0.0",
             port: 3000,
         },
         regions: {},
         modes: [
-            { mapName: "main", teamMode: TeamMode.Solo, enabled: true },
-            { mapName: "main", teamMode: TeamMode.Duo, enabled: true },
-            { mapName: "main", teamMode: TeamMode.Squad, enabled: true },
+            { mapName: "airstrike", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "flare", teamMode: TeamMode.Solo, enabled: true },
         ],
         clientTheme: "main",
         gameTps: 100,
@@ -71,7 +71,7 @@ export function getConfig(isProduction: boolean, dir: string) {
     if (isDev) {
         config.regions.local = {
             https: false,
-            address: `127.0.0.1:${config.gameServer.port}`,
+            address: `192.168.1.12:${config.gameServer.port}`,
             l10n: "index-local",
         };
     }

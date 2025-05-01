@@ -39,7 +39,7 @@ const mapDef = {
                 },
             ],
             crates: [
-                { name: "airdrop_crate_01", weight: 2 },
+                { name: "airdrop_crate_01a", weight: 2 },
                 { name: "airdrop_crate_02", weight: 1 },
             ],
         },
@@ -117,7 +117,7 @@ const mapDef = {
             { name: "556mm", count: 60, weight: 3 },
             { name: "12gauge", count: 10, weight: 3 },
             { name: "45acp", count: 60, weight: 3 },
-            { name: "flare", count: 1, weight: 3.5 },
+            { name: "flare", count: 1, weight: 1 },
         ],
         tier_cattle_crate: [
             { name: "colt45", count: 1, weight: 1 },
@@ -126,7 +126,10 @@ const mapDef = {
             { name: "m1a1", count: 1, weight: 2 },
             { name: "flare_gun", count: 1, weight: 1 },
         ],
-        tier_ring_case: [{ name: "potato_cannon", count: 1, weight: 1 }],
+        tier_ring_case: [
+            { name: "potato_cannon", count: 1, weight: 1 },
+            { name: "m134", count: 1, weight: 1 },
+        ],
         tier_cloud_01: [
             { name: "sv98", count: 1, weight: 0.5 },
             { name: "blr", count: 1, weight: 2 },
@@ -308,6 +311,9 @@ const mapDef = {
             { name: "chest03", count: 1, weight: 0.2 },
         ],
         tier_class_crate_mythic: [{ name: "30xscope", count: 1, weight: 1 }],
+        tier_scopes_sniper: [
+            { name: "15xscope", count: 1, weight: 1 }, // ?
+        ],
     },
     biome: {
         colors: {
@@ -367,7 +373,7 @@ const mapDef = {
                     retryOnFailure: true,
                 },
                 {
-                    type: "greenhouse_01",
+                    type: "greenhouse_01as",
                     pos: v2.create(0.6, 0.25),
                     rad: 200,
                     retryOnFailure: true,
@@ -385,9 +391,6 @@ const mapDef = {
             {
                 tree_01: 170,
                 tree_07: 170,
-                potato_01: 25,
-                potato_02: 25,
-                potato_03: 25,
                 stone_01: 250,
                 barrel_01: 90,
                 silo_01: 12,
@@ -425,7 +428,7 @@ const mapDef = {
                 hut_03: 3,
                 shack_03a: 2,
                 shack_03b: 3,
-                greenhouse_01: 1,
+                greenhouse_01as: 1,
                 cache_01: 1,
                 cache_02: 2,
                 cache_07: 3,
@@ -434,7 +437,7 @@ const mapDef = {
                 bunker_structure_03: 1,
                 bunker_structure_04: 1,
                 bunker_structure_05: 1,
-                warehouse_complex_01: 1,
+                warehouse_complex_01ms: 1,
                 mansion_structure_01: 2,
                 police_01: 1,
                 bank_01: 2,
@@ -455,11 +458,11 @@ const mapDef = {
             "desert_town_01",
             "desert_town_02",
             "river_town_02",
-            "logging_complex_01",
             "police_01",
             "logging_complex_02",
             "kopje_patch_01",
             "bunker_structure_09",
+            "warehouse_complex_01ms",
         ],
     },
     /* STRIP_FROM_PROD_CLIENT:END */

@@ -64,6 +64,11 @@ const mapDef = {
                     },
                 },
                 {
+                    circleIdx: 2,
+                    wait: 35,
+                    options: { type: GameConfig.Plane.Airdrop },
+                },
+                {
                     circleIdx: 3,
                     wait: 5,
                     options: {
@@ -84,6 +89,11 @@ const mapDef = {
                         wait: 0.25,
                         delay: 0.2,
                     },
+                },
+                {
+                    circleIdx: 3,
+                    wait: 35,
+                    options: { type: GameConfig.Plane.Airdrop },
                 },
                 {
                     circleIdx: 4,
@@ -119,6 +129,7 @@ const mapDef = {
                     },
                 },
             ],
+            crates: [{ name: "airdrop_crate_02de", weight: 1 }],
         },
         bagSizes: {
             strobe: [5, 10, 15, 20],
@@ -135,9 +146,36 @@ const mapDef = {
             { name: "colt45", count: 1, weight: 0.5 },
             { name: "p30l", count: 1, weight: 0.1 },
         ],
+        tier_airdrop_rare: [{ name: "deagle", count: 1, weight: 1 }],
+        tier_ammo: [
+            { name: "45acp", count: 60, weight: 3 },
+            { name: "9mm", count: 60, weight: 3 },
+            { name: "12gauge", count: 10, weight: 3 },
+        ],
+        tier_ammo_crate: [
+            { name: "45acp", count: 60, weight: 3 },
+            { name: "12gauge", count: 10, weight: 3 },
+            { name: "9mm", count: 60, weight: 3 },
+        ],
+        tier_airdrop_ammo: [
+            { name: "45acp", count: 30, weight: 3 },
+            { name: "9mm", count: 30, weight: 3 },
+            { name: "12gauge", count: 5, weight: 3 },
+        ],
         tier_throwables: [
             { name: "strobe", count: 2, weight: 1 },
             { name: "smoke", count: 1, weight: 1 },
+            { name: "mirv", count: 1, weight: 1 },
+        ],
+        tier_airdrop_outfits: [{ name: "outfitGhillie", count: 1, weight: 0.5 }],
+        tier_airdrop_melee: [{ name: "katana", count: 1, weight: 1 }],
+        tier_airdrop_throwables: [
+            { name: "strobe", count: 5, weight: 1 },
+            { name: "mirv", count: 2, weight: 1 },
+        ],
+        tier_perks: [
+            { name: "broken_arrow", count: 1, weight: 1 },
+            { name: "fabricate", count: 1, weight: 1 },
         ],
     },
     mapGen: {
