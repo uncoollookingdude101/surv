@@ -108,6 +108,17 @@ const mapDef = {
                 },
                 {
                     circleIdx: 4,
+                    wait: 10,
+                    options: {
+                        type: GameConfig.Plane.Airstrike,
+                        numPlanes: [{ count: 25, weight: 1 }],
+                        airstrikeZoneRad: 50,
+                        wait: 0.25,
+                        delay: 0.15,
+                    },
+                },
+                {
+                    circleIdx: 4,
                     wait: 20,
                     options: {
                         type: GameConfig.Plane.Airstrike,
@@ -122,7 +133,51 @@ const mapDef = {
                     wait: 0,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 5, weight: 1 }],
+                        numPlanes: [{ count: 10, weight: 1 }],
+                        airstrikeZoneRad: 25,
+                        wait: 0.25,
+                        delay: 0.15,
+                    },
+                },
+                {
+                    circleIdx: 5,
+                    wait: 5,
+                    options: {
+                        type: GameConfig.Plane.Airstrike,
+                        numPlanes: [{ count: 10, weight: 1 }],
+                        airstrikeZoneRad: 25,
+                        wait: 0.25,
+                        delay: 0.15,
+                    },
+                },
+                {
+                    circleIdx: 5,
+                    wait: 10,
+                    options: {
+                        type: GameConfig.Plane.Airstrike,
+                        numPlanes: [{ count: 10, weight: 1 }],
+                        airstrikeZoneRad: 25,
+                        wait: 0.25,
+                        delay: 0.15,
+                    },
+                },
+                {
+                    circleIdx: 5,
+                    wait: 15,
+                    options: {
+                        type: GameConfig.Plane.Airstrike,
+                        numPlanes: [{ count: 10, weight: 1 }],
+                        airstrikeZoneRad: 25,
+                        wait: 0.25,
+                        delay: 0.15,
+                    },
+                },
+                {
+                    circleIdx: 5,
+                    wait: 20,
+                    options: {
+                        type: GameConfig.Plane.Airstrike,
+                        numPlanes: [{ count: 10, weight: 1 }],
                         airstrikeZoneRad: 25,
                         wait: 0.25,
                         delay: 0.15,
@@ -139,13 +194,13 @@ const mapDef = {
     },
     lootTable: {
         tier_guns: [
-            { name: "m9", count: 1, weight: 2 },
-            { name: "m1911", count: 1, weight: 2 },
-            { name: "glock", count: 1, weight: 1 },
-            { name: "m93r", count: 1, weight: 1 },
-            { name: "colt45", count: 1, weight: 0.5 },
+            { name: "m9", count: 1, weight: 1 },
+            { name: "m1911", count: 1, weight: 1 },
+            { name: "glock", count: 1, weight: 0.75 },
+            { name: "m93r", count: 1, weight: 0.75 },
+            { name: "colt45", count: 1, weight: 0.25 },
             { name: "p30l", count: 1, weight: 0.25 },
-            { name: "m1100", count: 1, weight: 0.75 },
+            { name: "m1100", count: 1, weight: 0.5 },
         ],
         tier_airdrop_rare: [{ name: "deagle", count: 1, weight: 1 }],
         tier_ammo: [

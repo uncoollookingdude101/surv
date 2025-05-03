@@ -279,21 +279,11 @@ const mapDef = {
         ],
         tier_police: [
             { name: "helmet03", count: 1, weight: 0.15 },
-            {
-                name: "helmet03_potato",
-                count: 1,
-                weight: 0.1,
-            },
             { name: "chest03", count: 1, weight: 0.1 },
             { name: "backpack03", count: 1, weight: 0.25 },
         ],
         tier_airdrop_armor: [
             { name: "helmet03", count: 1, weight: 1 },
-            {
-                name: "helmet03_potato",
-                count: 1,
-                weight: 0.1,
-            },
             { name: "chest03", count: 1, weight: 1 },
             { name: "backpack03", count: 1, weight: 1 },
         ],
@@ -301,11 +291,6 @@ const mapDef = {
             { name: "helmet01", count: 1, weight: 9 },
             { name: "helmet02", count: 1, weight: 6 },
             { name: "helmet03", count: 1, weight: 0.2 },
-            {
-                name: "helmet03_potato",
-                count: 1,
-                weight: 0.1,
-            },
             { name: "chest01", count: 1, weight: 15 },
             { name: "chest02", count: 1, weight: 6 },
             { name: "chest03", count: 1, weight: 0.2 },
