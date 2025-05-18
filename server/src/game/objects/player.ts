@@ -2723,7 +2723,8 @@ export class Player extends BaseGameObject {
         if (
             this.hasPerk("martyrdom") ||
             this.role == "grenadier" ||
-            this.role == "demo"
+            this.role == "demo" ||
+            this.role == "the_hunted"
         ) {
             const martyrNadeType = "martyr_nade";
             const throwableDef = GameObjectDefs[martyrNadeType] as ThrowableDef;

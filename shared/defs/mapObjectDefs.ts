@@ -9111,7 +9111,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_throwables", 2, 3),
             tierLoot("tier_armor", 2, 3),
             tierLoot("tier_guns", 4, 4),
-            autoLoot("4xscope", 1),
+            tierLoot("tier_scopes", 1, 1),
             autoLoot("backpack01", 1),
         ],
         img: { sprite: "map-crate-07.img" },

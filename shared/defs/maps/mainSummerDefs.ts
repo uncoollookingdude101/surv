@@ -53,8 +53,22 @@ const mapDef = {
                 },
             ],
         },
+        roles: {
+            timings: [
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 0, wait: 60 },
+            ],
+        },
         bagSizes: {
-            strobe: [2, 4, 6, 10],
+            mirv: [3, 6, 9, 12],
+            strobe: [3, 6, 9, 12],
         },
         bleedDamage: 2,
         bleedDamageMult: 1,
@@ -193,9 +207,7 @@ const mapDef = {
             { name: "flare_gun_dual", count: 1, weight: 0.75 },
         ],
         tier_perks: [
-            { name: "firepower", count: 1, weight: 1 },
             { name: "windwalk", count: 1, weight: 1 },
-            { name: "endless_ammo", count: 1, weight: 1 },
             { name: "steelskin", count: 1, weight: 1 },
             { name: "small_arms", count: 1, weight: 1 },
             { name: "takedown", count: 1, weight: 1 },
@@ -203,20 +215,18 @@ const mapDef = {
             { name: "tree_climbing", count: 1, weight: 1 },
             { name: "scavenger", count: 1, weight: 1 },
             { name: "chambered", count: 1, weight: 1 },
-            { name: "martyrdom", count: 1, weight: 1 },
-            { name: "self_revive", count: 1, weight: 1 },
-            { name: "bonus_9mm", count: 1, weight: 1 },
             { name: "flak_jacket", count: 1, weight: 1 },
             { name: "fabricate", count: 1, weight: 1 },
+            { name: "broken_arrow", count: 1, weight: 1 },
         ],
         tier_hatchet_melee: [
-            { name: "helmet04_leader2", count: 1, weight: 5 }, // ?
+            { name: "helmet03_leader2", count: 1, weight: 5 }, // ?
         ],
         tier_vault_floor: [
-            { name: "helmet04_medic2", count: 1, weight: 0.5 },
+            { name: "helmet03_medic2", count: 1, weight: 0.5 },
             { name: "bonesaw_rusted", count: 1, weight: 0.5 },
         ],
-        tier_chrys_02: [{ name: "helmet03_forest", count: 1, weight: 1 }],
+        tier_chrys_02: [{ name: "endless_ammo", count: 1, weight: 1 }],
         tier_chrys_03: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],
@@ -230,7 +240,6 @@ const mapDef = {
             { name: "explosive", count: 1, weight: 1 },
             { name: "scavenger_adv", count: 1, weight: 1 },
             { name: "bonus_assault", count: 1, weight: 1 },
-            { name: "broken_arrow", count: 1, weight: 1 },
         ],
         tier_airdrop_rare: [
             { name: "awc", count: 1, weight: 1 },
@@ -263,19 +272,13 @@ const mapDef = {
             { name: "outfitGhillie", count: 1, weight: 0.05 }, // ?
         ],
         tier_eye_block: [
-            { name: "flare_gun", count: 1, weight: 2 },
-            { name: "painkiller", count: 1, weight: 2 },
-            { name: "m4a1", count: 1, weight: 2 },
-            { name: "m249", count: 1, weight: 1 },
-            { name: "awc", count: 1, weight: 1 },
-            { name: "pkp", count: 1, weight: 1 },
-            { name: "strobe", count: 1, weight: 2 },
+            { name: "tier_scavenger_adv", count: 1, weight: 5 },
             { name: "tier_airdrop_perk", count: 1, weight: 1 },
         ],
         tier_helm_special: [
-            { name: "helmet03_moon1", count: 1, weight: 2 },
-            { name: "helmet03_moon2", count: 1, weight: 0.5 },
-            { name: "helmet03_moon3", count: 1, weight: 1 },
+            { name: "helmet02_moon1", count: 1, weight: 1 },
+            { name: "helmet02_moon2", count: 1, weight: 1 },
+            { name: "helmet02_moon3", count: 1, weight: 1 },
         ],
         tier_police: [
             { name: "helmet03", count: 1, weight: 0.15 },
@@ -341,25 +344,13 @@ const mapDef = {
             locationSpawns: [
                 {
                     type: "logging_complex_01",
-                    pos: v2.create(0.25, 0.6),
+                    pos: v2.create(0.6, 0.6),
                     rad: 200,
                     retryOnFailure: true,
                 },
                 {
                     type: "shilo_01",
                     pos: v2.create(0.25, 0.25),
-                    rad: 200,
-                    retryOnFailure: true,
-                },
-                {
-                    type: "river_town_02",
-                    pos: v2.create(0.6, 0.6),
-                    rad: 200,
-                    retryOnFailure: true,
-                },
-                {
-                    type: "greenhouse_01as",
-                    pos: v2.create(0.6, 0.25),
                     rad: 200,
                     retryOnFailure: true,
                 },
@@ -430,7 +421,7 @@ const mapDef = {
                 chest_03: { odds: 0.2 },
                 mil_crate_02: { odds: 0.25 },
                 tree_02: 5,
-                teahouse_complex_01su: 4,
+                teahouse_complex_01su: 2,
                 stone_04: 20,
                 club_complex_01: 2,
                 greenhouse_02: 2,

@@ -233,6 +233,12 @@ const mapDef = {
             { name: "broken_arrow", count: 1, weight: 1 },
             { name: "fabricate", count: 1, weight: 1 },
         ],
+        tier_scopes: [
+            { name: "2xscope", count: 1, weight: 2 },
+            { name: "4xscope", count: 1, weight: 1 },
+            { name: "8xscope", count: 1, weight: 0.25 }, // ?
+            { name: "15xscope", count: 1, weight: 0.1 }, // ?
+        ],
     },
     mapGen: {
         map: {

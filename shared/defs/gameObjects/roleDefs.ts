@@ -152,6 +152,12 @@ export const RoleDefs: Record<string, RoleDef> = {
             assign: "leader_assigned_01",
             dead: "leader_dead_01",
         },
+        mapIndicator: {
+            sprite: "player-star.img",
+            tint: 0xff8400,
+            pulse: true,
+            pulseTint: 0xff8400,
+        },
         mapIcon: {
             alive: "player-star.img",
             dead: "skull-leader.img",
@@ -173,30 +179,31 @@ export const RoleDefs: Record<string, RoleDef> = {
             "targeting",
             "tree_climbing",
             "field_medic",
+            "chambered",
         ],
         defaultItems: createDefaultItems({
             weapons: [
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "m249", ammo: 0, fillInv: true },
-                            [TeamColor.Blue]: { type: "pkp", ammo: 0, fillInv: true },
+                            [TeamColor.Red]: { type: "potato_smg", ammo: 0 },
+                            [TeamColor.Blue]: { type: "potato_smg", ammo: 0 },
                         },
                         teamcolor,
                     ),
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "scarssr", ammo: 0, fillInv: true },
-                            [TeamColor.Blue]: { type: "scarssr", ammo: 0, fillInv: true },
+                            [TeamColor.Red]: { type: "scout_elite", ammo: 0 },
+                            [TeamColor.Blue]: { type: "m134", ammo: 0 },
                         },
                         teamcolor,
                     ),
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "pan", ammo: 0 },
-                            [TeamColor.Blue]: { type: "pan", ammo: 0 },
+                            [TeamColor.Red]: { type: "naginata", ammo: 0 },
+                            [TeamColor.Blue]: { type: "naginata", ammo: 0 },
                         },
                         teamcolor,
                     ),
@@ -205,11 +212,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet04_leader",
             chest: "chest03",
-            outfit: (teamcolor: TeamColor) =>
-                ({
-                    [TeamColor.Red]: "outfitRedLeader",
-                    [TeamColor.Blue]: "outfitBlueLeader",
-                })[teamcolor],
             inventory: {
                 "1xscope": 1,
                 "2xscope": 1,
@@ -218,8 +220,8 @@ export const RoleDefs: Record<string, RoleDef> = {
                 "15xscope": 1,
                 frag: 12,
                 smoke: 10,
-                strobe: 1,
-                mirv: 2,
+                strobe: 10,
+                mirv: 10,
                 bandage: 30,
                 healthkit: 4,
                 soda: 15,

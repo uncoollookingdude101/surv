@@ -112,14 +112,10 @@ const mapDef: PartialMapDef = {
                     wait: 10,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [
-                            { count: 3, weight: 5 },
-                            { count: 4, weight: 1 },
-                            { count: 5, weight: 0.1 },
-                        ],
-                        airstrikeZoneRad: 60,
-                        wait: 1.5,
-                        delay: 1,
+                        numPlanes: [{ count: 200, weight: 0.1 }],
+                        airstrikeZoneRad: 200,
+                        wait: 0.1,
+                        delay: 0.05,
                     },
                 },
                 {
@@ -132,14 +128,10 @@ const mapDef: PartialMapDef = {
                     wait: 30,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [
-                            { count: 3, weight: 4 },
-                            { count: 4, weight: 1 },
-                            { count: 5, weight: 0.1 },
-                        ],
-                        airstrikeZoneRad: 55,
-                        wait: 1.5,
-                        delay: 1,
+                        numPlanes: [{ count: 200, weight: 0.1 }],
+                        airstrikeZoneRad: 200,
+                        wait: 0.1,
+                        delay: 0.05,
                     },
                 },
                 {
@@ -147,14 +139,10 @@ const mapDef: PartialMapDef = {
                     wait: 8,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [
-                            { count: 3, weight: 3 },
-                            { count: 4, weight: 1 },
-                            { count: 5, weight: 0.1 },
-                        ],
-                        airstrikeZoneRad: 50,
-                        wait: 1.5,
-                        delay: 1,
+                        numPlanes: [{ count: 200, weight: 0.1 }],
+                        airstrikeZoneRad: 200,
+                        wait: 0.1,
+                        delay: 0.05,
                     },
                 },
                 {
@@ -167,14 +155,10 @@ const mapDef: PartialMapDef = {
                     wait: 21,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [
-                            { count: 3, weight: 2 },
-                            { count: 4, weight: 1 },
-                            { count: 5, weight: 0.1 },
-                        ],
-                        airstrikeZoneRad: 45,
-                        wait: 1.5,
-                        delay: 1,
+                        numPlanes: [{ count: 200, weight: 0.1 }],
+                        airstrikeZoneRad: 200,
+                        wait: 0.1,
+                        delay: 0.05,
                     },
                 },
                 {
@@ -182,14 +166,10 @@ const mapDef: PartialMapDef = {
                     wait: 6,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [
-                            { count: 3, weight: 1 },
-                            { count: 4, weight: 1 },
-                            { count: 5, weight: 0.1 },
-                        ],
-                        airstrikeZoneRad: 40,
-                        wait: 1.5,
-                        delay: 1,
+                        numPlanes: [{ count: 200, weight: 0.1 }],
+                        airstrikeZoneRad: 200,
+                        wait: 0.1,
+                        delay: 0.05,
                     },
                 },
             ],

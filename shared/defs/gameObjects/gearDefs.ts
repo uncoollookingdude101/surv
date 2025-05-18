@@ -742,8 +742,12 @@ const SkinDefs = {
             baseSprite: "player-helmet-moon.img",
             spriteScale: 0.3,
         },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
+        },
     }),
-    helmet03_moon1: defineSkin("helmet03", {
+    helmet02_moon1: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
         perk: "endless_ammo",
         skinImg: {
@@ -753,8 +757,12 @@ const SkinDefs = {
             baseSprite: "player-helmet-moon.img",
             spriteScale: 0.3,
         },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
+        },
     }),
-    helmet03_moon2: defineSkin("helmet03", {
+    helmet02_moon2: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
         perk: "splinter",
         skinImg: {
@@ -764,8 +772,12 @@ const SkinDefs = {
             baseSprite: "player-helmet-moon.img",
             spriteScale: 0.3,
         },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
+        },
     }),
-    helmet03_moon3: defineSkin("helmet03", {
+    helmet02_moon3: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
         perk: "explosive",
         skinImg: {
@@ -774,6 +786,10 @@ const SkinDefs = {
             baseTintBlue: 0xffffff,
             baseSprite: "player-helmet-moon.img",
             spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
         },
     }),
     helmet03_lt: defineSkin("helmet03", {
@@ -845,7 +861,6 @@ const SkinDefs = {
         },
         lootImg: {
             sprite: "player-helmet-marksman.img",
-            scale: 0.3,
             rot: 0.5 * Math.PI,
         },
     }),
@@ -913,7 +928,7 @@ const SkinDefs = {
             rot: 0.5 * Math.PI,
         },
     }),
-    helmet04_medic2: defineSkin("helmet04", {
+    helmet03_medic2: defineSkin("helmet03", {
         name: "Aged Medic Helmet",
         perk: "field_medic",
         skinImg: {
@@ -925,7 +940,6 @@ const SkinDefs = {
         },
         lootImg: {
             sprite: "player-helmet-medic.img",
-            scale: 0.3,
             rot: 0.5 * Math.PI,
         },
     }),
@@ -977,7 +991,7 @@ const SkinDefs = {
             rot: 0.5 * Math.PI,
         },
     }),
-    helmet04_leader2: defineSkin("helmet04", {
+    helmet03_leader2: defineSkin("helmet03", {
         name: "Leader Helmet",
         perk: "bonus_assault",
         skinImg: {
@@ -989,7 +1003,6 @@ const SkinDefs = {
         },
         lootImg: {
             sprite: "player-helmet-leader.img",
-            scale: 0.3,
             rot: 0.5 * Math.PI,
         },
     }),

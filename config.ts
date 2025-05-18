@@ -31,7 +31,7 @@ export function getConfig(isProduction: boolean, dir: string) {
         modes: [
             { mapName: "airstrike", teamMode: TeamMode.Solo, enabled: true },
             { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: true },
-            { mapName: "flare", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "faction", teamMode: TeamMode.Solo, enabled: true },
         ],
         clientTheme: "main",
         gameTps: 100,
@@ -74,7 +74,7 @@ export function getConfig(isProduction: boolean, dir: string) {
     if (isDev) {
         config.regions.local = {
             https: false,
-            address: `192.168.1.16:${config.gameServer.port}`,
+            address: `192.168.1.11:${config.gameServer.port}`,
             l10n: "index-local",
         };
     }
