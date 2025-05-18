@@ -141,7 +141,7 @@ export class PlayerBarn {
         this.game.joinTokens.delete(joinMsg.matchPriv);
 
         if (Config.rateLimitsEnabled) {
-            const count = this.players.filter(
+            const count = this.livingPlayers.filter(
                 (p) =>
                     p.ip === ip ||
                     p.findGameIp == joinData.findGameIp ||
