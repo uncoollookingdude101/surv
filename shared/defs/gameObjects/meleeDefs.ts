@@ -1,3 +1,4 @@
+import { ObjectSerializeFns } from "../../net/objectSerializeFns";
 import { defineSkin } from "../../utils/util";
 import type { Vec2 } from "../../utils/v2";
 
@@ -1290,6 +1291,24 @@ const SkinDefs: Record<string, MeleeDef> = {
         worldImg: {
             sprite: "loot-melee-warhammer-tank.img",
             pos: { x: -10.5, y: -3 },
+        },
+    }),
+    crowbar_hider: defineMeleeSkin("crowbar", {
+        name: "Hider's Crowbar",
+        noPotatoSwap: true,
+        noDropOnDeath: true,
+        obstacleDamage: 1,
+        speed: {
+            equip: 3,
+        },
+    }),
+    naginata_seeker: defineMeleeSkin("naginata", {
+        name: "Seeker's Naginata",
+        noPotatoSwap: true,
+        noDropOnDeath: true,
+        obstacleDamage: 5,
+        speed: {
+            equip: 2,
         },
     }),
 };

@@ -6,6 +6,7 @@ import { Desert } from "./maps/desertDefs";
 import { Faction } from "./maps/factionDefs";
 import { Flare } from "./maps/flareDefs";
 import { Halloween } from "./maps/halloweenDefs";
+import { HidenSeek } from "./maps/hidenseek";
 import { MainSpring } from "./maps/mainSpringDefs";
 import { MainSummer } from "./maps/mainSummerDefs";
 import { Potato } from "./maps/potatoDefs";
@@ -52,6 +53,7 @@ export const MapDefs = {
     turkey: Turkey,
     flare: Flare,
     airstrike: Airstrike,
+    hidenseek: HidenSeek,
 } satisfies Record<string, MapDef>;
 
 export interface MapDef {

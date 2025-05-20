@@ -1,10 +1,10 @@
 export const PerkProperties = {
     leadership: {
-        scale: 0.25,
+        scale: 0.1,
     },
     steelskin: {
-        scale: 0.4,
-        damageReduction: 0.5,
+        scale: 0.3,
+        damageReduction: 0.3,
     },
     flak_jacket: {
         scale: 0.2,
@@ -28,7 +28,7 @@ export const PerkProperties = {
         bonusAirstrikes: 4,
     },
     fabricate: {
-        refillInterval: 12, // means refill every x seconds
+        refillInterval: 30, // means refill every x seconds
         giveInterval: 0.08, // interval between each grenade being given until the backpack is full
     },
     gotw: {
@@ -370,6 +370,20 @@ export const PerkDefs: Record<string, PerkDef> = {
         },
     },
     fabricate: {
+        name: "Fabricate",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-fabricate.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    fabricate_s: {
         name: "Fabricate",
         type: "perk",
         lootImg: {

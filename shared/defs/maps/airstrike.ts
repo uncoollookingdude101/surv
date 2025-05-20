@@ -3,8 +3,36 @@ import { util } from "../../utils/util";
 import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
 import { Desert } from "./desertDefs";
+import type { PartialMapDef } from "./baseDefs";
 
-const mapDef = {
+const mapDef: PartialMapDef = {
+    desc: {
+        name: "Airstrike",
+        icon: "img/loot/loot-perk-broken-arrow.svg",
+        buttonCss: "btn-mode-desert",
+    },
+    assets: {
+        audio: [
+            { name: "log_03", channel: "sfx" },
+            { name: "log_04", channel: "sfx" },
+        ],
+        atlases: ["gradient", "loadout", "shared", "desert"],
+    },
+    biome: {
+        colors: {
+            background: 0x6a7543,
+            water: 0x8a9b4e,
+            waterRipple: 0xd1e685,
+            beach: 0xc9843a,
+            riverbank: 0xb25e24,
+            grass: 0xdfa757,
+            underground: 0x3d0d03,
+            playerSubmerge: 0x4e9b8f,
+            playerGhillie: 0xdfa761,
+        },
+        particles: {},
+    },
+    gameMode: { maxPlayers: 80, desertMode: true },
     gameConfig: {
         planes: {
             timings: [
@@ -324,4 +352,5 @@ const mapDef = {
         ],
     },
 };
+
 export const Airstrike = util.mergeDeep({}, Desert, mapDef) as MapDef;

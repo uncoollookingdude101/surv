@@ -55,15 +55,14 @@ const mapDef = {
         },
         roles: {
             timings: [
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
-                { role: "the_hunted", circleIdx: 0, wait: 60 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
+                { role: "the_hunted", circleIdx: 1, wait: 1 },
             ],
         },
         bagSizes: {

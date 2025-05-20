@@ -569,6 +569,12 @@ export class WeaponManager {
 
     dropMelee(): void {
         const slot = WeaponSlot.Melee;
+        const def = GameObjectDefs[this.weapons[slot].type] as GunDef | undefined;
+
+        if (def && def.noDrop) {
+            return;
+        }
+
         if (this.weapons[slot].type != "fists") {
             this.player.dropLoot(this.weapons[slot].type);
             this.setWeapon(slot, "fists", 0);

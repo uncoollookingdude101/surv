@@ -582,4 +582,51 @@ export const RoleDefs: Record<string, RoleDef> = {
         guiImg: "img/gui/role-assault.svg",
         color: 0xffec17,
     },
+    hider: {
+        type: "role",
+        announce: false,
+        killFeed: { assign: false },
+        sound: {},
+        perks: ["windwalk", "tree_climbing", "small_arms", "fabricate_s", "leadership"],
+        defaultItems: createDefaultItems({
+            weapons: [
+                { type: "", ammo: 0 },
+                { type: "", ammo: 0 },
+                { type: "crowbar_hider", ammo: 0 },
+            ],
+            backpack: "backpack01",
+            inventory: {
+                "8xscope": 1,
+            },
+        }),
+    },
+    seeker: {
+        type: "role",
+        announce: true,
+        killFeed: { assign: true },
+        sound: {
+            assign: "leader_assigned_01",
+            dead: "leader_dead_01",
+        },
+        mapIndicator: {
+            sprite: "player-the-hunted.img",
+            tint: 0xff0000,
+            pulse: true,
+            pulseTint: 0xff0000,
+        },
+        perks: ["endless_ammo", "steelskin", "fabricate", "leadership"],
+        defaultItems: createDefaultItems({
+            weapons: [
+                { type: "m134_s", ammo: 0 },
+                { type: "usas_s", ammo: 0 },
+                { type: "naginata_seeker", ammo: 0 },
+            ],
+            backpack: "backpack03",
+            helmet: "helmet04",
+            chest: "chest04",
+            inventory: {
+                "8xscope": 1,
+            },
+        }),
+    },
 };

@@ -4532,7 +4532,7 @@ function createLoggingComplex<T extends BuildingDef>(e: Partial<T>): T {
                 inheritOri: false,
             },
             {
-                type: randomObstacleType({ chest_02: 1, case_04: 1 }),
+                type: "chest_02",
                 pos: v2.create(-30.5, 4.75),
                 scale: 1,
                 ori: 0,
@@ -9174,6 +9174,17 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         sound: { explode: "crate_break_01" },
     } as unknown as Partial<ObstacleDef>),
+    crate_10b: createCrate({
+        health: 200,
+        scale: { destroy: 0.75 },
+        loot: [autoLoot("awc_h", 1)],
+        map: { display: false },
+        img: {
+            sprite: "map-crate-10.img",
+            residue: "map-crate-res-03.img",
+        },
+        sound: { explode: "crate_break_01" },
+    } as unknown as Partial<ObstacleDef>),
     crate_11: createCrate({
         scale: { destroy: 0.75 },
         health: 200,
@@ -9491,6 +9502,19 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             residue: "none",
         },
         destroyType: "crate_10a",
+        explodeParticle: "airdropCrate02",
+    } as unknown as Partial<ObstacleDef>),
+    airdrop_crate_01b: createAirdrop({
+        button: {
+            useImg: "map-airdrop-02.img",
+            useParticle: "airdropCrate01",
+            sound: { on: "airdrop_open_01", off: "" },
+        },
+        img: {
+            sprite: "map-airdrop-01.img",
+            residue: "none",
+        },
+        destroyType: "crate_10b",
         explodeParticle: "airdropCrate02",
     } as unknown as Partial<ObstacleDef>),
     airdrop_crate_02: createAirdrop({
@@ -10045,6 +10069,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     gun_mount_05: createGunMount({
         loot: [autoLoot("m1100", 1)],
+        img: { sprite: "map-gun-mount-05.img" },
+    }),
+    gun_mount_06: createGunMount({
+        loot: [autoLoot("flare_gun2", 1)],
         img: { sprite: "map-gun-mount-05.img" },
     }),
     locker_01: createLocker({
@@ -18937,6 +18965,12 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     cabin_03: createCabin({
         cabin_mount: "gun_mount_05",
+    }),
+    cabin_04: createCabin({
+        cabin_mount: "gun_mount_06",
+    }),
+    cabin_05: createCabin({
+        cabin_mount: "",
     }),
     dock_01: {
         type: "building",
