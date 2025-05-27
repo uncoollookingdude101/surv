@@ -261,10 +261,10 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         noPotatoSwap: true,
         explodeOnImpact: false,
         playerCollision: false,
-        fuseTime: 1,
+        fuseTime: 0.5,
         fuseVariance: 0.3,
         aimDistance: 0,
-        rad: 1,
+        rad: 3,
         throwPhysics: {
             playerVelMult: 0.6,
             velZ: 5,

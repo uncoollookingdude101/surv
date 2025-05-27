@@ -1,7 +1,6 @@
-import { table } from "console";
+
 import { GameConfig } from "../../gameConfig";
 import { util } from "../../utils/util";
-import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
 import { Main, type PartialMapDef } from "./baseDefs";
 
@@ -13,6 +12,10 @@ const mapDef: PartialMapDef = {
     },
     assets: {
         audio: [
+            {
+                name: "pumpkin_break_01",
+                channel: "sfx",
+            },
             { name: "club_music_01", channel: "ambient" },
             { name: "club_music_02", channel: "ambient" },
             {
@@ -50,11 +53,11 @@ const mapDef: PartialMapDef = {
     gameConfig: {
         planes: {
             timings: [
+                { circleIdx: 2, wait: 30, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 3, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 3, wait: 15, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 3, wait: 20, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 3, wait: 25, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 3, wait: 30, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 3, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 4, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
+                { circleIdx: 4, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
             ],
             crates: [{ name: "airdrop_crate_01b", weight: 1 }],
         },
@@ -69,6 +72,9 @@ const mapDef: PartialMapDef = {
                 { role: "hider", circleIdx: 0, wait: 21 },
                 { role: "hider", circleIdx: 0, wait: 21 },
             ],
+        },
+        bagSizes: {
+            "308sub": [0, 10, 0, 0],
         },
     },
     lootTable: {
@@ -157,7 +163,7 @@ const mapDef: PartialMapDef = {
         },
         densitySpawns: [
             {
-                stone_01: 500,
+                stone_01: 300,
                 barrel_01: 75,
                 silo_01: 20,
                 pumpkin_01: 50,
@@ -166,7 +172,7 @@ const mapDef: PartialMapDef = {
                 crate_03: 8,
                 bush_01: 100,
                 cache_06: 12,
-                tree_01: 1300,
+                tree_01: 750,
                 hedgehog_01: 24,
                 container_01: 5,
                 container_02: 5,
@@ -190,7 +196,6 @@ const mapDef: PartialMapDef = {
                 house_red_01: { small: 3, large: 4 },
                 house_red_02: { small: 3, large: 4 },
                 barn_01: { small: 1, large: 3 },
-                barn_02: 1,
                 hut_01: 3,
                 shack_03a: 2,
                 shack_03b: { small: 2, large: 3 },
@@ -201,7 +206,6 @@ const mapDef: PartialMapDef = {
                 warehouse_complex_01: 1,
                 chest_01: 1,
                 chest_03: { odds: 0.2 },
-                mil_crate_02: { odds: 0.25 },
                 tree_02: 3,
                 club_complex_01: 1,
                 mansion_structure_01: 1,
@@ -214,6 +218,7 @@ const mapDef: PartialMapDef = {
             {
                 cabin_01: "cabin_05",
                 bush_01: "bush_01b",
+                bunker_crossing_compartment_01: "bunker_crossing_compartment_01a",
             },
         ],
         importantSpawns: ["club_complex_01"],

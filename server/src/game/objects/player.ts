@@ -1686,6 +1686,42 @@ export class Player extends BaseGameObject {
                 this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
             }
         }
+        if (this.hasPerk("fabricate_m")) {
+            if (this.fabricateThrowablesLeft > 0) {
+                this.fabricateGiveTicker -= dt;
+                if (this.fabricateGiveTicker < 0) {
+                    this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
+                    this.inventory["mirv"]++;
+                    this.inventoryDirty = true;
+                    this.fabricateThrowablesLeft--;
+
+                    const msg = new net.PickupMsg();
+                    msg.type = net.PickupMsgType.Success;
+                    msg.item = "mirv";
+                    msg.count = 1;
+
+                    if (
+                        !this.weaponManager.weapons[GameConfig.WeaponSlot.Throwable].type
+                    ) {
+                        this.weaponManager.showNextThrowable();
+                    }
+
+                    this.msgsToSend.push({ type: net.MsgType.Pickup, msg });
+                }
+            }
+
+            this.fabricateRefillTicker -= dt;
+            if (this.fabricateRefillTicker <= 0) {
+                const backpackLevel = this.getGearLevel(this.backpack);
+                const throwablesToGive = math.max(
+                    this.bagSizes["mirv"][backpackLevel] - this.inventory["mirv"],
+                    0,
+                );
+                this.fabricateThrowablesLeft = throwablesToGive;
+                this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
+                this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
+            }
+        }
 
         if (this.fatModifier > 0) {
             this.fatTicker -= dt;

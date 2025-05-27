@@ -715,7 +715,7 @@ export const BaseDefs: Record<string, BulletDef> = {
         tracerWidth: 0.1,
         tracerLength: 0.9,
     },
-    bullet_m139: {
+    bullet_m134: {
         type: "bullet",
         damage: 10,
         obstacleDamage: 5,
@@ -832,6 +832,33 @@ export const BaseDefs: Record<string, BulletDef> = {
         tracerColor: "308sub",
         tracerWidth: 0.2,
         tracerLength: 1,
+    },
+    bullet_m134_s: {
+        type: "bullet",
+        damage: 20,
+        obstacleDamage: 5,
+        falloff: 0,
+        distance: 200,
+        speed: 140,
+        variance: 0,
+        shrapnel: false,
+        tracerColor: "762mm",
+        tracerWidth: 0.1,
+        tracerLength: 0.9,
+    },
+    bullet_frag_s: {
+        type: "bullet",
+        damage: 12,
+        obstacleDamage: 5,
+        falloff: 0.3,
+        speed: 100,
+        distance: 24,
+        variance: 0,
+        shrapnel: false,
+        tracerColor: "frag",
+        tracerWidth: 0.1,
+        tracerLength: 0.5,
+        onHit: "explosion_usas",
     },
 };
 

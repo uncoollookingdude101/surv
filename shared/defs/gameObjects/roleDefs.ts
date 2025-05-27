@@ -587,7 +587,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         announce: false,
         killFeed: { assign: false },
         sound: {},
-        perks: ["windwalk", "tree_climbing", "small_arms", "fabricate_s", "leadership"],
+        perks: ["tree_climbing", "small_arms", "fabricate_s", "leadership"],
         defaultItems: createDefaultItems({
             weapons: [
                 { type: "", ammo: 0 },
@@ -614,7 +614,14 @@ export const RoleDefs: Record<string, RoleDef> = {
             pulse: true,
             pulseTint: 0xff0000,
         },
-        perks: ["endless_ammo", "steelskin", "fabricate", "leadership"],
+        perks: [
+            "endless_ammo",
+            "steelskin",
+            "fabricate_m",
+            "leadership",
+            "bonus_assault",
+            "flak_jacket"
+        ],
         defaultItems: createDefaultItems({
             weapons: [
                 { type: "m134_s", ammo: 0 },
