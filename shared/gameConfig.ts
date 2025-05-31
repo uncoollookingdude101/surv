@@ -360,6 +360,7 @@ export const GameConfig = {
         strobe: [2, 3, 4, 5],
         mirv: [2, 4, 6, 8],
         snowball: [10, 20, 30, 40],
+        snowball_h: [10, 20, 30, 40],
         potato: [10, 20, 30, 40],
         bandage: [5, 10, 15, 30],
         healthkit: [1, 2, 3, 4],

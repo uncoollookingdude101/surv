@@ -1,4 +1,3 @@
-
 import { GameConfig } from "../../gameConfig";
 import { util } from "../../utils/util";
 import type { MapDef } from "../mapDefs";
@@ -75,6 +74,7 @@ const mapDef: PartialMapDef = {
         },
         bagSizes: {
             "308sub": [0, 10, 0, 0],
+            snowball_h: [0, 10, 0, 0],
         },
     },
     lootTable: {

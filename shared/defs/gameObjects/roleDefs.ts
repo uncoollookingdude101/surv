@@ -53,6 +53,7 @@ type DefaultItems = {
         strobe: number;
         mirv: number;
         snowball: number;
+        snowball_h: number;
         potato: number;
         bandage: number;
         healthkit: number;
@@ -127,6 +128,7 @@ function createDefaultItems<T extends DefaultItems>(e: DeepPartial<T>): T {
             strobe: 0,
             mirv: 0,
             snowball: 0,
+            snowball_h: 0,
             potato: 0,
             bandage: 0,
             healthkit: 0,
@@ -174,27 +176,27 @@ export const RoleDefs: Record<string, RoleDef> = {
             "windwalk",
             "endless_ammo",
             "small_arms",
-            "fabricate",
             "gotw",
             "targeting",
             "tree_climbing",
             "field_medic",
             "chambered",
+            "fabricate_m",
         ],
         defaultItems: createDefaultItems({
             weapons: [
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "potato_smg", ammo: 0 },
-                            [TeamColor.Blue]: { type: "potato_smg", ammo: 0 },
+                            [TeamColor.Red]: { type: "m134_s", ammo: 0 },
+                            [TeamColor.Blue]: { type: "sv98", ammo: 0 },
                         },
                         teamcolor,
                     ),
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "scout_elite", ammo: 0 },
+                            [TeamColor.Red]: { type: "usas_s", ammo: 0 },
                             [TeamColor.Blue]: { type: "m134", ammo: 0 },
                         },
                         teamcolor,
@@ -207,7 +209,6 @@ export const RoleDefs: Record<string, RoleDef> = {
                         },
                         teamcolor,
                     ),
-                { type: "smoke", ammo: 10 },
             ],
             backpack: "backpack03",
             helmet: "helmet04_leader",
@@ -218,10 +219,6 @@ export const RoleDefs: Record<string, RoleDef> = {
                 "4xscope": 1,
                 "8xscope": 1,
                 "15xscope": 1,
-                frag: 12,
-                smoke: 10,
-                strobe: 10,
-                mirv: 10,
                 bandage: 30,
                 healthkit: 4,
                 soda: 15,
@@ -593,10 +590,12 @@ export const RoleDefs: Record<string, RoleDef> = {
                 { type: "", ammo: 0 },
                 { type: "", ammo: 0 },
                 { type: "crowbar_hider", ammo: 0 },
+                { type: "snowball_h", ammo: 0 },
             ],
             backpack: "backpack01",
             inventory: {
                 "8xscope": 1,
+                snowball_h: 5,
             },
         }),
     },
@@ -620,7 +619,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             "fabricate_m",
             "leadership",
             "bonus_assault",
-            "flak_jacket"
+            "flak_jacket",
         ],
         defaultItems: createDefaultItems({
             weapons: [

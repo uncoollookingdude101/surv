@@ -1115,6 +1115,10 @@ export class Player extends BaseGameObject {
             this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
         } else if (type === "fabricate_s") {
             this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
+        } else if (type === "fabricate_m") {
+            this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
+        } else if (type === "fabricate_str") {
+            this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
         } else if (type === "leadership") {
             this.boost = 100;
         }
@@ -1715,6 +1719,42 @@ export class Player extends BaseGameObject {
                 const backpackLevel = this.getGearLevel(this.backpack);
                 const throwablesToGive = math.max(
                     this.bagSizes["mirv"][backpackLevel] - this.inventory["mirv"],
+                    0,
+                );
+                this.fabricateThrowablesLeft = throwablesToGive;
+                this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
+                this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
+            }
+        }
+        if (this.hasPerk("fabricate_str")) {
+            if (this.fabricateThrowablesLeft > 0) {
+                this.fabricateGiveTicker -= dt;
+                if (this.fabricateGiveTicker < 0) {
+                    this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
+                    this.inventory["strobe"]++;
+                    this.inventoryDirty = true;
+                    this.fabricateThrowablesLeft--;
+
+                    const msg = new net.PickupMsg();
+                    msg.type = net.PickupMsgType.Success;
+                    msg.item = "strobe";
+                    msg.count = 1;
+
+                    if (
+                        !this.weaponManager.weapons[GameConfig.WeaponSlot.Throwable].type
+                    ) {
+                        this.weaponManager.showNextThrowable();
+                    }
+
+                    this.msgsToSend.push({ type: net.MsgType.Pickup, msg });
+                }
+            }
+
+            this.fabricateRefillTicker -= dt;
+            if (this.fabricateRefillTicker <= 0) {
+                const backpackLevel = this.getGearLevel(this.backpack);
+                const throwablesToGive = math.max(
+                    this.bagSizes["strobe"][backpackLevel] - this.inventory["strobe"],
                     0,
                 );
                 this.fabricateThrowablesLeft = throwablesToGive;
