@@ -8931,7 +8931,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-couch-03.img" },
     }),
     crate_01: createCrate({}),
-    crate_01a: createCrate({ loot: [autoLoot("m134", 1, 1)] }),
+    crate_01a: createCrate({ loot: [autoLoot("pkp", 1, 1)] }),
     crate_01b: createCrate({ loot: [autoLoot("chest03", 1, 1)] }),
     crate_01c: createCrate({ loot: [autoLoot("backpack03", 1, 1)] }),
     crate_01x: createCrate({ img: { sprite: "map-crate-01x.img" } }),

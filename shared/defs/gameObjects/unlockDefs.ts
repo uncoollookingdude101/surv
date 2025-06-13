@@ -362,7 +362,6 @@ export const UnlockDefs: Record<string, UnlockDef> = {
             "emote_logocloud",
             "emote_logotwins",
 
-            /* use this to unlock everything :)
             ...new Set([
                 ..._allowedOutfits,
                 ..._allowedMeleeSkins,

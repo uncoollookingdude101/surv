@@ -141,7 +141,7 @@ const mapDef = {
         ],
         tier_ring_case: [
             { name: "potato_cannon", count: 1, weight: 1 },
-            { name: "m134", count: 1, weight: 1 },
+            { name: "pkp", count: 1, weight: 1 },
         ],
         tier_cloud_01: [
             { name: "sv98", count: 1, weight: 0.5 },
@@ -297,7 +297,7 @@ const mapDef = {
             { name: "chest02", count: 1, weight: 6 },
             { name: "chest03", count: 1, weight: 0.2 },
         ],
-        tier_class_crate_mythic: [{ name: "30xscope", count: 1, weight: 1 }],
+        // tier_class_crate_mythic: [{ name: "30xscope", count: 1, weight: 1 }],
         tier_scopes_sniper: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],
