@@ -1,4 +1,3 @@
-import { ObjectSerializeFns } from "../../net/objectSerializeFns";
 import { defineSkin } from "../../utils/util";
 import type { Vec2 } from "../../utils/v2";
 
