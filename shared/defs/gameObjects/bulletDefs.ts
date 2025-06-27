@@ -868,6 +868,7 @@ export const BaseDefs: Record<string, BulletDef> = {
         tracerWidth: 0.1,
         tracerLength: 0.5,
         onHit: "explosion_usas",
+        noDistAdj: true,
     },
 };
 

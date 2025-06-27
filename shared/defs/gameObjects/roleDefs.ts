@@ -623,8 +623,8 @@ export const RoleDefs: Record<string, RoleDef> = {
         ],
         defaultItems: createDefaultItems({
             weapons: [
-                { type: "m134_s", ammo: 0 },
-                { type: "usas_s", ammo: 0 },
+                { type: "pkp_s", ammo: 200 },
+                { type: "usas_s", ammo: 10 },
                 { type: "naginata_seeker", ammo: 0 },
             ],
             backpack: "backpack03",
