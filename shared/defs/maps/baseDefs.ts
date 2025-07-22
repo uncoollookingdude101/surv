@@ -306,7 +306,7 @@ export const Main: MapDef = {
         tier_pirate_melee: [{ name: "hook", count: 1, weight: 1 }],
         tier_hatchet: [
             { name: "vector", count: 1, weight: 0.4 },
-            { name: "hk416", count: 1, weight: 0.25 },
+            { name: "bar", count: 1, weight: 0.25 },
             { name: "mp220", count: 1, weight: 0.15 },
             { name: "pkp", count: 1, weight: 0.01 },
             { name: "m249", count: 1, weight: 0.01 },
