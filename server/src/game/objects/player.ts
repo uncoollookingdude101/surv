@@ -3701,11 +3701,8 @@ export class Player extends BaseGameObject {
                         | GunDef
                         | undefined;
                     if (
-                        (oldWeapDef && oldWeapDef.noDrop) ||
-                        (this.role === "leader" &&
-                            (this.weapons[newGunIdx].type === "flare_gun" ||
-                                this.weapons[newGunIdx].type === "flare_gun_dual") &&
-                            !this.hasFiredFlare)
+                        oldWeapDef &&
+                        (oldWeapDef.noDrop || !this.weaponManager.canDropFlare(newGunIdx))
                     ) {
                         this.pickupTicker = 0;
                         return;

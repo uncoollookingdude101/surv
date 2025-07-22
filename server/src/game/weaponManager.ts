@@ -536,20 +536,7 @@ export class WeaponManager {
 
     dropGun(weapIdx: number): void {
         const def = GameObjectDefs[this.weapons[weapIdx].type] as GunDef | undefined;
-        if (def && def.noDrop) {
-            return;
-        }
-
-        if (
-            this.player.role === "leader" &&
-            def &&
-            this.weapons[weapIdx].type &&
-            (this.weapons[weapIdx].type === "flare_gun" ||
-                this.weapons[weapIdx].type === "flare_gun_dual") &&
-            !this.player.hasFiredFlare
-        ) {
-            return;
-        }
+        if (def && (def.noDrop || !this.canDropFlare(weapIdx))) return;
 
         this._dropGun(weapIdx);
         this.setWeapon(weapIdx, "", 0);
@@ -576,6 +563,20 @@ export class WeaponManager {
             this.setWeapon(slot, "fists", 0);
             if (slot === this.curWeapIdx) this.player.setDirty();
         }
+    }
+
+    /**
+     * Checks if player can drop flare gun, if holding one. Assumes the slot is not empty.
+     * @param weapIdx The slot index.
+     */
+    canDropFlare(weapIdx: number): boolean {
+        const def = GameObjectDefs[this.weapons[weapIdx].type] as GunDef;
+        return (
+            this.player.role !== "leader" ||
+            (this.player.hasFiredFlare &&
+                // This is a hacky check and should be replaced with something cleaner in the future.
+                def.ammo === "flare")
+        );
     }
 
     isBulletSaturated(ammo: string): boolean {
