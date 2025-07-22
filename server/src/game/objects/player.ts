@@ -3700,7 +3700,13 @@ export class Player extends BaseGameObject {
                     const oldWeapDef = GameObjectDefs[this.weapons[newGunIdx].type] as
                         | GunDef
                         | undefined;
-                    if (oldWeapDef && oldWeapDef.noDrop) {
+                    if (
+                        (oldWeapDef && oldWeapDef.noDrop) ||
+                        (this.role === "leader" &&
+                            (this.weapons[newGunIdx].type === "flare_gun" ||
+                                this.weapons[newGunIdx].type === "flare_gun_dual") &&
+                            !this.hasFiredFlare)
+                    ) {
                         this.pickupTicker = 0;
                         return;
                     }
@@ -4134,13 +4140,6 @@ export class Player extends BaseGameObject {
     dropItem(dropMsg: net.DropItemMsg): void {
         if (this.dead) return;
         if (this.game.map.perkMode && !this.role) return;
-        if (
-            this.role === "leader" &&
-            (dropMsg.item === "flare_gun" || dropMsg.item === "flare_gun_dual") &&
-            !this.hasFiredFlare
-        ) {
-            return;
-        }
 
         const itemDef = GameObjectDefs[dropMsg.item] as LootDef;
         if (!itemDef) return;

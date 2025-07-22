@@ -539,6 +539,18 @@ export class WeaponManager {
         if (def && def.noDrop) {
             return;
         }
+
+        if (
+            this.player.role === "leader" &&
+            def &&
+            this.weapons[weapIdx].type &&
+            (this.weapons[weapIdx].type === "flare_gun" ||
+                this.weapons[weapIdx].type === "flare_gun_dual") &&
+            !this.player.hasFiredFlare
+        ) {
+            return;
+        }
+
         this._dropGun(weapIdx);
         this.setWeapon(weapIdx, "", 0);
     }
