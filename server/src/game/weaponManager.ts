@@ -536,7 +536,7 @@ export class WeaponManager {
 
     dropGun(weapIdx: number): void {
         const def = GameObjectDefs[this.weapons[weapIdx].type] as GunDef | undefined;
-        if (def && (def.noDrop || !this.canDropFlare(weapIdx))) return;
+        if (def?.noDrop) return;
 
         this._dropGun(weapIdx);
         this.setWeapon(weapIdx, "", 0);
@@ -571,12 +571,10 @@ export class WeaponManager {
      */
     canDropFlare(weapIdx: number): boolean {
         const def = GameObjectDefs[this.weapons[weapIdx].type] as GunDef;
-        return (
-            this.player.role !== "leader" ||
-            (this.player.hasFiredFlare &&
-                // This is a hacky check and should be replaced with something cleaner in the future.
-                def.ammo === "flare")
-        );
+
+        if (this.player.role !== "leader") return true;
+
+        return def.ammo !== "flare" || this.player.hasFiredFlare;
     }
 
     isBulletSaturated(ammo: string): boolean {

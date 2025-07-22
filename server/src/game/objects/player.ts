@@ -4199,7 +4199,9 @@ export class Player extends BaseGameObject {
                 break;
             }
             case "gun":
-                this.weaponManager.dropGun(dropMsg.weapIdx);
+                if (this.weaponManager.canDropFlare(dropMsg.weapIdx)) {
+                    this.weaponManager.dropGun(dropMsg.weapIdx);
+                }
                 break;
             case "melee":
                 this.weaponManager.dropMelee();
