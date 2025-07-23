@@ -836,8 +836,9 @@ class Application {
         const typeText: Record<string, string> = {
             // TODO: translate those?
             behind_proxy: this.localization.translate("index-behind-proxy"),
-            ip_banned: `Your IP has been banned`,
+            ip_banned: this.localization.translate("index-ip-banned"),
         };
+
         const text = typeText[err];
 
         if (text) {

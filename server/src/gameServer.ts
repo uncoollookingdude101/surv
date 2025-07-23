@@ -100,6 +100,25 @@ class GameServer {
             this.logger.error(`Failed to update region: `, err);
         }
     }
+
+    async isIpBanned(ip: string) {
+        try {
+            const apiRes = await apiPrivateRouter.moderation.is_ip_banned.$post({
+                json: {
+                    ip,
+                },
+            });
+
+            if (apiRes.ok) {
+                const body = await apiRes.json();
+                return body.banned;
+            }
+        } catch (err) {
+            this.logger.error(`Failed check if IP is banned: `, err);
+        }
+
+        return false;
+    }
 }
 
 const server = new GameServer();
@@ -204,6 +223,8 @@ app.ws<GameSocketData>("/play", {
 
         if (await isBehindProxy(ip)) {
             disconnectReason = "behind_proxy";
+        } else if (await server.isIpBanned(ip)) {
+            disconnectReason = "ip_banned";
         }
 
         if (res.aborted) return;
