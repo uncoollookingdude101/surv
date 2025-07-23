@@ -1,4 +1,10 @@
-import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
+import {
+    Client,
+    Events,
+    GatewayIntentBits,
+    type InteractionReplyOptions,
+    MessageFlags,
+} from "discord.js";
 import { commandHandlers } from "./commands";
 import { DISCORD_BOT_TOKEN } from "./config";
 import { type Command, hasPermission } from "./utils";
@@ -28,9 +34,9 @@ function setupInteractionHandlers() {
             await commandHandlers[commandName](interaction);
         } catch (error) {
             console.error(`Error executing command "${commandName}":`, error);
-            const errorMessage = {
+            const errorMessage: InteractionReplyOptions = {
                 content: "There was an error while executing this command!",
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             };
 
             if (interaction.replied || interaction.deferred) {
