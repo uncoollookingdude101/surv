@@ -29,6 +29,8 @@ export async function genericExecute<N extends Exclude<Command, "search_player">
     interaction: ChatInputCommandInteraction,
     validator: z.ZodTypeAny,
 ) {
+    await interaction.deferReply();
+
     const options = interaction.options.data.reduce(
         (obj, { name, value }) => {
             obj[name] = value;
@@ -56,7 +58,7 @@ export async function genericExecute<N extends Exclude<Command, "search_player">
     });
 
     const { message } = await res.json();
-    await interaction.reply(message);
+    await interaction.editReply(message);
 }
 
 export function createSlashCommand(config: ReturnType<typeof createCommand>) {
