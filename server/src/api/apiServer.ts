@@ -1,6 +1,5 @@
 import type { Hono } from "hono";
 import type { UpgradeWebSocket } from "hono/ws";
-import { GameConfig } from "../../../shared/gameConfig";
 import type { Info } from "../../../shared/types/api";
 import { Config } from "../config";
 import { TeamMenu } from "../teamMenu";
