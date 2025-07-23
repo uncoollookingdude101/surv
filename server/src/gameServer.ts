@@ -9,8 +9,8 @@ import { GameProcessManager } from "./game/gameProcessManager";
 import { GIT_VERSION } from "./utils/gitRevision";
 import { Logger } from "./utils/logger";
 import {
+    apiPrivateRouter,
     cors,
-    fetchApiServer,
     forbidden,
     getIp,
     HTTPRateLimit,
@@ -87,12 +87,18 @@ class GameServer {
     }
 
     sendData() {
-        fetchApiServer("private/update_region", {
-            data: {
-                playerCount: this.manager.getPlayerCount(),
-            },
-            regionId: Config.gameServer.thisRegion,
-        });
+        try {
+            apiPrivateRouter.update_region.$post({
+                json: {
+                    data: {
+                        playerCount: this.manager.getPlayerCount(),
+                    },
+                    regionId: Config.gameServer.thisRegion,
+                },
+            });
+        } catch (err) {
+            this.logger.error(`Failed to update region: `, err);
+        }
     }
 }
 
