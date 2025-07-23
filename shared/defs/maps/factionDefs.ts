@@ -280,7 +280,7 @@ const mapDef: PartialMapDef = {
             { name: "sv98", count: 1, weight: 0.01 },
             { name: "spas12", count: 1, weight: 1 },
             { name: "qbb97", count: 1, weight: 0.01 },
-            { name: "flare_gun", count: 1, weight: 0.1 },
+            { name: "flare_gun", count: 1, weight: 0.1, preload: true },
             { name: "groza", count: 1, weight: 0.8 },
             { name: "scout_elite", count: 1, weight: 0.05 },
             { name: "vss", count: 1, weight: 0.1 }, // ?
