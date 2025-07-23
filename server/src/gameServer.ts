@@ -86,9 +86,9 @@ class GameServer {
         };
     }
 
-    sendData() {
+    async sendData() {
         try {
-            apiPrivateRouter.update_region.$post({
+            await apiPrivateRouter.update_region.$post({
                 json: {
                     data: {
                         playerCount: this.manager.getPlayerCount(),
