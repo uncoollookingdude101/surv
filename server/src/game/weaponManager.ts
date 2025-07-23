@@ -566,11 +566,12 @@ export class WeaponManager {
     }
 
     /**
-     * Checks if player can drop flare gun, if holding one. Assumes the slot is not empty.
+     * Checks if player can drop flare gun, if holding one.
      * @param weapIdx The slot index.
      */
     canDropFlare(weapIdx: number): boolean {
         const def = GameObjectDefs[this.weapons[weapIdx].type] as GunDef;
+        if (!def) return false;
 
         if (this.player.role !== "leader") return true;
 
