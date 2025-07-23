@@ -3023,7 +3023,10 @@ export class Player extends BaseGameObject {
 
     canDespawn() {
         return (
-            this.timeAlive < GameConfig.player.minActiveTime && !this.dead && !this.downed
+            this.timeAlive < GameConfig.player.minActiveTime &&
+            !this.dead &&
+            !this.downed &&
+            !this.role
         );
     }
 
