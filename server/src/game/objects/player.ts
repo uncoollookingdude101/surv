@@ -3022,11 +3022,12 @@ export class Player extends BaseGameObject {
     }
 
     canDespawn() {
+        // special check for 50v50
+        // we dont want eg leaders to despawn a second after being promoted :p
+        if (this.game.map.factionMode && this.role) return false;
+
         return (
-            this.timeAlive < GameConfig.player.minActiveTime &&
-            !this.dead &&
-            !this.downed &&
-            !this.role
+            this.timeAlive < GameConfig.player.minActiveTime && !this.dead && !this.downed
         );
     }
 
