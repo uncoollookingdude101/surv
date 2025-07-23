@@ -4144,6 +4144,9 @@ export class Player extends BaseGameObject {
 
         const itemDef = GameObjectDefs[dropMsg.item] as LootDef;
         if (!itemDef) return;
+
+        dropMsg.weapIdx = math.clamp(dropMsg.weapIdx, 0, GameConfig.WeaponSlot.Count - 1);
+
         switch (itemDef.type) {
             case "ammo": {
                 const inventoryCount = this.inventory[dropMsg.item];
