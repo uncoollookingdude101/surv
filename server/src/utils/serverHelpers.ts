@@ -366,7 +366,7 @@ export async function isBehindProxy(ip: string): Promise<boolean> {
         }
     }
     if (!info) {
-        return true;
+        return false;
     }
     proxyCheckCache.set(ip, {
         info,
