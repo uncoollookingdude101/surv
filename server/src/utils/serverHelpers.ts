@@ -344,7 +344,9 @@ export async function isBehindProxy(ip: string): Promise<boolean> {
     }
     if (!info) {
         try {
-            const proxyRes = await proxyCheck.checkIP(ip);
+            const proxyRes = await proxyCheck.checkIP(ip, {
+                vpn: 3,
+            });
             switch (proxyRes.status) {
                 case "ok":
                 case "warning":
