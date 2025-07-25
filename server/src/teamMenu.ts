@@ -403,8 +403,8 @@ export class TeamMenu {
     init(app: Hono, upgradeWebSocket: UpgradeWebSocket) {
         const teamMenu = this;
 
-        const httpRateLimit = new HTTPRateLimit(1, 2000);
-        const wsRateLimit = new WebSocketRateLimit(15, 1000, 5);
+        const httpRateLimit = new HTTPRateLimit(5, 2000);
+        const wsRateLimit = new WebSocketRateLimit(50, 1000, 5);
 
         app.get(
             "/team_v2",
@@ -587,7 +587,7 @@ export class TeamMenu {
         const player = ws.raw?.player;
 
         if (!player) {
-            this.logger.warn("Player not found, closing socket.");
+            this.logger.debug("Player not found, closing socket.");
             ws.close();
             return;
         }
