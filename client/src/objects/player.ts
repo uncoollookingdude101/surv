@@ -827,7 +827,7 @@ export class Player implements AbstractObject {
             this.posInterpTicker += dt;
             const posT = math.clamp(this.posInterpTicker / camera.m_interpInterval, 0, 1);
             this.m_visualPos = v2.lerp(posT, this.m_visualPosOld, this.m_pos);
-            if (!camera.m_localRotationEnabled || !isActivePlayer) {
+            if (!camera.m_localRotationEnabled || !isActivePlayer || isSpectating) {
                 this.dirInterpolationTicker += dt;
                 const dirT = math.clamp(
                     this.dirInterpolationTicker / camera.m_interpInterval,
