@@ -1163,11 +1163,23 @@ export class Player extends BaseGameObject {
     getPanSegment() {
         const panSurface = this.wearingPan ? "unequipped" : "equipped";
         let surface = (GameObjectDefs.pan as MeleeDef).reflectSurface![panSurface];
-        if (panSurface === "unequipped") {
-            surface = {
-                p0: v2.mul(surface.p0, this.rad),
-                p1: v2.mul(surface.p1, this.rad),
-            };
+
+        const scale = this.scale;
+
+        if (scale !== 1) {
+            if (panSurface === "unequipped") {
+                surface = {
+                    p0: v2.mul(surface.p0, scale),
+                    p1: v2.mul(surface.p1, scale),
+                };
+            } else {
+                const s = (scale - 1) * 0.75;
+                const off = v2.create(s, -s);
+                surface = {
+                    p0: v2.add(surface.p0, off),
+                    p1: v2.add(surface.p1, off),
+                };
+            }
         }
 
         return surface;

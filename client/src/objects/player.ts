@@ -706,12 +706,23 @@ export class Player implements AbstractObject {
         const panSurface = this.m_netData.m_wearingPan ? "unequipped" : "equipped";
         let surface = (GameObjectDefs.pan as MeleeDef).reflectSurface![panSurface];
 
-        if (panSurface === "unequipped") {
-            surface = {
-                p0: v2.mul(surface.p0, this.m_rad),
-                p1: v2.mul(surface.p1, this.m_rad),
-            };
-        } // TODO: fix scaled hitbox when pan is equipped too
+        const scale = this.m_netData.m_scale;
+
+        if (scale !== 1) {
+            if (panSurface === "unequipped") {
+                surface = {
+                    p0: v2.mul(surface.p0, scale),
+                    p1: v2.mul(surface.p1, scale),
+                };
+            } else {
+                const s = (scale - 1) * 0.75;
+                const off = v2.create(s, -s);
+                surface = {
+                    p0: v2.add(surface.p0, off),
+                    p1: v2.add(surface.p1, off),
+                };
+            }
+        }
 
         return surface;
     }
