@@ -67,39 +67,25 @@ export function createSlashCommand(config: ReturnType<typeof createCommand>) {
         .setName(config.name)
         .setDescription(config.description);
 
+    const configureBuilderOption = (opt: any, option: any) =>
+        opt
+            .setName(option.name as string)
+            .setDescription(option.description)
+            .setRequired(option.required);
+
     for (const option of config.options) {
         switch (option.type) {
             case ApplicationCommandOptionType.String:
-                builder.addStringOption((stringOption) =>
-                    stringOption
-                        .setName(option.name as string)
-                        .setDescription(option.description)
-                        .setRequired(option.required),
-                );
+                builder.addStringOption((opt) => configureBuilderOption(opt, option));
                 break;
             case ApplicationCommandOptionType.Integer:
-                builder.addIntegerOption((integerOption) =>
-                    integerOption
-                        .setName(option.name as string)
-                        .setDescription(option.description)
-                        .setRequired(option.required),
-                );
+                builder.addIntegerOption((opt) => configureBuilderOption(opt, option));
                 break;
             case ApplicationCommandOptionType.Boolean:
-                builder.addBooleanOption((booleanOption) =>
-                    booleanOption
-                        .setName(option.name as string)
-                        .setDescription(option.description)
-                        .setRequired(option.required),
-                );
+                builder.addBooleanOption((opt) => configureBuilderOption(opt, option));
                 break;
             case ApplicationCommandOptionType.User:
-                builder.addUserOption((booleanOption) =>
-                    booleanOption
-                        .setName(option.name as string)
-                        .setDescription(option.description)
-                        .setRequired(option.required),
-                );
+                builder.addUserOption((opt) => configureBuilderOption(opt, option));
                 break;
             default:
                 throw new Error(`Unsupported option type: ${option.type}, add it first.`);
