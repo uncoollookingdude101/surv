@@ -18,7 +18,8 @@ export function createCommand<T extends z.ZodSchema>(config: {
         type:
             | ApplicationCommandOptionType.String
             | ApplicationCommandOptionType.Integer
-            | ApplicationCommandOptionType.Boolean;
+            | ApplicationCommandOptionType.Boolean
+            | ApplicationCommandOptionType.User;
     }[];
 }) {
     return config;
@@ -86,6 +87,14 @@ export function createSlashCommand(config: ReturnType<typeof createCommand>) {
                 break;
             case ApplicationCommandOptionType.Boolean:
                 builder.addBooleanOption((booleanOption) =>
+                    booleanOption
+                        .setName(option.name as string)
+                        .setDescription(option.description)
+                        .setRequired(option.required),
+                );
+                break;
+            case ApplicationCommandOptionType.User:
+                builder.addUserOption((booleanOption) =>
                     booleanOption
                         .setName(option.name as string)
                         .setDescription(option.description)
