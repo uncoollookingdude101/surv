@@ -1846,7 +1846,8 @@ export class Player implements AbstractObject {
         }
         this.handLContainer.position.x -= this.gunRecoilL * 1.125;
         this.handRContainer.position.x -= this.gunRecoilR * 1.125;
-        //Local Rotation
+
+        // Local Rotation
         const mouseY = inputManager.mousePos.y;
         const mouseX = inputManager.mousePos.x;
         if (
