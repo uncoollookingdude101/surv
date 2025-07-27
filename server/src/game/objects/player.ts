@@ -2516,8 +2516,12 @@ export class Player extends BaseGameObject {
 
                 playerToSpec = shouldSpecRandom
                     ? this.game.map.factionMode && groupExistsOrAlive
-                        ? this.group!.livingPlayers[util.randomInt(0, this.group!.livingPlayers.length - 1)]
-                        : spectatablePlayers[util.randomInt(0, spectatablePlayers.length - 1)]
+                        ? this.group!.livingPlayers[
+                              util.randomInt(0, this.group!.livingPlayers.length - 1)
+                          ]
+                        : spectatablePlayers[
+                              util.randomInt(0, spectatablePlayers.length - 1)
+                          ]
                     : aliveKiller;
                 break;
             case spectateMsg.specNext:
