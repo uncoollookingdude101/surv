@@ -2511,11 +2511,13 @@ export class Player extends BaseGameObject {
                 const teamExistsOrAlive =
                     this.game.map.factionMode && this.team!.livingPlayers.length > 0;
                 const aliveKiller = this.getAliveKiller();
-
                 const shouldSpecRandom =
                     groupExistsOrAlive || teamExistsOrAlive || !aliveKiller;
+
                 playerToSpec = shouldSpecRandom
-                    ? spectatablePlayers[util.randomInt(0, spectatablePlayers.length - 1)]
+                    ? this.game.map.factionMode && groupExistsOrAlive
+                        ? this.group!.livingPlayers[util.randomInt(0, this.group!.livingPlayers.length - 1)]
+                        : spectatablePlayers[util.randomInt(0, spectatablePlayers.length - 1)]
                     : aliveKiller;
                 break;
             case spectateMsg.specNext:
