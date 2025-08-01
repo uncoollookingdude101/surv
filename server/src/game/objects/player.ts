@@ -2324,7 +2324,7 @@ export class Player extends BaseGameObject {
                 this.game.logger.warn("Too many new player statuses!", statuses.length);
                 statuses = statuses.slice(0, 255);
             }
-            updateMsg.playerStatus.players = statuses;
+            updateMsg.playerStatus = statuses;
             updateMsg.playerStatusDirty = true;
             player.playerStatusTicker = 0;
         }
@@ -2343,7 +2343,7 @@ export class Player extends BaseGameObject {
                 this.game.logger.warn("Too many new group statuses!", statuses.length);
                 statuses = statuses.slice(0, 255);
             }
-            updateMsg.groupStatus.players = statuses;
+            updateMsg.groupStatus = statuses;
             updateMsg.groupStatusDirty = true;
         }
 
