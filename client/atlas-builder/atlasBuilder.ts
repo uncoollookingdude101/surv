@@ -209,6 +209,15 @@ export class AtlasManager {
     hashAtlas(atlas: Atlas): string {
         const atlasDef = Atlases[atlas];
 
+        const images = new Map<string, boolean>();
+        for (let i = 0; i < atlasDef.images.length; i++) {
+            const image = atlasDef.images[i];
+            if (images.has(image)) {
+                atlasLogger.warn(`Atlas ${atlas} has duplicated sprite ${image}`);
+            }
+            images.set(image, true);
+        }
+
         let atlasHash = "";
         for (const file of atlasDef.images) {
             const imagePath = Path.join(imageFolder, file);
