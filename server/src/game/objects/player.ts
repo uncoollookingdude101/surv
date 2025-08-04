@@ -2288,34 +2288,13 @@ export class Player extends BaseGameObject {
             ? playerBarn.players
             : playerBarn.newPlayers;
 
-        if (updateMsg.playerInfos.length > 255) {
-            this.game.logger.warn(
-                "Too many new player infos!",
-                updateMsg.playerInfos.length,
-            );
-            updateMsg.playerInfos = updateMsg.playerInfos.slice(0, 255);
-        }
-
         updateMsg.deletedPlayerIds = playerBarn.deletedPlayers;
-
-        if (updateMsg.deletedPlayerIds.length > 255) {
-            this.game.logger.warn(
-                "Too many deleted players!",
-                updateMsg.deletedPlayerIds.length,
-            );
-            updateMsg.deletedPlayerIds = updateMsg.deletedPlayerIds.slice(0, 255);
-        }
-
         if (
             player.playerStatusDirty ||
             player.playerStatusTicker >
                 net.getPlayerStatusUpdateRate(this.game.map.factionMode)
         ) {
             let statuses = this.game.modeManager.getPlayerStatuses(player);
-            if (statuses.length > 255) {
-                this.game.logger.warn("Too many new player statuses!", statuses.length);
-                statuses = statuses.slice(0, 255);
-            }
             updateMsg.playerStatus = statuses;
             updateMsg.playerStatusDirty = true;
             player.playerStatusTicker = 0;
@@ -2330,10 +2309,6 @@ export class Player extends BaseGameObject {
                     health: p.health,
                     disconnected: p.disconnected,
                 });
-            }
-            if (statuses.length > 255) {
-                this.game.logger.warn("Too many new group statuses!", statuses.length);
-                statuses = statuses.slice(0, 255);
             }
             updateMsg.groupStatus = statuses;
             updateMsg.groupStatusDirty = true;
@@ -2385,14 +2360,6 @@ export class Player extends BaseGameObject {
             }
         }
 
-        if (updateMsg.emotes.length > 255) {
-            this.game.logger.warn(
-                "Too many new emotes created!",
-                updateMsg.emotes.length,
-            );
-            updateMsg.emotes = updateMsg.emotes.slice(0, 255);
-        }
-
         const extendedRadius = 1.1 * radius;
         const radiusSquared = extendedRadius * extendedRadius;
 
@@ -2412,13 +2379,6 @@ export class Player extends BaseGameObject {
                 updateMsg.bullets.push(bullet);
             }
         }
-        if (updateMsg.bullets.length > 255) {
-            this.game.logger.warn(
-                "Too many new bullets created!",
-                updateMsg.bullets.length,
-            );
-            updateMsg.bullets = updateMsg.bullets.slice(0, 255);
-        }
 
         for (let i = 0; i < game.explosionBarn.newExplosions.length; i++) {
             const explosion = game.explosionBarn.newExplosions[i];
@@ -2426,13 +2386,6 @@ export class Player extends BaseGameObject {
             if (v2.lengthSqr(v2.sub(explosion.pos, player.pos)) < rad * rad) {
                 updateMsg.explosions.push(explosion);
             }
-        }
-        if (updateMsg.explosions.length > 255) {
-            this.game.logger.warn(
-                "Too many new explosions created!",
-                updateMsg.explosions.length,
-            );
-            updateMsg.explosions = updateMsg.explosions.slice(0, 255);
         }
 
         const planes = this.game.planeBarn.planes;
@@ -2442,26 +2395,10 @@ export class Player extends BaseGameObject {
                 updateMsg.planes.push(plane);
             }
         }
-        if (updateMsg.planes.length > 255) {
-            this.game.logger.warn(
-                "Too many new planes created!",
-                updateMsg.planes.length,
-            );
-            updateMsg.planes = updateMsg.planes.slice(0, 255);
-        }
-
         const newAirstrikeZones = this.game.planeBarn.newAirstrikeZones;
         for (let i = 0; i < newAirstrikeZones.length; i++) {
             const zone = newAirstrikeZones[i];
             updateMsg.airstrikeZones.push(zone);
-        }
-
-        if (updateMsg.airstrikeZones.length > 255) {
-            this.game.logger.warn(
-                "Too many new airstrike zones created!",
-                updateMsg.airstrikeZones.length,
-            );
-            updateMsg.airstrikeZones = updateMsg.airstrikeZones.slice(0, 255);
         }
 
         const indicators = this.game.mapIndicatorBarn.mapIndicators;
@@ -2474,14 +2411,6 @@ export class Player extends BaseGameObject {
             if (indicator.dead) {
                 this.visibleMapIndicators.delete(indicator);
             }
-        }
-
-        if (updateMsg.mapIndicators.length > 255) {
-            this.game.logger.warn(
-                "Too many new map indicators created!",
-                updateMsg.mapIndicators.length,
-            );
-            updateMsg.mapIndicators = updateMsg.mapIndicators.slice(0, 255);
         }
 
         if (playerBarn.killLeaderDirty || this._firstUpdate) {
