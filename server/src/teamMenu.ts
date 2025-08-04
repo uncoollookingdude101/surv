@@ -349,10 +349,12 @@ class Room {
 }
 
 const teamCodeCharacters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
-function randomString(len: number) {
+function generateTeamCode(): string {
     let str = "";
-    for (let i = 0; i < len; i++) {
-        str += teamCodeCharacters.charAt(Math.floor(Math.random() * teamCodeCharacters.length));
+    for (let i = 0; i < 4; i++) {
+        str += teamCodeCharacters.charAt(
+            Math.floor(Math.random() * teamCodeCharacters.length),
+        );
     }
     return `${str}`;
 }
@@ -608,9 +610,9 @@ export class TeamMenu {
     }
 
     createRoom(data: ClientRoomData) {
-        let roomUrl = randomString(4);
+        let roomUrl = generateTeamCode();
         while (this.rooms.has(roomUrl)) {
-            roomUrl = randomString(4);
+            roomUrl = generateTeamCode();
         }
 
         const room = new Room(this, roomUrl, data);
