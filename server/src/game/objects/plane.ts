@@ -490,7 +490,7 @@ class AirstrikeZone {
 
     getAirstrikePos(): Vec2 {
         let pos = v2.add(this.pos, util.randomPointInCircle(this.rad));
-        
+
         // Roll a chance for the airstrike to aim at a random player
         const aimChance = 0.5;
         if (Math.random() < aimChance) {
@@ -511,10 +511,7 @@ class AirstrikeZone {
         // Offset the final position to make the bomb line centered
         const negPlaneDir = v2.neg(this.planeDir);
         const bombOffset = v2.mul(negPlaneDir, AIRSTRIKE_PLANE_MAX_BOMB_DIST / 2);
-        const offsetPos = v2.add(
-            pos,
-            bombOffset,
-        );
+        const offsetPos = v2.add(pos, bombOffset);
 
         return offsetPos;
     }
