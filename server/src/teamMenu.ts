@@ -348,13 +348,11 @@ class Room {
     }
 }
 
-const alphanumerics = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+const teamCodeCharacters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
 function randomString(len: number) {
     let str = "";
-    let i = 0;
-    while (i < len) {
-        str += alphanumerics.charAt(Math.floor(Math.random() * alphanumerics.length));
-        i++;
+    for (let i = 0; i < len; i++) {
+        str += teamCodeCharacters.charAt(Math.floor(Math.random() * teamCodeCharacters.length));
     }
     return `${str}`;
 }
