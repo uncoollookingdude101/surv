@@ -104,7 +104,12 @@ export class ImageManager {
 
         let threadsLeft = Math.max(os.availableParallelism() - 2, 1);
 
-        let imagesPerThread = Math.ceil(imagesToRender.length / threadsLeft);
+        let imagesPerThread = imagesToRender.length;
+
+        if (imagesToRender.length > 25) {
+            imagesPerThread = Math.ceil(imagesToRender.length / threadsLeft);
+        }
+
         let originalCount = imagesToRender.length;
 
         const promises: Promise<void>[] = [];
