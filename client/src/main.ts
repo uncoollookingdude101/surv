@@ -20,7 +20,7 @@ import { errorLogManager } from "./errorLogs";
 import { Game } from "./game";
 import { helpers } from "./helpers";
 import { InputHandler } from "./input";
-import { InputBindUi, InputBinds } from "./inputBinds";
+import { InputBinds, InputBindUi } from "./inputBinds";
 import { PingTest } from "./pingTest";
 import { proxy } from "./proxy";
 import { ResourceManager } from "./resources";
@@ -335,7 +335,7 @@ class Application {
                 if (errMsg) {
                     this.showErrorModal(errMsg);
                 }
-
+                console.error("Quitting", errMsg);
                 SDK.gamePlayStop();
             };
             this.game = new Game(
@@ -837,8 +837,9 @@ class Application {
         const typeText: Record<string, string> = {
             // TODO: translate those?
             behind_proxy: this.localization.translate("index-behind-proxy"),
-            ip_banned: `Your IP has been banned`,
+            ip_banned: this.localization.translate("index-ip-banned"),
         };
+
         const text = typeText[err];
 
         if (text) {
@@ -864,7 +865,6 @@ class Application {
         this.resourceManager!.update(dt);
         this.audioManager.update(dt);
         this.ambience.update(dt, this.audioManager, !this.active);
-        this.teamMenu.update(dt);
 
         // Game update
         if (this.game?.initialized && this.game.m_playing) {
@@ -941,6 +941,9 @@ const reportedErrors: string[] = [];
 window.onerror = function (msg, url, lineNo, columnNo, error) {
     msg = msg || "undefined_error_msg";
     const stacktrace = error ? error.stack : "";
+
+    // don't report useless errors lol
+    if (!url && !lineNo && !columnNo) return;
 
     const errObj = {
         msg,

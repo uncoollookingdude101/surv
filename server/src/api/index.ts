@@ -1,7 +1,7 @@
-import { randomUUID } from "crypto";
 import { serve } from "@hono/node-server";
 import { createNodeWebSocket } from "@hono/node-ws";
 import { Cron } from "croner";
+import { randomUUID } from "crypto";
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { cors } from "hono/cors";
@@ -16,8 +16,8 @@ import {
 import { Config } from "../config";
 import { GIT_VERSION } from "../utils/gitRevision";
 import {
-    HTTPRateLimit,
     getHonoIp,
+    HTTPRateLimit,
     isBehindProxy,
     logErrorToWebhook,
     verifyTurnsStile,
@@ -90,29 +90,21 @@ app.post("/api/find_game", validateParams(zFindGameBody), async (c) => {
     const ip = getHonoIp(c, Config.apiServer.proxyIPHeader);
 
     if (!ip) {
-        return c.json({}, 500);
+        return c.json<FindGameResponse>({ error: "invalid_ip" }, 500);
     }
 
     if (findGameRateLimit.isRateLimited(ip)) {
         return c.json<FindGameResponse>({ error: "rate_limited" }, 429);
     }
 
-    if (await isBehindProxy(ip)) {
-        return c.json<FindGameResponse>({ error: "behind_proxy" });
-    }
-
-    try {
-        const banData = await isBanned(ip);
-        if (banData) {
-            return c.json<FindGameResponse>({
-                banned: true,
-                reason: banData.reason,
-                permanent: banData.permanent,
-                expiresIn: banData.expiresIn,
-            });
-        }
-    } catch (err) {
-        server.logger.error("/api/find_game: Failed to check if IP is banned", err);
+    const banData = await isBanned(ip);
+    if (banData) {
+        return c.json<FindGameResponse>({
+            banned: true,
+            reason: banData.reason,
+            permanent: banData.permanent,
+            expiresIn: banData.expiresIn,
+        });
     }
 
     const token = randomUUID();
@@ -132,6 +124,10 @@ app.post("/api/find_game", validateParams(zFindGameBody), async (c) => {
             server.logger.error("/api/find_game: Failed to validate session", err);
             userId = null;
         }
+    }
+
+    if (await isBehindProxy(ip, userId ? 0 : 3)) {
+        return c.json<FindGameResponse>({ error: "behind_proxy" });
     }
 
     const body = c.req.valid("json");
@@ -192,15 +188,26 @@ app.post(
     "/api/report_error",
     rateLimitMiddleware(5, 60 * 1000),
     validateParams(z.object({ loc: z.string(), error: z.any(), data: z.any() })),
-    async (c) => {
-        const content = await c.req.json();
-        if ("error" in content) {
+    (c) => {
+        const content = c.req.valid("json");
+        if (content.error) {
             try {
                 content.error = JSON.parse(content.error);
             } catch {}
         }
 
-        logErrorToWebhook("client", content);
+        let stackTrace: string | undefined;
+        if (
+            typeof content.error == "object" &&
+            "stacktrace" in content.error &&
+            typeof content.error.stacktrace == "string" &&
+            content.error.stacktrace
+        ) {
+            stackTrace = `### Stacktrace:\n \`\`\`${content.error.stacktrace.replaceAll("`", "\\`")}\`\`\``;
+            delete content.error.stacktrace;
+        }
+
+        logErrorToWebhook("client", content, stackTrace);
 
         return c.json({ success: true }, 200);
     },

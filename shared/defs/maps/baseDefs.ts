@@ -264,6 +264,7 @@ export const Main: MapDef = {
             { name: "ak47", count: 1, weight: 2.7 },
             { name: "scar", count: 1, weight: 0.01 },
             { name: "dp28", count: 1, weight: 0.5 },
+            { name: "bar", count: 1, weight: 0.25 },
             { name: "mosin", count: 1, weight: 0.1 },
             { name: "m39", count: 1, weight: 0.1 },
             { name: "mp5", count: 1, weight: 10 },
@@ -286,7 +287,7 @@ export const Main: MapDef = {
             { name: "flare_gun_dual", count: 1, weight: 0.0025 }, // !
             { name: "groza", count: 1, weight: 0.8 },
             { name: "scout_elite", count: 1, weight: 0.05 },
-            { name: "vss", count: 1, weight: 0.05 }, // !
+            { name: "vss", count: 1, weight: 0.1 }, // !
         ],
         tier_police: [
             { name: "scar", count: 1, weight: 1 },
@@ -308,6 +309,7 @@ export const Main: MapDef = {
             { name: "ak47", count: 1, weight: 4 },
             { name: "scar", count: 1, weight: 0.27 },
             { name: "dp28", count: 1, weight: 0.55 },
+            { name: "bar", count: 1, weight: 0.55 },
             { name: "mosin", count: 1, weight: 0.55 },
             { name: "m39", count: 1, weight: 0.55 },
             { name: "saiga", count: 1, weight: 0.26 },
@@ -333,7 +335,7 @@ export const Main: MapDef = {
         tier_pirate_melee: [{ name: "hook", count: 1, weight: 1 }],
         tier_hatchet: [
             { name: "vector", count: 1, weight: 0.4 },
-            { name: "hk416", count: 1, weight: 0.25 },
+            { name: "bar", count: 1, weight: 0.25 },
             { name: "mp220", count: 1, weight: 0.15 },
             { name: "pkp", count: 1, weight: 0.01 },
             { name: "m249", count: 1, weight: 0.01 },
@@ -495,7 +497,7 @@ export const Main: MapDef = {
             { name: "m9", count: 1, weight: 0.01 },
             { name: "flare_gun", count: 1, weight: 0.5 },
             { name: "scout_elite", count: 1, weight: 1.5 },
-            { name: "vss", count: 1, weight: 1.5 }, // !
+            { name: "vss", count: 1, weight: 2.5 }, // !
         ],
         tier_airdrop_rare: [
             { name: "garand", count: 1, weight: 6 },
