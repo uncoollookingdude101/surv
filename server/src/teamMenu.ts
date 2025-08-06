@@ -348,13 +348,13 @@ class Room {
     }
 }
 
-const alphanumerics = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-function randomString(len: number) {
+const teamCodeCharacters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
+function generateTeamCode(): string {
     let str = "";
-    let i = 0;
-    while (i < len) {
-        str += alphanumerics.charAt(Math.floor(Math.random() * alphanumerics.length));
-        i++;
+    for (let i = 0; i < 4; i++) {
+        str += teamCodeCharacters.charAt(
+            Math.floor(Math.random() * teamCodeCharacters.length),
+        );
     }
     return `${str}`;
 }
@@ -610,9 +610,9 @@ export class TeamMenu {
     }
 
     createRoom(data: ClientRoomData) {
-        let roomUrl = randomString(4);
+        let roomUrl = generateTeamCode();
         while (this.rooms.has(roomUrl)) {
-            roomUrl = randomString(4);
+            roomUrl = generateTeamCode();
         }
 
         const room = new Room(this, roomUrl, data);
