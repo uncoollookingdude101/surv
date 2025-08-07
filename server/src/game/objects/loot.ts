@@ -164,7 +164,7 @@ export class LootBarn {
                 const rightAmmo = new Loot(
                     this.game,
                     def.ammo,
-                    v2.add(pos, v2.create((AMMO_OFFSET_X - 0.001), AMMO_OFFSET_Y)),
+                    v2.add(pos, v2.create(AMMO_OFFSET_X - 0.001, AMMO_OFFSET_Y)),
                     layer,
                     ammoCount - halfAmmo,
                     pushSpeed,
