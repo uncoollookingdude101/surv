@@ -16,14 +16,14 @@ import type { Player } from "./player";
 import type { Structure } from "./structure";
 
 // velocity drag applied every tick
-const LOOT_DRAG = 3;
+const LOOT_DRAG = 4;
 // how much loot pushes each other every tick
-const LOOT_PUSH_FORCE = 3;
+const LOOT_PUSH_FORCE = 4;
 // explosion push force multiplier
-export const EXPLOSION_LOOT_PUSH_FORCE = 6;
+export const EXPLOSION_LOOT_PUSH_FORCE = 4;
 
-const AMMO_OFFSET_X = 1.35;
-const AMMO_OFFSET_Y = -0.3;
+const AMMO_OFFSET_X = 1;
+const AMMO_OFFSET_Y = -0.25;
 
 type LootTierItem = MapDef["lootTable"][string][number];
 
@@ -164,7 +164,7 @@ export class LootBarn {
                 const rightAmmo = new Loot(
                     this.game,
                     def.ammo,
-                    v2.add(pos, v2.create(AMMO_OFFSET_X, AMMO_OFFSET_Y)),
+                    v2.add(pos, v2.create((AMMO_OFFSET_X - 0.001), AMMO_OFFSET_Y)),
                     layer,
                     ammoCount - halfAmmo,
                     pushSpeed,
@@ -324,12 +324,12 @@ export class Loot extends BaseGameObject {
         v2.set(this.pos, v2.add(this.pos, v2.mul(this.vel, dt)));
         this.vel = v2.mul(this.vel, 1 / (1 + dt * LOOT_DRAG));
 
-        // cap speed to 100
+        // cap speed to 40
         const sqrLen = v2.lengthSqr(this.vel);
-        if (sqrLen > 100 * 100) {
+        if (sqrLen > 40 * 40) {
             const len = Math.sqrt(sqrLen);
             const thisDir = v2.div(this.vel, len > 0.000001 ? len : 1);
-            this.vel = v2.mul(thisDir, 100);
+            this.vel = v2.mul(thisDir, 40);
         }
 
         const originalLayer = this.layer;
