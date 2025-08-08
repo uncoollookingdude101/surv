@@ -935,6 +935,9 @@ export class Player extends BaseGameObject {
                 this.chest = roleDef.defaultItems.chest;
             }
             if (roleDef.defaultItems.backpack) {
+                if (this.backpack) {
+                    this.dropBackPackCopy(this.backpack);
+                }
                 this.backpack = roleDef.defaultItems.backpack;
             }
 
@@ -4117,6 +4120,15 @@ export class Player extends BaseGameObject {
         this.dropLoot(item, 1);
         this[armorDef.type] = "";
         this.setDirty();
+        return true;
+    }
+
+    dropBackPackCopy(item: string): boolean {
+        const armorDef = GameObjectDefs[item];
+        if (armorDef.type != "backpack") return false;
+        if (this[armorDef.type] !== item) return false;
+
+        this.dropLoot(item, 1);
         return true;
     }
 
