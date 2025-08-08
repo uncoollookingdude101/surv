@@ -19,6 +19,8 @@ import type { Structure } from "./structure";
 const LOOT_DRAG = 4;
 // how much loot pushes each other every tick
 const LOOT_PUSH_FORCE = 4;
+// cant go faster than this
+const MAX_LOOT_VELOCITY = 40;
 // explosion push force multiplier
 export const EXPLOSION_LOOT_PUSH_FORCE = 4;
 
@@ -324,12 +326,12 @@ export class Loot extends BaseGameObject {
         v2.set(this.pos, v2.add(this.pos, v2.mul(this.vel, dt)));
         this.vel = v2.mul(this.vel, 1 / (1 + dt * LOOT_DRAG));
 
-        // cap speed to 40
+        // cap speed
         const sqrLen = v2.lengthSqr(this.vel);
-        if (sqrLen > 40 * 40) {
+        if (sqrLen > MAX_LOOT_VELOCITY * MAX_LOOT_VELOCITY) {
             const len = Math.sqrt(sqrLen);
             const thisDir = v2.div(this.vel, len > 0.000001 ? len : 1);
-            this.vel = v2.mul(thisDir, 40);
+            this.vel = v2.mul(thisDir, MAX_LOOT_VELOCITY);
         }
 
         const originalLayer = this.layer;
