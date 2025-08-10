@@ -769,6 +769,7 @@ export class Player extends BaseGameObject {
     downedDamageTicker = 0;
     bleedTicker = 0;
     playerBeingRevived: Player | undefined;
+    revivedBy: Player | undefined;
 
     animType: Anim = GameConfig.Anim.None;
     animSeq = 0;
@@ -3054,6 +3055,7 @@ export class Player extends BaseGameObject {
                 this.__id,
             );
         } else {
+            playerToRevive.revivedBy = this;
             playerToRevive.doAction(
                 "",
                 GameConfig.Action.Revive,
@@ -3192,7 +3194,9 @@ export class Player extends BaseGameObject {
         return this.downed
             ? (input === GameConfig.Input.Revive && this.hasPerk("self_revive")) || // Players can revive themselves if they have the self-revive perk.
                   (input === GameConfig.Input.Cancel &&
-                      this.game.modeManager.isReviving(this)) || // Players can cancel their own revives (if they are reviving themself, which is only true if they have the perk).
+                      !this.revivedBy?.hasPerk("aoe_heal")) || // Players can cancel their own revives if they are not revived by aoe heal.
+                  (input === GameConfig.Input.Cancel &&
+                      this.game.modeManager.isReviving(this)) || // Players can cancel their own revives if they are reviving themselves.
                   input === GameConfig.Input.Interact // Players can interact with obstacles while downed.
             : true;
     }
@@ -4400,6 +4404,16 @@ export class Player extends BaseGameObject {
                 this.playerBeingRevived = undefined;
                 this.cancelAnim();
             }
+        }
+
+        if (this.revivedBy) {
+            const revivingPlayer = this.revivedBy;
+            if (revivingPlayer.playerBeingRevived) {
+                revivingPlayer.playerBeingRevived = undefined;
+                revivingPlayer.cancelAction();
+                revivingPlayer.cancelAnim();
+            }
+            this.revivedBy = undefined;
         }
 
         this.action.duration = 0;
