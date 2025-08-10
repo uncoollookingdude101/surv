@@ -3200,6 +3200,7 @@ export class Player extends BaseGameObject {
                       !this.revivedBy?.hasPerk("aoe_heal")) || // Players can cancel their own revives if they are not revived by aoe heal.
                   (input === GameConfig.Input.Cancel &&
                       this.game.modeManager.isReviving(this)) || // Players can cancel their own revives if they are reviving themselves.
+                  input === GameConfig.Input.Use ||
                   input === GameConfig.Input.Interact // Players can interact with obstacles while downed.
             : true;
     }
@@ -3312,7 +3313,11 @@ export class Player extends BaseGameObject {
                     const obstacles = this.getInteractableObstacles();
                     const playerToRevive = this.getPlayerToRevive();
 
-                    const interactables = [loot, ...obstacles, playerToRevive];
+                    const interactables = [
+                        !this.downed && loot,
+                        ...obstacles,
+                        playerToRevive,
+                    ];
 
                     for (let i = 0; i < interactables.length; i++) {
                         const interactable = interactables[i];
