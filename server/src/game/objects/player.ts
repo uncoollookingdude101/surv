@@ -1575,7 +1575,10 @@ export class Player extends BaseGameObject {
                     });
                 }
 
-                this.cancelAction();
+                // Prevent cancelAction from being called by revived players at the end of revive
+                if (!this.revivedBy || this.playerBeingRevived == this.revivedBy) {
+                    this.cancelAction();
+                }
 
                 if (
                     (this.curWeapIdx == GameConfig.WeaponSlot.Primary ||
@@ -4397,6 +4400,7 @@ export class Player extends BaseGameObject {
             return;
         }
 
+        // If player is reviving a player and this is called, cancel their action
         if (this.playerBeingRevived) {
             const revivedPlayer = this.playerBeingRevived;
             this.playerBeingRevived = undefined;
@@ -4409,6 +4413,7 @@ export class Player extends BaseGameObject {
             }
         }
 
+        // If player is being revived and this is called, cancel the reviver's action
         if (this.revivedBy) {
             const revivingPlayer = this.revivedBy;
             this.revivedBy = undefined;
