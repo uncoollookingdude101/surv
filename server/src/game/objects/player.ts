@@ -3047,6 +3047,7 @@ export class Player extends BaseGameObject {
         if (!playerToRevive) return;
 
         this.playerBeingRevived = playerToRevive;
+        playerToRevive.revivedBy = this;
         if (this.downed && this.hasPerk("self_revive")) {
             this.doAction(
                 "",
@@ -3055,7 +3056,6 @@ export class Player extends BaseGameObject {
                 this.__id,
             );
         } else {
-            playerToRevive.revivedBy = this;
             playerToRevive.doAction(
                 "",
                 GameConfig.Action.Revive,
@@ -3309,18 +3309,19 @@ export class Player extends BaseGameObject {
                     const obstacles = this.getInteractableObstacles();
                     const playerToRevive = this.getPlayerToRevive();
 
-                    const interactables = [
-                        !this.downed && loot,
-                        ...obstacles,
-                        playerToRevive,
-                    ];
+                    const interactables = [loot, ...obstacles, playerToRevive];
 
                     for (let i = 0; i < interactables.length; i++) {
                         const interactable = interactables[i];
                         if (!interactable) continue;
-                        if (interactable.__type === ObjectType.Player) {
+                        if (interactable.__type === ObjectType.Player && !this.downed) {
                             this.revive(playerToRevive);
                             ignoreCancel = true;
+                        } else if (
+                            interactable.__type === ObjectType.Loot &&
+                            !this.downed
+                        ) {
+                            this.interactWith(interactable);
                         } else {
                             this.interactWith(interactable);
                         }
@@ -4397,23 +4398,25 @@ export class Player extends BaseGameObject {
         }
 
         if (this.playerBeingRevived) {
-            if (this.hasPerk("self_revive") && this.playerBeingRevived == this) {
-                this.playerBeingRevived = undefined;
+            const revivedPlayer = this.playerBeingRevived;
+            this.playerBeingRevived = undefined;
+            if (revivedPlayer == this.revivedBy) {
+                this.revivedBy = undefined;
             } else {
-                this.playerBeingRevived.cancelAction();
-                this.playerBeingRevived = undefined;
+                revivedPlayer.revivedBy = undefined;
+                revivedPlayer.cancelAction();
                 this.cancelAnim();
             }
         }
 
         if (this.revivedBy) {
             const revivingPlayer = this.revivedBy;
+            this.revivedBy = undefined;
             if (revivingPlayer.playerBeingRevived) {
                 revivingPlayer.playerBeingRevived = undefined;
                 revivingPlayer.cancelAction();
                 revivingPlayer.cancelAnim();
             }
-            this.revivedBy = undefined;
         }
 
         this.action.duration = 0;
