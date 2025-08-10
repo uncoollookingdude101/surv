@@ -20,6 +20,7 @@ import type { OutfitDef } from "../../../../shared/defs/gameObjects/outfitDefs";
 import { PerkProperties } from "../../../../shared/defs/gameObjects/perkDefs";
 import type { RoleDef } from "../../../../shared/defs/gameObjects/roleDefs";
 import type { ThrowableDef } from "../../../../shared/defs/gameObjects/throwableDefs";
+import { UnlockDefs } from "../../../../shared/defs/gameObjects/unlockDefs";
 import {
     type Action,
     type Anim,
@@ -32,12 +33,12 @@ import { ObjectType } from "../../../../shared/net/objectSerializeFns";
 import type { GroupStatus } from "../../../../shared/net/updateMsg";
 import { type Circle, coldet } from "../../../../shared/utils/coldet";
 import { collider } from "../../../../shared/utils/collider";
+import type { Loadout } from "../../../../shared/utils/loadout";
 import { math } from "../../../../shared/utils/math";
 import { assert, util } from "../../../../shared/utils/util";
 import { type Vec2, v2 } from "../../../../shared/utils/v2";
 import { Config } from "../../config";
 import { IDAllocator } from "../../utils/IDAllocator";
-import { setLoadout } from "../../utils/loadoutHelpers";
 import { validateUserName } from "../../utils/serverHelpers";
 import type { Game, JoinTokenData } from "../game";
 import { Group } from "../group";
@@ -205,6 +206,7 @@ export class PlayerBarn {
             ip,
             joinData.findGameIp,
             joinData.userId,
+            joinData.loadout,
         );
 
         this.socketIdToPlayer.set(socketId, player);
@@ -1265,6 +1267,7 @@ export class Player extends BaseGameObject {
         ip: string,
         findGameIp: string,
         userId: string | null,
+        loadout?: Loadout,
     ) {
         super(game, pos);
 
@@ -1335,12 +1338,15 @@ export class Player extends BaseGameObject {
         this.backpack = defaultItems.backpack;
         assertType(this.backpack, "backpack", false);
 
+        this.outfit = defaultItems.outfit;
+        assertType(this.outfit, "outfit", false);
+
         for (const perk of defaultItems.perks) {
             assertType(perk.type, "perk", false);
             this.addPerk(perk.type, perk.droppable);
         }
 
-        setLoadout(joinMsg, this);
+        this.setLoadout(loadout ? loadout : joinMsg.loadout, !loadout);
 
         this.weaponManager.showNextThrowable();
         this.recalculateScale();
@@ -4209,6 +4215,51 @@ export class Player extends BaseGameObject {
 
         if (reloading && this.weapons[this.curWeapIdx].ammo == 0) {
             this.weaponManager.tryReload();
+        }
+    }
+
+    setLoadout(loadout: net.JoinMsg["loadout"], useDefaultUnlocks?: boolean) {
+        const defaltUnlocks = UnlockDefs.unlock_default.unlocks;
+        /**
+         * Checks if an item is present in the player's loadout
+         */
+        const isItemInLoadout = (item: string, category: string) => {
+            if (useDefaultUnlocks && !defaltUnlocks.includes(item)) return false;
+
+            const def = GameObjectDefs[item];
+            if (!def || def.type !== category) return false;
+
+            return true;
+        };
+
+        if (
+            isItemInLoadout(loadout.outfit, "outfit") &&
+            loadout.outfit !== "outfitBase"
+        ) {
+            this.setOutfit(loadout.outfit);
+        }
+
+        if (isItemInLoadout(loadout.melee, "melee") && loadout.melee != "fists") {
+            this.weapons[GameConfig.WeaponSlot.Melee].type = loadout.melee;
+        }
+
+        if (isItemInLoadout(loadout.heal, "heal_effect")) {
+            this.loadout.heal = loadout.heal;
+        }
+        if (isItemInLoadout(loadout.boost, "boost_effect")) {
+            this.loadout.boost = loadout.boost;
+        }
+
+        const emotes = loadout.emotes;
+        for (let i = 0; i < emotes.length; i++) {
+            const emote = emotes[i];
+            if (i > GameConfig.EmoteSlot.Count) break;
+
+            if (emote === "" || !isItemInLoadout(emote, "emote")) {
+                continue;
+            }
+
+            this.loadout.emotes[i] = emote;
         }
     }
 

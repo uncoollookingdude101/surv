@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { MapDefs } from "../../../shared/defs/mapDefs";
 import type { TeamMode } from "../../../shared/gameConfig";
 import type { FindGameError } from "../../../shared/types/api";
+import { loadoutSchema } from "../../../shared/utils/loadout";
 import type { MatchDataTable } from "../api/db/schema";
 
 export interface GameSocketData {
@@ -52,6 +53,7 @@ export const zFindGamePrivateBody = z.object({
             token: z.string(),
             userId: z.string().nullable(),
             ip: z.string(),
+            loadout: loadoutSchema.optional(),
         }),
     ),
 });

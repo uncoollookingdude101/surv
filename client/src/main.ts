@@ -765,7 +765,6 @@ class Application {
             this.game!.tryJoinGame(
                 url,
                 matchData.data,
-                this.account.loadoutPriv,
                 this.account.questPriv,
                 onFailure,
             );

@@ -1,5 +1,6 @@
 import { TeamMode } from "../../../shared/gameConfig";
 import * as net from "../../../shared/net/net";
+import type { Loadout } from "../../../shared/utils/loadout";
 import { math } from "../../../shared/utils/math";
 import { v2 } from "../../../shared/utils/v2";
 import { Config } from "../config";
@@ -35,6 +36,7 @@ export interface JoinTokenData {
     expiresAt: number;
     userId: string | null;
     findGameIp: string;
+    loadout?: Loadout;
     groupData: {
         autoFill: boolean;
         playerCount: number;
@@ -500,6 +502,7 @@ export class Game {
                 userId: token.userId,
                 groupData,
                 findGameIp: token.ip,
+                loadout: token.loadout,
             });
         }
     }

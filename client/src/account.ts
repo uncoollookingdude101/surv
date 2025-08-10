@@ -96,7 +96,6 @@ export class Account {
     };
 
     loadout = loadouts.defaultLoadout();
-    loadoutPriv = "";
     items: Item[] = [];
     quests: Quest[] = [];
     questPriv = "";
@@ -250,7 +249,6 @@ export class Account {
             this.loggingIn = false;
             this.loggedIn = false;
             this.profile = {} as this["profile"];
-            this.loadoutPriv = "";
             this.items = [];
             if (err) {
                 errorLogManager.storeGeneric("account", "load_profile_error");
@@ -259,7 +257,6 @@ export class Account {
             } else if (data.success) {
                 this.loggedIn = true;
                 this.profile = data.profile;
-                this.loadoutPriv = data.loadoutPriv;
                 this.items = data.items;
                 this.loadout = data.loadout;
                 const profile = this.config.get("profile") || { slug: "" };
@@ -338,7 +335,6 @@ export class Account {
                 this.loadout = loadoutPrev;
             } else {
                 this.loadout = res.loadout;
-                this.loadoutPriv = res.loadoutPriv;
             }
             this.emit("loadout", this.loadout);
         });
