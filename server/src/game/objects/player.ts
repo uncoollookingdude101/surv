@@ -3566,15 +3566,17 @@ export class Player extends BaseGameObject {
     pickupTicker = 0;
     pickupLoot(obj: Loot) {
         if (obj.destroyed) return;
+
+        const def = GameObjectDefs[obj.type];
         if (
-            this.actionType == GameConfig.Action.UseItem ||
-            this.actionType == GameConfig.Action.Revive
+            (this.actionType == GameConfig.Action.UseItem ||
+                this.actionType == GameConfig.Action.Revive) &&
+            def.type != "gun"
         )
             return;
+
         if (this.pickupTicker > 0) return;
         this.pickupTicker = 0.1;
-        const def = GameObjectDefs[obj.type];
-
         let amountLeft = 0;
         let lootToAdd = obj.type;
         let removeLoot = true;
