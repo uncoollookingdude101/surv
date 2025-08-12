@@ -1522,7 +1522,7 @@ export class Player extends BaseGameObject {
             });
         }
 
-        if (this.reloadAgain) {
+        if (this.reloadAgain && this.actionType !== GameConfig.Action.Revive) {
             this.reloadAgain = false;
             this.weaponManager.tryReload();
         }
@@ -1583,7 +1583,8 @@ export class Player extends BaseGameObject {
                 if (
                     (this.curWeapIdx == GameConfig.WeaponSlot.Primary ||
                         this.curWeapIdx == GameConfig.WeaponSlot.Secondary) &&
-                    this.weapons[this.curWeapIdx].ammo == 0
+                    this.weapons[this.curWeapIdx].ammo == 0 &&
+                    this.actionType !== GameConfig.Action.Revive
                 ) {
                     this.weaponManager.tryReload();
                 }
@@ -3112,7 +3113,8 @@ export class Player extends BaseGameObject {
 
         if (
             (!this.hasPerk("aoe_heal") && this.health == itemDef.maxHeal) ||
-            this.actionType == GameConfig.Action.UseItem
+            this.actionType == GameConfig.Action.UseItem ||
+            this.actionType == GameConfig.Action.Revive
         ) {
             return;
         }
@@ -3159,7 +3161,10 @@ export class Player extends BaseGameObject {
         const itemDef = GameObjectDefs[item];
         assert(itemDef.type === "boost", `Invalid boost item ${item}`);
 
-        if (this.actionType == GameConfig.Action.UseItem) {
+        if (
+            this.actionType == GameConfig.Action.UseItem ||
+            this.actionType == GameConfig.Action.Revive
+        ) {
             return;
         }
         if (!this.inventory[item]) {
@@ -3314,9 +3319,9 @@ export class Player extends BaseGameObject {
                     const playerToRevive = this.getPlayerToRevive();
 
                     const interactables = [
+                        playerToRevive,
                         !this.downed && loot,
                         ...obstacles,
-                        playerToRevive,
                     ];
 
                     for (let i = 0; i < interactables.length; i++) {
@@ -3336,6 +3341,10 @@ export class Player extends BaseGameObject {
                     }
                     break;
                 }
+                case GameConfig.Input.Revive: {
+                    const playerToRevive = this.getPlayerToRevive();
+                    this.revive(playerToRevive);
+                }
                 case GameConfig.Input.Loot: {
                     const loot = this.getClosestLoot();
                     if (loot) {
@@ -3351,7 +3360,9 @@ export class Player extends BaseGameObject {
                     break;
                 }
                 case GameConfig.Input.Reload:
-                    this.weaponManager.tryReload();
+                    if (this.actionType !== GameConfig.Action.Revive) {
+                        this.weaponManager.tryReload();
+                    }
                     break;
                 case GameConfig.Input.Cancel:
                     if (ignoreCancel) {
@@ -3412,10 +3423,6 @@ export class Player extends BaseGameObject {
                         this.weapsDirty = true;
                     }
                     break;
-                }
-                case GameConfig.Input.Revive: {
-                    const playerToRevive = this.getPlayerToRevive();
-                    this.revive(playerToRevive);
                 }
             }
         }
@@ -3569,9 +3576,8 @@ export class Player extends BaseGameObject {
 
         const def = GameObjectDefs[obj.type];
         if (
-            (this.actionType == GameConfig.Action.UseItem ||
-                this.actionType == GameConfig.Action.Revive) &&
-            def.type != "gun"
+            (this.actionType == GameConfig.Action.UseItem && def.type != "gun") ||
+            this.actionType == GameConfig.Action.Revive
         )
             return;
 

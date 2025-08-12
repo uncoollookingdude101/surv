@@ -260,7 +260,11 @@ export class WeaponManager {
         }
 
         this.reloadTicker -= dt;
-        if (this.reloadTicker <= 0 && this.scheduledReload) {
+        if (
+            this.reloadTicker <= 0 &&
+            this.scheduledReload &&
+            player.actionType !== GameConfig.Action.Revive
+        ) {
             this.scheduledReload = false;
             this.tryReload();
         }
