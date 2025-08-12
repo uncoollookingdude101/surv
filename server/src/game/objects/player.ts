@@ -1524,7 +1524,7 @@ export class Player extends BaseGameObject {
 
         if (this.reloadAgain && this.actionType !== GameConfig.Action.Revive) {
             this.reloadAgain = false;
-            this.weaponManager.tryReload();
+            this.weaponManager.scheduleReload();
         }
 
         // handle heal and boost actions
@@ -1586,7 +1586,7 @@ export class Player extends BaseGameObject {
                     this.weapons[this.curWeapIdx].ammo == 0 &&
                     this.actionType !== GameConfig.Action.Revive
                 ) {
-                    this.weaponManager.tryReload();
+                    this.weaponManager.scheduleReload();
                 }
             }
         }
@@ -3114,7 +3114,8 @@ export class Player extends BaseGameObject {
         if (
             (!this.hasPerk("aoe_heal") && this.health == itemDef.maxHeal) ||
             this.actionType == GameConfig.Action.UseItem ||
-            this.actionType == GameConfig.Action.Revive
+            this.actionType == GameConfig.Action.Revive ||
+            this.weaponManager.cookingThrowable
         ) {
             return;
         }
@@ -3163,7 +3164,8 @@ export class Player extends BaseGameObject {
 
         if (
             this.actionType == GameConfig.Action.UseItem ||
-            this.actionType == GameConfig.Action.Revive
+            this.actionType == GameConfig.Action.Revive ||
+            this.weaponManager.cookingThrowable
         ) {
             return;
         }
@@ -3361,7 +3363,7 @@ export class Player extends BaseGameObject {
                 }
                 case GameConfig.Input.Reload:
                     if (this.actionType !== GameConfig.Action.Revive) {
-                        this.weaponManager.tryReload();
+                        this.weaponManager.scheduleReload();
                     }
                     break;
                 case GameConfig.Input.Cancel:
@@ -3671,7 +3673,7 @@ export class Player extends BaseGameObject {
                         this.weapons[this.curWeapIdx].ammo == 0 &&
                         weaponInfo.ammo == obj.type
                     ) {
-                        this.weaponManager.tryReload();
+                        this.weaponManager.scheduleReload();
                     }
                 }
                 break;
@@ -3771,7 +3773,8 @@ export class Player extends BaseGameObject {
 
                         const switchDelay = (GameObjectDefs[gunType] as GunDef)
                             .switchDelay;
-                        this.weaponManager.scheduleReload(switchDelay);
+                        this.weaponManager.applyWeaponDelay(switchDelay);
+                        this.weaponManager.scheduleReload();
                     }
 
                     // always select primary slot if melee is selected
@@ -4240,7 +4243,7 @@ export class Player extends BaseGameObject {
         this.cancelAction();
 
         if (reloading && this.weapons[this.curWeapIdx].ammo == 0) {
-            this.weaponManager.tryReload();
+            this.weaponManager.scheduleReload();
         }
     }
 
