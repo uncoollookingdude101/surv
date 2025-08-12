@@ -1153,6 +1153,13 @@ export class Player extends BaseGameObject {
             if (slot !== -1) {
                 this.weaponManager.setWeapon(slot, "", 0);
             }
+        } else if (type === "inspiration") {
+            const slot = this.weapons.findIndex((weap) => {
+                return weap.type === "bugle";
+            });
+            if (slot !== -1) {
+                this.weaponManager.setWeapon(slot, "", 0);
+            }
         } else if (type === "fabricate") {
             this.fabricateRefillTicker = 0;
         } else if (type === "firepower") {
@@ -1161,8 +1168,31 @@ export class Player extends BaseGameObject {
                 const def = GameObjectDefs[weap.type];
                 if (def?.type !== "gun") continue;
                 const ammo = this.weaponManager.getTrueAmmoStats(def);
+                const ammoType = def.ammo;
+                const diff = weap.ammo - ammo.trueMaxClip;
 
-                weap.ammo = math.min(weap.ammo, ammo.trueMaxClip);
+                weap.ammo -= diff;
+
+                let amountToDrop = 0;
+                const backpackLevel = this.getGearLevel(this.backpack);
+                if (this.bagSizes[ammoType] && !this.weaponManager.isInfinite(def)) {
+                    const bagSpace = this.bagSizes[ammoType][backpackLevel];
+                    if (this.inventory[ammoType] + diff <= bagSpace) {
+                        this.inventory[ammoType] += diff;
+                        this.inventoryDirty = true;
+                    } else {
+                        const spaceLeft = bagSpace - this.inventory[ammoType];
+                        const amountToAdd = spaceLeft;
+
+                        this.inventory[ammoType] += amountToAdd;
+                        this.inventoryDirty = true;
+                        amountToDrop = diff - amountToAdd;
+                    }
+                }
+
+                if (amountToDrop != 0) {
+                    this.dropLoot(ammoType, amountToDrop);
+                }
                 this.weapsDirty = true;
             }
         }
