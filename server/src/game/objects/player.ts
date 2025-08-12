@@ -1831,7 +1831,7 @@ export class Player extends BaseGameObject {
         // Mobile auto interaction
         //
         this.mobileDropTicker -= dt;
-        if (this.isMobile && this.mobileDropTicker <= 0) {
+        if (this.isMobile && this.mobileDropTicker <= 0 && !this.downed) {
             const closestLoot = this.getClosestLoot();
 
             if (closestLoot) {
