@@ -3325,7 +3325,7 @@ export class Player extends BaseGameObject {
 
                     const interactables = [
                         playerToRevive,
-                        canRevive && loot,
+                        !this.downed && loot,
                         ...obstacles,
                     ];
 
@@ -3335,7 +3335,10 @@ export class Player extends BaseGameObject {
                         if (interactable.__type === ObjectType.Player && canRevive) {
                             this.revive(playerToRevive);
                             ignoreCancel = true;
-                        } else if (interactable.__type === ObjectType.Loot && canRevive) {
+                        } else if (
+                            interactable.__type === ObjectType.Loot &&
+                            !this.downed
+                        ) {
                             this.interactWith(interactable);
                         } else {
                             this.interactWith(interactable);
