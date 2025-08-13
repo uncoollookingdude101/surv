@@ -3349,6 +3349,7 @@ export class Player extends BaseGameObject {
                 case GameConfig.Input.Revive: {
                     const playerToRevive = this.getPlayerToRevive();
                     this.revive(playerToRevive);
+                    break;
                 }
                 case GameConfig.Input.Loot: {
                     const loot = this.getClosestLoot();
