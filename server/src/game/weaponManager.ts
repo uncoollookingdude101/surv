@@ -153,8 +153,11 @@ export class WeaponManager {
             this.player.wearingPan = true;
         }
 
+        const itemDef = GameObjectDefs[this.activeWeapon] as GunDef;
+        this.applyWeaponDelay(itemDef.switchDelay);
+
         if (GameConfig.WeaponType[idx] === "gun" && this.weapons[idx].ammo == 0) {
-            this.scheduleReload(effectiveSwitchDelay);
+            this.scheduleReload();
         }
 
         if (idx === this.curWeapIdx && WeaponSlot[idx] == "gun") {
@@ -259,8 +262,12 @@ export class WeaponManager {
             this.weapons[i].recoilTime -= dt;
         }
 
-        this.reloadTicker -= dt;
-        if (this.reloadTicker <= 0 && this.scheduledReload) {
+        this.weaponDelayTicker -= dt;
+        if (
+            this.weaponDelayTicker <= 0 &&
+            this.scheduledReload &&
+            player.actionType !== GameConfig.Action.Revive
+        ) {
             this.scheduledReload = false;
             this.tryReload();
         }
@@ -372,11 +379,16 @@ export class WeaponManager {
         }
     }
 
-    reloadTicker = 0;
     scheduledReload = false;
-    scheduleReload(delay: number): void {
-        this.reloadTicker = delay;
+    scheduleReload(): void {
         this.scheduledReload = true;
+    }
+
+    weaponDelayTicker = 0;
+    weaponOnDelay = false;
+    applyWeaponDelay(delay: number): void {
+        this.weaponDelayTicker = delay;
+        this.weaponOnDelay = true;
     }
 
     getTrueAmmoStats(weaponDef: GunDef): {
@@ -607,9 +619,11 @@ export class WeaponManager {
 
         const weapon = this.weapons[this.curWeapIdx];
 
+        this.applyWeaponDelay(itemDef.fireDelay);
+
         this.scheduledReload = false;
         if (weapon.ammo <= 1) {
-            this.scheduleReload(itemDef.fireDelay);
+            this.scheduleReload();
         }
         if (weapon.ammo <= 0) return;
 

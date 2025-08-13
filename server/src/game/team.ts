@@ -46,7 +46,7 @@ export class Team {
         // players with self_revive are discarded from the check since they can get downed "independently"
         // they have no influence over the other downed teammates and how the code measures them
         const filteredPlayers = this.livingPlayers.filter(
-            (p) => p != player && !p.hasPerk("self_revive"),
+            (p) => p != player && player.downed && !p.hasPerk("self_revive"),
         );
         if (filteredPlayers.length == 0) {
             // this is necessary since for some dumb reason every() on an empty array returns true????

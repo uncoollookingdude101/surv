@@ -769,6 +769,7 @@ export class Player extends BaseGameObject {
     downedDamageTicker = 0;
     bleedTicker = 0;
     playerBeingRevived: Player | undefined;
+    revivedBy: Player | undefined;
 
     animType: Anim = GameConfig.Anim.None;
     animSeq = 0;
@@ -1521,9 +1522,9 @@ export class Player extends BaseGameObject {
             });
         }
 
-        if (this.reloadAgain) {
+        if (this.reloadAgain && this.actionType !== GameConfig.Action.Revive) {
             this.reloadAgain = false;
-            this.weaponManager.tryReload();
+            this.weaponManager.scheduleReload();
         }
 
         // handle heal and boost actions
@@ -1574,14 +1575,18 @@ export class Player extends BaseGameObject {
                     });
                 }
 
-                this.cancelAction();
+                // Prevent cancelAction from being called by revived players at the end of revive
+                if (!this.revivedBy || this.playerBeingRevived == this.revivedBy) {
+                    this.cancelAction();
+                }
 
                 if (
                     (this.curWeapIdx == GameConfig.WeaponSlot.Primary ||
                         this.curWeapIdx == GameConfig.WeaponSlot.Secondary) &&
-                    this.weapons[this.curWeapIdx].ammo == 0
+                    this.weapons[this.curWeapIdx].ammo == 0 &&
+                    this.actionType !== GameConfig.Action.Revive
                 ) {
-                    this.weaponManager.tryReload();
+                    this.weaponManager.scheduleReload();
                 }
             }
         }
@@ -1826,7 +1831,7 @@ export class Player extends BaseGameObject {
         // Mobile auto interaction
         //
         this.mobileDropTicker -= dt;
-        if (this.isMobile && this.mobileDropTicker <= 0) {
+        if (this.isMobile && this.mobileDropTicker <= 0 && !this.downed) {
             const closestLoot = this.getClosestLoot();
 
             if (closestLoot) {
@@ -3046,6 +3051,7 @@ export class Player extends BaseGameObject {
         if (!playerToRevive) return;
 
         this.playerBeingRevived = playerToRevive;
+        playerToRevive.revivedBy = this;
         if (this.downed && this.hasPerk("self_revive")) {
             this.doAction(
                 "",
@@ -3107,7 +3113,9 @@ export class Player extends BaseGameObject {
 
         if (
             (!this.hasPerk("aoe_heal") && this.health == itemDef.maxHeal) ||
-            this.actionType == GameConfig.Action.UseItem
+            this.actionType == GameConfig.Action.UseItem ||
+            this.actionType == GameConfig.Action.Revive ||
+            this.weaponManager.cookingThrowable
         ) {
             return;
         }
@@ -3154,7 +3162,11 @@ export class Player extends BaseGameObject {
         const itemDef = GameObjectDefs[item];
         assert(itemDef.type === "boost", `Invalid boost item ${item}`);
 
-        if (this.actionType == GameConfig.Action.UseItem) {
+        if (
+            this.actionType == GameConfig.Action.UseItem ||
+            this.actionType == GameConfig.Action.Revive ||
+            this.weaponManager.cookingThrowable
+        ) {
             return;
         }
         if (!this.inventory[item]) {
@@ -3192,7 +3204,10 @@ export class Player extends BaseGameObject {
         return this.downed
             ? (input === GameConfig.Input.Revive && this.hasPerk("self_revive")) || // Players can revive themselves if they have the self-revive perk.
                   (input === GameConfig.Input.Cancel &&
-                      this.game.modeManager.isReviving(this)) || // Players can cancel their own revives (if they are reviving themself, which is only true if they have the perk).
+                      !this.revivedBy?.hasPerk("aoe_heal")) || // Players can cancel their own revives if they are not revived by aoe heal.
+                  (input === GameConfig.Input.Cancel &&
+                      this.game.modeManager.isReviving(this)) || // Players can cancel their own revives if they are reviving themselves.
+                  input === GameConfig.Input.Use ||
                   input === GameConfig.Input.Interact // Players can interact with obstacles while downed.
             : true;
     }
@@ -3305,23 +3320,32 @@ export class Player extends BaseGameObject {
                     const obstacles = this.getInteractableObstacles();
                     const playerToRevive = this.getPlayerToRevive();
 
+                    const canRevive =
+                        !this.downed || (this.downed && this.hasPerk("self_revive"));
+
                     const interactables = [
-                        !this.downed && loot,
-                        ...obstacles,
                         playerToRevive,
+                        canRevive && loot,
+                        ...obstacles,
                     ];
 
                     for (let i = 0; i < interactables.length; i++) {
                         const interactable = interactables[i];
                         if (!interactable) continue;
-                        if (interactable.__type === ObjectType.Player) {
+                        if (interactable.__type === ObjectType.Player && canRevive) {
                             this.revive(playerToRevive);
                             ignoreCancel = true;
+                        } else if (interactable.__type === ObjectType.Loot && canRevive) {
+                            this.interactWith(interactable);
                         } else {
                             this.interactWith(interactable);
                         }
                     }
                     break;
+                }
+                case GameConfig.Input.Revive: {
+                    const playerToRevive = this.getPlayerToRevive();
+                    this.revive(playerToRevive);
                 }
                 case GameConfig.Input.Loot: {
                     const loot = this.getClosestLoot();
@@ -3338,7 +3362,9 @@ export class Player extends BaseGameObject {
                     break;
                 }
                 case GameConfig.Input.Reload:
-                    this.weaponManager.tryReload();
+                    if (this.actionType !== GameConfig.Action.Revive) {
+                        this.weaponManager.scheduleReload();
+                    }
                     break;
                 case GameConfig.Input.Cancel:
                     if (ignoreCancel) {
@@ -3399,10 +3425,6 @@ export class Player extends BaseGameObject {
                         this.weapsDirty = true;
                     }
                     break;
-                }
-                case GameConfig.Input.Revive: {
-                    const playerToRevive = this.getPlayerToRevive();
-                    this.revive(playerToRevive);
                 }
             }
         }
@@ -3553,10 +3575,16 @@ export class Player extends BaseGameObject {
     pickupTicker = 0;
     pickupLoot(obj: Loot) {
         if (obj.destroyed) return;
+
+        const def = GameObjectDefs[obj.type];
+        if (
+            (this.actionType == GameConfig.Action.UseItem && def.type != "gun") ||
+            this.actionType == GameConfig.Action.Revive
+        )
+            return;
+
         if (this.pickupTicker > 0) return;
         this.pickupTicker = 0.1;
-        const def = GameObjectDefs[obj.type];
-
         let amountLeft = 0;
         let lootToAdd = obj.type;
         let removeLoot = true;
@@ -3645,7 +3673,7 @@ export class Player extends BaseGameObject {
                         this.weapons[this.curWeapIdx].ammo == 0 &&
                         weaponInfo.ammo == obj.type
                     ) {
-                        this.weaponManager.tryReload();
+                        this.weaponManager.scheduleReload();
                     }
                 }
                 break;
@@ -3745,7 +3773,8 @@ export class Player extends BaseGameObject {
 
                         const switchDelay = (GameObjectDefs[gunType] as GunDef)
                             .switchDelay;
-                        this.weaponManager.scheduleReload(switchDelay);
+                        this.weaponManager.applyWeaponDelay(switchDelay);
+                        this.weaponManager.scheduleReload();
                     }
 
                     // always select primary slot if melee is selected
@@ -4214,7 +4243,7 @@ export class Player extends BaseGameObject {
         this.cancelAction();
 
         if (reloading && this.weapons[this.curWeapIdx].ammo == 0) {
-            this.weaponManager.tryReload();
+            this.weaponManager.scheduleReload();
         }
     }
 
@@ -4387,13 +4416,27 @@ export class Player extends BaseGameObject {
             return;
         }
 
+        // If player is reviving a player and this is called, cancel their action
         if (this.playerBeingRevived) {
-            if (this.hasPerk("self_revive") && this.playerBeingRevived == this) {
-                this.playerBeingRevived = undefined;
+            const revivedPlayer = this.playerBeingRevived;
+            this.playerBeingRevived = undefined;
+            if (revivedPlayer == this.revivedBy) {
+                this.revivedBy = undefined;
             } else {
-                this.playerBeingRevived.cancelAction();
-                this.playerBeingRevived = undefined;
+                revivedPlayer.revivedBy = undefined;
+                revivedPlayer.cancelAction();
                 this.cancelAnim();
+            }
+        }
+
+        // If player is being revived and this is called, cancel the reviver's action
+        if (this.revivedBy) {
+            const revivingPlayer = this.revivedBy;
+            this.revivedBy = undefined;
+            if (revivingPlayer.playerBeingRevived) {
+                revivingPlayer.playerBeingRevived = undefined;
+                revivingPlayer.cancelAction();
+                revivingPlayer.cancelAnim();
             }
         }
 
