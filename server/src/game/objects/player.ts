@@ -3320,22 +3320,22 @@ export class Player extends BaseGameObject {
                     const obstacles = this.getInteractableObstacles();
                     const playerToRevive = this.getPlayerToRevive();
 
+                    const canRevive =
+                        !this.downed || (this.downed && this.hasPerk("self_revive"));
+
                     const interactables = [
                         playerToRevive,
-                        !this.downed && loot,
+                        canRevive && loot,
                         ...obstacles,
                     ];
 
                     for (let i = 0; i < interactables.length; i++) {
                         const interactable = interactables[i];
                         if (!interactable) continue;
-                        if (interactable.__type === ObjectType.Player && !this.downed) {
+                        if (interactable.__type === ObjectType.Player && canRevive) {
                             this.revive(playerToRevive);
                             ignoreCancel = true;
-                        } else if (
-                            interactable.__type === ObjectType.Loot &&
-                            !this.downed
-                        ) {
+                        } else if (interactable.__type === ObjectType.Loot && canRevive) {
                             this.interactWith(interactable);
                         } else {
                             this.interactWith(interactable);
