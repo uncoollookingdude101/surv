@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import {
     GameObjectDefs,
     type LootDef,
@@ -216,6 +217,12 @@ export class PlayerBarn {
 
         this.socketIdToPlayer.set(socketId, player);
 
+        this.activatePlayer(player, group, team);
+
+        return player;
+    }
+
+    activatePlayer(player: Player, group?: Group, team?: Team) {
         if (team && group) {
             team.addPlayer(player);
             group.addPlayer(player);
@@ -253,6 +260,41 @@ export class PlayerBarn {
         this.game.pluginManager.emit("playerJoin", player);
 
         this.game.updateData();
+    }
+
+    testPlayerCount = 0;
+    addTestPlayer(params: {
+        group?: Group;
+        team?: Team;
+        pos?: Vec2;
+        name?: string;
+    }): Player {
+        let group = params.group;
+        let team = params.team;
+
+        if (!group && this.game.isTeamMode) {
+            group = this.addGroup(false);
+        }
+
+        if (!team && this.game.map.factionMode) {
+            team = this.getSmallestTeam();
+        }
+
+        const socketId = randomUUID();
+
+        const player = new Player(
+            this.game,
+            params.pos ?? v2.create(this.game.map.width / 2, this.game.map.height / 2),
+            0,
+            params.name ?? `TEST-${this.testPlayerCount++}`,
+            socketId,
+            new net.JoinMsg(),
+            "",
+            "",
+            null,
+        );
+
+        this.activatePlayer(player, group, team);
 
         return player;
     }
@@ -439,6 +481,7 @@ export class PlayerBarn {
     addTeam(teamId: number) {
         const team = new Team(this.game, teamId);
         this.teams.push(team);
+        return team;
     }
 
     getGroupAndTeam({ groupData }: JoinTokenData):
