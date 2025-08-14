@@ -155,6 +155,7 @@ describe.for(Object.entries(RoleDefs))("Role $0", ([, def]) => {
             });
         });
     }
+
     if (!hasTest) {
         // some roles have nothing to test... and vitest gets mad at that
         test("Type", () => {
