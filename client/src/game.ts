@@ -9,7 +9,7 @@ import { v2 } from "../../shared/utils/v2";
 import type { Ambiance } from "./ambiance";
 import type { AudioManager } from "./audioManager";
 import { Camera } from "./camera";
-import type { ConfigManager, DebugOptions } from "./config";
+import type { ConfigManager, DebugRenderOpts } from "./config";
 import { debugLines } from "./debugLines";
 import { device } from "./device";
 import { Editor } from "./editor";
@@ -136,6 +136,10 @@ export class Game {
         this.m_inputBinds = m_inputBinds;
         this.m_inputBindUi = m_inputBindUi;
         this.m_resourceManager = m_resourceManager;
+
+        if (IS_DEV) {
+            this.editor = new Editor(this.m_config);
+        }
     }
 
     tryJoinGame(
@@ -254,10 +258,6 @@ export class Game {
         // this.audioManager,
         // this.uiManager
 
-        if (IS_DEV) {
-            this.editor = new Editor(this.m_config);
-        }
-
         // Register types
         const TypeToPool = {
             [ObjectType.Player]: this.m_playerBarn.playerPool,
@@ -365,6 +365,7 @@ export class Game {
             this.m_renderer.m_free();
             this.m_input.m_free();
             this.m_audioManager.stopAll();
+
             while (this.m_pixi.stage.children.length > 0) {
                 const c = this.m_pixi.stage.children[0];
                 this.m_pixi.stage.removeChild(c);
@@ -391,17 +392,15 @@ export class Game {
                 this.editor.setEnabled(!this.editor.enabled);
             }
             if (this.editor.enabled) {
-                this.editor.m_update(dt, this.m_input, this.m_activePlayer, this.m_map);
+                this.editor.m_update(dt, this.m_input, this.m_activePlayer);
             }
         }
 
-        let debug: DebugOptions;
+        let debug: DebugRenderOpts;
         if (IS_DEV) {
-            debug = this.m_config.get("debug")!;
+            debug = this.m_config.get("debugRenderer")!;
         } else {
-            debug = {
-                render: {},
-            } as DebugOptions;
+            debug = {} as DebugRenderOpts;
         }
 
         const smokeParticles = this.m_smokeBarn.m_particles;
@@ -1009,7 +1008,7 @@ export class Game {
         this.m_render(dt, debug);
     }
 
-    m_render(dt: number, debug: DebugOptions) {
+    m_render(dt: number, debug: DebugRenderOpts) {
         const grassColor = this.m_map.mapLoaded
             ? this.m_map.getMapDef().biome.colors.grass
             : 8433481;
@@ -1032,7 +1031,7 @@ export class Game {
         this.m_emoteBarn.m_render(this.m_camera);
         if (IS_DEV) {
             this.m_debugDisplay.clear();
-            if (debug.render.enabled) {
+            if (debug.enabled) {
                 debugLines.m_render(this.m_camera, this.m_debugDisplay);
             }
             debugLines.flush();
@@ -1296,6 +1295,11 @@ export class Game {
                     this.m_uiManager.setRoleMenuActive(true);
                 } else {
                     this.m_uiManager.setRoleMenuActive(false);
+                }
+
+                if (IS_DEV) {
+                    this.editor.toolParams.mapSeed = msg.seed;
+                    this.editor.pane.refresh();
                 }
                 break;
             }
