@@ -238,7 +238,7 @@ const mapDef = {
             { name: "splinter", count: 1, weight: 1 },
             { name: "explosive", count: 1, weight: 1 },
             { name: "scavenger_adv", count: 1, weight: 1 },
-            { name: "bonus_assault", count: 1, weight: 1 },
+            { name: "ap_rounds", count: 1, weight: 1 },
         ],
         tier_airdrop_rare: [
             { name: "awc", count: 1, weight: 1 },

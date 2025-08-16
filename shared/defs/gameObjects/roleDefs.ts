@@ -182,22 +182,31 @@ export const RoleDefs: Record<string, RoleDef> = {
             "field_medic",
             "chambered",
             "fabricate_m",
+            "ap_rounds",
         ],
         defaultItems: createDefaultItems({
             weapons: [
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "pkp", ammo: 0 },
-                            [TeamColor.Blue]: { type: "sv98", ammo: 0 },
+                            [TeamColor.Red]: { type: "pkp", ammo: 0, fillInv: true },
+                            [TeamColor.Blue]: { type: "pkp", ammo: 0, fillInv: true },
                         },
                         teamcolor,
                     ),
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "usas_s", ammo: 0 },
-                            [TeamColor.Blue]: { type: "pkp", ammo: 0 },
+                            [TeamColor.Red]: {
+                                type: "flare_gun_dual",
+                                ammo: 0,
+                                fillInv: true,
+                            },
+                            [TeamColor.Blue]: {
+                                type: "flare_gun_dual",
+                                ammo: 0,
+                                fillInv: true,
+                            },
                         },
                         teamcolor,
                     ),
@@ -215,13 +224,19 @@ export const RoleDefs: Record<string, RoleDef> = {
             chest: "chest03",
             outfit: (teamcolor: TeamColor) =>
                 ({
-                    [TeamColor.Red]: "outfitRedLeader",
-                    [TeamColor.Blue]: "outfitBlueLeader",
+                    [TeamColor.Red]: "outfitGhillie",
+                    [TeamColor.Blue]: "outfitGhillie",
                 })[teamcolor],
             inventory: {
+                "15xscope": 1,
                 "8xscope": 1,
-                healthkit: 1,
-                bandage: 5,
+                "4xscope": 1,
+                "2xscope": 1,
+                healthkit: 4,
+                bandage: 30,
+                painkiller: 4,
+                soda: 10,
+                flare: 4,
             },
         }),
     },

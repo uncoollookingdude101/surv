@@ -174,7 +174,7 @@ const mapDef: PartialMapDef = {
                     },
                 },
             ],
-            crates: [{ name: "airdrop_crate_03", weight: 1 }],
+            crates: [{ name: "airdrop_crate_04", weight: 1 }],
         },
         roles: {
             timings: [
@@ -324,6 +324,16 @@ const mapDef: PartialMapDef = {
             { name: "scout_elite", count: 1, weight: 1.5 },
             { name: "vss", count: 1, weight: 2.5 }, // !
         ],
+        tier_airdrop_mythic: [
+            { name: "scarssr", count: 1, weight: 1 }, // ?
+            { name: "usas", count: 1, weight: 1 }, // ?
+            { name: "p30l_dual", count: 1, weight: 1 }, // ?
+            { name: "awc", count: 1, weight: 1 }, // ?
+            { name: "pkp", count: 1, weight: 1 }, // ?
+            { name: "m249", count: 1, weight: 1 }, // ?
+            { name: "potato_smg", count: 1, weight: 1 }, // ?
+            { name: "potato_cannon", count: 1, weight: 1 }, // ?
+        ],
         tier_ghillie: [
             {
                 name: "outfitGhillie",
@@ -339,6 +349,12 @@ const mapDef: PartialMapDef = {
                 count: 1,
                 weight: 0.5,
             },
+        ],
+        tier_airdrop_throwables: [
+            { name: "frag", count: 2, weight: 1 },
+            { name: "mirv", count: 2, weight: 1 },
+            { name: "strobe", count: 2, weight: 1 },
+            { name: "smoke", count: 2, weight: 1 },
         ],
         tier_ammo_crate: [
             { name: "9mm", count: 60, weight: 3 },

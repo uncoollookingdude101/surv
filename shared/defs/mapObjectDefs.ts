@@ -8931,9 +8931,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-couch-03.img" },
     }),
     crate_01: createCrate({}),
-    crate_01a: createCrate({ loot: [autoLoot("pkp", 1, 1)] }),
-    crate_01b: createCrate({ loot: [autoLoot("chest03", 1, 1)] }),
-    crate_01c: createCrate({ loot: [autoLoot("backpack03", 1, 1)] }),
+    crate_01a: createCrate({ loot: [autoLoot("pkp", 1)] }),
+    crate_01b: createCrate({ loot: [autoLoot("chest03", 1)] }),
+    crate_01c: createCrate({ loot: [autoLoot("backpack03", 1)] }),
     crate_01x: createCrate({ img: { sprite: "map-crate-01x.img" } }),
     crate_02: createCrate({
         health: 140,
@@ -8983,10 +8983,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     crate_02d: createCrate({
         health: 140,
         loot: [
-            autoLoot("m1014", 1, 1),
-            autoLoot("helmet03_marksman2", 1, 1),
-            autoLoot("8xscope", 1, 1),
-            autoLoot("machete_taiga", 1, 1),
+            autoLoot("m1014", 1),
+            autoLoot("helmet03_marksman2", 1),
+            autoLoot("8xscope", 1),
+            autoLoot("machete_taiga", 1),
         ],
         map: { display: true, color: 0xcc0000 },
         terrain: { grass: true, beach: false },
@@ -9464,10 +9464,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     crate_22d: createCrate({
         health: 140,
         loot: [
-            autoLoot("an94", 1, 1),
-            autoLoot("helmet03_lt_aged", 1, 1),
-            autoLoot("8xscope", 1, 1),
-            autoLoot("kukri_trad", 1, 1),
+            autoLoot("an94", 1),
+            autoLoot("helmet03_lt_aged", 1),
+            autoLoot("8xscope", 1),
+            autoLoot("kukri_trad", 1),
         ],
         map: { display: true, color: 0x7eff },
         terrain: { grass: true, beach: false },

@@ -737,7 +737,7 @@ export class WeaponManager {
 
         let damageMult = 1;
         if (hasSplinter) {
-            damageMult *= PerkProperties.splinter.mainDamageMulti;
+            damageMult *= PerkProperties.splinter.mainDamageMult;
         }
 
         const saturated = this.isBulletSaturated(itemDef.ammo);
@@ -876,7 +876,7 @@ export class WeaponManager {
                     sParams.lastShot = false;
                     sParams.shotFx = false;
                     sParams.trailSmall = true;
-                    sParams.damageMult *= PerkProperties.splinter.splitsDamageMulti;
+                    sParams.damageMult *= PerkProperties.splinter.splitsDamageMult;
 
                     this.player.game.bulletBarn.fireBullet(sParams);
                     //
