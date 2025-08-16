@@ -1,15 +1,15 @@
 export const PerkProperties = {
     leadership: {
         minBoost: 100,
-        scale: 0.25,
+        scale: 0.15,
     },
     assume_leadership: {
         minBoost: 50,
-        scale: 0.15,
+        scale: 0.1,
     },
     steelskin: {
-        scale: 0.4,
-        damageReduction: 0.45,
+        scale: 0.3,
+        damageReduction: 0.35,
     },
     flak_jacket: {
         scale: 0.1,
@@ -18,6 +18,7 @@ export const PerkProperties = {
     },
     small_arms: {
         scale: -0.25,
+        damageReduction: -0.1,
     },
     splinter: {
         mainDamageMult: 0.6,
@@ -64,7 +65,7 @@ export const PerkProperties = {
         "12gauge": ["treat_12g"],
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
-    ammoBonusDamageMulti: 1.2,
+    ammoBonusDamageMulti: 1.15,
 };
 
 export interface PerkDef {

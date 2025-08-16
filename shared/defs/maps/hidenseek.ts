@@ -33,6 +33,7 @@ const mapDef: PartialMapDef = {
             "woods",
             "desert",
             "halloween",
+            "custom",
         ],
     },
     biome: {

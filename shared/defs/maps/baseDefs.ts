@@ -21,7 +21,7 @@ export const Main: MapDef = {
             { name: "log_11", channel: "sfx" },
             { name: "log_12", channel: "sfx" },
         ],
-        atlases: ["gradient", "loadout", "shared", "main"],
+        atlases: ["gradient", "loadout", "shared", "main", "custom"],
     },
     biome: {
         colors: {
@@ -642,6 +642,7 @@ export const Main: MapDef = {
             { name: "tier_perks", count: 1, weight: 1 },
         ],
         tier_helm_special: [{ name: "", count: 1, weight: 1 }],
+        tier_custom: [{ name: "", count: 1, weight: 1 }],
     },
     mapGen: {
         map: {

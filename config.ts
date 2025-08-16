@@ -155,7 +155,7 @@ export function getConfig(isProduction: boolean, dir: string) {
     if (isDev) {
         config.regions.local ??= {
             https: false,
-            address: `192.168.1.12:${config.gameServer.port}`,
+            address: `192.168.1.17:${config.gameServer.port}`,
             l10n: "index-local",
         };
     }

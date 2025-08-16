@@ -6740,26 +6740,6 @@
             "h": 70
           }
         },
-        "gun-m134-01.img": {
-          "frame": {
-            "x": 2688,
-            "y": 5,
-            "w": 101,
-            "h": 276
-          },
-          "rotated": false,
-          "trimmed": true,
-          "spriteSourceSize": {
-            "x": 0,
-            "y": 0,
-            "w": 101,
-            "h": 276
-          },
-          "sourceSize": {
-            "w": 101,
-            "h": 276
-          }
-        },
         "gun-famas-01.img": {
           "frame": {
             "x": 249,
@@ -11594,26 +11574,6 @@
             "y": 2,
             "w": 114,
             "h": 124
-          },
-          "sourceSize": {
-            "w": 128,
-            "h": 128
-          }
-        },
-        "loot-weapon-m134.img": {
-          "frame": {
-            "x": 2560,
-            "y": 8,
-            "w": 116,
-            "h": 128
-          },
-          "rotated": false,
-          "trimmed": true,
-          "spriteSourceSize": {
-            "x": 7,
-            "y": 2,
-            "w": 116,
-            "h": 128
           },
           "sourceSize": {
             "w": 128,
@@ -28128,6 +28088,25 @@
             "h": 64
           }
         }
+      }
+    }
+  ],
+  "custom": [
+    {
+      "meta": {
+        "image": "custom-0-100.png",
+        "size": {
+          "w": 4096,
+          "h": 4096
+        },
+        "scale": 1
+      },
+      "frames": {
+        "gun-m134-01.img":{"frame":{"x":286,"y":508,"w":96,"h":264},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":96,"h":264},"sourceSize":{"w":96,"h":264}},"part-shell-05.img":{"frame":{"x":941,"y":2,"w":63,"h":260},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":63,"h":260},"sourceSize":{"w":63,"h":260}},
+        "loot-weapon-m134.img":{"frame":{"x":740,"y":3949,"w":115,"h":115},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":9,"y":10,"w":115,"h":115},"sourceSize":{"w":129,"h":129}},
+        "gun-m79-01.img":{"frame":{"x":861,"y":275,"w":48,"h":229},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":48,"h":229},"sourceSize":{"w":48,"h":229}},"gun-dp28-01.img":{"frame":{"x":346,"y":776,"w":34,"h":228},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":14,"y":4,"w":34,"h":228},"sourceSize":{"w":56,"h":232}},
+        "loot-weapon-m79.img":{"frame":{"x":481,"y":3722,"w":112,"h":116},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":9,"y":7,"w":112,"h":116},"sourceSize":{"w":129,"h":129}},
+        "proj-40mm-01.img":{"frame":{"x":786,"y":3584,"w":24,"h":46},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":24,"h":46},"sourceSize":{"w":24,"h":46}}
       }
     }
   ]

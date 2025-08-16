@@ -227,4 +227,17 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         freezeAmount: 10,
         freezeDuration: 10,
     },
+    explosion_40mm_granade: {
+        type: "explosion",
+        damage: 125,
+        obstacleDamage: 1.1,
+        rad: {
+            min: 5,
+            max: 12,
+        },
+        shrapnelCount: 12,
+        shrapnelType: "shrapnel_frag",
+        explosionEffectType: "frag",
+        decalType: "decal_frag_explosion",
+    },
 };

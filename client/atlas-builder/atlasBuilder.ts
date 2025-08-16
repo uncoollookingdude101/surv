@@ -21,6 +21,7 @@ import { SavannahAtlas } from "./defs/savannah.ts";
 import { SharedAtlas } from "./defs/shared.ts";
 import { SnowAtlas } from "./defs/snow.ts";
 import { WoodsAtlas } from "./defs/woods.ts";
+import { CustomAtlas } from "./defs/custom.ts";
 
 const Atlases: Record<Atlas, AtlasDef> = {
     gradient: GradientAtlas,
@@ -35,6 +36,7 @@ const Atlases: Record<Atlas, AtlasDef> = {
     woods: WoodsAtlas,
     cobalt: CobaltAtlas,
     savannah: SavannahAtlas,
+    custom: CustomAtlas,
 };
 
 if (!fs.existsSync(AtlasesConfig.outDir)) {

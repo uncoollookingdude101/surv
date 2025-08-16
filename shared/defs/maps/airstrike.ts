@@ -16,7 +16,7 @@ const mapDef: PartialMapDef = {
             { name: "log_03", channel: "sfx" },
             { name: "log_04", channel: "sfx" },
         ],
-        atlases: ["gradient", "loadout", "shared", "desert"],
+        atlases: ["gradient", "loadout", "shared", "desert", "custom"],
     },
     biome: {
         colors: {

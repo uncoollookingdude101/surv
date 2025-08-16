@@ -765,6 +765,32 @@ const Sounds: Record<string, Record<string, SoundDef>> = {
             maxInstances: 3,
             preload: false,
         },
+        m134_01: {
+            path: "audio/guns/m134_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
+        m134_reload_01: {
+            path: "audio/guns/m134_reload_01.mp3",
+            volume: 1,
+        },
+        m134_switch_01: {
+            path: "audio/guns/pkp_switch_01.mp3",
+            volume: 1,
+        },
+        m79_01: {
+            path: "audio/guns/potato_cannon_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
+        m79_reload_01: {
+            path: "audio/guns/potato_cannon_reload_01.mp3",
+            volume: 1,
+        },
+        m79_switch_01: {
+            path: "audio/guns/potato_cannon_switch_01.mp3",
+            volume: 1,
+        },
         empty_fire_01: {
             path: "audio/guns/empty_fire_01.mp3",
             volume: 0.9,

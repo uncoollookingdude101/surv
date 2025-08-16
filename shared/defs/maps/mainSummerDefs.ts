@@ -19,13 +19,10 @@ const mapDef = {
             timings: [
                 { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
 
                 { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
 
-                { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
 
@@ -39,7 +36,7 @@ const mapDef = {
                 },
             ],
             crates: [
-                { name: "airdrop_crate_01a", weight: 2 },
+                { name: "airdrop_crate_01a", weight: 3 },
                 { name: "airdrop_crate_02", weight: 1 },
             ],
         },
@@ -109,6 +106,7 @@ const mapDef = {
             "faction",
             "potato",
             "cobalt",
+            "custom",
         ],
     },
     lootTable: {
@@ -120,7 +118,7 @@ const mapDef = {
             { name: "strobe", count: 1, weight: 0.5 },
         ],
         tier_airdrop_throwables: [{ name: "strobe", count: 1, weight: 1 }],
-        loot_tier_sv98: [
+        tier_sv98: [
             { name: "sv98", count: 1, weight: 1 },
             { name: "awc", count: 1, weight: 0.25 },
         ],
@@ -141,7 +139,7 @@ const mapDef = {
         ],
         tier_ring_case: [
             { name: "potato_cannon", count: 1, weight: 1 },
-            { name: "pkp", count: 1, weight: 1 },
+            { name: "tier_custom", count: 1, weight: 1 },
         ],
         tier_cloud_01: [
             { name: "sv98", count: 1, weight: 0.5 },
@@ -185,6 +183,10 @@ const mapDef = {
             { name: "scout_elite", count: 1, weight: 0.05 },
             { name: "vss", count: 1, weight: 0.5 }, // !
             { name: "bar", count: 1, weight: 1 },
+            { name: "colt45", count: 1, weight: 1 },
+            { name: "model94", count: 1, weight: 1 },
+            { name: "m1911", count: 1, weight: 3 },
+            { name: "m1a1", count: 1, weight: 2 },
         ],
         tier_cloud_02: [
             { name: "garand", count: 1, weight: 1 },
@@ -200,23 +202,21 @@ const mapDef = {
         tier_hatchet: [
             { name: "usas", count: 1, weight: 2 },
             { name: "m249", count: 1, weight: 1 },
-            { name: "pkp", count: 1, weight: 0.5 },
+            { name: "pkp", count: 1, weight: 0.75 },
             { name: "awc", count: 1, weight: 0.5 },
             { name: "m9", count: 1, weight: 0.5 },
             { name: "flare_gun_dual", count: 1, weight: 0.75 },
         ],
         tier_perks: [
-            { name: "windwalk", count: 1, weight: 1 },
             { name: "steelskin", count: 1, weight: 1 },
-            { name: "small_arms", count: 1, weight: 1 },
             { name: "takedown", count: 1, weight: 1 },
-            { name: "field_medic", count: 1, weight: 1 },
             { name: "tree_climbing", count: 1, weight: 1 },
             { name: "scavenger", count: 1, weight: 1 },
             { name: "chambered", count: 1, weight: 1 },
             { name: "flak_jacket", count: 1, weight: 1 },
             { name: "fabricate", count: 1, weight: 1 },
             { name: "broken_arrow", count: 1, weight: 1 },
+            { name: "bonus_9mm", count: 1, weight: 1 },
         ],
         tier_hatchet_melee: [
             { name: "helmet03_leader2", count: 1, weight: 5 }, // ?
@@ -225,7 +225,7 @@ const mapDef = {
             { name: "helmet03_medic2", count: 1, weight: 0.5 },
             { name: "bonesaw_rusted", count: 1, weight: 0.5 },
         ],
-        tier_chrys_02: [{ name: "endless_ammo", count: 1, weight: 1 }],
+        tier_chrys_02: [{ name: "windwalk", count: 1, weight: 1 }],
         tier_chrys_03: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],
@@ -239,6 +239,7 @@ const mapDef = {
             { name: "explosive", count: 1, weight: 1 },
             { name: "scavenger_adv", count: 1, weight: 1 },
             { name: "ap_rounds", count: 1, weight: 1 },
+            { name: "bonus_assault", count: 1, weight: 1 },
         ],
         tier_airdrop_rare: [
             { name: "awc", count: 1, weight: 1 },
@@ -265,10 +266,10 @@ const mapDef = {
         tier_saloon: [{ name: "flare_gun_dual", count: 2, weight: 1 }],
         tier_outfits: [
             { name: "outfitCobaltShell", count: 1, weight: 0.2 }, // ?
-            { name: "outfitKeyLime", count: 1, weight: 0.15 }, // ?
-            { name: "outfitWoodland", count: 1, weight: 0.1 }, // ?
-            { name: "outfitCamo", count: 1, weight: 0.1 }, // ?
-            { name: "outfitGhillie", count: 1, weight: 0.05 }, // ?
+            { name: "outfitKeyLime", count: 1, weight: 0.2 }, // ?
+            { name: "outfitWoodland", count: 1, weight: 0.2 }, // ?
+            { name: "outfitCamo", count: 1, weight: 0.2 }, // ?
+            { name: "outfitGhillie", count: 1, weight: 0.15 }, // ?
         ],
         tier_eye_block: [
             { name: "tier_scavenger_adv", count: 1, weight: 5 },
@@ -278,6 +279,7 @@ const mapDef = {
             { name: "helmet02_moon1", count: 1, weight: 1 },
             { name: "helmet02_moon2", count: 1, weight: 1 },
             { name: "helmet02_moon3", count: 1, weight: 1 },
+            { name: "helmet02_moon4", count: 1, weight: 1 },
         ],
         tier_police: [
             { name: "helmet03", count: 1, weight: 0.15 },
@@ -301,6 +303,10 @@ const mapDef = {
         tier_scopes_sniper: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],
+        tier_custom: [
+            { name: "m134", count: 1, weight: 1 },
+            { name: "m79", count: 1, weight: 1 },
+        ]
     },
     biome: {
         colors: {
@@ -322,18 +328,12 @@ const mapDef = {
             baseHeight: 750,
             extension: 112,
             shoreInset: 48,
-            grassInset: 18,
+            grassInset: 24,
         },
         rivers: {
             lakes: [],
             weights: [
-                { weight: 0.1, widths: [4] },
-                { weight: 0.15, widths: [8] },
-                { weight: 0.25, widths: [8, 4] },
-                { weight: 0.21, widths: [16] },
-                { weight: 0.09, widths: [16, 8] },
-                { weight: 1, widths: [16, 8, 4] },
-                { weight: 1e-4, widths: [16, 16, 8, 6, 4] },
+                { weight: 1, widths: [20, 20, 20] },
             ],
             smoothness: 0.45,
             spawnCabins: true,
@@ -364,15 +364,15 @@ const mapDef = {
         },
         densitySpawns: [
             {
-                tree_01: 170,
-                tree_07: 170,
-                stone_01: 250,
-                barrel_01: 90,
+                tree_01: 150,
+                tree_07: 150,
+                stone_01: 175,
+                barrel_01: 50,
                 silo_01: 12,
-                crate_01: 75,
+                crate_01: 100,
                 crate_02: 10,
                 crate_03: 18,
-                bush_01: 100,
+                bush_01: 75,
                 cache_06: 18,
                 hedgehog_01: 35,
                 container_01: 7,
@@ -394,7 +394,7 @@ const mapDef = {
                 desert_town_01: 1,
                 desert_town_02: 1,
                 river_town_02: 1,
-                warehouse_01: 6,
+                warehouse_01: 5,
                 house_red_01: { small: 3, large: 4 },
                 house_red_02: { small: 3, large: 4 },
                 barn_01: { small: 1, large: 3 },
@@ -413,18 +413,18 @@ const mapDef = {
                 bunker_structure_04: 1,
                 bunker_structure_05: 1,
                 warehouse_complex_01ms: 1,
-                mansion_structure_01: 2,
+                mansion_structure_01: 1,
                 police_01: 1,
-                bank_01: 2,
+                bank_01: 1,
                 chest_01: 3,
                 chest_03: { odds: 0.2 },
                 mil_crate_02: { odds: 0.25 },
                 tree_02: 5,
                 teahouse_complex_01su: 2,
                 stone_04: 20,
-                club_complex_01: 2,
+                club_complex_01: 1,
                 greenhouse_02: 2,
-                logging_complex_02: 5,
+                logging_complex_02: 3,
             },
         ],
         randomSpawns: [],
@@ -433,9 +433,7 @@ const mapDef = {
             "desert_town_01",
             "desert_town_02",
             "river_town_02",
-            "police_01",
             "logging_complex_02",
-            "kopje_patch_01",
             "bunker_structure_09",
             "warehouse_complex_01ms",
         ],

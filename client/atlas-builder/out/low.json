@@ -6740,26 +6740,6 @@
             "h": 35
           }
         },
-        "gun-m134-01.img": {
-          "frame": {
-            "x": 1254,
-            "y": 74,
-            "w": 50,
-            "h": 138
-          },
-          "rotated": false,
-          "trimmed": true,
-          "spriteSourceSize": {
-            "x": 0,
-            "y": 0,
-            "w": 50,
-            "h": 138
-          },
-          "sourceSize": {
-            "w": 50,
-            "h": 138
-          }
-        },
         "gun-famas-01.img": {
           "frame": {
             "x": 314,
@@ -11606,26 +11586,6 @@
             "y": 1514,
             "w": 57,
             "h": 62
-          },
-          "rotated": false,
-          "trimmed": true,
-          "spriteSourceSize": {
-            "x": 3,
-            "y": 1,
-            "w": 57,
-            "h": 62
-          },
-          "sourceSize": {
-            "w": 64,
-            "h": 64
-          }
-        },
-        "loot-weapon-m134.img": {
-          "frame": {
-            "x": 1314,
-            "y": 3,
-            "w": 64,
-            "h": 64
           },
           "rotated": false,
           "trimmed": true,
@@ -28148,6 +28108,25 @@
             "h": 32
           }
         }
+      }
+    }
+  ],
+  "custom": [
+    {
+      "meta": {
+        "image": "custom-0-50.png",
+        "size": {
+          "w": 4096,
+          "h": 4096
+        },
+        "scale": 1
+      },
+      "frames": {
+        "gun-m134-01.img":{"frame":{"x":143,"y":254,"w":48,"h":132},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":48,"h":132},"sourceSize":{"w":48,"h":132}},
+        "loot-weapon-m134.img":{"frame":{"x":370,"y":1975,"w":58,"h":58},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":5,"y":5,"w":58,"h":58},"sourceSize":{"w":65,"h":65}},
+        "gun-m79-01.img":{"frame":{"x":431,"y":138,"w":24,"h":115},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":24,"h":115},"sourceSize":{"w":24,"h":115}},
+        "loot-weapon-m79.img":{"frame":{"x":241,"y":1861,"w":56,"h":58},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":5,"y":4,"w":56,"h":58},"sourceSize":{"w":65,"h":65}},
+        "proj-40mm-01.img":{"frame":{"x":393,"y":1792,"w":12,"h":23},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":12,"h":23},"sourceSize":{"w":12,"h":23}}
       }
     }
   ]

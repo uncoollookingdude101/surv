@@ -468,6 +468,21 @@ const AmmoDefs: Record<string, AmmoDef> = {
             pickup: "ammo_pickup_01",
         },
     },
+//"40mm": {
+//        name: "40 mm",
+//        type: "ammo",
+//         special: true,
+//         minStackSize: 10,
+//         lootImg: {
+//           sprite: "loot-ammo-box.img",
+//           scale: 0.2,
+//           tint: 843179,
+//           tintDark: 843179
+//         },
+//         sound: {
+//           pickup: "ammo_pickup_01"
+//         }
+//     },
     "762mm": {
         name: "7.62mm",
         type: "ammo",
@@ -780,6 +795,21 @@ const SkinDefs = {
     helmet02_moon3: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
         perk: "explosive",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-moon.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
+        },
+    }),
+    helmet02_moon4: defineSkin("helmet02", {
+        name: "Tsukuyomi no Kabuto",
+        perk: ["small_arms"],
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

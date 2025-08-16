@@ -43,6 +43,7 @@ type DefaultItems = {
         "9mm": number;
         "762mm": number;
         "556mm": number;
+        "40mm": number;
         "12gauge": number;
         "50AE": number;
         "308sub": number;
@@ -118,6 +119,7 @@ function createDefaultItems<T extends DefaultItems>(e: DeepPartial<T>): T {
             "9mm": 0,
             "762mm": 0,
             "556mm": 0,
+            "40mm": 0,
             "12gauge": 0,
             "50AE": 0,
             "308sub": 0,
