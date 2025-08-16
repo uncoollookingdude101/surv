@@ -13,7 +13,7 @@ import type { Account } from "../account";
 import type { AudioManager } from "../audioManager";
 import { Camera } from "../camera";
 import type { ConfigManager, DebugRenderOpts } from "../config";
-import { debugLines } from "../debugLines";
+import { debugLines } from "../debug/debugLines";
 import { device } from "../device";
 import type { Game } from "../game";
 import type { InputBinds } from "../inputBinds";

@@ -41,7 +41,7 @@ import { Animations, Bones, IdlePoses, Pose } from "../animData";
 import type { AudioManager } from "../audioManager";
 import type { Camera } from "../camera";
 import type { DebugRenderOpts } from "../config";
-import { debugLines } from "../debugLines";
+import { debugLines } from "../debug/debugLines";
 import { device } from "../device";
 import { errorLogManager } from "../errorLogs";
 import type { Ctx } from "../game";

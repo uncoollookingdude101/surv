@@ -12,7 +12,7 @@ import { type Vec2, v2 } from "../../../shared/utils/v2";
 import type { AudioManager } from "../audioManager";
 import type { Camera } from "../camera";
 import type { DebugRenderOpts } from "../config";
-import { debugLines } from "../debugLines";
+import { debugLines } from "../debug/debugLines";
 import { device } from "../device";
 import type { Map } from "../map";
 import type { Renderer } from "../renderer";

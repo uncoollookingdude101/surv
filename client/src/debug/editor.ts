@@ -1,13 +1,13 @@
 import $ from "jquery";
 import { type FolderApi, Pane, type TabPageApi } from "tweakpane";
-import { GameObjectDefs } from "../../shared/defs/gameObjectDefs";
-import { RoleDefs } from "../../shared/defs/gameObjects/roleDefs";
-import { EditMsg } from "../../shared/net/editMsg";
-import { math } from "../../shared/utils/math";
-import { util } from "../../shared/utils/util";
-import type { ConfigManager, debugRenderConfig, debugToolsConfig } from "./config";
-import { type InputHandler, Key } from "./input";
-import type { Player } from "./objects/player";
+import { GameObjectDefs } from "../../../shared/defs/gameObjectDefs";
+import { RoleDefs } from "../../../shared/defs/gameObjects/roleDefs";
+import { EditMsg } from "../../../shared/net/editMsg";
+import { math } from "../../../shared/utils/math";
+import { util } from "../../../shared/utils/util";
+import type { ConfigManager, debugRenderConfig, debugToolsConfig } from "../config";
+import { type InputHandler, Key } from "../input";
+import type { Player } from "../objects/player";
 
 const availableLoot = Object.entries(GameObjectDefs)
     .filter(([_, def]) => "lootImg" in def)

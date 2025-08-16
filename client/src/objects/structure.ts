@@ -20,8 +20,8 @@ import {
     renderMapBuildingBounds,
     renderMapObstacleBounds,
     renderWaterEdge,
-} from "../debugHelpers";
-import { debugLines } from "../debugLines";
+} from "../debug/debugHelpers";
+import { debugLines } from "../debug/debugLines";
 import type { Ctx } from "../game";
 import type { Map } from "../map";
 import type { AbstractObject, Player } from "./player";

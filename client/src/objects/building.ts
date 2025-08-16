@@ -18,8 +18,8 @@ import {
     renderMapBuildingBounds,
     renderMapObstacleBounds,
     renderWaterEdge,
-} from "../debugHelpers";
-import { debugLines } from "../debugLines";
+} from "../debug/debugHelpers";
+import { debugLines } from "../debug/debugLines";
 import type { Ctx } from "../game";
 import type { SoundHandle } from "../lib/createJS";
 import type { Map } from "../map";
