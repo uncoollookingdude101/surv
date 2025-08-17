@@ -545,7 +545,7 @@ class AirstrikeZone {
         const negPlaneDir = v2.neg(this.planeDir);
         const bombOffset = v2.mul(
             negPlaneDir,
-            (planeConfig.bombCount * planeConfig.bombOffset) / 2,
+            ((planeConfig.bombCount + 1.75) * planeConfig.bombOffset) / 2,
         );
         const offsetPos = v2.add(pos, bombOffset);
 
