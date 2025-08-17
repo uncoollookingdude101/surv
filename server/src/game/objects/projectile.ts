@@ -96,6 +96,7 @@ export class Projectile extends BaseGameObject {
         airstrikeTicker: number;
         airstrikeDelay: number;
         airstrikeOffset: number;
+        rotAngle: number;
     };
 
     constructor(
@@ -153,11 +154,11 @@ export class Projectile extends BaseGameObject {
             this.strobe.airstrikeTicker -= dt;
 
             if (this.strobe.airstrikeTicker <= 0) {
-                let rotDir = -Math.PI / 2;
+                let rotAngle = this.strobe.rotAngle;
                 if (this.strobe.airstrikesLeft % 2) {
-                    rotDir *= -1;
+                    rotAngle *= -1;
                 }
-                const nextDir = v2.rotate(this.throwDir, rotDir);
+                const nextDir = v2.rotate(this.throwDir, rotAngle);
                 const newOffset =
                     Math.ceil(
                         (this.strobe.airstrikesTotal - this.strobe.airstrikesLeft) / 2,

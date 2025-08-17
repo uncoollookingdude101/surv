@@ -1166,6 +1166,11 @@ export class WeaponManager {
             let airstrikesLeft = 3;
             let strikeDelay = throwableDef.strikeDelay;
 
+            let rotAngle = -Math.PI / 2;
+            if (Math.random() < 0.5) {
+                rotAngle *= -1;
+            }
+
             if (this.player.hasPerk("broken_arrow")) {
                 airstrikesLeft += PerkProperties.broken_arrow.bonusAirstrikes;
             }
@@ -1177,6 +1182,7 @@ export class WeaponManager {
                 airstrikeTicker: 0,
                 airstrikeDelay: duration / airstrikesLeft,
                 airstrikeOffset: airstrikeOffset,
+                rotAngle: rotAngle,
             };
         }
 
