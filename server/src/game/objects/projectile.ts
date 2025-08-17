@@ -157,11 +157,11 @@ export class Projectile extends BaseGameObject {
                 if (this.strobe.airstrikesLeft % 2) {
                     rotDir *= -1;
                 }
-                const nextDir = v2.rotate(
-                    this.throwDir,
-                    rotDir,
-                )
-                const newOffset = Math.ceil((this.strobe.airstrikesTotal - this.strobe.airstrikesLeft) / 2) * this.strobe.airstrikeOffset;
+                const nextDir = v2.rotate(this.throwDir, rotDir);
+                const newOffset =
+                    Math.ceil(
+                        (this.strobe.airstrikesTotal - this.strobe.airstrikesLeft) / 2,
+                    ) * this.strobe.airstrikeOffset;
                 const pos = v2.add(this.pos, v2.mul(nextDir, newOffset));
                 this.game.planeBarn.addAirStrike(pos, this.throwDir, this.playerId);
                 this.strobe.airstrikesLeft--;

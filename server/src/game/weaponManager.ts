@@ -1162,7 +1162,7 @@ export class WeaponManager {
 
         if (oldThrowableType == "strobe" && throwableDef.strikeDelay) {
             const duration = 3;
-            const airstrikeOffset = 4;
+            const airstrikeOffset = 5;
             let airstrikesLeft = 3;
             let strikeDelay = throwableDef.strikeDelay;
 
