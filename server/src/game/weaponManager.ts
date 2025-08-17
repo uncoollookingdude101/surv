@@ -1160,19 +1160,23 @@ export class WeaponManager {
             oldThrowableType,
         );
 
-        if (oldThrowableType == "strobe") {
+        if (oldThrowableType == "strobe" && throwableDef.strikeDelay) {
+            const duration = 3;
+            const airstrikeOffset = 4;
             let airstrikesLeft = 3;
-            let strobeTicker = 3;
+            let strikeDelay = throwableDef.strikeDelay;
 
             if (this.player.hasPerk("broken_arrow")) {
                 airstrikesLeft += PerkProperties.broken_arrow.bonusAirstrikes;
             }
 
             projectile.strobe = {
-                strobeTicker: strobeTicker,
+                timeToPing: strikeDelay,
+                airstrikesTotal: airstrikesLeft,
                 airstrikesLeft: airstrikesLeft,
                 airstrikeTicker: 0,
-                airstrikeDelay: strobeTicker / airstrikesLeft,
+                airstrikeDelay: duration / airstrikesLeft,
+                airstrikeOffset: airstrikeOffset,
             };
         }
 

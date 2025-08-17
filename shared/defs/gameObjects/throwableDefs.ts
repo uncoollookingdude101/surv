@@ -367,7 +367,7 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         explodeOnImpact: false,
         playerCollision: false,
         fuseTime: 13.5,
-        strikeDelay: 2.5,
+        strikeDelay: 3, // Changed this from 2.5 to 3, but it might have been used somewhere else
         aimDistance: 0,
         rad: 1,
         throwPhysics: {
