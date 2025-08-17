@@ -1166,6 +1166,7 @@ export class WeaponManager {
             let airstrikesLeft = 3;
             let strikeDelay = throwableDef.strikeDelay;
 
+            // Randomize the direction to make strobes less predictable, was not in surviv
             let rotAngle = -Math.PI / 2;
             if (Math.random() < 0.5) {
                 rotAngle *= -1;
