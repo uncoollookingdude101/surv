@@ -64,10 +64,10 @@ export class Team {
     }
 
     checkAllDeadOrDisconnected(player: Player) {
-        const alivePlayers = this.players.filter(
+        const alivePlayers = !this.players.some(
             (p) => !p.dead && !p.disconnected && p !== player,
         );
-        return alivePlayers.length <= 0;
+        return alivePlayers;
     }
 
     killAllTeammates() {

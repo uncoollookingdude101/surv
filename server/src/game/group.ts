@@ -90,10 +90,10 @@ export class Group {
      * also if player is solo queuing, all teammates are "dead" by default
      */
     checkAllDeadOrDisconnected(player: Player) {
-        const alivePlayers = this.players.filter(
+        const alivePlayers = !this.players.some(
             (p) => !p.dead && !p.disconnected && p !== player,
         );
-        return alivePlayers.length <= 0;
+        return alivePlayers;
     }
 
     /**

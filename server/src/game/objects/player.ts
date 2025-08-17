@@ -3201,15 +3201,15 @@ export class Player extends BaseGameObject {
     mousePos = v2.create(1, 0);
 
     shouldAcceptInput(input: number): boolean {
-        return this.downed
-            ? (input === GameConfig.Input.Revive && this.hasPerk("self_revive")) || // Players can revive themselves if they have the self-revive perk.
-                  (input === GameConfig.Input.Cancel &&
-                      !this.revivedBy?.hasPerk("aoe_heal")) || // Players can cancel their own revives if they are not revived by aoe heal.
-                  (input === GameConfig.Input.Cancel &&
-                      this.revivedBy == this.playerBeingRevived) || // Players can cancel their own revives if they are reviving themselves.
-                  input === GameConfig.Input.Use ||
-                  input === GameConfig.Input.Interact // Players can interact with obstacles while downed.
-            : true;
+        return (
+            !this.downed ||
+            (input === GameConfig.Input.Revive && this.hasPerk("self_revive")) || // Players can revive themselves if they have the self-revive perk.
+            (input === GameConfig.Input.Cancel && !this.revivedBy?.hasPerk("aoe_heal")) || // Players can cancel their own revives if they are not revived by aoe heal.
+            (input === GameConfig.Input.Cancel &&
+                this.revivedBy == this.playerBeingRevived) || // Players can cancel their own revives if they are reviving themselves.
+            input === GameConfig.Input.Use ||
+            input === GameConfig.Input.Interact // Players can interact with obstacles while downed.
+        );
     }
 
     handleInput(msg: net.InputMsg): void {
