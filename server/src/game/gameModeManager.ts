@@ -397,9 +397,7 @@ export class GameModeManager {
                     const allDeadOrDisconnected =
                         group.checkAllDeadOrDisconnected(player);
                     const allDowned = group.checkAllDowned(player);
-                    const groupHasSelfRevive = group.livingPlayers.find((p) =>
-                        p.hasPerk("self_revive"),
-                    );
+                    const groupHasSelfRevive = group.checkSelfRevive();
 
                     if (!groupHasSelfRevive && (allDeadOrDisconnected || allDowned)) {
                         group.allDeadOrDisconnected = true; // must set before any kill() calls so the gameovermsgs are accurate
@@ -440,9 +438,7 @@ export class GameModeManager {
 
                     const allDeadOrDisconnected = team.checkAllDeadOrDisconnected(player);
                     const allDowned = team.checkAllDowned(player);
-                    const teamHasSelfRevive = team.livingPlayers.find((p) =>
-                        p.hasPerk("self_revive"),
-                    );
+                    const teamHasSelfRevive = team.checkSelfRevive();
 
                     if (!teamHasSelfRevive && (allDeadOrDisconnected || allDowned)) {
                         player.kill(params);

@@ -1524,7 +1524,7 @@ export class Player extends BaseGameObject {
 
         if (this.reloadAgain && this.actionType !== GameConfig.Action.Revive) {
             this.reloadAgain = false;
-            this.weaponManager.scheduleReload();
+            this.weaponManager.scheduledReload = true;
         }
 
         // handle heal and boost actions
@@ -1586,7 +1586,7 @@ export class Player extends BaseGameObject {
                     this.weapons[this.curWeapIdx].ammo == 0 &&
                     this.actionType !== GameConfig.Action.Revive
                 ) {
-                    this.weaponManager.scheduleReload();
+                    this.weaponManager.scheduledReload = true;
                 }
             }
         }
@@ -3203,12 +3203,12 @@ export class Player extends BaseGameObject {
     shouldAcceptInput(input: number): boolean {
         return (
             !this.downed ||
+            input === GameConfig.Input.Interact || // Players can interact with obstacles while downed.
+            input === GameConfig.Input.Use || // Players can interact with doors while downed.
             (input === GameConfig.Input.Revive && this.hasPerk("self_revive")) || // Players can revive themselves if they have the self-revive perk.
-            (input === GameConfig.Input.Cancel && !this.revivedBy?.hasPerk("aoe_heal")) || // Players can cancel their own revives if they are not revived by aoe heal.
             (input === GameConfig.Input.Cancel &&
-                this.revivedBy == this.playerBeingRevived) || // Players can cancel their own revives if they are reviving themselves.
-            input === GameConfig.Input.Use ||
-            input === GameConfig.Input.Interact // Players can interact with obstacles while downed.
+                (!this.revivedBy?.hasPerk("aoe_heal") || // Players can cancel their own revives if they are not revived by aoe heal.
+                    this.revivedBy === this.playerBeingRevived)) // Players can cancel their own revives if they are reviving themselves.
         );
     }
 
@@ -3367,7 +3367,7 @@ export class Player extends BaseGameObject {
                 }
                 case GameConfig.Input.Reload:
                     if (this.actionType !== GameConfig.Action.Revive) {
-                        this.weaponManager.scheduleReload();
+                        this.weaponManager.scheduledReload = true;
                     }
                     break;
                 case GameConfig.Input.Cancel:
@@ -3559,19 +3559,12 @@ export class Player extends BaseGameObject {
 
         // if none are found use active weapon if its a gun
         if (GameConfig.WeaponType[this.curWeapIdx] === "gun") {
-            const newGunDef = GameObjectDefs[obj.type];
-            let dualToSingle = false;
-            if (
-                newGunDef.type == "gun" &&
-                newGunDef.dualWieldType === this.weapons[this.curWeapIdx].type
-            ) {
-                dualToSingle = true;
-            }
+            const newGunDef = GameObjectDefs[obj.type] as GunDef;
             return {
                 slot: this.curWeapIdx,
                 isDual: false,
                 cause:
-                    this.activeWeapon === obj.type || dualToSingle
+                    this.activeWeapon === obj.type || newGunDef.dualWieldType === this.weapons[this.curWeapIdx].type
                         ? net.PickupMsgType.AlreadyOwned
                         : net.PickupMsgType.Success,
             };
@@ -3599,7 +3592,6 @@ export class Player extends BaseGameObject {
         this.pickupTicker = 0.1;
         let amountLeft = 0;
         let lootToAdd = obj.type;
-        let removeLoot = true;
         const pickupMsg = new net.PickupMsg();
         pickupMsg.item = obj.type;
         pickupMsg.type = net.PickupMsgType.Success;
@@ -3685,7 +3677,7 @@ export class Player extends BaseGameObject {
                         this.weapons[this.curWeapIdx].ammo == 0 &&
                         weaponInfo.ammo == obj.type
                     ) {
-                        this.weaponManager.scheduleReload();
+                        this.weaponManager.scheduledReload = true;
                     }
                 }
                 break;
@@ -3696,7 +3688,6 @@ export class Player extends BaseGameObject {
             case "gun":
                 {
                     amountLeft = 0;
-                    removeLoot = true;
 
                     const freeGunSlot = this.getFreeGunSlot(obj);
                     pickupMsg.type = freeGunSlot.cause;
@@ -3793,7 +3784,7 @@ export class Player extends BaseGameObject {
                     if (newGunIdx === oldWeaponIdx && this.weapons[newGunIdx].ammo <= 0) {
                         this.cancelAction();
                         this.weaponManager.applyWeaponDelay(0);
-                        this.weaponManager.scheduleReload();
+                        this.weaponManager.scheduledReload = true;
                     }
                 }
                 break;
@@ -3912,7 +3903,6 @@ export class Player extends BaseGameObject {
 
         const lootToAddDef = GameObjectDefs[lootToAdd] as LootDef;
         if (
-            removeLoot &&
             amountLeft > 0 &&
             lootToAdd !== "" &&
             // if obj you tried picking up can't be picked up and needs to be dropped, "noDrop" is irrelevant
@@ -3929,9 +3919,7 @@ export class Player extends BaseGameObject {
             );
         }
 
-        if (removeLoot) {
-            obj.destroy();
-        }
+        obj.destroy();
         this.msgsToSend.push({
             type: net.MsgType.Pickup,
             msg: pickupMsg,
@@ -4254,7 +4242,7 @@ export class Player extends BaseGameObject {
         this.cancelAction();
 
         if (reloading && this.weapons[this.curWeapIdx].ammo == 0) {
-            this.weaponManager.scheduleReload();
+            this.weaponManager.scheduledReload = true;
         }
     }
 

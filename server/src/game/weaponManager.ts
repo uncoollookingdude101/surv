@@ -158,7 +158,7 @@ export class WeaponManager {
         }
 
         if (GameConfig.WeaponType[idx] === "gun" && this.weapons[idx].ammo == 0) {
-            this.scheduleReload();
+            this.scheduledReload = true;
         }
 
         if (idx === this.curWeapIdx && WeaponSlot[idx] == "gun") {
@@ -377,9 +377,6 @@ export class WeaponManager {
     }
 
     scheduledReload = false;
-    scheduleReload(): void {
-        this.scheduledReload = true;
-    }
 
     weaponDelayTicker = 0;
     applyWeaponDelay(delay: number): void {
@@ -618,7 +615,7 @@ export class WeaponManager {
 
         this.scheduledReload = false;
         if (weapon.ammo <= 1) {
-            this.scheduleReload();
+            this.scheduledReload = true;
         }
         if (weapon.ammo <= 0) return;
 
