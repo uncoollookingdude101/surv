@@ -953,7 +953,7 @@ export const GunDefs: Record<string, GunDef> = {
         shotSpread: 1.5,
         bulletCount: 1,
         bulletType: "bullet_scarssr",
-        armorPiercing: true,   
+        armorPiercing: true,
         headshotMult: 1.5,
         speed: { equip: 0, attack: 0 },
         lootImg: {
@@ -1508,7 +1508,7 @@ export const GunDefs: Record<string, GunDef> = {
         bulletCount: 1,
         bulletType: "bullet_sv98",
         headshotMult: 1.5,
-        armorPiercing: true,    
+        armorPiercing: true,
         speed: { equip: 0, attack: 0 },
         lootImg: {
             sprite: "loot-weapon-sv98.img",

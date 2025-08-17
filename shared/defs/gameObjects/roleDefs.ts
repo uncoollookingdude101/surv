@@ -499,8 +499,14 @@ export const RoleDefs: Record<string, RoleDef> = {
     woods_king: {
         type: "role",
         announce: false,
-        killFeed: { dead: true, color: "#12ff00" },
+        killFeed: { dead: true, color: "#12ff00ff" },
         sound: { dead: "leader_dead_01" },
+        mapIndicator: {
+            sprite: "player-the-hunted.img",
+            tint: 0x12ff00ff,
+            pulse: true,
+            pulseTint: 0x12ff00ff,
+        },
         perks: ["gotw", "windwalk"],
     },
     kill_leader: {
@@ -655,7 +661,7 @@ export const RoleDefs: Record<string, RoleDef> = {
     seeker: {
         type: "role",
         announce: true,
-        killFeed: { assign: true },
+        killFeed: { assign: true, dead: true, color: "#ff0000" },
         sound: {
             assign: "leader_assigned_01",
             dead: "leader_dead_01",
