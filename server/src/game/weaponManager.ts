@@ -153,10 +153,6 @@ export class WeaponManager {
             this.player.wearingPan = true;
         }
 
-        if (effectiveSwitchDelay != 0) {
-            this.applyWeaponDelay(effectiveSwitchDelay);
-        }
-
         if (GameConfig.WeaponType[idx] === "gun" && this.weapons[idx].ammo == 0) {
             this.scheduledReload = true;
         }
@@ -263,8 +259,7 @@ export class WeaponManager {
             this.weapons[i].recoilTime -= dt;
         }
 
-        this.weaponDelayTicker -= dt;
-        if (this.weaponDelayTicker <= 0 && this.scheduledReload) {
+        if (this.weapons[this.curWeapIdx].cooldown <= 0 && this.scheduledReload) {
             this.scheduledReload = false;
             this.tryReload();
         }
@@ -377,11 +372,6 @@ export class WeaponManager {
     }
 
     scheduledReload = false;
-
-    weaponDelayTicker = 0;
-    applyWeaponDelay(delay: number): void {
-        this.weaponDelayTicker = delay;
-    }
 
     getTrueAmmoStats(weaponDef: GunDef): {
         trueMaxClip: number;
@@ -610,13 +600,8 @@ export class WeaponManager {
         const itemDef = GameObjectDefs[this.activeWeapon] as GunDef;
 
         const weapon = this.weapons[this.curWeapIdx];
+        this.scheduledReload = weapon.ammo <= 1;
 
-        this.applyWeaponDelay(itemDef.fireDelay);
-
-        this.scheduledReload = false;
-        if (weapon.ammo <= 1) {
-            this.scheduledReload = true;
-        }
         if (weapon.ammo <= 0) return;
 
         const firstShotAccuracy = weapon.recoilTime <= 0;

@@ -3564,7 +3564,8 @@ export class Player extends BaseGameObject {
                 slot: this.curWeapIdx,
                 isDual: false,
                 cause:
-                    this.activeWeapon === obj.type || newGunDef.dualWieldType === this.weapons[this.curWeapIdx].type
+                    this.activeWeapon === obj.type ||
+                    newGunDef.dualWieldType === this.weapons[this.curWeapIdx].type
                         ? net.PickupMsgType.AlreadyOwned
                         : net.PickupMsgType.Success,
             };
@@ -3783,7 +3784,6 @@ export class Player extends BaseGameObject {
                     // Reload instantly if a gun was dropped, handle duals
                     if (newGunIdx === oldWeaponIdx && this.weapons[newGunIdx].ammo <= 0) {
                         this.cancelAction();
-                        this.weaponManager.applyWeaponDelay(0);
                         this.weaponManager.scheduledReload = true;
                     }
                 }
