@@ -153,11 +153,8 @@ export class WeaponManager {
             this.player.wearingPan = true;
         }
 
-        const itemDef = GameObjectDefs[this.activeWeapon] as GunDef;
-        this.applyWeaponDelay(itemDef.switchDelay);
-
         if (GameConfig.WeaponType[idx] === "gun" && this.weapons[idx].ammo == 0) {
-            this.scheduleReload();
+            this.scheduledReload = true;
         }
 
         if (idx === this.curWeapIdx && WeaponSlot[idx] == "gun") {
@@ -262,12 +259,7 @@ export class WeaponManager {
             this.weapons[i].recoilTime -= dt;
         }
 
-        this.weaponDelayTicker -= dt;
-        if (
-            this.weaponDelayTicker <= 0 &&
-            this.scheduledReload &&
-            player.actionType !== GameConfig.Action.Revive
-        ) {
+        if (this.weapons[this.curWeapIdx].cooldown <= 0 && this.scheduledReload) {
             this.scheduledReload = false;
             this.tryReload();
         }
@@ -380,16 +372,6 @@ export class WeaponManager {
     }
 
     scheduledReload = false;
-    scheduleReload(): void {
-        this.scheduledReload = true;
-    }
-
-    weaponDelayTicker = 0;
-    weaponOnDelay = false;
-    applyWeaponDelay(delay: number): void {
-        this.weaponDelayTicker = delay;
-        this.weaponOnDelay = true;
-    }
 
     getTrueAmmoStats(weaponDef: GunDef): {
         trueMaxClip: number;
@@ -431,15 +413,15 @@ export class WeaponManager {
         }
         const weaponDef = GameObjectDefs[this.activeWeapon] as GunDef;
 
-        const conditions = [
-            this.player.actionType == GameConfig.Action.UseItem,
+        if (
+            this.player.actionType == GameConfig.Action.Revive ||
+            this.player.actionType == GameConfig.Action.UseItem ||
             this.weapons[this.curWeapIdx].ammo >=
-                this.getTrueAmmoStats(weaponDef).trueMaxClip,
-            !this.player.inventory[weaponDef.ammo] && !this.isInfinite(weaponDef),
+                this.getTrueAmmoStats(weaponDef).trueMaxClip ||
+            (!this.player.inventory[weaponDef.ammo] && !this.isInfinite(weaponDef)) ||
             this.curWeapIdx == WeaponSlot.Melee ||
-                this.curWeapIdx == WeaponSlot.Throwable,
-        ];
-        if (conditions.some((c) => c)) {
+            this.curWeapIdx == WeaponSlot.Throwable
+        ) {
             return;
         }
 
@@ -618,13 +600,8 @@ export class WeaponManager {
         const itemDef = GameObjectDefs[this.activeWeapon] as GunDef;
 
         const weapon = this.weapons[this.curWeapIdx];
+        this.scheduledReload = weapon.ammo <= 1;
 
-        this.applyWeaponDelay(itemDef.fireDelay);
-
-        this.scheduledReload = false;
-        if (weapon.ammo <= 1) {
-            this.scheduleReload();
-        }
         if (weapon.ammo <= 0) return;
 
         const firstShotAccuracy = weapon.recoilTime <= 0;

@@ -37,21 +37,12 @@ export class Group {
         this.maxPlayers = maxPlayers;
     }
 
-    /**
-     * getPlayers((p) => !p.dead) : gets all alive players on team
-     */
-    getPlayers(playerFilter?: (player: Player) => boolean) {
-        if (!playerFilter) return this.players;
-
-        return this.players.filter((p) => playerFilter(p));
-    }
-
     getAlivePlayers() {
-        return this.getPlayers((p) => !p.dead && !p.disconnected);
+        return this.players.filter((p) => !p.dead && !p.disconnected);
     }
 
     getAliveTeammates(player: Player) {
-        return this.getPlayers((p) => p != player && !p.dead && !p.disconnected);
+        return this.players.filter((p) => p != player && !p.dead && !p.disconnected);
     }
 
     addPlayer(player: Player) {
@@ -90,10 +81,10 @@ export class Group {
      * also if player is solo queuing, all teammates are "dead" by default
      */
     checkAllDeadOrDisconnected(player: Player) {
-        const alivePlayers = this.players.filter(
+        const alivePlayers = !this.players.some(
             (p) => !p.dead && !p.disconnected && p !== player,
         );
-        return alivePlayers.length <= 0;
+        return alivePlayers;
     }
 
     /**
@@ -143,8 +134,7 @@ export class Group {
 
     /** gets next alive player in the array, loops around if end is reached */
     nextPlayer(currentPlayer: Player) {
-        // const alivePlayers = this.getAlivePlayers();
-        const alivePlayers = this.getPlayers((p) => !p.dead && !p.disconnected);
+        const alivePlayers = this.getAlivePlayers();
         const currentPlayerIndex = alivePlayers.indexOf(currentPlayer);
         const newIndex = (currentPlayerIndex + 1) % alivePlayers.length;
         return alivePlayers[newIndex];
@@ -152,8 +142,7 @@ export class Group {
 
     /** gets previous alive player in the array, loops around if beginning is reached */
     prevPlayer(currentPlayer: Player) {
-        // const alivePlayers = this.getAlivePlayers();
-        const alivePlayers = this.getPlayers((p) => !p.dead && !p.disconnected);
+        const alivePlayers = this.getAlivePlayers();
         const currentPlayerIndex = alivePlayers.indexOf(currentPlayer);
         const newIndex =
             currentPlayerIndex == 0 ? alivePlayers.length - 1 : currentPlayerIndex - 1;
