@@ -519,25 +519,30 @@ class AirstrikeZone {
 
         const planeConfig = GameConfig.airstrike;
 
-        // Aims at players above ground in range
-        let connectedPlayers = this.game.playerBarn.livingPlayers.filter(
-            (p) => !p.disconnected,
-        );
-        util.shuffleArray(connectedPlayers);
-        for (let i = 0; i < connectedPlayers.length; i++) {
-            const testPos = v2.add(
-                connectedPlayers[i].pos,
-                util.randomPointInCircle(
-                    (planeConfig.bombCount * planeConfig.bombOffset) / 8,
-                ),
+        // 33% to aim at players above ground in range
+        const aimChance = 0.33;
+        if (Math.random() < aimChance) {
+            let connectedPlayers = this.game.playerBarn.livingPlayers.filter(
+                (p) => !p.disconnected,
             );
+            util.shuffleArray(connectedPlayers);
+            for (let i = 0; i < connectedPlayers.length; i++) {
+                // Apply a random offset to the selected position
+                const testPos = v2.add(
+                    connectedPlayers[i].pos,
+                    util.randomPointInCircle(
+                        (planeConfig.bombCount * planeConfig.bombOffset) / 4,
+                    ),
+                );
 
-            if (
-                connectedPlayers[i].layer != 1 &&
-                v2.distance(this.pos, testPos) <= this.rad
-            ) {
-                pos = testPos;
-                break;
+                // Test if its within the zone
+                if (
+                    connectedPlayers[i].layer != 1 &&
+                    v2.distance(this.pos, testPos) <= this.rad
+                ) {
+                    pos = testPos;
+                    break;
+                }
             }
         }
 
