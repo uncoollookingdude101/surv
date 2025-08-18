@@ -519,8 +519,8 @@ class AirstrikeZone {
 
         const planeConfig = GameConfig.airstrike;
 
-        // 33% to aim at players above ground in range
-        const aimChance = 0.33;
+        // 50% to aim at players above ground in range
+        const aimChance = 0.5;
         if (Math.random() < aimChance) {
             let connectedPlayers = this.game.playerBarn.livingPlayers.filter(
                 (p) => !p.disconnected,
