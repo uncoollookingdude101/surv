@@ -227,36 +227,6 @@ export class GameModeManager {
             );
     }
 
-    isReviveSupported(): boolean {
-        return !this.isSolo;
-    }
-
-    isReviving(player: Player): boolean {
-        if (this.isSolo) return false;
-
-        return player.actionType == GameConfig.Action.Revive && !!player.action.targetId;
-    }
-
-    isBeingRevived(player: Player): boolean {
-        if (!player.downed || this.isSolo) return false;
-
-        const normalRevive =
-            player.actionType == GameConfig.Action.Revive && player.action.targetId == 0;
-        if (normalRevive) return true;
-
-        const numMedics = this.game.playerBarn.medics.length;
-        if (numMedics) {
-            return this.game.playerBarn.medics.some((medic) => {
-                return (
-                    medic != player &&
-                    this.isReviving(medic) &&
-                    player.isAffectedByAOE(medic)
-                );
-            });
-        }
-        return false;
-    }
-
     showStatsMsg(player: Player): boolean {
         switch (this.mode) {
             case GameMode.Solo:

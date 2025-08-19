@@ -1514,10 +1514,7 @@ export class Player extends BaseGameObject {
         //
         // Action logic
         //
-        if (
-            this.game.modeManager.isReviving(this) ||
-            this.game.modeManager.isBeingRevived(this)
-        ) {
+        if (this.isReviving() || this.isBeingRevived()) {
             // cancel revive if either player goes out of range or if player being revived dies
             if (
                 this.playerBeingRevived &&
@@ -3086,13 +3083,33 @@ export class Player extends BaseGameObject {
         );
     }
 
+    isReviving() {
+        return this.actionType == GameConfig.Action.Revive && !!this.action.targetId;
+    }
+
+    isBeingRevived() {
+        if (!this.downed) return false;
+
+        const normalRevive =
+            this.actionType == GameConfig.Action.Revive && this.action.targetId == 0;
+        if (normalRevive) return true;
+
+        const numMedics = this.game.playerBarn.medics.length;
+        if (numMedics) {
+            return this.game.playerBarn.medics.some((medic) => {
+                return medic != this && medic.isReviving() && this.isAffectedByAOE(medic);
+            });
+        }
+        return false;
+    }
+
     /** returns player to revive if can revive */
     getPlayerToRevive(): Player | undefined {
         if (this.actionType != GameConfig.Action.None) return undefined; // action in progress already
 
         if (this.downed && this.hasPerk("self_revive")) return this;
 
-        if (!this.game.modeManager.isReviveSupported()) return undefined; // no revives in solos
+        if (!this.game.isTeamMode) return undefined; // no revives in solos
         if (this.downed) return undefined; // can't revive players while downed
 
         const nearbyDownedTeammates = this.game.grid
