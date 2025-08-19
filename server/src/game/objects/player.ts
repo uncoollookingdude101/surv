@@ -1126,19 +1126,24 @@ export class Player extends BaseGameObject {
         });
         this.perkTypes.push(type);
 
-        if (type === "trick_m9") {
-            const ammo = this.weaponManager.getTrueAmmoStats(
-                GameObjectDefs["m9_cursed"] as GunDef,
-            );
-            this.weaponManager.setWeapon(
-                GameConfig.WeaponSlot.Secondary,
-                "m9_cursed",
-                ammo.trueMaxClip,
-            );
-        } else if (type === "fabricate") {
-            this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
-        } else if (type === "aoe_heal") {
-            this.game.playerBarn.aoeHealPlayers.push(this);
+        switch (type) {
+            case "trick_m9": {
+                const ammo = this.weaponManager.getTrueAmmoStats(
+                    GameObjectDefs["m9_cursed"] as GunDef,
+                );
+                this.weaponManager.setWeapon(
+                    GameConfig.WeaponSlot.Secondary,
+                    "m9_cursed",
+                    ammo.trueMaxClip,
+                );
+                break;
+            }
+            case "fabricate":
+                this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
+                break;
+            case "aoe_heal":
+                this.game.playerBarn.aoeHealPlayers.push(this);
+                break;
         }
 
         this.recalculateScale();
@@ -1150,59 +1155,37 @@ export class Player extends BaseGameObject {
         this.perks.splice(idx, 1);
         this.perkTypes.splice(this.perkTypes.indexOf(type), 1);
 
-        if (type === "trick_m9") {
-            const slot = this.weapons.findIndex((weap) => {
-                return weap.type === "m9_cursed";
-            });
-            if (slot !== -1) {
-                this.weaponManager.setWeapon(slot, "", 0);
-            }
-        } else if (type === "inspiration") {
-            const slot = this.weapons.findIndex((weap) => {
-                return weap.type === "bugle";
-            });
-            if (slot !== -1) {
-                this.weaponManager.setWeapon(slot, "", 0);
-            }
-        } else if (type === "fabricate") {
-            this.fabricateRefillTicker = 0;
-        } else if (type === "firepower") {
-            for (let i = 0; i < this.weapons.length; i++) {
-                const weap = this.weapons[i];
-                const def = GameObjectDefs[weap.type];
-                if (def?.type !== "gun") continue;
-                const ammo = this.weaponManager.getTrueAmmoStats(def);
-                const ammoType = def.ammo;
-                const diff = weap.ammo - ammo.trueMaxClip;
-
-                weap.ammo -= diff;
-
-                let amountToDrop = 0;
-                const backpackLevel = this.getGearLevel(this.backpack);
-                if (this.bagSizes[ammoType] && !this.weaponManager.isInfinite(def)) {
-                    const bagSpace = this.bagSizes[ammoType][backpackLevel];
-                    if (this.inventory[ammoType] + diff <= bagSpace) {
-                        this.inventory[ammoType] += diff;
-                        this.inventoryDirty = true;
-                    } else {
-                        const spaceLeft = bagSpace - this.inventory[ammoType];
-                        const amountToAdd = spaceLeft;
-
-                        this.inventory[ammoType] += amountToAdd;
-                        this.inventoryDirty = true;
-                        amountToDrop = diff - amountToAdd;
-                    }
+        switch (type) {
+            case "trick_m9": {
+                const slot = this.weapons.findIndex((weap) => {
+                    return weap.type === "m9_cursed";
+                });
+                if (slot !== -1) {
+                    this.weaponManager.setWeapon(slot, "", 0);
                 }
-
-                if (amountToDrop != 0) {
-                    this.dropLoot(ammoType, amountToDrop);
-                }
-                this.weapsDirty = true;
+                break;
             }
-        } else if (type === "aoe_heal") {
-            const idx = this.game.playerBarn.aoeHealPlayers.indexOf(this);
-            if (idx !== -1) {
-                this.game.playerBarn.aoeHealPlayers.splice(idx, 1);
+            case "inspiration": {
+                const slot = this.weapons.findIndex((weap) => {
+                    return weap.type === "bugle";
+                });
+                if (slot !== -1) {
+                    this.weaponManager.setWeapon(slot, "", 0);
+                }
+                break;
+            }
+            case "fabricate":
+                this.fabricateRefillTicker = 0;
+                break;
+            case "firepower":
+                this.weaponManager.clampGunsAmmo();
+                break;
+            case "aoe_heal": {
+                const idx = this.game.playerBarn.aoeHealPlayers.indexOf(this);
+                if (idx !== -1) {
+                    this.game.playerBarn.aoeHealPlayers.splice(idx, 1);
+                }
+                break;
             }
         }
 
