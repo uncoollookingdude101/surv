@@ -202,17 +202,6 @@ export class GameModeManager {
         }
     }
 
-    getIdContext(player: Player): number {
-        switch (this.mode) {
-            case GameMode.Solo:
-                return player.__id;
-            case GameMode.Team:
-                return player.groupId;
-            case GameMode.Faction:
-                return player.teamId;
-        }
-    }
-
     /** includes passed in player */
     getNearbyAlivePlayersContext(player: Player, range: number): Player[] {
         const alivePlayersContext = this.getPlayerAlivePlayersContext(player);
@@ -226,13 +215,12 @@ export class GameModeManager {
             );
         }
 
-        const playerIdContext = this.getIdContext(player);
         return this.game.grid
             .intersectCollider(collider.createCircle(player.pos, range))
             .filter(
                 (obj): obj is Player =>
                     obj.__type == ObjectType.Player &&
-                    playerIdContext == this.getIdContext(obj) &&
+                    player.teamId === obj.teamId &&
                     !obj.dead && // necessary since player isnt deleted from grid on death
                     !!util.sameLayer(player.layer, obj.layer) &&
                     v2.lengthSqr(v2.sub(player.pos, obj.pos)) <= range * range,
