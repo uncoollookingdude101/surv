@@ -137,13 +137,13 @@ server {
         etag off;
         if_modified_since off;
         add_header Cache-Control "public, no-transform";
-        root /var/www/survev;
+        root /opt/survev/client/dist;
     }
 
     location ~* \.(html)$ {
         etag on;
         add_header Cache-Control "no-cache";
-        root /var/www/survev;
+        root /opt/survev/client/dist;
     }
 
     # Client build
