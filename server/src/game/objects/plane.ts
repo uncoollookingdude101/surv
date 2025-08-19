@@ -49,9 +49,7 @@ export class PlaneBarn {
     }[] = [];
     airstrikeZones: AirstrikeZone[] = [];
 
-    helpForLosingTeam = {
-        sent: false,
-    };
+    sentHelp = false;
 
     constructor(readonly game: Game) {}
     update(dt: number) {
@@ -211,7 +209,7 @@ export class PlaneBarn {
     }
 
     isOneTeamWinning(): boolean {
-        if (this.helpForLosingTeam.sent || this.game.gas.circleIdx == 0) return false;
+        if (this.sentHelp || this.game.gas.circleIdx == 0) return false;
 
         const redConnectedPlayers = this.game.playerBarn.teams[0].livingPlayers.filter(
             (p) => !p.disconnected,
@@ -273,7 +271,7 @@ export class PlaneBarn {
         const pos = v2.add(furthestLosingTeamPlayer.pos, v2.mul(v2.randomUnit(), 5));
         this.game.planeBarn.addAirdrop(pos, "airdrop_crate_04"); // golden airdrop
 
-        this.helpForLosingTeam.sent = true;
+        this.sentHelp = true;
 
         // Special airstrike
         const airstrikeRad = 50;
