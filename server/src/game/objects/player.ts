@@ -41,8 +41,7 @@ import { Config } from "../../config";
 import { IDAllocator } from "../../utils/IDAllocator";
 import { validateUserName } from "../../utils/serverHelpers";
 import type { Game, JoinTokenData } from "../game";
-import { Group } from "../group";
-import { Team } from "../team";
+import { Group, Team } from "../group";
 import { throwableList, WeaponManager } from "../weaponManager";
 import type { Building } from "./building";
 import { BaseGameObject, type DamageParams, type GameObject } from "./gameObject";
@@ -220,15 +219,15 @@ export class PlayerBarn {
         if (team && group) {
             team.addPlayer(player);
             group.addPlayer(player);
+            player.setGroupStatuses();
         } else if (!team && group) {
             group.addPlayer(player);
-            player.teamId = group.groupId;
+            player.setGroupStatuses();
         } else if (team && !group) {
             team.addPlayer(player);
             player.groupId = this.groupIdAllocator.getNextId();
         } else {
             player.groupId = this.groupIdAllocator.getNextId();
-            player.teamId = player.groupId;
         }
 
         if (player.game.map.perkMode) {
