@@ -248,8 +248,15 @@ export class GameModeManager {
                 const redLeader = this.game.playerBarn.teams[TeamColor.Red - 1].leader;
                 const blueLeader = this.game.playerBarn.teams[TeamColor.Blue - 1].leader;
                 const highestKiller = this.game.playerBarn.players.reduce(
-                    (highestKiller, p) =>
-                        highestKiller.kills > p.kills ? highestKiller : p,
+                    (highestKiller, p) => {
+                        if (highestKiller.kills === p.kills) {
+                            return highestKiller.damageDealt > p.damageDealt
+                                ? highestKiller
+                                : p;
+                        }
+
+                        return highestKiller.kills > p.kills ? highestKiller : p;
+                    },
                 );
 
                 // if game ends before leaders are promoted, just show the player by himself
