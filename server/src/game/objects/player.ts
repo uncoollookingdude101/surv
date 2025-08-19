@@ -2567,21 +2567,14 @@ export class Player extends BaseGameObject {
         // cobalt players on role picker menu
         if (this.game.map.perkMode && !this.role) return;
 
-        const sourceIsPlayer = params.source?.__type === ObjectType.Player;
+        const playerSource =
+            params.source?.__type === ObjectType.Player
+                ? (params.source as Player)
+                : undefined;
 
         // teammates can't deal damage to each other
-        if (sourceIsPlayer && params.source !== this) {
-            if (
-                (params.source as Player).groupId === this.groupId &&
-                !this.disconnected
-            ) {
-                return;
-            }
-            if (
-                this.game.map.factionMode &&
-                (params.source as Player).teamId === this.teamId &&
-                !this.disconnected
-            ) {
+        if (playerSource && params.source !== this) {
+            if (playerSource.teamId === this.teamId && !this.disconnected) {
                 return;
             }
         }
@@ -2644,11 +2637,11 @@ export class Player extends BaseGameObject {
         this.game.pluginManager.emit("playerDamage", { ...params, player: this });
 
         this.damageTaken += finalDamage;
-        if (sourceIsPlayer && params.source !== this) {
-            if ((params.source as Player).groupId !== this.groupId) {
-                (params.source as Player).damageDealt += finalDamage;
+        if (playerSource && params.source !== this) {
+            if (playerSource.groupId !== this.groupId) {
+                playerSource.damageDealt += finalDamage;
             }
-            this.lastDamagedBy = params.source as Player;
+            this.lastDamagedBy = playerSource;
         }
 
         this.health -= finalDamage;
