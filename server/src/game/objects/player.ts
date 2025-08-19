@@ -84,7 +84,7 @@ export class PlayerBarn {
     killLeaderDirty = false;
     killLeader?: Player;
 
-    medics: Player[] = [];
+    aoeHealPlayers: Player[] = [];
 
     scheduledRoles: Array<{
         role: string;
@@ -851,10 +851,6 @@ export class Player extends BaseGameObject {
             this.flareTimer = 15;
         }
 
-        if (this.role == "medic") {
-            const index = this.game.playerBarn.medics.indexOf(this);
-            if (index != -1) this.game.playerBarn.medics.splice(index, 1);
-        }
         if (this.role === role) return;
 
         // switching from one role to another
@@ -892,10 +888,6 @@ export class Player extends BaseGameObject {
                 this.health = 100;
                 this.boost = 100;
                 this.giveHaste(GameConfig.HasteType.Windwalk, 5);
-                break;
-            case "medic":
-                // TODO: this should be based on aoe_heal perk not role
-                this.game.playerBarn.medics.push(this);
                 break;
         }
 
@@ -1145,6 +1137,8 @@ export class Player extends BaseGameObject {
             );
         } else if (type === "fabricate") {
             this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
+        } else if (type === "aoe_heal") {
+            this.game.playerBarn.aoeHealPlayers.push(this);
         }
 
         this.recalculateScale();
@@ -1204,6 +1198,11 @@ export class Player extends BaseGameObject {
                     this.dropLoot(ammoType, amountToDrop);
                 }
                 this.weapsDirty = true;
+            }
+        } else if (type === "aoe_heal") {
+            const idx = this.game.playerBarn.aoeHealPlayers.indexOf(this);
+            if (idx !== -1) {
+                this.game.playerBarn.aoeHealPlayers.splice(idx, 1);
             }
         }
 
@@ -3087,9 +3086,9 @@ export class Player extends BaseGameObject {
             this.actionType == GameConfig.Action.Revive && this.action.targetId == 0;
         if (normalRevive) return true;
 
-        const numMedics = this.game.playerBarn.medics.length;
+        const numMedics = this.game.playerBarn.aoeHealPlayers.length;
         if (numMedics) {
-            return this.game.playerBarn.medics.some((medic) => {
+            return this.game.playerBarn.aoeHealPlayers.some((medic) => {
                 return medic != this && medic.isReviving() && this.isAffectedByAOE(medic);
             });
         }
@@ -3197,8 +3196,9 @@ export class Player extends BaseGameObject {
         const itemDef = GameObjectDefs[item];
         assert(itemDef.type === "heal", `Invalid heal item ${item}`);
 
+        const hasAoeHeal = this.hasPerk("aoe_heal");
         if (
-            (!this.hasPerk("aoe_heal") && this.health == itemDef.maxHeal) ||
+            (!hasAoeHeal && this.health == itemDef.maxHeal) ||
             this.actionType == GameConfig.Action.UseItem ||
             this.actionType == GameConfig.Action.Revive ||
             this.weaponManager.cookingThrowable
@@ -3210,7 +3210,7 @@ export class Player extends BaseGameObject {
         }
 
         // medics always emote the healing/boost item they're using
-        if (this.role == "medic") {
+        if (hasAoeHeal) {
             this.game.playerBarn.addEmote("emote_loot", this.__id, item);
         }
 
@@ -3218,12 +3218,14 @@ export class Player extends BaseGameObject {
         this.doAction(
             item,
             GameConfig.Action.UseItem,
-            (this.hasPerk("aoe_heal") ? 0.75 : 1) * itemDef.useTime,
+            (hasAoeHeal ? 0.75 : 1) * itemDef.useTime,
         );
     }
 
     applyActionFunc(actionFunc: (target: Player) => void): void {
-        if (this.hasPerk("aoe_heal")) {
+        const hasAoeHeal = this.hasPerk("aoe_heal");
+
+        if (hasAoeHeal) {
             let aoePlayers = this.getAOEPlayers();
 
             // aoe doesnt heal/give boost to downed players
@@ -3258,9 +3260,10 @@ export class Player extends BaseGameObject {
         if (!this.inventory[item]) {
             return;
         }
+        const hasAoeHeal = this.hasPerk("aoe_heal");
 
         // medics always emote the healing/boost item they're using
-        if (this.role == "medic") {
+        if (hasAoeHeal) {
             this.game.playerBarn.addEmote("emote_loot", this.__id, item);
         }
 
@@ -3268,7 +3271,7 @@ export class Player extends BaseGameObject {
         this.doAction(
             item,
             GameConfig.Action.UseItem,
-            (this.hasPerk("aoe_heal") ? 0.75 : 1) * itemDef.useTime,
+            (hasAoeHeal ? 0.75 : 1) * itemDef.useTime,
         );
     }
 
