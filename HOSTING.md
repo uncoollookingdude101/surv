@@ -76,7 +76,6 @@ IF you want to have accounts, leaderboards and IP bans, you will have to install
 
 ```sh
 sudo apt -y postgresql
-sudo -u postgres initdb --locale=C.UTF-8 --encoding=UTF8 -D /var/lib/postgres/data --data-checksums
 sudo systemctl enable --now postgresql
 sudo -u postgres createuser survev
 sudo -u postgres createdb survev -O survev
