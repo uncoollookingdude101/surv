@@ -40,7 +40,7 @@ export class ProjectileBarn {
         fuseTime: number,
         damageType: number,
         throwDir?: Vec2,
-        gameSourceType?: string,
+        weaponSourceType?: string,
     ): Projectile {
         const proj = new Projectile(
             this.game,
@@ -53,7 +53,7 @@ export class ProjectileBarn {
             fuseTime,
             damageType,
             throwDir,
-            gameSourceType,
+            weaponSourceType,
         );
 
         this.projectiles.push(proj);
@@ -75,7 +75,7 @@ export class Projectile extends BaseGameObject {
     type: string;
     // used for "heavy" potatos and snowballs
     // so the kill source is still the regular potato
-    gameSourceType: string;
+    weaponSourceType: string;
 
     rad: number;
 
@@ -110,7 +110,7 @@ export class Projectile extends BaseGameObject {
         fuseTime: number,
         damageType: DamageType,
         throwDir?: Vec2,
-        gameSourceType?: string,
+        weaponSourceType?: string,
     ) {
         super(game, pos);
         this.layer = layer;
@@ -122,7 +122,7 @@ export class Projectile extends BaseGameObject {
         this.damageType = damageType;
         this.dir = v2.normalizeSafe(vel);
         this.throwDir = throwDir ?? v2.copy(this.dir);
-        this.gameSourceType = gameSourceType || this.type;
+        this.weaponSourceType = weaponSourceType || this.type;
 
         const def = GameObjectDefs[type] as ThrowableDef;
         this.velZ = def.throwPhysics.velZ;
@@ -230,7 +230,8 @@ export class Projectile extends BaseGameObject {
                         obj.damage({
                             amount: damage,
                             damageType: this.damageType,
-                            gameSourceType: this.gameSourceType,
+                            gameSourceType: this.type,
+                            weaponSourceType: this.weaponSourceType,
                             source: this.game.objectRegister.getById(this.playerId),
                             mapSourceType: "",
                             dir: this.vel,
@@ -359,7 +360,7 @@ export class Projectile extends BaseGameObject {
                     splitDef.fuseTime,
                     DamageType.Player,
                     undefined,
-                    this.gameSourceType,
+                    this.weaponSourceType,
                 );
             }
         }
@@ -377,7 +378,8 @@ export class Projectile extends BaseGameObject {
                 this.pos,
                 this.layer,
                 {
-                    gameSourceType: this.gameSourceType,
+                    gameSourceType: this.type,
+                    weaponSourceType: this.weaponSourceType,
                     damageType: this.damageType,
                     source,
                 },
