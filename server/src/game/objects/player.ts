@@ -222,12 +222,13 @@ export class PlayerBarn {
             player.setGroupStatuses();
         } else if (!team && group) {
             group.addPlayer(player);
+            player.teamId = player.groupId;
             player.setGroupStatuses();
         } else if (team && !group) {
             team.addPlayer(player);
             player.groupId = this.groupIdAllocator.getNextId();
         } else {
-            player.groupId = this.groupIdAllocator.getNextId();
+            player.groupId = player.teamId = this.groupIdAllocator.getNextId();
         }
 
         if (player.game.map.perkMode) {
