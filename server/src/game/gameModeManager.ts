@@ -315,7 +315,7 @@ export class GameModeManager {
                     params.damageType == GameConfig.DamageType.Bleeding;
 
                 if (finishedByTeammate || bledOut) {
-                    params.source = player.downedBy;
+                    params.killCreditSource = player.downedBy;
                 }
 
                 player.kill(params);

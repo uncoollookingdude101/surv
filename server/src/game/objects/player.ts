@@ -1621,6 +1621,7 @@ export class Player extends BaseGameObject {
                     this.applyActionFunc((target: Player) => {
                         if (!target.downed) return;
                         target.downed = false;
+                        target.downedBy = undefined;
                         target.downedDamageTicker = 0;
                         target.health = GameConfig.player.reviveHealth;
 
@@ -2774,31 +2775,36 @@ export class Player extends BaseGameObject {
         killMsg.targetId = this.__id;
         killMsg.killed = true;
 
-        if (params.source?.__type === ObjectType.Player) {
-            const source = params.source;
-            this.killedBy = source;
+        const killCreditSource = params.killCreditSource
+            ? params.killCreditSource
+            : params.source;
+        if (killCreditSource?.__type === ObjectType.Player) {
+            this.killedBy = killCreditSource;
 
-            if (source !== this && source.teamId !== this.teamId) {
-                source.killedIds.push(this.matchDataId);
-                source.kills++;
+            if (killCreditSource !== this && killCreditSource.teamId !== this.teamId) {
+                killCreditSource.killedIds.push(this.matchDataId);
+                killCreditSource.kills++;
 
-                if (source.isKillLeader) {
+                if (killCreditSource.isKillLeader) {
                     this.game.playerBarn.killLeaderDirty = true;
                 }
 
-                if (source.hasPerk("takedown")) {
-                    source.health += 25;
-                    source.boost += 25;
-                    source.giveHaste(GameConfig.HasteType.Takedown, 3);
+                if (killCreditSource.hasPerk("takedown")) {
+                    killCreditSource.health += 25;
+                    killCreditSource.boost += 25;
+                    killCreditSource.giveHaste(GameConfig.HasteType.Takedown, 3);
                 }
 
-                if (source.role === "woods_king") {
+                if (killCreditSource.role === "woods_king") {
                     this.game.playerBarn.addMapPing("ping_woodsking", this.pos);
                 }
             }
-            killMsg.killerId = source.__id;
-            killMsg.killCreditId = source.__id;
-            killMsg.killerKills = source.kills;
+            killMsg.killCreditId = killCreditSource.__id;
+            killMsg.killerKills = killCreditSource.kills;
+        }
+
+        if (params.source?.__type === ObjectType.Player) {
+            killMsg.killerId = params.source.__id;
         }
 
         if (this.hasPerk("final_bugle")) {
@@ -2882,15 +2888,15 @@ export class Player extends BaseGameObject {
             const newKillLeader = this.game.playerBarn.getPlayerWithHighestKills();
             if (
                 killLeader !== newKillLeader &&
-                params.source &&
-                newKillLeader === params.source &&
+                killCreditSource &&
+                newKillLeader === killCreditSource &&
                 newKillLeader.kills > killLeaderKills
             ) {
                 if (killLeader && killLeader.role === "the_hunted") {
                     killLeader.removeRole();
                 }
 
-                params.source.promoteToKillLeader();
+                killCreditSource.promoteToKillLeader();
             }
         }
 
