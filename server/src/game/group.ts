@@ -49,7 +49,6 @@ export class Group {
         player.groupId = this.groupId;
         player.group = this;
         player.setGroupStatuses();
-        player.playerStatusDirty = true;
         this.players.push(player);
         this.livingPlayers.push(player);
         this.totalCount++;

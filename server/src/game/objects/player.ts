@@ -100,6 +100,9 @@ export class PlayerBarn {
     groups: Group[] = [];
     groupsByHash = new Map<string, Group>();
 
+    playerStatusTicker = 0;
+    playerStatusRate = 0;
+
     defaultItems = util.mergeDeep(
         {},
         GameConfig.player.defaultItems,
@@ -118,6 +121,8 @@ export class PlayerBarn {
             GameConfig.bagSizes,
             this.game.map.mapDef.gameConfig.bagSizes,
         );
+
+        this.playerStatusRate = net.getPlayerStatusUpdateRate(this.game.map.factionMode);
     }
 
     randomPlayer(player?: Player) {
@@ -226,9 +231,6 @@ export class PlayerBarn {
             player.groupId = this.groupIdAllocator.getNextId();
             player.teamId = player.groupId;
         }
-        if (player.game.map.factionMode) {
-            player.playerStatusDirty = true;
-        }
 
         if (player.game.map.perkMode) {
             /*
@@ -264,6 +266,10 @@ export class PlayerBarn {
                 sendWinEmotes = true;
                 this.sentWinEmotes = true;
             }
+        }
+
+        if (this.game.isTeamMode || this.game.map.factionMode) {
+            this.playerStatusTicker += dt;
         }
 
         for (let i = 0; i < this.players.length; i++) {
@@ -352,6 +358,11 @@ export class PlayerBarn {
         this.aliveCountDirty = false;
         this.killLeaderDirty = false;
 
+        const flushPlayerStatus = this.playerStatusTicker > this.playerStatusRate;
+        if (flushPlayerStatus) {
+            this.playerStatusTicker = 0;
+        }
+
         for (let i = 0; i < this.players.length; i++) {
             const player = this.players[i];
             player.healthDirty = false;
@@ -363,6 +374,9 @@ export class PlayerBarn {
             player.spectatorCountDirty = false;
             player.activeIdDirty = false;
             player.groupStatusDirty = false;
+            if (flushPlayerStatus) {
+                player.playerStatusDirty = false;
+            }
         }
     }
 
@@ -591,7 +605,6 @@ export class Player extends BaseGameObject {
      * for updating player and teammate locations in the minimap client UI
      */
     playerStatusDirty = false;
-    playerStatusTicker = 0;
 
     private _health: number = GameConfig.player.health;
 
@@ -1418,8 +1431,11 @@ export class Player extends BaseGameObject {
 
         this.timeAlive += dt;
 
-        if (this.game.map.factionMode) {
+        if (this.game.map.factionMode && this.timeUntilHidden > 0) {
             this.timeUntilHidden -= dt;
+            if (this.timeUntilHidden < 0) {
+                this.playerStatusDirty = true;
+            }
         }
 
         if (this.role === "leader" && !this.hasFiredFlare && this.flareTimer > 0) {
@@ -1722,13 +1738,6 @@ export class Player extends BaseGameObject {
                     }
                 }
                 this.weapsDirty = true;
-            }
-        }
-
-        if (this.game.isTeamMode || this.game.map.factionMode) {
-            this.playerStatusTicker += dt;
-            for (const spectator of this.spectators) {
-                spectator.playerStatusTicker += dt;
             }
         }
 
@@ -2351,15 +2360,11 @@ export class Player extends BaseGameObject {
             : playerBarn.newPlayers;
 
         updateMsg.deletedPlayerIds = playerBarn.deletedPlayers;
-        if (
-            player.playerStatusDirty ||
-            player.playerStatusTicker >
-                net.getPlayerStatusUpdateRate(this.game.map.factionMode)
-        ) {
-            let statuses = this.game.modeManager.getPlayerStatuses(player);
+
+        if (playerBarn.playerStatusTicker > playerBarn.playerStatusRate) {
+            let statuses = player.getPlayerStatus();
             updateMsg.playerStatus = statuses;
             updateMsg.playerStatusDirty = true;
-            player.playerStatusTicker = 0;
         }
 
         if (player.groupStatusDirty) {
@@ -3584,6 +3589,21 @@ export class Player extends BaseGameObject {
                 obj.interact(this);
                 break;
         }
+    }
+
+    getPlayerStatus() {
+        const players: Player[] = this.game.modeManager.getPlayerStatusPlayers(this)!;
+        return players.map((p) => {
+            const visible = p.teamId === this.teamId || p.timeUntilHidden > 0;
+            return {
+                hasData: visible || p.playerStatusDirty,
+                pos: p.pos,
+                visible,
+                dead: p.dead,
+                downed: p.downed,
+                role: p.role,
+            };
+        });
     }
 
     getFreeGunSlot(obj: Loot) {

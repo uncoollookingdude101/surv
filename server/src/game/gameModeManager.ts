@@ -1,7 +1,6 @@
 import { TeamColor } from "../../../shared/defs/maps/factionDefs";
 import { GameConfig, TeamMode } from "../../../shared/gameConfig";
 import { ObjectType } from "../../../shared/net/objectSerializeFns";
-import type { PlayerStatus } from "../../../shared/net/updateMsg";
 import { collider } from "../../../shared/utils/collider";
 import { util } from "../../../shared/utils/util";
 import { v2 } from "../../../shared/utils/v2";
@@ -193,10 +192,10 @@ export class GameModeManager {
         return this.game.playerBarn.livingPlayers.filter(playerFilter);
     }
 
-    getPlayerStatusPlayers(player: Player): Player[] | undefined {
+    getPlayerStatusPlayers(player: Player): Player[] {
         switch (this.mode) {
             case GameMode.Solo:
-                return undefined;
+                return [];
             case GameMode.Team:
                 return player.group!.players;
             case GameMode.Faction:
@@ -347,20 +346,6 @@ export class GameModeManager {
             // Set remaining spectators to new player.
             spectator.spectating = playerToSpec;
         }
-    }
-
-    getPlayerStatuses(player: Player): PlayerStatus[] {
-        if (this.isSolo) return [];
-
-        const players: Player[] = this.getPlayerStatusPlayers(player)!;
-        return players.map((p) => ({
-            hasData: p.playerStatusDirty,
-            pos: p.pos,
-            visible: p.teamId === player.teamId || p.timeUntilHidden > 0,
-            dead: p.dead,
-            downed: p.downed,
-            role: p.role,
-        }));
     }
 
     handlePlayerDeath(player: Player, params: DamageParams): void {
