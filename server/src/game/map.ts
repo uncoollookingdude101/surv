@@ -524,7 +524,7 @@ export class GameMap {
 
                 // building
                 const unlockables = unlockObject.childObjects.filter(
-                    (o) => o instanceof Obstacle && o.door && o.door.locked,
+                    (o) => o.__type === ObjectType.Obstacle && o.door && o.door.locked,
                 ) as Obstacle[];
                 this.unlocks.push({
                     unlockables: unlockables,

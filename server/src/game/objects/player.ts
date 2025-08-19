@@ -2709,7 +2709,7 @@ export class Player extends BaseGameObject {
         downedMsg.targetId = this.__id;
         downedMsg.downed = true;
 
-        if (params.source instanceof Player) {
+        if (params.source?.__type === ObjectType.Player) {
             this.downedBy = params.source;
             downedMsg.killerId = params.source.__id;
             downedMsg.killCreditId = params.source.__id;
@@ -2774,7 +2774,7 @@ export class Player extends BaseGameObject {
         killMsg.targetId = this.__id;
         killMsg.killed = true;
 
-        if (params.source instanceof Player) {
+        if (params.source?.__type === ObjectType.Player) {
             const source = params.source;
             this.killedBy = source;
 
