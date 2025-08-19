@@ -1160,17 +1160,30 @@ export class WeaponManager {
             oldThrowableType,
         );
 
-        if (oldThrowableType == "strobe") {
+        if (oldThrowableType == "strobe" && throwableDef.strikeDelay) {
+            const duration = 3;
+            const airstrikeOffset = 5;
             let airstrikesLeft = 3;
+            let strikeDelay = throwableDef.strikeDelay;
+
+            // Randomize the direction to make strobes less predictable, was not in surviv
+            let rotAngle = -Math.PI / 2;
+            if (Math.random() < 0.5) {
+                rotAngle *= -1;
+            }
 
             if (this.player.hasPerk("broken_arrow")) {
                 airstrikesLeft += PerkProperties.broken_arrow.bonusAirstrikes;
             }
 
             projectile.strobe = {
-                strobeTicker: 4,
+                timeToPing: strikeDelay,
+                airstrikesTotal: airstrikesLeft,
                 airstrikesLeft: airstrikesLeft,
                 airstrikeTicker: 0,
+                airstrikeDelay: duration / airstrikesLeft,
+                airstrikeOffset: airstrikeOffset,
+                rotAngle: rotAngle,
             };
         }
 
