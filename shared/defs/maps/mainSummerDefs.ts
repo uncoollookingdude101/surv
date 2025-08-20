@@ -342,6 +342,9 @@ const mapDef = {
         tier_chest_04: [
             { name: "p30l_dual", count: 1, weight: 1 }, // ?
         ],
+        tier_chest_04b: [
+            { name: "lasr_gun_dual", count: 1, weight: 1 }
+        ]
     },
     biome: {
         colors: {
@@ -417,6 +420,7 @@ const mapDef = {
                 loot_tier_1: 50,
                 loot_tier_beach: 7,
                 cache_pumpkin_01: 15,
+                crate_18: 10,
             },
         ],
         fixedSpawns: [

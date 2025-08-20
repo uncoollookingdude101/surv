@@ -8799,7 +8799,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [
             tierLoot("tier_noir_outfit", 1, 1),
             tierLoot("tier_chest_04", 1, 1),
-            autoLoot("glock_dual", 1),
+            tierLoot("tier_chest_04b", 1, 1),
             autoLoot("smoke", 4),
         ],
         map: { display: false, color: 0x6b3500, scale: 0.85 },

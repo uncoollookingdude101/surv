@@ -28126,7 +28126,10 @@
         "loot-weapon-m134.img":{"frame":{"x":370,"y":1975,"w":58,"h":58},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":5,"y":5,"w":58,"h":58},"sourceSize":{"w":65,"h":65}},
         "gun-m79-01.img":{"frame":{"x":431,"y":138,"w":24,"h":115},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":24,"h":115},"sourceSize":{"w":24,"h":115}},
         "loot-weapon-m79.img":{"frame":{"x":241,"y":1861,"w":56,"h":58},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":5,"y":4,"w":56,"h":58},"sourceSize":{"w":65,"h":65}},
-        "proj-40mm-01.img":{"frame":{"x":393,"y":1792,"w":12,"h":23},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":12,"h":23},"sourceSize":{"w":12,"h":23}}
+        "proj-40mm-01.img":{"frame":{"x":393,"y":1792,"w":12,"h":23},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":12,"h":23},"sourceSize":{"w":12,"h":23}},
+        "gun-lasr-gun.img":{"frame":{"x":457,"y":138,"w":12,"h":65},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":0,"y":0,"w":12,"h":65},"sourceSize":{"w":13,"h":65}},
+        "loot-weapon-double-lasr-gun.img":{"frame":{"x":1436,"y":620,"w":61,"h":35},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":2,"y":16,"w":61,"h":35},"sourceSize":{"w":65,"h":65}},
+        "loot-weapon-lasr-gun.img":{"frame":{"x":122,"y":1696,"w":59,"h":41},"rotated":false,"trimmed":true,"spriteSourceSize":{"x":3,"y":13,"w":59,"h":41},"sourceSize":{"w":65,"h":65}}
       }
     }
   ]

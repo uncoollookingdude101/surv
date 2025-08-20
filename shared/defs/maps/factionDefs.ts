@@ -84,7 +84,7 @@ const mapDef: PartialMapDef = {
                 channel: "otherPlayers",
             },
         ],
-        atlases: ["gradient", "loadout", "shared", "faction"],
+        atlases: ["gradient", "loadout", "shared", "faction", "custom"],
     },
     biome: {
         colors: {
@@ -113,8 +113,8 @@ const mapDef: PartialMapDef = {
                     wait: 10,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 200, weight: 0.1 }],
-                        airstrikeZoneRad: 200,
+                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        airstrikeZoneRad: 100,
                         wait: 0.1,
                         delay: 0.05,
                     },
@@ -129,8 +129,8 @@ const mapDef: PartialMapDef = {
                     wait: 30,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 200, weight: 0.1 }],
-                        airstrikeZoneRad: 200,
+                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        airstrikeZoneRad: 100,
                         wait: 0.1,
                         delay: 0.05,
                     },
@@ -140,8 +140,8 @@ const mapDef: PartialMapDef = {
                     wait: 8,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 200, weight: 0.1 }],
-                        airstrikeZoneRad: 200,
+                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        airstrikeZoneRad: 100,
                         wait: 0.1,
                         delay: 0.05,
                     },
@@ -156,8 +156,8 @@ const mapDef: PartialMapDef = {
                     wait: 21,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 200, weight: 0.1 }],
-                        airstrikeZoneRad: 200,
+                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        airstrikeZoneRad: 50,
                         wait: 0.1,
                         delay: 0.05,
                     },
@@ -167,8 +167,8 @@ const mapDef: PartialMapDef = {
                     wait: 6,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 200, weight: 0.1 }],
-                        airstrikeZoneRad: 200,
+                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        airstrikeZoneRad: 25,
                         wait: 0.1,
                         delay: 0.05,
                     },
@@ -333,6 +333,9 @@ const mapDef: PartialMapDef = {
             { name: "m249", count: 1, weight: 1 }, // ?
             { name: "potato_smg", count: 1, weight: 1 }, // ?
             { name: "potato_cannon", count: 1, weight: 1 }, // ?
+            { name: "m134", count: 1, weight: 1 }, // ?
+            { name: "lasr_gun_dual", count: 1, weight: 1 }, // ?
+            { name: "m79", count: 1, weight: 1 }, // ?
         ],
         tier_ghillie: [
             {
@@ -372,6 +375,12 @@ const mapDef: PartialMapDef = {
                 count: 1,
                 weight: 1,
             },
+        ],
+        tier_katanas: [
+            { name: "katana", count: 1, weight: 1 }, // ?
+            { name: "katana_rusted", count: 1, weight: 1 }, // ?
+            { name: "katana_orchid", count: 1, weight: 1 }, // ?
+            { name: "pan", count: 1, weight: 1 }, // ?
         ],
     },
     mapGen: {

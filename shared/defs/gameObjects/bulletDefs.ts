@@ -884,6 +884,19 @@ export const BaseDefs: Record<string, BulletDef> = {
         tracerLength: 1.2,
         skipCollision: true,
     },
+    bullet_lasr: {
+        type: "bullet",
+        damage: 42.0,
+        obstacleDamage: 1.0,
+        falloff: 0.75,
+        speed: 115.0,
+        distance: 240.0,
+        variance: 0.0,
+        shrapnel: false,
+        tracerColor: "laser",
+        tracerWidth: 0.12,
+        tracerLength: 0.8,
+    },
 };
 
 const SkinDefs: Record<string, BulletDef> = {

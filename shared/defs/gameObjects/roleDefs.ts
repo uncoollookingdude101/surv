@@ -191,8 +191,8 @@ export const RoleDefs: Record<string, RoleDef> = {
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "pkp", ammo: 0, fillInv: true },
-                            [TeamColor.Blue]: { type: "pkp", ammo: 0, fillInv: true },
+                            [TeamColor.Red]: { type: "bugle", ammo: 0 },
+                            [TeamColor.Blue]: { type: "bugle", ammo: 0 },
                         },
                         teamcolor,
                     ),
@@ -201,12 +201,12 @@ export const RoleDefs: Record<string, RoleDef> = {
                         {
                             [TeamColor.Red]: {
                                 type: "flare_gun_dual",
-                                ammo: 0,
+                                ammo: 2,
                                 fillInv: true,
                             },
                             [TeamColor.Blue]: {
                                 type: "flare_gun_dual",
-                                ammo: 0,
+                                ammo: 2,
                                 fillInv: true,
                             },
                         },
@@ -215,8 +215,8 @@ export const RoleDefs: Record<string, RoleDef> = {
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "naginata", ammo: 0 },
-                            [TeamColor.Blue]: { type: "naginata", ammo: 0 },
+                            [TeamColor.Red]: { type: "pan", ammo: 0 },
+                            [TeamColor.Blue]: { type: "pan", ammo: 0 },
                         },
                         teamcolor,
                     ),
@@ -237,8 +237,7 @@ export const RoleDefs: Record<string, RoleDef> = {
                 healthkit: 4,
                 bandage: 30,
                 painkiller: 4,
-                soda: 10,
-                flare: 4,
+                soda: 15,
             },
         }),
     },

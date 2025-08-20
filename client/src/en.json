@@ -742,5 +742,7 @@
   "game-m134_s": "M134",
   "game-usas_s": "USAS-12",
   "game-40mm": "40mm",
-  "game-40mm-tooltip": "Ammo for M79."
+  "game-40mm-tooltip": "Ammo for M79.",
+  "game-lasr_gun": "Lasr Gun",
+  "game-lasr_gun_dual": "Dual Lasr Gun"
 }

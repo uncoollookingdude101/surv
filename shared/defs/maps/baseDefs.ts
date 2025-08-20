@@ -643,6 +643,7 @@ export const Main: MapDef = {
         ],
         tier_helm_special: [{ name: "", count: 1, weight: 1 }],
         tier_custom: [{ name: "", count: 1, weight: 1 }],
+        tier_chest_04b: [{ name: "glock_dual", count: 1, weight: 1 }]
     },
     mapGen: {
         map: {
