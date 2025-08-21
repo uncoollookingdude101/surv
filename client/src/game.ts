@@ -12,7 +12,11 @@ import { Camera } from "./camera";
 import type { ConfigManager, DebugRenderOpts } from "./config";
 import { DebugHUD } from "./debug/debugHUD";
 import { debugLines } from "./debug/debugLines";
+
+/* STRIP_FROM_PROD_CLIENT:START */
 import { Editor } from "./debug/editor";
+/* STRIP_FROM_PROD_CLIENT:END */
+
 import { device } from "./device";
 import { EmoteBarn } from "./emote";
 import { Gas } from "./gas";
