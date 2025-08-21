@@ -22,13 +22,13 @@
   "devDependencies": {
     "@types/ejs": "^3.1.5",
     "@types/jquery": "^3.5.32",
+    "canvas": "^3.2.0",
     "codefend": "^3.2.0",
-    "tsx": "^4.20.3",
+    "maxrects-packer": "^2.7.3",
+    "sharp": "^0.33.5",
+    "tsx": "^4.20.4",
     "turnstile-types": "^1.2.3",
     "vite": "^6.3.5",
-    "vite-plugin-strip-block": "^1.0.1",
-    "canvas": "^3.1.2",
-    "maxrects-packer": "^2.7.3",
-    "sharp": "^0.33.5"
+    "vite-plugin-strip-block": "^1.0.1"
   }
 }
