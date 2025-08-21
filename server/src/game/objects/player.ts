@@ -2521,7 +2521,13 @@ export class Player extends BaseGameObject {
     }
 
     spectate(spectateMsg: net.SpectateMsg): void {
-        const spectatablePlayers = this.game.modeManager.getSpectatablePlayers(this);
+        // livingPlayers is used here instead of a more "efficient" option because its sorted while other options are not
+        const spectatablePlayers = this.game.playerBarn.livingPlayers.filter((p) => (
+            this != p
+            && !p.disconnected
+            && (this.game.modeManager.getPlayerAlivePlayersContext(this).length === 0 || p.teamId == this.teamId)
+        ));
+        
         let playerToSpec: Player | undefined;
         switch (true) {
             case spectateMsg.specBegin:

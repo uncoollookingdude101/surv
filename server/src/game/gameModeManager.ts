@@ -180,18 +180,6 @@ export class GameModeManager {
         }
     }
 
-    getSpectatablePlayers(player: Player): Player[] {
-        let playerFilter: (p: Player) => boolean;
-        if (this.getPlayerAlivePlayersContext(player).length != 0) {
-            playerFilter = (p: Player) => !p.disconnected && p.teamId == player.teamId;
-        } else {
-            // if no players left on group/team, player can spectate anyone
-            playerFilter = (p: Player) => !p.disconnected;
-        }
-        // livingPlayers is used here instead of a more "efficient" option because its sorted while other options are not
-        return this.game.playerBarn.livingPlayers.filter(playerFilter);
-    }
-
     getPlayerStatusPlayers(player: Player): Player[] {
         switch (this.mode) {
             case GameMode.Solo:
