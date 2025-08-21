@@ -44,6 +44,24 @@ export const debugRenderConfig = {
     },
 };
 
+export const debugHUDConfig = {
+    enabled: false,
+    position: false,
+    objectPools: false,
+    fps: {
+        show: false,
+        showGraph: false,
+    },
+    ping: {
+        show: false,
+        showGraph: false,
+    },
+    netIn: {
+        show: false,
+        showGraph: false,
+    },
+};
+
 export type DebugRenderOpts = typeof debugRenderConfig;
 
 const defaultConfig = {
@@ -79,6 +97,7 @@ const defaultConfig = {
     debugTools: debugToolsConfig,
     debugRenderer: debugRenderConfig,
     /* STRIP_FROM_PROD_CLIENT:END */
+    debugHUD: debugHUDConfig,
 };
 
 export type ConfigType = typeof defaultConfig;

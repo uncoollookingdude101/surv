@@ -5,9 +5,15 @@ import { RoleDefs } from "../../../shared/defs/gameObjects/roleDefs";
 import { EditMsg } from "../../../shared/net/editMsg";
 import { math } from "../../../shared/utils/math";
 import { util } from "../../../shared/utils/util";
-import type { ConfigManager, debugRenderConfig, debugToolsConfig } from "../config";
+import {
+    type ConfigKey,
+    type ConfigManager,
+    type ConfigType,
+    debugHUDConfig,
+    debugRenderConfig,
+    type debugToolsConfig,
+} from "../config";
 import { type InputHandler, Key } from "../input";
-import type { Player } from "../objects/player";
 
 const availableLoot = Object.entries(GameObjectDefs)
     .filter(([_, def]) => "lootImg" in def)
@@ -27,9 +33,20 @@ const availableRoles = Object.entries(RoleDefs)
 
 availableRoles["None"] = "";
 
+function camelCaseToText(str: string) {
+    return str
+        .replace(/([A-Z])/g, " $1")
+        .split(" ")
+        .map((s) => {
+            return `${s.charAt(0).toUpperCase()}${s.substring(1)}`;
+        })
+        .join(" ");
+}
+
 export class Editor {
     toolParams: typeof debugToolsConfig;
     renderParams: typeof debugRenderConfig;
+    debugHUDParams: typeof debugHUDConfig;
 
     config: ConfigManager;
     pane: Pane;
@@ -57,6 +74,7 @@ export class Editor {
         this.toolParams.role = "";
 
         this.renderParams = this.config.get("debugRenderer")!;
+        this.debugHUDParams = this.config.get("debugHUD")!;
 
         const container = document.querySelector(
             "#ui-editor-info-list",
@@ -78,9 +96,12 @@ export class Editor {
                 {
                     title: "Render",
                 },
+                {
+                    title: "HUD",
+                },
             ],
         });
-        const [tools, render] = tabs.pages;
+        const [tools, render, HUD] = tabs.pages;
 
         //
         // Tools
@@ -123,6 +144,7 @@ export class Editor {
             });
             const input = loot.element.querySelector("input") as HTMLInputElement;
 
+            input.addEventListener("keyup", (e) => e.stopPropagation());
             input.addEventListener("keydown", (e) => {
                 e.stopPropagation();
 
@@ -240,36 +262,51 @@ export class Editor {
         //
 
         const addObject = (
+            keys: Record<string, unknown>,
             obj: Record<string, unknown>,
+            params: keyof Editor,
             folder: FolderApi | TabPageApi,
+            configKey: ConfigKey,
         ) => {
-            for (const key in obj) {
-                const entry = obj[key];
+            for (const key in keys) {
+                const entry = keys[key];
                 if (typeof entry === "object") {
                     const folder2 = folder.addFolder({
-                        title: `${key.charAt(0).toUpperCase()}${key.substring(1)}`,
+                        title: camelCaseToText(key),
                         expanded: true,
                     });
-                    addObject(entry as Record<string, unknown>, folder2);
+                    addObject(
+                        entry as Record<string, unknown>,
+                        obj[key] as Record<string, unknown>,
+                        params,
+                        folder2,
+                        configKey,
+                    );
                 } else if (typeof entry === "boolean") {
-                    const label = key
-                        .replace(/([A-Z])/g, " $1")
-                        .split(" ")
-                        .map((s) => {
-                            return `${s.charAt(0).toUpperCase()}${s.substring(1)}`;
-                        })
-                        .join(" ");
+                    const label = camelCaseToText(key);
 
                     const bind = folder.addBinding(obj, key, {
                         label,
                     });
                     bind.on("change", () => {
-                        this.config.set("debugRenderer", this.renderParams);
+                        this.config.set(configKey, this[params] as ConfigType[ConfigKey]);
                     });
                 }
             }
         };
-        addObject(this.renderParams, render);
+        addObject(
+            debugRenderConfig,
+            this.renderParams,
+            "renderParams",
+            render,
+            "debugRenderer",
+        );
+
+        //
+        // HUD
+        //
+
+        addObject(debugHUDConfig, this.debugHUDParams, "debugHUDParams", HUD, "debugHUD");
 
         // we dont want to focus buttons because they can mess with keybinds
         // like if you click on "toggle layer" and dont click on anything else
@@ -308,7 +345,7 @@ export class Editor {
         );
     }
 
-    m_update(dt: number, input: InputHandler, player: Player) {
+    m_update(input: InputHandler) {
         let zoom = this.toolParams.zoom;
         if (input.keyPressed(Key.Plus)) {
             zoom -= 8;

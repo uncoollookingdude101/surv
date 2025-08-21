@@ -10,6 +10,7 @@ import type { Ambiance } from "./ambiance";
 import type { AudioManager } from "./audioManager";
 import { Camera } from "./camera";
 import type { ConfigManager, DebugRenderOpts } from "./config";
+import { DebugHUD } from "./debug/debugHUD";
 import { debugLines } from "./debug/debugLines";
 import { Editor } from "./debug/editor";
 import { device } from "./device";
@@ -105,6 +106,7 @@ export class Game {
     m_useDebugZoom!: boolean;
 
     editor!: Editor;
+    debugHUD!: DebugHUD;
 
     seq!: number;
     seqInFlight!: boolean;
@@ -254,6 +256,8 @@ export class Game {
             this.m_map,
         );
         this.m_shotBarn = new ShotBarn();
+        this.debugHUD = new DebugHUD(this.m_config);
+
         // this.particleBarn,
         // this.audioManager,
         // this.uiManager
@@ -297,6 +301,7 @@ export class Game {
             this.m_uiManager.container,
             this.m_uiManager.m_pieTimer.container,
             this.m_emoteBarn.indContainer,
+            this.debugHUD.container,
         ];
         for (let i = 0; i < pixiContainers.length; i++) {
             const container = pixiContainers[i];
@@ -387,12 +392,14 @@ export class Game {
     }
 
     update(dt: number) {
+        this.debugHUD.m_update(dt, this);
+
         if (IS_DEV) {
             if (this.m_input.keyPressed(Key.Tilde)) {
                 this.editor.setEnabled(!this.editor.enabled);
             }
             if (this.editor.enabled) {
-                this.editor.m_update(dt, this.m_input, this.m_activePlayer);
+                this.editor.m_update(this.m_input);
             }
         }
 
@@ -1232,6 +1239,7 @@ export class Game {
         if (msg.ack == this.seq && this.seqInFlight) {
             this.seqInFlight = false;
             const ping = now - this.seqSendTime;
+            this.debugHUD.pingGraph.addEntry(ping);
             this.pings.push(ping);
         }
         if (this.lastUpdateTime > 0) {
@@ -1608,6 +1616,8 @@ export class Game {
                 this.m_disconnectMsg = msg.reason;
             }
         }
+        console.log(net.MsgType[type]);
+        this.debugHUD.netInGraph.addEntry(stream.buffer.byteLength);
     }
 
     m_sendMessage(type: net.MsgType, data: net.Msg, maxLen?: number) {

@@ -511,6 +511,10 @@ class Application {
         if (key == "highResTex") {
             location.reload();
         }
+
+        if (key === "debugHUD") {
+            this.game?.debugHUD?.onConfigModified();
+        }
     }
 
     refreshUi() {
