@@ -564,9 +564,11 @@ export class Player extends BaseGameObject {
     }
 
     dir = v2.create(1, 0);
+    dirOld = v2.create(1, 0);
+    // direction received from the last inputMsg
+    dirNew = v2.create(1, 0);
 
     posOld = v2.create(0, 0);
-    dirOld = v2.create(0, 0);
 
     collider: Circle;
 
@@ -1469,6 +1471,17 @@ export class Player extends BaseGameObject {
 
         // players are still choosing a perk from the perk select menu
         if (this.game.map.perkMode && !this.role) return;
+
+        //
+        // Direction
+        //
+        this.dirOld = v2.copy(this.dir);
+
+        if (!v2.eq(this.dir, this.dirNew)) {
+            this.dir = this.dirNew;
+            this.setPartDirty();
+        }
+        this.mousePos = v2.add(this.pos, v2.mul(this.dir, this.toMouseLen));
 
         //
         // Boost logic
@@ -3279,11 +3292,7 @@ export class Player extends BaseGameObject {
         if (this.dead) return;
         if (this.game.map.perkMode && !this.role) return;
 
-        if (!v2.eq(this.dir, msg.toMouseDir)) {
-            this.setPartDirty();
-            this.dirOld = v2.copy(this.dir);
-            this.dir = v2.normalizeSafe(msg.toMouseDir);
-        }
+        this.dirNew = v2.normalizeSafe(msg.toMouseDir);
 
         this.moveLeft = msg.moveLeft;
         this.moveRight = msg.moveRight;
@@ -3294,8 +3303,6 @@ export class Player extends BaseGameObject {
         this.touchMoveDir = v2.normalizeSafe(msg.touchMoveDir);
         this.touchMoveLen = msg.touchMoveLen;
         this.toMouseLen = msg.toMouseLen;
-
-        this.mousePos = v2.add(this.pos, v2.mul(this.dir, this.toMouseLen));
 
         // spectators are only allowed to send movement related inputs
         if (this.debug.spectatorMode) return;
