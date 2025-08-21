@@ -144,6 +144,7 @@ export class Editor {
             });
             const input = loot.element.querySelector("input") as HTMLInputElement;
 
+            // don't want to trigger keybinds (like L to fullscreen) while typing
             input.addEventListener("keyup", (e) => e.stopPropagation());
             input.addEventListener("keydown", (e) => {
                 e.stopPropagation();
@@ -262,14 +263,20 @@ export class Editor {
         //
 
         const addObject = (
-            keys: Record<string, unknown>,
-            obj: Record<string, unknown>,
-            params: keyof Editor,
+            // we pass both the default config object
+            // and the one we actually write to / loaded from local storage
+            // because if we always pass the one from LS to it may have keys that have been deleted
+            // and i dont want it to spam a bunch of deleted keys specially during development where
+            // i end up renaming keys a lot before deciding their final name :)
+            defaultObj: Record<string, unknown>,
+            outObj: Record<string, unknown>,
+            parentObj: Record<string, unknown>,
             folder: FolderApi | TabPageApi,
             configKey: ConfigKey,
         ) => {
-            for (const key in keys) {
-                const entry = keys[key];
+            for (const key in defaultObj) {
+                const entry = defaultObj[key];
+
                 if (typeof entry === "object") {
                     const folder2 = folder.addFolder({
                         title: camelCaseToText(key),
@@ -277,19 +284,19 @@ export class Editor {
                     });
                     addObject(
                         entry as Record<string, unknown>,
-                        obj[key] as Record<string, unknown>,
-                        params,
+                        outObj[key] as Record<string, unknown>,
+                        parentObj,
                         folder2,
                         configKey,
                     );
                 } else if (typeof entry === "boolean") {
                     const label = camelCaseToText(key);
 
-                    const bind = folder.addBinding(obj, key, {
+                    const bind = folder.addBinding(outObj, key, {
                         label,
                     });
                     bind.on("change", () => {
-                        this.config.set(configKey, this[params] as ConfigType[ConfigKey]);
+                        this.config.set(configKey, parentObj as ConfigType[ConfigKey]);
                     });
                 }
             }
@@ -297,7 +304,7 @@ export class Editor {
         addObject(
             debugRenderConfig,
             this.renderParams,
-            "renderParams",
+            this.renderParams,
             render,
             "debugRenderer",
         );
@@ -306,7 +313,13 @@ export class Editor {
         // HUD
         //
 
-        addObject(debugHUDConfig, this.debugHUDParams, "debugHUDParams", HUD, "debugHUD");
+        addObject(
+            debugHUDConfig,
+            this.debugHUDParams,
+            this.debugHUDParams,
+            HUD,
+            "debugHUD",
+        );
 
         // we dont want to focus buttons because they can mess with keybinds
         // like if you click on "toggle layer" and dont click on anything else
@@ -318,6 +331,8 @@ export class Editor {
                     elm.blur();
                 });
             });
+        // dont let those events reach the game input handler
+        // firing a gun while clicking on an editor button is annoying
         for (const event of ["wheel", "mousedown"]) {
             pane.element.addEventListener(event, (e) => {
                 e.stopPropagation();
