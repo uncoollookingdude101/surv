@@ -37,7 +37,7 @@ export function isAdmin(interaction: Interaction) {
     }
 
     if (interaction.inCachedGuild()) {
-        return interaction.member.id === interaction.guild.ownerId;
+        return interaction.member.permissions.has(PermissionFlagsBits.Administrator);
     }
 
     return false;
