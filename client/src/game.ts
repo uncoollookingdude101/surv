@@ -1616,7 +1616,6 @@ export class Game {
                 this.m_disconnectMsg = msg.reason;
             }
         }
-        console.log(net.MsgType[type]);
         this.debugHUD.netInGraph.addEntry(stream.buffer.byteLength);
     }
 

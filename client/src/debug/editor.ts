@@ -76,8 +76,8 @@ export class Editor {
         this.renderParams = this.config.get("debugRenderer")!;
         this.debugHUDParams = this.config.get("debugHUD")!;
 
-        const container = document.querySelector(
-            "#ui-editor-info-list",
+        const container = document.getElementById(
+            "ui-editor-top-right",
         ) as HTMLDivElement;
 
         this.pane = new Pane({
