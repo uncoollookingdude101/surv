@@ -9,6 +9,7 @@ import type {
 import { MessageFlags, PermissionFlagsBits } from "discord.js";
 import { hc } from "hono/client";
 import type { PrivateRouteApp } from "../../server/src/api/routes/private/private";
+import { Logger } from "../../shared/utils/logger";
 import { API_URL, Config, DISCORD_GUILD_ID, DISCORD_ROLE_ID } from "./config";
 
 // we love enums
@@ -108,3 +109,5 @@ export function createCollector<
         }
     });
 }
+
+export const botLogger = new Logger(Config.logging, "Bot");

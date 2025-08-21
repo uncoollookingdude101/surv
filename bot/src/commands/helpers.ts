@@ -5,7 +5,7 @@ import {
     SlashCommandBuilder,
 } from "discord.js";
 import type z from "zod";
-import { type Command, honoClient, isAdmin } from "../utils";
+import { botLogger, type Command, honoClient, isAdmin } from "../utils";
 
 export function createCommand<T extends z.ZodSchema>(config: {
     name: Command;
@@ -48,7 +48,7 @@ export async function genericExecute<N extends Exclude<Command, "search_player">
     });
 
     if (!args.success) {
-        console.error("Failed to parse arguments", options, args.error);
+        botLogger.error("Failed to parse arguments", options, args.error);
         await interaction.reply({
             content: "Invalid arguments",
             flags: MessageFlags.Ephemeral,
