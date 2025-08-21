@@ -51,6 +51,11 @@ jobs:
         working-directory: ./client
         if: always()
 
+      - name: Typecheck Bot
+        run: pnpm run typecheck
+        working-directory: ./bot
+        if: always()
+
       - name: Save Atlas Cache
         id: cache-atlases-save
         uses: actions/cache/save@v4
