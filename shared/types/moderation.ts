@@ -65,7 +65,7 @@ export const zFindDiscordUserSlugParams = z.object({
 export const zGiveItemParams = z.object({
     item: z.string(),
     slug: z.string(),
-    source: z.string().default("daddy-has-privileges"),
+    source: z.string().default("unlock_default"),
 });
 
 export const zRemoveItemParams = z.object({
