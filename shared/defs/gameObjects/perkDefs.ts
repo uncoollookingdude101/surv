@@ -18,10 +18,10 @@ export const PerkProperties = {
     },
     small_arms: {
         scale: -0.25,
-        damageReduction: -0.1,
+        damageReduction: -0.15,
     },
     splinter: {
-        mainDamageMult: 0.6,
+        mainDamageMult: 0.7,
         splitsDamageMult: 0.5,
     },
     ap_rounds: {
@@ -42,14 +42,14 @@ export const PerkProperties = {
         giveInterval: 0.08, // interval between each grenade being given until the backpack is full
     },
     gotw: {
-        scale: 0.25,
-        healthRegen: 1, // per second
+        scale: 0.2,
+        healthRegen: 5, // per second
     },
     field_medic: {
-        speedBoost: 1,
+        speedBoost: 1.25,
     },
     tree_climbing: {
-        waterSpeedBoost: 2,
+        waterSpeedBoost: 3,
     },
     bonus_9mm: {
         spreadMul: 1.1,
