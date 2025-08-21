@@ -2522,12 +2522,14 @@ export class Player extends BaseGameObject {
 
     spectate(spectateMsg: net.SpectateMsg): void {
         // livingPlayers is used here instead of a more "efficient" option because its sorted while other options are not
-        const spectatablePlayers = this.game.playerBarn.livingPlayers.filter((p) => (
-            this != p
-            && !p.disconnected
-            && (this.game.modeManager.getPlayerAlivePlayersContext(this).length === 0 || p.teamId == this.teamId)
-        ));
-        
+        const spectatablePlayers = this.game.playerBarn.livingPlayers.filter(
+            (p) =>
+                this != p &&
+                !p.disconnected &&
+                (this.game.modeManager.getPlayerAlivePlayersContext(this).length === 0 ||
+                    p.teamId == this.teamId),
+        );
+
         let playerToSpec: Player | undefined;
         switch (true) {
             case spectateMsg.specBegin:
@@ -2539,14 +2541,17 @@ export class Player extends BaseGameObject {
                 const shouldSpecRandom =
                     groupExistsOrAlive || teamExistsOrAlive || !aliveKiller;
 
-                if ( !shouldSpecRandom ) {
+                if (!shouldSpecRandom) {
                     playerToSpec = aliveKiller;
                     break;
                 }
 
-                const players = this.game.map.factionMode && groupExistsOrAlive ? this.group!.livingPlayers : spectatablePlayers;
+                const players =
+                    this.game.map.factionMode && groupExistsOrAlive
+                        ? this.group!.livingPlayers
+                        : spectatablePlayers;
 
-                playerToSpec = util.randomItem(players)
+                playerToSpec = util.randomItem(players);
                 break;
             case spectateMsg.specNext:
             case spectateMsg.specPrev:
