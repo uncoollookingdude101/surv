@@ -82,7 +82,7 @@ function setupModals(inputBinds: InputBinds, inputBindUi: InputBindUi) {
 
     // Auto submit link or code on enter
     $("#team-link-input").on("keypress", (e) => {
-        if ((e.which || e.keyCode) === 13) {
+        if (e.key === "Enter") {
             $("#btn-team-mobile-link-join").trigger("click");
             e.target.blur();
         }
@@ -90,7 +90,7 @@ function setupModals(inputBinds: InputBinds, inputBindUi: InputBindUi) {
 
     // Blur name input on enter
     $("#player-name-input-solo").on("keypress", (e) => {
-        if ((e.which || e.keyCode) === 13) {
+        if (e.key === "Enter") {
             e.target.blur();
         }
     });

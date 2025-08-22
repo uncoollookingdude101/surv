@@ -151,7 +151,7 @@ export class ProfileUi {
             });
         });
         $("#modal-account-name-input").on("keypress", (e) => {
-            if ((e.which || e.keyCode) === 13) {
+            if (e.key === "Enter") {
                 $("#modal-account-name-finish").trigger("click");
             }
         });
@@ -170,7 +170,7 @@ export class ProfileUi {
             }
         });
         $("#modal-account-reset-stats-input").on("keypress", (e) => {
-            if ((e.which || e.keyCode) === 13) {
+            if (e.key === "Enter") {
                 $("#modal-account-reset-stats-finish").trigger("click");
             }
         });
@@ -188,7 +188,7 @@ export class ProfileUi {
             }
         });
         $("#modal-account-delete-input").on("keypress", (e) => {
-            if ((e.which || e.keyCode) === 13) {
+            if (e.key === "Enter") {
                 $("#modal-account-delete-finish").trigger("click");
             }
         });

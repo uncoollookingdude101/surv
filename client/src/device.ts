@@ -102,8 +102,8 @@ class Device {
     onResize() {
         this.isLandscape =
             window.innerWidth > window.innerHeight ||
-            window.orientation == 90 ||
-            window.orientation == -90;
+            window.screen.orientation.angle == 90 ||
+            window.screen.orientation.angle == -90;
         this.screenWidth = window.innerWidth;
         this.screenHeight = window.innerHeight;
         const layoutDim = this.isLandscape ? this.screenWidth : this.screenHeight;
