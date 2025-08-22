@@ -76,6 +76,9 @@ importers:
         specifier: ^1.6.6
         version: 1.6.6
     devDependencies:
+      '@tweakpane/core':
+        specifier: ^2.0.5
+        version: 2.0.5
       '@types/ejs':
         specifier: ^3.1.5
         version: 3.1.5
@@ -100,6 +103,9 @@ importers:
       turnstile-types:
         specifier: ^1.2.3
         version: 1.2.3
+      tweakpane:
+        specifier: ^4.0.5
+        version: 4.0.5
       vite:
         specifier: ^6.3.5
         version: 6.3.5(@types/node@24.3.0)(terser@5.39.0)(tsx@4.20.4)
@@ -1177,6 +1183,9 @@ packages:
   '@taufik-nurrohman/color-picker@1.4.2':
     resolution: {integrity: sha512-eOallA276njR5PNVD6ivLFkkPmFBqKDfW31f+DBGmsZTVHDazUB+KlW5a/ImrJdSwR2snKAA4P/SEn3/gZiV1Q==}
 
+  '@tweakpane/core@2.0.5':
+    resolution: {integrity: sha512-punBgD5rKCF5vcNo6BsSOXiDR/NSs9VM7SG65QSLJIxfRaGgj54ree9zQW6bO3pNFf3AogiGgaNODUVQRk9YqQ==}
+
   '@types/better-sqlite3@7.6.13':
     resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
 
@@ -2070,6 +2079,9 @@ packages:
 
   turnstile-types@1.2.3:
     resolution: {integrity: sha512-EDjhDB9TDwda2JRbhzO/kButPio3JgrC3gXMVAMotxldybTCJQVMvPNJ89rcAiN9vIrCb2i1E+VNBCqB8wue0A==}
+
+  tweakpane@4.0.5:
+    resolution: {integrity: sha512-rxEXdSI+ArlG1RyO6FghC4ZUX8JkEfz8F3v1JuteXSV0pEtHJzyo07fcDG+NsJfN5L39kSbCYbB9cBGHyuI/tQ==}
 
   typescript@5.9.2:
     resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
@@ -3009,6 +3021,8 @@ snapshots:
   '@taufik-nurrohman/color-picker@1.4.2':
     dependencies:
       opencollective-postinstall: 2.0.3
+
+  '@tweakpane/core@2.0.5': {}
 
   '@types/better-sqlite3@7.6.13':
     dependencies:
@@ -3951,6 +3965,8 @@ snapshots:
       safe-buffer: 5.2.1
 
   turnstile-types@1.2.3: {}
+
+  tweakpane@4.0.5: {}
 
   typescript@5.9.2: {}
 
