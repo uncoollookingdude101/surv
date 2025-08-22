@@ -385,7 +385,7 @@ export class PlayerView {
         const timeSelector = this.el.find("#player-time");
         if (timeSelector) {
             timeSelector.val(params.interval);
-            timeSelector.change(() => {
+            timeSelector.on("change", () => {
                 this.onChangedParams();
             });
         }
@@ -393,7 +393,7 @@ export class PlayerView {
         const mapIdSelector = this.el.find("#player-map-id");
         if (mapIdSelector) {
             mapIdSelector.val(params.mapId);
-            mapIdSelector.change(() => {
+            mapIdSelector.on("change", () => {
                 this.onChangedParams();
             });
         }
@@ -418,13 +418,13 @@ export class PlayerView {
         if (historySelector) {
             historySelector.html(historyContent);
 
-            $(".js-match-data").click((e) => {
+            $(".js-match-data").on("click", (e) => {
                 if (!$(e.target).is("a")) {
                     this.toggleMatchData($(e.currentTarget).data("game-id"));
                 }
             });
 
-            $(".js-match-load-more").click((_e) => {
+            $(".js-match-load-more").on("click", (_e) => {
                 const params = this.getUrlParams();
                 this.loadMatchHistory(
                     params.slug,
@@ -434,7 +434,7 @@ export class PlayerView {
                 this.render();
             });
 
-            $(".extra-team-mode-filter").click((e) => {
+            $(".extra-team-mode-filter").on("click", (e) => {
                 if (!this.matchHistory.inProgress) {
                     const _params = this.getUrlParams();
                     this.games = [];

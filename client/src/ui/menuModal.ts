@@ -9,7 +9,7 @@ export class MenuModal {
     modalCloseListener: (e: JQuery.TriggeredEvent) => void;
 
     constructor(public selector: JQuery<HTMLElement>) {
-        selector.find(".close").click((e) => {
+        selector.find(".close").on("click", (e) => {
             this.hide(e);
         });
 
