@@ -169,7 +169,7 @@ class Application {
                 });
             });
 
-            this.serverSelect.change(() => {
+            this.serverSelect.on("change", () => {
                 const t = this.serverSelect.find(":selected").val();
                 this.config.set("region", t as string);
             });
@@ -212,7 +212,7 @@ class Application {
                     const a = $(r);
                     a.prop("checked", this.config.get(a.prop("id")));
                 });
-            $(".modal-settings-item > input:checkbox").change((t) => {
+            $(".modal-settings-item > input:checkbox").on("change", (t) => {
                 const r = $(t.target);
                 this.config.set(r.prop("id"), r.is(":checked"));
             });
