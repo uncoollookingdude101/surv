@@ -185,6 +185,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             "chambered",
             "fabricate_m",
             "ap_rounds",
+            "inspiration"
         ],
         defaultItems: createDefaultItems({
             weapons: [

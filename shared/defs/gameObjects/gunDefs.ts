@@ -3737,7 +3737,6 @@ export const GunDefs: Record<string, GunDef> = {
         bulletCount: 1,
         bulletType: "bullet_m79",
         projType: "mm40_granade",
-        noSplinter: true,
         headshotMult: 1,
         speed: {
             equip: -3,

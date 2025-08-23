@@ -388,7 +388,7 @@ export class Game {
 
     update(dt: number) {
         if (IS_DEV) {
-            if (this.m_input.keyPressed(Key.Tilde)) {
+            if (false && this.m_input.keyPressed(Key.Tilde)) {
                 this.editor.setEnabled(!this.editor.enabled);
             }
             if (this.editor.enabled) {

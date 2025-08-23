@@ -29,9 +29,9 @@ export function getConfig(isProduction: boolean, dir: string) {
         regions: {},
         proxies: {},
         modes: [
-            { mapName: "faction", teamMode: TeamMode.Solo, enabled: false },
+            { mapName: "faction", teamMode: TeamMode.Solo, enabled: true },
             { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: true },
-            { mapName: "cobalt", teamMode: TeamMode.Solo, enabled: false },
+            { mapName: "cobalt", teamMode: TeamMode.Solo, enabled: true },
         ],
         clientTheme: "main",
         gameTps: 100,
