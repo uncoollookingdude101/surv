@@ -1815,7 +1815,17 @@ export class GameMap {
     ): Building {
         const def = MapObjectDefs[type] as BuildingDef;
 
-        ori = ori ?? def.ori ?? util.randomInt(0, 3);
+        if (ori === undefined) {
+            if (def.oris?.length) {
+                // specific number of possible orientations
+                // used by the desert aged river town
+                ori = util.randomItem(def.oris)!;
+            } else if (def.ori !== undefined) {
+                ori = def.ori;
+            } else {
+                ori = util.randomInt(0, 3);
+            }
+        }
 
         const building = new Building(this.game, type, pos, ori, layer, parentId);
 
