@@ -214,10 +214,25 @@ app.ws<GameSocketData>("/play", {
         const searchParams = new URLSearchParams(req.getQuery());
         const gameId = searchParams.get("gameId");
 
-        if (!gameId || !server.manager.getById(gameId)) {
+        if (!gameId) {
+            console.log("game_id_missing");
             forbidden(res);
             return;
         }
+        const gameData = server.manager.getById(gameId);
+
+        if (!gameData) {
+            console.log("invalid_game_id");
+            forbidden(res);
+            return;
+        }
+
+        if (!gameData.canJoin) {
+            console.log("game_started");
+            forbidden(res);
+            return;
+        }
+
         gameWsRateLimit.ipConnected(ip);
 
         const socketId = randomUUID();
