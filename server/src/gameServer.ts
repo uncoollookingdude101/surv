@@ -134,6 +134,17 @@ const app = Config.gameServer.ssl
       })
     : App();
 
+app.options("/health", (res) => {
+    cors(res);
+    res.end();
+});
+
+app.get("/health", (res) => {
+    res.writeStatus("200 OK");
+    res.write("OK");
+    res.end();
+});
+
 app.options("/api/find_game", (res) => {
     cors(res);
     res.end();
