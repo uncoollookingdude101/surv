@@ -1,6 +1,18 @@
 import { math } from "./math";
 import { type Vec2, v2 } from "./v2";
 
+export class AssertionError extends Error {
+    name = "AssertionError";
+    constructor(message?: string, options?: ErrorOptions) {
+        super(message, options);
+
+        // @ts-ignore this was v8 / nodejs specific but firefox now also supports it
+        // what it does is remove the `assert` call from the stack trace
+        // typescript types for it only exist on @types/node so cant use ts-expect-error without
+        // it failing on the server
+        Error.captureStackTrace?.(this, assert);
+    }
+}
 /**
  * Custom function to not bundle nodejs assert polyfill with the client
  */
@@ -9,7 +21,7 @@ export function assert(value: unknown, message?: string | Error): asserts value 
         const error =
             message instanceof Error
                 ? message
-                : new Error(message ?? "Assertation failed");
+                : new AssertionError(message ?? "Assertation failed");
         throw error;
     }
 }
