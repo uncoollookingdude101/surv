@@ -15,7 +15,6 @@ class BasePlayerGroup {
     players: Player[] = [];
     livingPlayers: Player[] = [];
 
-    totalCount = 0;
     allDeadOrDisconnected = true; // only set to false when first player is added to the group
 
     constructor(id: number, type: BasePlayerGroup["type"]) {
@@ -42,7 +41,6 @@ class BasePlayerGroup {
 
         this.players.push(player);
         this.livingPlayers.push(player);
-        this.totalCount++;
         this.allDeadOrDisconnected = false;
         this.checkPlayers();
     }

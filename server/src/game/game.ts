@@ -545,8 +545,8 @@ export class Game {
 
         const teamKills = players.reduce(
             (acc, curr) => {
-                acc[curr.player.groupId] =
-                    (acc[curr.player.groupId] ?? 0) + curr.player.kills;
+                acc[curr.player.teamId] =
+                    (acc[curr.player.teamId] ?? 0) + curr.player.kills;
                 return acc;
             },
             {} as Record<string, number>,
@@ -560,7 +560,7 @@ export class Game {
                 username: player.name,
                 playerId: player.matchDataId,
                 teamMode: this.teamMode,
-                teamCount: player.group?.totalCount ?? 1,
+                teamCount: player.group?.players.length ?? 1,
                 teamTotal: teamTotal,
                 teamId: player.teamId,
                 timeAlive: Math.round(player.timeAlive),
