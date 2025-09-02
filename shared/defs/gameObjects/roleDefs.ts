@@ -1,4 +1,4 @@
-import { util } from "../../utils/util";
+import { type DeepPartial, util } from "../../utils/util";
 import { TeamColor } from "../maps/factionDefs";
 
 type BasicRoleWeapon = {
@@ -26,12 +26,6 @@ function getTeamHelmet(
 ) {
     return colorToHelmetMap[teamcolor];
 }
-
-type DeepPartial<T> = T extends object
-    ? {
-          [P in keyof T]?: DeepPartial<T[P]>;
-      }
-    : T;
 
 type DefaultItems = {
     weapons: [RoleWeapon, RoleWeapon, RoleWeapon, RoleWeapon];
