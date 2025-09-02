@@ -9,7 +9,7 @@ import {
     StringSelectMenuBuilder,
     type StringSelectMenuInteraction,
 } from "discord.js";
-import { formatDate } from "../../shared/utils/util";
+import { util } from "../../shared/utils/util";
 import { BUTTON_PREFIXES, type SelectedPlayer } from "./commands/search-player";
 import { createCollector, honoClient } from "./utils";
 
@@ -24,7 +24,7 @@ export async function createDiscordDropdownUI(
 
         return {
             label: `[${player.region}] - ${player.mapId.toLowerCase()} - ${player.teamMode} - ${player.username} ${slug}`,
-            description: `Played at: ${formatDate(player.createdAt)}`,
+            description: `Played at: ${util.formatDate(player.createdAt)}`,
             value: `ban_${index}`,
         };
     });
@@ -229,7 +229,7 @@ function getEmbedFields(selectedPlayer: SelectedPlayer) {
 
     fields.push({
         name: "Played at",
-        value: formatDate(selectedPlayer.createdAt),
+        value: util.formatDate(selectedPlayer.createdAt),
         inline: false,
     });
 

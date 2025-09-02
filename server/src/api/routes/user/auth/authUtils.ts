@@ -4,6 +4,7 @@ import type { Context } from "hono";
 import { deleteCookie, setCookie } from "hono/cookie";
 import slugify from "slugify";
 import { UnlockDefs } from "../../../../../../shared/defs/gameObjects/unlockDefs";
+import { util } from "../../../../../../shared/utils/util";
 import { Config } from "../../../../config";
 import { checkForBadWords } from "../../../../utils/serverHelpers";
 import { createSession, invalidateSession } from "../../../auth";
@@ -163,11 +164,7 @@ export function getRedirectUri(method: Provider) {
     return `${Config.oauthRedirectURI}/api/auth/${method}/callback`;
 }
 
-export function daysToMs(days: number) {
-    const dayInMs = 24 * 60 * 60 * 1000;
-    return days * dayInMs;
-}
-export const cooldownPeriod = daysToMs(10);
+const cooldownPeriod = util.daysToMs(10);
 
 export function getTimeUntilNextUsernameChange(lastChangeTime: Date | null) {
     if (!(lastChangeTime instanceof Date)) return 0;
