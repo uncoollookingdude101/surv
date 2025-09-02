@@ -14,13 +14,11 @@ export function assert(value: unknown, message?: string | Error): asserts value 
     }
 }
 
-export function defineSkin<Def>(
-    baseDefs: Record<string, Def>,
-    baseType: string,
-    params: Partial<Def>,
-) {
-    return util.mergeDeep({}, baseDefs[baseType], { baseType }, params) as Def;
-}
+export type DeepPartial<T> = T extends object
+    ? {
+          [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;
 
 export const util = {
     //
