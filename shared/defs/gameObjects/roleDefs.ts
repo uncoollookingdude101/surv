@@ -1,3 +1,4 @@
+import type { InventoryItem } from "../../gameConfig";
 import { type DeepPartial, util } from "../../utils/util";
 import { TeamColor } from "../maps/factionDefs";
 
@@ -33,31 +34,7 @@ type DefaultItems = {
     helmet: string | ((teamcolor: TeamColor) => string);
     chest: string;
     outfit: string | ((teamcolor: TeamColor) => string);
-    inventory: {
-        "9mm": number;
-        "762mm": number;
-        "556mm": number;
-        "12gauge": number;
-        "50AE": number;
-        "308sub": number;
-        flare: number;
-        "45acp": number;
-        frag: number;
-        smoke: number;
-        strobe: number;
-        mirv: number;
-        snowball: number;
-        potato: number;
-        bandage: number;
-        healthkit: number;
-        soda: number;
-        painkiller: number;
-        "1xscope": number;
-        "2xscope": number;
-        "4xscope": number;
-        "8xscope": number;
-        "15xscope": number;
-    };
+    inventory: Partial<Record<InventoryItem, number>>;
 };
 
 export interface RoleDef {
@@ -93,7 +70,7 @@ export interface RoleDef {
     color?: number;
 }
 
-function createDefaultItems<T extends DefaultItems>(e: DeepPartial<T>): T {
+function createDefaultItems(e: DeepPartial<DefaultItems>): DefaultItems {
     const defaultItems: DefaultItems = {
         weapons: [
             { type: "", ammo: 0 },
