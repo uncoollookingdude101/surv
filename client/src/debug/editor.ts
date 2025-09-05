@@ -159,9 +159,11 @@ export class Editor {
                 title: "Spawn",
             });
             button.on("click", () => {
-                this.spawnLoot = true;
-                this.sendMsg = true;
-                this.config.set("debugTools", this.toolParams);
+                if (!availableLoot.includes(input.value)) {
+                    this.spawnLoot = true;
+                    this.sendMsg = true;
+                    this.config.set("debugTools", this.toolParams);
+                }
             });
 
             const dataList = document.createElement("datalist");
@@ -395,7 +397,9 @@ export class Editor {
         msg.loadNewMap = this.loadNewMap;
         msg.newMapSeed = this.toolParams.mapSeed;
 
-        msg.spawnLootType = this.spawnLoot ? this.toolParams.loot : "";
+        if (availableLoot.includes(this.toolParams.loot)) {
+            msg.spawnLootType = this.spawnLoot ? this.toolParams.loot : "";
+        }
         msg.promoteToRole = this.promoteToRole;
         msg.promoteToRoleType = this.toolParams.role;
 
