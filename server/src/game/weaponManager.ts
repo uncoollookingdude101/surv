@@ -412,26 +412,51 @@ export class WeaponManager {
             return;
         }
         const weaponDef = GameObjectDefs[this.activeWeapon] as GunDef;
-        if (!this.player.invManager.isValid(weaponDef.ammo)) return;
 
-        const invAmmo = this.player.invManager.get(weaponDef.ammo);
         if (
             this.player.actionType == GameConfig.Action.Revive ||
             this.player.actionType == GameConfig.Action.UseItem ||
-            this.weapons[this.curWeapIdx].ammo >= this.getAmmoStats(weaponDef).maxClip ||
-            (invAmmo <= 0 && !this.isInfinite(weaponDef)) ||
             this.curWeapIdx == WeaponSlot.Melee ||
             this.curWeapIdx == WeaponSlot.Throwable
         ) {
             return;
         }
 
+        const isInfinite = this.isInfinite(weaponDef);
+
+        let invAmmo = Infinity;
+
+        if (!isInfinite) {
+            if (this.player.invManager.isValid(weaponDef.ammo)) {
+                invAmmo = this.player.invManager.get(weaponDef.ammo);
+                if (invAmmo <= 0) return;
+            } else {
+                // not a valid ammo type and not an infinite ammo gun (e.g bugle)
+                // so dont try to reload it
+                // since bugle reloads are managed in a timer elsewhere
+                return;
+            }
+        }
+
+        const curWeapon = this.weapons[this.curWeapIdx];
+        const stats = this.getAmmoStats(weaponDef);
+
+        // gun is full
+        if (curWeapon.ammo >= stats.maxClip) {
+            return;
+        }
+
         let duration = weaponDef.reloadTime;
         let action: number = GameConfig.Action.Reload;
+
+        // schedule an alt reload if ammo is 0 and we have more inventory ammo
+        // than a single reload
+        // so if you have a mosin with 0 ammo and 1 ammo in the inventory it will
+        // schedule the single bullet reload instead of longer 5 bullets reload
         if (
             weaponDef.reloadTimeAlt &&
             this.weapons[this.curWeapIdx].ammo === 0 &&
-            (invAmmo > weaponDef.maxReload || this.isInfinite(weaponDef))
+            invAmmo > stats.maxReload
         ) {
             duration = weaponDef.reloadTimeAlt!;
             action = GameConfig.Action.ReloadAlt;
@@ -462,23 +487,25 @@ export class WeaponManager {
             maxReload = ammoStats.maxReload;
         }
 
-        const spaceLeft = math.clamp(
-            ammoStats.maxClip - activeWeaponAmmo,
-            0,
-            ammoStats.maxClip,
-        );
-        let amountToReload = math.clamp(maxReload, 0, spaceLeft);
+        const spaceLeft = ammoStats.maxClip - activeWeaponAmmo;
+        if (spaceLeft <= 0) return;
+
+        let amountToReload = math.min(maxReload, spaceLeft);
 
         if (amountToReload <= 0) return;
 
         const isInfinite = this.isInfinite(weaponDef);
+        // isValid check because some ammo types are not "valid" as in "they are in the player backpack"
+        // eg potato and bugle ammo
         if (!isInfinite && this.player.invManager.isValid(weaponDef.ammo)) {
             amountToReload = this.player.invManager.take(weaponDef.ammo, amountToReload);
+            if (amountToReload <= 0) return;
         }
 
-        if (amountToReload <= 0) return;
         weapon.ammo += amountToReload;
 
+        // reload again if we still have ammo in the inventory but didnt fill the weapon
+        // for single reload shotguns
         if (
             weapon.ammo < ammoStats.maxClip &&
             (isInfinite || this.player.invManager.has(weaponDef.ammo as InventoryItem))

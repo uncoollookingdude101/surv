@@ -1,9 +1,5 @@
 import { GameObjectDefs } from "../../../shared/defs/gameObjectDefs";
-import {
-    type BackpackDef,
-    SCOPE_LEVELS,
-    type ScopeDef,
-} from "../../../shared/defs/gameObjects/gearDefs";
+import { SCOPE_LEVELS, type ScopeDef } from "../../../shared/defs/gameObjects/gearDefs";
 import { GameConfig, type InventoryItem } from "../../../shared/gameConfig";
 import { math } from "../../../shared/utils/math";
 import type { Player } from "./objects/player";
@@ -42,10 +38,6 @@ export class InventoryManager {
         return this.player.game.playerBarn.bagSizes;
     }
 
-    get bagLevel() {
-        return (GameObjectDefs[this.player.backpack] as BackpackDef).level;
-    }
-
     isValid(item: string): item is InventoryItem {
         return item in emptyInventory;
     }
@@ -67,16 +59,17 @@ export class InventoryManager {
             const oldAmount = this._items[item];
             this._items[item] = amount;
 
-            if (oldAmount <= 0 && amount > 0) {
+            if (oldAmount === 0) {
                 this._onItemAdded(item);
-            } else if (amount <= 0) {
+            } else if (amount === 0) {
                 this._onItemRemoved(item);
             }
         }
     }
 
     getMaxCapacity(item: InventoryItem): number {
-        return this.bagSizes[item][this.bagLevel];
+        const bagLevel = this.player.getGearLevel(this.player.backpack);
+        return this.bagSizes[item][bagLevel];
     }
 
     /**
@@ -221,7 +214,6 @@ export class InventoryManager {
                 // automatically reloads gun if inventory has 0 ammo and ammo is picked up
                 const weaponInfo = GameObjectDefs[this.player.activeWeapon];
                 if (
-                    def.type == "ammo" &&
                     weaponInfo.type === "gun" &&
                     this.player.weapons[this.player.curWeapIdx].ammo <= 0 &&
                     weaponInfo.ammo === item
