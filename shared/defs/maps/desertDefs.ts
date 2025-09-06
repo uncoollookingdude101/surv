@@ -226,6 +226,7 @@ const mapDef: PartialMapDef = {
             {
                 name: "Blood Gulch",
                 pos: v2.create(0.51, 0.5),
+                dontSpawnObjects: true,
             },
             {
                 name: "Southhaven",
@@ -249,7 +250,7 @@ const mapDef: PartialMapDef = {
                     retryOnFailure: false,
                 },
             ],
-            placeSpawns: ["desert_town_01", "desert_town_02"],
+            placeSpawns: ["desert_town_02", "desert_town_01"],
         },
         densitySpawns: [
             {

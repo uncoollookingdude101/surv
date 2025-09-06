@@ -199,6 +199,7 @@ export interface MapDef {
         places: Array<{
             name: string;
             pos: Vec2;
+            dontSpawnObjects?: boolean;
         }>;
         bridgeTypes: {
             medium: string;
