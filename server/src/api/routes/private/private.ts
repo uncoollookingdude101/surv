@@ -74,6 +74,29 @@ export const PrivateRouter = new Hono<Context>()
         },
     )
     .post(
+        "/set_client_theme",
+        validateParams(
+            z.object({
+                theme: z.string(),
+            }),
+        ),
+        (c) => {
+            const { theme } = c.req.valid("json");
+
+            if (!MapDefs[theme as keyof typeof MapDefs]) {
+                return c.json({ error: "Invalid map name" }, 400);
+            }
+
+            server.clientTheme = theme as keyof typeof MapDefs;
+
+            saveConfig(serverConfigPath, {
+                clientTheme: server.clientTheme,
+            });
+
+            return c.json({}, 200);
+        },
+    )
+    .post(
         "/toggle_captcha",
         validateParams(
             z.object({
