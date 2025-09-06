@@ -10,7 +10,12 @@ import {
     zRemoveItemParams,
 } from "../../../../../shared/types/moderation";
 import { serverConfigPath } from "../../../config";
-import { type SaveGameBody, zUpdateRegionBody } from "../../../utils/types";
+import {
+    type SaveGameBody,
+    zSetClientThemeBody,
+    zSetGameModeBody,
+    zUpdateRegionBody,
+} from "../../../utils/types";
 import type { Context } from "../..";
 import { server } from "../../apiServer";
 import {
@@ -39,63 +44,52 @@ export const PrivateRouter = new Hono<Context>()
         server.updateRegion(regionId, data);
         return c.json({}, 200);
     })
-    .post(
-        "/set_game_mode",
-        validateParams(
-            z.object({
-                index: z.number(),
-                teamMode: z.nativeEnum(TeamMode).optional(),
-                mapName: z.string().optional(),
-                enabled: z.boolean().optional(),
-            }),
-        ),
-        (c) => {
-            const { index, mapName, teamMode, enabled } = c.req.valid("json");
+    .post("/set_game_mode", validateParams(zSetGameModeBody), (c) => {
+        const {
+            index,
+            map_name: mapName,
+            team_mode: teamMode,
+            enabled,
+        } = c.req.valid("json");
 
-            if (!MapDefs[mapName as keyof typeof MapDefs]) {
-                return c.json({ error: "Invalid map name" }, 400);
-            }
+        if (!MapDefs[mapName as keyof typeof MapDefs]) {
+            return c.json({ error: "Invalid map name" }, 400);
+        }
 
-            if (!server.modes[index]) {
-                return c.json({ error: "Invalid mode index" }, 400);
-            }
+        if (!server.modes[index]) {
+            return c.json({ error: "Invalid mode index" }, 400);
+        }
 
-            server.modes[index] = {
-                mapName: (mapName ?? server.modes[index].mapName) as keyof typeof MapDefs,
-                teamMode: teamMode ?? server.modes[index].teamMode,
-                enabled: enabled ?? server.modes[index].enabled,
-            };
+        server.modes[index] = {
+            mapName: (mapName ?? server.modes[index].mapName) as keyof typeof MapDefs,
+            teamMode: teamMode ?? server.modes[index].teamMode,
+            enabled: enabled ?? server.modes[index].enabled,
+        };
 
-            saveConfig(serverConfigPath, {
-                modes: server.modes,
-            });
+        saveConfig(serverConfigPath, {
+            modes: server.modes,
+        });
 
-            return c.json({}, 200);
-        },
-    )
-    .post(
-        "/set_client_theme",
-        validateParams(
-            z.object({
-                theme: z.string(),
-            }),
-        ),
-        (c) => {
-            const { theme } = c.req.valid("json");
+        return c.json(
+            { message: `Set mode ${index} to ${JSON.stringify(server.modes[index])}` },
+            200,
+        );
+    })
+    .post("/set_client_theme", validateParams(zSetClientThemeBody), (c) => {
+        const { theme } = c.req.valid("json");
 
-            if (!MapDefs[theme as keyof typeof MapDefs]) {
-                return c.json({ error: "Invalid map name" }, 400);
-            }
+        if (!MapDefs[theme as keyof typeof MapDefs]) {
+            return c.json({ error: "Invalid map name" }, 400);
+        }
 
-            server.clientTheme = theme as keyof typeof MapDefs;
+        server.clientTheme = theme as keyof typeof MapDefs;
 
-            saveConfig(serverConfigPath, {
-                clientTheme: server.clientTheme,
-            });
+        saveConfig(serverConfigPath, {
+            clientTheme: server.clientTheme,
+        });
 
-            return c.json({}, 200);
-        },
-    )
+        return c.json({ message: `Set client theme to ${theme}` }, 200);
+    })
     .post(
         "/toggle_captcha",
         validateParams(
