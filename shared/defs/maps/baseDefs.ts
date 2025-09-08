@@ -13,7 +13,12 @@ import { MapId } from "../types/misc";
 
 export const Main: MapDef = {
     mapId: MapId.Main,
-    desc: { name: "Normal", icon: "", buttonCss: "" },
+    desc: {
+        name: "Normal",
+        icon: "",
+        buttonCss: "",
+        backgroundImg: "img/main_splash.png",
+    },
     assets: {
         audio: [
             { name: "club_music_01", channel: "ambient" },

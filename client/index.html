@@ -30,12 +30,6 @@
 
     <link href="css/app.css" rel="stylesheet">
     <link href="css/game.css" rel="stylesheet">
-
-    <style type="text/css">
-      #background {
-        background-image: url(%VITE_BACKGROUND_IMG%);
-      }
-    </style>
   </head>
   <body>
     <div id="preroll-wrapper">
@@ -791,7 +785,7 @@
               <div class="login-options-content"></div>
             </div>
           </div>
-        </div> 
+        </div>
 
         <div id="start-main-center">
           <div id="start-row-header">
@@ -1436,6 +1430,16 @@
         </div>
       </div>
     </div>
+    <script>
+      // load a cached background image as earlier as possible
+      // so we dont have to wait for API to reply to show a background
+      const config = JSON.parse(localStorage.getItem("surviv_config") || {});
+      const bgImg = config.cachedBgImg || "img/main_splash.png";
+      const bg = document.getElementById("background");
+      if (bg) {
+          bg.style.backgroundImage = `url(${bgImg})`;
+      }
+    </script>
     <script type="module" src="src/main.ts"></script>
   </body>
 </html>

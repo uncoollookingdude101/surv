@@ -131,14 +131,7 @@ export interface ConfigType {
      *
      * NOTE: Required at build time, unlike modes it wont update by fetching from the server!
      */
-    clientTheme:
-        | "main"
-        | "easter"
-        | "halloween"
-        | "faction"
-        | "cobalt"
-        | "snow"
-        | "spring";
+    clientTheme: keyof typeof MapDefs;
 
     /**
      * Game tick rate.

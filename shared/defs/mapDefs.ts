@@ -63,6 +63,7 @@ export interface MapDef {
         icon: string;
         buttonCss: string;
         buttonText?: string;
+        backgroundImg: string;
     };
     assets: {
         audio: Array<{

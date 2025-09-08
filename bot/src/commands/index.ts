@@ -3,6 +3,7 @@ import {
     type ChatInputCommandInteraction,
     type SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
+import { zSetClientThemeBody, zSetGameModeBody } from "../../../server/src/utils/types";
 import {
     zBanAccountParams,
     zBanIpParams,
@@ -216,6 +217,52 @@ const commands = {
             {
                 name: "slug",
                 description: "The account slug to remove the item from",
+                required: true,
+                type: ApplicationCommandOptionType.String,
+            },
+        ],
+    }),
+    [Command.SetGameMode]: createCommand({
+        name: Command.SetGameMode,
+        description: "Sets a game mode in the API",
+        optionValidator: zSetGameModeBody,
+        isPrivateRoute: true,
+        options: [
+            {
+                name: "index",
+                description: "The mode index, e.g 0 for solo / first play button",
+                required: true,
+                type: ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: "map_name",
+                description: "The map name",
+                required: false,
+                type: ApplicationCommandOptionType.String,
+            },
+            {
+                name: "team_mode",
+                description: "The team mode",
+                required: false,
+                type: ApplicationCommandOptionType.Integer,
+            },
+            {
+                name: "enabled",
+                description: "If the mode is enabled",
+                required: false,
+                type: ApplicationCommandOptionType.Boolean,
+            },
+        ],
+    }),
+    [Command.SetClientTheme]: createCommand({
+        name: Command.SetClientTheme,
+        description: "Sets the client theme in the API",
+        optionValidator: zSetClientThemeBody,
+        isPrivateRoute: true,
+        options: [
+            {
+                name: "theme",
+                description: "The client theme",
                 required: true,
                 type: ApplicationCommandOptionType.String,
             },
