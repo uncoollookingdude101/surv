@@ -2630,7 +2630,6 @@ export class Player extends BaseGameObject {
                     finalDamage *= gameSourceDef.headshotMult;
                 }
             }
-            console.log(isHeadShot, params.gameSourceType, finalDamage);
 
             if (this.hasPerk("flak_jacket")) {
                 reduceDamage(
