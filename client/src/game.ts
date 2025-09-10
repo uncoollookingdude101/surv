@@ -196,6 +196,9 @@ export class Game {
                         this.m_onMsg(type, msgStream.getStream());
                         msgStream.stream.readAlignToNextByte();
                     }
+                    this.debugHUD?.netInGraph.addEntry(
+                        msgStream.stream.buffer.byteLength,
+                    );
                 };
                 this.m_ws.onclose = () => {
                     const displayingStats = this.m_uiManager?.displayingStats;
@@ -1620,7 +1623,6 @@ export class Game {
                 this.m_disconnectMsg = msg.reason;
             }
         }
-        this.debugHUD.netInGraph.addEntry(stream.buffer.byteLength);
     }
 
     m_sendMessage(type: net.MsgType, data: net.Msg, maxLen?: number) {
