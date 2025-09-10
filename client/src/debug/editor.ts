@@ -159,7 +159,7 @@ export class Editor {
                 title: "Spawn",
             });
             button.on("click", () => {
-                if (!availableLoot.includes(input.value)) {
+                if (availableLoot.includes(input.value)) {
                     this.spawnLoot = true;
                     this.sendMsg = true;
                     this.config.set("debugTools", this.toolParams);
