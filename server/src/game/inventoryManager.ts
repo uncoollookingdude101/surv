@@ -130,7 +130,7 @@ export class InventoryManager {
     } {
         const result = this.give(item, amount);
 
-        if (result.remaining > 0) {
+        if (result.remaining > 0 && item !== "1xscope") {
             this.player.dropLoot(item, result.remaining, false);
         }
 
