@@ -4115,7 +4115,6 @@ export class Player extends BaseGameObject {
             10,
             v2.neg(this.dir),
             undefined,
-            undefined,
             "player",
         );
     }
