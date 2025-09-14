@@ -174,7 +174,10 @@ const mapDef: PartialMapDef = {
                     },
                 },
             ],
-            crates: [{ name: "airdrop_crate_04", weight: 1 }],
+            crates: [
+                { name: "airdrop_crate_03", weight: 1 },
+                { name: "airdrop_crate_04", weight: 1 },
+            ],
         },
         roles: {
             timings: [
@@ -323,6 +326,7 @@ const mapDef: PartialMapDef = {
             { name: "m9", count: 1, weight: 0.01 },
             { name: "scout_elite", count: 1, weight: 1.5 },
             { name: "vss", count: 1, weight: 2.5 }, // !
+            { name: "colt45", count: 1, weight: 2.5 },
         ],
         tier_airdrop_mythic: [
             { name: "scarssr", count: 1, weight: 1 }, // ?

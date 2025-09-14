@@ -331,7 +331,7 @@ const mapDef = {
             { name: "chest02", count: 1, weight: 6 },
             { name: "chest03", count: 1, weight: 0.2 },
         ],
-        tier_class_crate_mythic: [{ name: "scavanger_adv", count: 1, weight: 1 }],
+        tier_class_crate_mythic: [{ name: "scavenger_adv", count: 1, weight: 1 }],
         tier_scopes_sniper: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],
@@ -342,9 +342,7 @@ const mapDef = {
         tier_chest_04: [
             { name: "p30l_dual", count: 1, weight: 1 }, // ?
         ],
-        tier_chest_04b: [
-            { name: "lasr_gun_dual", count: 1, weight: 1 }
-        ]
+        tier_chest_04b: [{ name: "lasr_gun_dual", count: 1, weight: 1 }],
     },
     biome: {
         colors: {

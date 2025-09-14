@@ -185,14 +185,15 @@ export const RoleDefs: Record<string, RoleDef> = {
             "chambered",
             "fabricate_m",
             "ap_rounds",
-            "inspiration"
+            "inspiration",
+            "scavenger",
         ],
         defaultItems: createDefaultItems({
             weapons: [
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "bugle", ammo: 0 },
+                            [TeamColor.Red]: { type: "ak47op", ammo: 0 },
                             [TeamColor.Blue]: { type: "bugle", ammo: 0 },
                         },
                         teamcolor,
@@ -498,13 +499,13 @@ export const RoleDefs: Record<string, RoleDef> = {
     },
     woods_king: {
         type: "role",
-        announce: false,
+        announce: true,
         killFeed: { dead: true, color: "#12ff00ff" },
         sound: { dead: "leader_dead_01" },
         mapIndicator: {
             sprite: "player-the-hunted.img",
             tint: 0x12ff00ff,
-            pulse: true,
+            pulse: false,
             pulseTint: 0x12ff00ff,
         },
         perks: ["gotw", "windwalk"],
@@ -672,18 +673,11 @@ export const RoleDefs: Record<string, RoleDef> = {
             pulse: true,
             pulseTint: 0xff0000,
         },
-        perks: [
-            "endless_ammo",
-            "steelskin",
-            "fabricate_m",
-            "leadership",
-            "bonus_assault",
-            "flak_jacket",
-        ],
+        perks: ["endless_ammo", "steelskin", "fabricate_m", "leadership", "flak_jacket"],
         defaultItems: createDefaultItems({
             weapons: [
-                { type: "pkp_s", ammo: 200 },
-                { type: "usas_s", ammo: 10 },
+                { type: "m134_s", ammo: 200 },
+                { type: "m9_cursed", ammo: 15 },
                 { type: "naginata_seeker", ammo: 0 },
             ],
             backpack: "backpack03",

@@ -9181,6 +9181,17 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         sound: { explode: "crate_break_01" },
     } as unknown as Partial<ObstacleDef>),
+    crate_10c: createCrate({
+        health: 200,
+        scale: { destroy: 0.75 },
+        loot: [autoLoot("m870_h", 1)],
+        map: { display: false },
+        img: {
+            sprite: "map-crate-10.img",
+            residue: "map-crate-res-03.img",
+        },
+        sound: { explode: "crate_break_01" },
+    } as unknown as Partial<ObstacleDef>),
     crate_11: createCrate({
         scale: { destroy: 0.75 },
         health: 200,
@@ -9511,6 +9522,19 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             residue: "none",
         },
         destroyType: "crate_10b",
+        explodeParticle: "airdropCrate02",
+    } as unknown as Partial<ObstacleDef>),
+    airdrop_crate_01c: createAirdrop({
+        button: {
+            useImg: "map-airdrop-02.img",
+            useParticle: "airdropCrate01",
+            sound: { on: "airdrop_open_01", off: "" },
+        },
+        img: {
+            sprite: "map-airdrop-01.img",
+            residue: "none",
+        },
+        destroyType: "crate_10c",
         explodeParticle: "airdropCrate02",
     } as unknown as Partial<ObstacleDef>),
     airdrop_crate_02: createAirdrop({

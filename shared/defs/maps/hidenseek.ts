@@ -53,10 +53,24 @@ const mapDef: PartialMapDef = {
     gameConfig: {
         planes: {
             timings: [
+                {
+                    circleIdx: 1,
+                    wait: 10,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_01c",
+                    },
+                },
+                {
+                    circleIdx: 1,
+                    wait: 10,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_01c",
+                    },
+                },
                 { circleIdx: 2, wait: 30, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 3, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 3, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 4, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
                 { circleIdx: 4, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
             ],
             crates: [{ name: "airdrop_crate_01b", weight: 1 }],
@@ -96,7 +110,7 @@ const mapDef: PartialMapDef = {
         tier_vending_soda: [
             { name: "", count: 1, weight: 1 }, // ?
         ],
-        tier_throwables: [{ name: "", count: 2, weight: 1 }],
+        tier_throwables: [{ name: "snowball_h", count: 1, weight: 1 }],
         tier_airdrop_throwables: [{ name: "", count: 2, weight: 1 }],
         tier_ammo: [{ name: "", count: 60, weight: 1 }],
         tier_ammo_crate: [{ name: "", count: 60, weight: 1 }],
