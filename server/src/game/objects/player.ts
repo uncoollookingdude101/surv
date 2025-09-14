@@ -3748,6 +3748,11 @@ export class Player extends BaseGameObject {
                     pickupMsg.type = freeGunSlot.cause;
                     let newGunIdx = freeGunSlot.slot;
 
+                    if (newGunIdx === null) {
+                        this.pickupTicker = 0;
+                        return;
+                    }
+
                     // if "preloaded" gun add ammo to inventory
                     if (obj.isPreloadedGun) {
                         this.invManager.giveAndDrop(
@@ -3759,11 +3764,6 @@ export class Player extends BaseGameObject {
                     if (freeGunSlot.cause === net.PickupMsgType.AlreadyOwned) {
                         amountLeft = 1;
                         break;
-                    }
-
-                    if (newGunIdx === null) {
-                        this.pickupTicker = 0;
-                        return;
                     }
 
                     const oldWeapDef = GameObjectDefs[this.weapons[newGunIdx].type] as
