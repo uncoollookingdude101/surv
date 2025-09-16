@@ -3783,6 +3783,15 @@ export class Player extends BaseGameObject {
 
                     if (def.dualWieldType && freeGunSlot.isDual) {
                         gunType = def.dualWieldType;
+
+                        // cancel reload when going from single to dual
+                        if (this.curWeapIdx === newGunIdx && this.isReloading()) {
+                            this.cancelAction();
+
+                            if (this.weapons[newGunIdx].ammo <= 0) {
+                                this.weaponManager.scheduledReload = true;
+                            }
+                        }
                     }
 
                     // replaces the gun
