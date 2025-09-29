@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { inArray } from "drizzle-orm";
 import type { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import type { UpgradeWebSocket, WSContext } from "hono/ws";
@@ -14,12 +15,15 @@ import {
     type TeamPlayGameMsg,
     zTeamClientMsg,
 } from "../../shared/types/team";
+import type { Loadout } from "../../shared/utils/loadout";
 import { assert } from "../../shared/utils/util";
 import type { ApiServer } from "./api/apiServer";
 import { validateSessionToken } from "./api/auth";
+import { db } from "./api/db";
+import { usersTable } from "./api/db/schema";
 import { hashIp, isBanned } from "./api/routes/private/ModerationRouter";
 import { Config } from "./config";
-import { Logger } from "./utils/logger";
+import { ServerLogger } from "./utils/logger";
 import {
     getHonoIp,
     HTTPRateLimit,
@@ -28,6 +32,7 @@ import {
     verifyTurnsStile,
     WebSocketRateLimit,
 } from "./utils/serverHelpers";
+import type { FindGamePrivateBody } from "./utils/types";
 
 interface SocketData {
     rateLimit: Record<symbol, number>;
@@ -246,6 +251,19 @@ class Room {
 
         const tokenMap = new Map<Player, string>();
 
+        const userIds = this.players.map((p) => p.userId).filter((p) => p !== null);
+
+        let loadouts: Array<{ userId: string; loadout: Loadout }> = [];
+        if (userIds.length > 0) {
+            loadouts = await db
+                .select({
+                    userId: usersTable.id,
+                    loadout: usersTable.loadout,
+                })
+                .from(usersTable)
+                .where(inArray(usersTable.id, userIds));
+        }
+
         const playerData = this.players.map((p) => {
             const token = randomUUID();
             tokenMap.set(p, token);
@@ -253,7 +271,8 @@ class Room {
                 token,
                 userId: p.userId,
                 ip: p.ip,
-            };
+                loadout: loadouts.find((l) => l.userId == p.userId)?.loadout,
+            } satisfies FindGamePrivateBody["playerData"][0];
         });
 
         const mode = this.teamMenu.server.modes[this.data.gameModeIdx];
@@ -348,13 +367,13 @@ class Room {
     }
 }
 
-const alphanumerics = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-function randomString(len: number) {
+const teamCodeCharacters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
+function generateTeamCode(): string {
     let str = "";
-    let i = 0;
-    while (i < len) {
-        str += alphanumerics.charAt(Math.floor(Math.random() * alphanumerics.length));
-        i++;
+    for (let i = 0; i < 4; i++) {
+        str += teamCodeCharacters.charAt(
+            Math.floor(Math.random() * teamCodeCharacters.length),
+        );
     }
     return `${str}`;
 }
@@ -362,7 +381,7 @@ function randomString(len: number) {
 export class TeamMenu {
     rooms = new Map<string, Room>();
 
-    logger = new Logger("TeamMenu");
+    logger = new ServerLogger("TeamMenu");
 
     playersByIp = new Map<string, Set<Player>>();
 
@@ -610,9 +629,9 @@ export class TeamMenu {
     }
 
     createRoom(data: ClientRoomData) {
-        let roomUrl = randomString(4);
+        let roomUrl = generateTeamCode();
         while (this.rooms.has(roomUrl)) {
-            roomUrl = randomString(4);
+            roomUrl = generateTeamCode();
         }
 
         const room = new Room(this, roomUrl, data);

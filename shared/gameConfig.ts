@@ -28,6 +28,7 @@ export enum Action {
     ReloadAlt,
     UseItem,
     Revive,
+    Count,
 }
 
 export enum Rarity {
@@ -61,6 +62,7 @@ export enum Anim {
     CrawlForward,
     CrawlBackward,
     Revive,
+    Count,
 }
 
 export enum Plane {
@@ -73,6 +75,7 @@ export enum HasteType {
     Windwalk,
     Takedown,
     Inspire,
+    Count,
 }
 
 export enum Input {
@@ -120,7 +123,7 @@ export const GameConfig = {
     // the protocol we originated from was 78
     // remember to bump this every time a serialization function is changed
     // or a definition item added, removed or moved
-    protocolVersion: 1006,
+    protocolVersion: 1008,
     Input,
     EmoteSlot,
     WeaponSlot,
@@ -416,3 +419,5 @@ export const GameConfig = {
         xp: 1,
     } as Record<string, number>,
 };
+
+export type InventoryItem = keyof (typeof GameConfig)["bagSizes"];

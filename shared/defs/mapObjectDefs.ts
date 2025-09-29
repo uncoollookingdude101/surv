@@ -30,31 +30,7 @@ function autoLoot(type: string, count: number, props?: LootSpawnDef["props"]) {
 }
 
 function randomObstacleType(types: Record<string, number>) {
-    const arr: Array<{
-        type: string;
-        weight: number;
-    }> = [];
-    for (const key in types) {
-        if (types[key]) {
-            arr.push({ type: key, weight: types[key] });
-        }
-    }
-    if (arr.length === 0) {
-        throw new Error("Invalid obstacle types");
-    }
-    let total = 0.0;
-    for (let i = 0; i < arr.length; i++) {
-        total += arr[i].weight;
-    }
-    return function () {
-        let rng = util.random(0, total);
-        let idx = 0;
-        while (rng > arr[idx].weight) {
-            rng -= arr[idx].weight;
-            idx++;
-        }
-        return arr[idx].type;
-    };
+    return types;
 }
 
 function wallImg(img: string, tint = 0xffffff, alpha = 1, zIdx = 10) {
@@ -10798,10 +10774,31 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { tint: 0xb1b1b1 },
         loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
     }),
+    // savannah cache
     tree_03sv: createTree({
         map: { display: false, color: 0x435119 },
         img: {
             sprite: "map-tree-03sv.img",
+            tint: 0xb1b1b1,
+        },
+        loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
+    } as unknown as Partial<ObstacleDef>),
+    // desert cache
+    tree_03d: createTree({
+        map: { display: false, color: 0x758028 },
+        img: { sprite: "map-tree-06.img", tint: 0xb1b1b1 },
+        loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
+    } as unknown as Partial<ObstacleDef>),
+    // faction cache
+    tree_03f: createTree({
+        scale: { createMin: 1.2, createMax: 1.6 },
+        health: 200,
+        map: { display: false, color: 0xf3204, scale: 3 },
+        img: {
+            sprite: "map-tree-08f.img",
+            residue: "map-tree-res-01.img",
+            scale: 0.35,
+            zIdx: 801,
             tint: 0xb1b1b1,
         },
         loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
@@ -10813,11 +10810,25 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-tree-07.img", tint: 0xb1b1b1 },
         loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
     } as unknown as Partial<ObstacleDef>),
+    // halloween cache
+    tree_03h: createTree({
+        scale: { createMin: 1, createMax: 1.2 },
+        map: { display: false, color: 0x4f5715, scale: 2.5 },
+        img: { sprite: "map-tree-07.img", tint: 0xb1b1b1 },
+        loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
+    } as unknown as Partial<ObstacleDef>),
     // spring cache
     tree_03sp: createTree({
         scale: { createMin: 1, createMax: 1.2 },
         map: { display: false, color: 0xfec6e1, scale: 2.5 },
         img: { sprite: "map-tree-07sp.img", tint: 0xb1b1b1 },
+        loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
+    } as unknown as Partial<ObstacleDef>),
+    // summer cache
+    tree_03su: createTree({
+        scale: { createMin: 1, createMax: 1.2 },
+        map: { display: false, color: 0x215906, scale: 2.5 },
+        img: { sprite: "map-tree-07su.img", tint: 0xb1b1b1 },
         loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
     } as unknown as Partial<ObstacleDef>),
     // cobalt cache
@@ -13671,14 +13682,14 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 inheritOri: false,
             },
         ],
-        map: { displayType: "tree_01sv" },
+        map: { displayType: "tree_03sv" },
     }),
     cache_02w: createCache({
         mapObjects: [
             {
                 type: "tree_03w",
                 pos: v2.create(0, 0),
-                scale: 0.9,
+                scale: 1,
                 ori: 0,
             },
             {
@@ -13709,6 +13720,24 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         ],
         map: { displayType: "tree_07sp" },
     }),
+    cache_02su: createCache({
+        mapObjects: [
+            {
+                type: "tree_03su",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_initiative_01",
+                pos: v2.create(0, 0),
+                scale: 1.3,
+                ori: 0,
+                inheritOri: false,
+            },
+        ],
+        map: { displayType: "tree_07su" },
+    }),
     cache_02cb: createCache({
         mapObjects: [
             {
@@ -13726,6 +13755,60 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
         map: { displayType: "tree_01cb" },
+    }),
+    cache_02d: createCache({
+        mapObjects: [
+            {
+                type: "tree_03d",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_initiative_01",
+                pos: v2.create(0, 0),
+                scale: 1.2,
+                ori: 0,
+                inheritOri: false,
+            },
+        ],
+        map: { displayType: "tree_06" },
+    }),
+    cache_02f: createCache({
+        mapObjects: [
+            {
+                type: "tree_03f",
+                pos: v2.create(0, 0),
+                scale: 1.2,
+                ori: 0,
+            },
+            {
+                type: "decal_initiative_01",
+                pos: v2.create(0, 0),
+                scale: 1.3,
+                ori: 0,
+                inheritOri: false,
+            },
+        ],
+        map: { displayType: "tree_08f" },
+    }),
+    cache_02h: createCache({
+        mapObjects: [
+            {
+                type: "tree_03h",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_initiative_01",
+                pos: v2.create(0, 0),
+                scale: 1.2,
+                ori: 0,
+                inheritOri: false,
+            },
+        ],
+        map: { displayType: "tree_07" },
     }),
     cache_03: createCache({
         mapObjects: [
@@ -30674,10 +30757,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         type: "loot_spawner",
         loot: [tierLoot("tier_woodaxe", 1, 1)],
     },
-    loot_tier_fireaxe: {
-        type: "loot_spawner",
-        loot: [tierLoot("tier_fireaxe", 1, 1)],
-    },
+    // loot_tier_fireaxe: {
+    //     type: "loot_spawner",
+    //     loot: [tierLoot("tier_fireaxe", 1, 1)],
+    // },
     loot_tier_stonehammer: {
         type: "loot_spawner",
         loot: [tierLoot("tier_stonehammer", 1, 1)],
@@ -30726,10 +30809,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         type: "loot_spawner",
         loot: [tierLoot("tier_spetsnaz_outfit", 1, 1)],
     },
-    loot_tier_eye_01: {
-        type: "loot_spawner",
-        loot: [tierLoot("tier_eye_01", 1, 1)],
-    },
+    // loot_tier_eye_01: {
+    //     type: "loot_spawner",
+    //     loot: [tierLoot("tier_eye_01", 1, 1)],
+    // },
     loot_tier_eye_02: {
         type: "loot_spawner",
         loot: [tierLoot("tier_eye_02", 1, 1)],
@@ -30746,10 +30829,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         type: "loot_spawner",
         loot: [tierLoot("tier_chrys_02", 1, 1)],
     },
-    loot_tier_chrys_02b: {
-        type: "loot_spawner",
-        loot: [tierLoot("tier_chrys_02b", 1, 1)],
-    },
+    // loot_tier_chrys_02b: {
+    //     type: "loot_spawner",
+    //     loot: [tierLoot("tier_chrys_02b", 1, 1)],
+    // },
     loot_tier_chrys_03: {
         type: "loot_spawner",
         loot: [tierLoot("tier_chrys_03", 1, 1)],
@@ -30763,11 +30846,11 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [tierLoot("tier_forest_helmet", 1, 1)],
         terrain: { grass: true, beach: false },
     },
-    loot_tier_helmet_potato: {
-        type: "loot_spawner",
-        loot: [tierLoot("tier_potato_helmet", 1, 1)],
-        terrain: { grass: true, beach: false },
-    },
+    // loot_tier_helmet_potato: {
+    //     type: "loot_spawner",
+    //     loot: [tierLoot("tier_potato_helmet", 1, 1)],
+    //     terrain: { grass: true, beach: false },
+    // },
     loot_tier_perk_test: {
         type: "loot_spawner",
         loot: [
