@@ -4,6 +4,8 @@ import { util } from "../../shared/utils/util";
 import type { Locale } from "./ui/localization";
 
 export const debugToolsConfig = {
+    enabled: false,
+
     zoomEnabled: false,
     zoom: GameConfig.scopeZoomRadius.desktop["1xscope"],
 
