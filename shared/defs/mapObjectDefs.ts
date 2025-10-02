@@ -8638,7 +8638,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     } as unknown as Partial<ObstacleDef>),
     bush_06: createBush({
         collision: collider.createCircle(v2.create(0, 0), 1.75),
-        map: { display: true, color: 0xFB9C01, scale: 1.5 },
+        map: { display: true, color: 0xfb9c01, scale: 1.5 },
         img: {
             sprite: "map-bush-06.img",
             residue: "map-bush-res-06.img",
@@ -8646,7 +8646,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     bush_06tr: createBush({
         collision: collider.createCircle(v2.create(0, 0), 1.75),
-        map: { display: true, color: 0xE2A51A, scale: 1.6 },
+        map: { display: true, color: 0xe2a51a, scale: 1.6 },
         img: {
             sprite: "map-bush-06tr.img",
             residue: "map-bush-res-06.img",
@@ -8773,7 +8773,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-chest-03x.img" },
         loot: [tierLoot("tier_chest", 3, 5), autoLoot("outfitWaterElem", 1)],
     }),
-	chest_03tr: createRiverChest({
+    chest_03tr: createRiverChest({
         img: { sprite: "map-chest-03tr.img" },
         loot: [tierLoot("tier_chest", 3, 5), autoLoot("outfitWaterElem", 1)],
     }),
@@ -8977,8 +8977,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     crate_03: createCrate({
         health: 100,
         collision: collider.createAabbExtents(v2.create(0, 0), v2.create(1.575, 1.575)),
-        loot: [tierLoot("tier_throwables", 2, 4),
-                tierLoot("tier_fragtastic", 1, 1)],
+        loot: [tierLoot("tier_throwables", 2, 4), tierLoot("tier_fragtastic", 1, 1)],
         map: { color: 0x4d4d1e, scale: 0.875 },
         terrain: { grass: true, beach: false },
         img: { sprite: "map-crate-03.img", scale: 0.35 },

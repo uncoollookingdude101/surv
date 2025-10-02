@@ -23,15 +23,15 @@ const mapDef: PartialMapDef = {
     },
     biome: {
          colors: {
-            background: 0x474D4A,
-            water: 0x707B76,
-            waterRipple: 0x7E8984,
-            beach: 0xCC975B,
-            riverbank: 0xBD5C21,
-            grass: 0xA08B2F,
+            background: 0x474d4a,
+            water: 0x707b76,
+            waterRipple: 0x7e8984,
+            beach: 0xcc975b,
+            riverbank: 0xbd5c21,
+            grass: 0xa08b2f,
             underground: 0x1b0d03,
             playerSubmerge: 0x2b8ca4,
-            playerGhillie: 0xA48E2E,
+            playerGhillie: 0xa48e2e,
         },
     },
         mapGen: {
