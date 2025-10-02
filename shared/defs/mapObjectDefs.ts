@@ -10392,6 +10392,12 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             residue: "map-stone-res-02x.img",
         },
     }),
+    stone_03tr: createRiverStone({
+        img: {
+            sprite: "map-stone-03tr.img",
+            residue: "map-stone-res-02x.img",
+        },
+    }),
     stone_04: createStone({
         stonePlated: true,
         scale: {
