@@ -19,7 +19,7 @@ const mapDef: PartialMapDef = {
             { name: "xp_drop_02", channel: "sfx" },
             { name: "pumpkin_break_01", channel: "sfx" },
         ],
-        atlases: ["main", "gradient", "loadout", "shared", "woods"],
+        atlases: ["main", "gradient", "loadout", "shared"],
     },
     biome: {
         colors: {
