@@ -22,7 +22,7 @@ const mapDef: PartialMapDef = {
         atlases: ["main", "gradient", "loadout", "shared", "woods"],
     },
     biome: {
-         colors: {
+        colors: {
             background: 0x474d4a,
             water: 0x707b76,
             waterRipple: 0x7e8984,
@@ -34,7 +34,7 @@ const mapDef: PartialMapDef = {
             playerGhillie: 0xa48e2e,
         },
     },
-        mapGen: {
+    mapGen: {
         densitySpawns: [
             {
                 stone_01: 250,
@@ -62,7 +62,7 @@ const mapDef: PartialMapDef = {
                 woodpile_02: 4,
             },
         ],
-            fixedSpawns: [
+        fixedSpawns: [
             {
                 // small is spawn count for solos and duos, large is spawn count for squads
                 warehouse_01: 3,
@@ -101,7 +101,6 @@ const mapDef: PartialMapDef = {
         ],
     },
     gameMode: { turkeyMode: 1 },
-    
 };
 
 export const Turkey = util.mergeDeep({}, Main, mapDef);

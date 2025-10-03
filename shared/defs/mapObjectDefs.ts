@@ -10126,7 +10126,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     squash_01: createPumpkin({
         collision: collider.createCircle(v2.create(0, 0), 1.25),
-        map: { display: true, color: 0x8DAD49, scale: 1.25 },
+        map: { display: true, color: 0x8dad49, scale: 1.25 },
         img: {
             sprite: "map-squash-01.img",
             residue: "map-squash-res-01.img",
@@ -13192,7 +13192,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 0,
             },
             {
-                type: randomObstacleType({ "": 2, "loot_tier_leaf_pile": 1 }),
+                type: randomObstacleType({ "": 2, loot_tier_leaf_pile: 1 }),
                 pos: v2.create(0, 0),
                 scale: 1,
                 ori: 0,
@@ -16206,7 +16206,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
     } as unknown as Partial<BuildingDef>),
     outhouse_02: createOutHouse({
-		map: { display: true, color: 0x9E4116, scale: 1 },
+        map: { display: true, color: 0x9e4116, scale: 1 },
         ceiling: {
             zoomRegions: [
                 {
