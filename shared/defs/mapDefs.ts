@@ -16,6 +16,7 @@ import { Woods } from "./maps/woodsDefs";
 import { WoodsSnow } from "./maps/woodsSnowDefs";
 import { WoodsSpring } from "./maps/woodsSpringDefs";
 import { WoodsSummer } from "./maps/woodsSummerDefs";
+import { Birthday } from "./maps/birthdayDefs";
 import type { MapId } from "./types/misc";
 
 export type Atlas =
@@ -49,6 +50,7 @@ export const MapDefs = {
     savannah: Savannah,
     cobalt: Cobalt,
     turkey: Turkey,
+    birthday: Birthday,
 
     /* STRIP_FROM_PROD_CLIENT:START */
     test_normal: testNormal,
