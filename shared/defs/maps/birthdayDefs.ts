@@ -20,9 +20,7 @@ export const Birthday: MapDef = {
         backgroundImg: "img/main_splash.png",
     },
     assets: {
-        audio: [
-            
-        ],
+        audio: [],
         atlases: ["gradient", "loadout", "shared", "main"],
     },
     biome: {
@@ -53,12 +51,8 @@ export const Birthday: MapDef = {
     },
     gameConfig: {
         planes: {
-            timings: [
-
-            ],
-            crates: [
-
-            ],
+            timings: [],
+            crates: [],
         },
         bagSizes: {},
         bleedDamage: 2,
@@ -70,11 +64,11 @@ export const Birthday: MapDef = {
     // ! are uncertain data based on leak
     lootTable: {
         tier_world: [
-            { name: "tier_guns", count: 1, weight: 0.50 }, // TODO get more data on this from original
+            { name: "tier_guns", count: 1, weight: 0.5 }, // TODO get more data on this from original
             { name: "tier_scopes", count: 1, weight: 0.15 }, // ?
             { name: "tier_armor", count: 1, weight: 0.15 }, // ?
             { name: "tier_medical", count: 1, weight: 0.15 }, // ?
-            { name: "tier_packs", count: 1, weight: 0.20 }, // ?
+            { name: "tier_packs", count: 1, weight: 0.2 }, // ?
             { name: "tier_outfits", count: 1, weight: 0.03 }, // ?
         ],
         tier_scopes: [
@@ -111,12 +105,13 @@ export const Birthday: MapDef = {
             { name: "m870", count: 1, weight: 9 },
             { name: "m9", count: 1, weight: 10 },
         ],
-        tier_outfits: [ // CHECK IF THERE ARE ANY OTHER SKINS
+        tier_outfits: [
+            // CHECK IF THERE ARE ANY OTHER SKINS
             { name: "outfitWhite", count: 1, weight: 0.2 }, // yes
             { name: "outfitWoodland", count: 1, weight: 0.1 }, // yes
             { name: "outfitKeyLime", count: 1, weight: 0.15 },
             { name: "outfitCamo", count: 1, weight: 0.1 },
-        ]
+        ],
     },
     mapGen: {
         map: {
@@ -128,9 +123,7 @@ export const Birthday: MapDef = {
             grassInset: 0,
             rivers: {
                 lakes: [],
-                weights: [
-                    { weight: 1, widths: [] },
-                ],
+                weights: [{ weight: 1, widths: [] }],
                 smoothness: 1,
                 spawnCabins: false,
                 masks: [],
@@ -176,9 +169,7 @@ export const Birthday: MapDef = {
             xlarge: "",
         },
         customSpawnRules: {
-            locationSpawns: [
-
-            ],
+            locationSpawns: [],
             placeSpawns: [""],
         },
         densitySpawns: [

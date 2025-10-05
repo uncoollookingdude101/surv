@@ -3407,7 +3407,8 @@ a:active {
   }
 }
 
-@keyframes birthdayPulse { /* for pulse */
+@keyframes birthdayPulse {
+  /* for pulse */
   from {
     background-color: #a1a1cd;
     -webkit-box-shadow: 0 0 9px #c0c0db;
@@ -3421,12 +3422,14 @@ a:active {
     -webkit-box-shadow: 0 0 9px #c0c0db;
   }
 }
-.btn-mode-birthday { /* for desktop */
+.btn-mode-birthday {
+  /* for desktop */
   animation-name: birthdayPulse;
   border-bottom: 4px solid #8484ac;
 }
 
-@media (max-width: 850px), (max-width: 900px) and (min-resolution: 3dppx) { /* for phone */
+@media (max-width: 850px), (max-width: 900px) and (min-resolution: 3dppx) {
+  /* for phone */
   .btn-mode-birthday {
     border-bottom: 2px solid #8484ac;
   }
