@@ -1,5 +1,6 @@
 import type { Atlas } from "../../shared/defs/mapDefs";
 import { CobaltAtlas } from "./defs/cobalt";
+import { CustomAtlas } from "./defs/custom";
 import { DesertAtlas } from "./defs/desert";
 import { FactionAtlas } from "./defs/faction";
 import { GradientAtlas } from "./defs/gradient";
@@ -40,6 +41,7 @@ export const Atlases: Record<Atlas, AtlasDef> = {
     woods: WoodsAtlas,
     cobalt: CobaltAtlas,
     savannah: SavannahAtlas,
+    custom: CustomAtlas,
 };
 export type AtlasRes = "high" | "low";
 

@@ -3971,9 +3971,10 @@ export const GunDefs: Record<string, GunDef> = {
         recoilTime: 1e10,
         moveSpread: 7.5,
         shotSpread: 5,
-        bulletCount: 10,
+        bulletCount: 5,
         bulletType: "bullet_invis",
-        projType: "snowball_heavy",
+        projType: "snowball",
+        noSplinter: true,
         headshotMult: 2,
         speed: { equip: 0, attack: 0 },
         lootImg: {

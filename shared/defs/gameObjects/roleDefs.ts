@@ -161,7 +161,7 @@ export const RoleDefs: Record<string, RoleDef> = {
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "ak47op", ammo: 0 },
+                            [TeamColor.Red]: { type: "bugle", ammo: 0 },
                             [TeamColor.Blue]: { type: "bugle", ammo: 0 },
                         },
                         teamcolor,

@@ -1805,13 +1805,13 @@ export class Player extends BaseGameObject {
                 if (this.fabricateGiveTicker < 0) {
                     this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
                     this.invManager.give("frag", 1);
-
                     this.fabricateThrowablesLeft--;
 
                     const msg = new net.PickupMsg();
                     msg.type = net.PickupMsgType.Success;
-                    msg.item = "smoke";
+                    msg.item = "frag";
                     msg.count = 1;
+
                     if (
                         !this.weaponManager.weapons[GameConfig.WeaponSlot.Throwable].type
                     ) {
@@ -1826,20 +1826,20 @@ export class Player extends BaseGameObject {
             if (this.fabricateRefillTicker <= 0) {
                 const maxSize = this.invManager.getMaxCapacity("frag");
                 const current = this.invManager.get("frag");
-                const throwablesToGive = math.max(maxSize - current, 0);
+                const throwablesToGive = Math.max(maxSize - current, 0);
 
                 this.fabricateThrowablesLeft = throwablesToGive;
                 this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
                 this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
             }
         }
+
         if (this.hasPerk("fabricate_s")) {
             if (this.fabricateThrowablesLeft > 0) {
                 this.fabricateGiveTicker -= dt;
                 if (this.fabricateGiveTicker < 0) {
                     this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                    this.inventory["smoke"]++;
-                    this.inventoryDirty = true;
+                    this.invManager.give("smoke", 1);
                     this.fabricateThrowablesLeft--;
 
                     const msg = new net.PickupMsg();
@@ -1859,23 +1859,22 @@ export class Player extends BaseGameObject {
 
             this.fabricateRefillTicker -= dt;
             if (this.fabricateRefillTicker <= 0) {
-                const backpackLevel = this.getGearLevel(this.backpack);
-                const throwablesToGive = math.max(
-                    this.bagSizes["smoke"][backpackLevel] - this.inventory["smoke"],
-                    0,
-                );
+                const maxSize = this.invManager.getMaxCapacity("smoke");
+                const current = this.invManager.get("smoke");
+                const throwablesToGive = Math.max(maxSize - current, 0);
+
                 this.fabricateThrowablesLeft = throwablesToGive;
                 this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
                 this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
             }
         }
+
         if (this.hasPerk("fabricate_m")) {
             if (this.fabricateThrowablesLeft > 0) {
                 this.fabricateGiveTicker -= dt;
                 if (this.fabricateGiveTicker < 0) {
                     this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                    this.inventory["mirv"]++;
-                    this.inventoryDirty = true;
+                    this.invManager.give("mirv", 1);
                     this.fabricateThrowablesLeft--;
 
                     const msg = new net.PickupMsg();
@@ -1895,23 +1894,22 @@ export class Player extends BaseGameObject {
 
             this.fabricateRefillTicker -= dt;
             if (this.fabricateRefillTicker <= 0) {
-                const backpackLevel = this.getGearLevel(this.backpack);
-                const throwablesToGive = math.max(
-                    this.bagSizes["mirv"][backpackLevel] - this.inventory["mirv"],
-                    0,
-                );
+                const maxSize = this.invManager.getMaxCapacity("mirv");
+                const current = this.invManager.get("mirv");
+                const throwablesToGive = Math.max(maxSize - current, 0);
+
                 this.fabricateThrowablesLeft = throwablesToGive;
                 this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
                 this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
             }
         }
+
         if (this.hasPerk("fabricate_str")) {
             if (this.fabricateThrowablesLeft > 0) {
                 this.fabricateGiveTicker -= dt;
                 if (this.fabricateGiveTicker < 0) {
                     this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                    this.inventory["strobe"]++;
-                    this.inventoryDirty = true;
+                    this.invManager.give("strobe", 1);
                     this.fabricateThrowablesLeft--;
 
                     const msg = new net.PickupMsg();
@@ -1931,11 +1929,10 @@ export class Player extends BaseGameObject {
 
             this.fabricateRefillTicker -= dt;
             if (this.fabricateRefillTicker <= 0) {
-                const backpackLevel = this.getGearLevel(this.backpack);
-                const throwablesToGive = math.max(
-                    this.bagSizes["strobe"][backpackLevel] - this.inventory["strobe"],
-                    0,
-                );
+                const maxSize = this.invManager.getMaxCapacity("strobe");
+                const current = this.invManager.get("strobe");
+                const throwablesToGive = Math.max(maxSize - current, 0);
+
                 this.fabricateThrowablesLeft = throwablesToGive;
                 this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
                 this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;

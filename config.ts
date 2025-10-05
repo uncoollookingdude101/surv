@@ -45,7 +45,7 @@ export function getConfig(isProduction: boolean, dir: string) {
             errorLogs: true,
         },
         database: {
-            enabled: true,
+            enabled: false,
             host: "127.0.0.1",
             user: "survev",
             password: "survev",
@@ -155,7 +155,7 @@ export function getConfig(isProduction: boolean, dir: string) {
     if (isDev) {
         config.regions.local ??= {
             https: false,
-            address: `192.168.1.4:${config.gameServer.port}`,
+            address: `192.168.1.11:${config.gameServer.port}`,
             l10n: "index-local",
         };
     }
