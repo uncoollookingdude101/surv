@@ -64,12 +64,12 @@ export const Birthday: MapDef = {
     // ! are uncertain data based on leak
     lootTable: {
         tier_world: [
-            { name: "tier_guns", count: 1, weight: 0.5 }, // TODO get more data on this from original
+            { name: "tier_guns", count: 1, weight: 0.4 }, // TODO get more data on this from original
             { name: "tier_scopes", count: 1, weight: 0.15 }, // ?
             { name: "tier_armor", count: 1, weight: 0.15 }, // ?
             { name: "tier_medical", count: 1, weight: 0.15 }, // ?
             { name: "tier_packs", count: 1, weight: 0.2 }, // ?
-            { name: "tier_outfits", count: 1, weight: 0.03 }, // ?
+            { name: "tier_outfits", count: 1, weight: 0.01 }, // ?
         ],
         tier_scopes: [
             { name: "2xscope", count: 1, weight: 24 },
@@ -97,7 +97,7 @@ export const Birthday: MapDef = {
             { name: "painkiller", count: 1, weight: 5 },
         ],
         tier_guns: [
-            { name: "ak47", count: 1, weight: 9 },
+            { name: "ak47", count: 1, weight: 8 },
             { name: "mosin", count: 1, weight: 1 },
             { name: "m39", count: 1, weight: 0.5 },
             { name: "saiga", count: 1, weight: 0.5 },
@@ -109,7 +109,8 @@ export const Birthday: MapDef = {
             // CHECK IF THERE ARE ANY OTHER SKINS
             { name: "outfitWhite", count: 1, weight: 0.2 }, // yes
             { name: "outfitWoodland", count: 1, weight: 0.1 }, // yes
-            { name: "outfitKeyLime", count: 1, weight: 0.15 },
+            { name: "outfitKeyLime", count: 1, weight: 0.15 }, 
+            { name: "outfitRed", count: 1, weight: 0.1 }, // yes
             { name: "outfitCamo", count: 1, weight: 0.1 },
         ],
     },
@@ -117,7 +118,7 @@ export const Birthday: MapDef = {
         map: {
             baseWidth: 512,
             baseHeight: 512,
-            scale: { small: 1.1875, large: 1.1875 },
+            scale: { small: 1.1875, large: 1.21875 },
             extension: 112,
             shoreInset: -1,
             grassInset: 0,
@@ -179,7 +180,7 @@ export const Birthday: MapDef = {
                 silo_01: 16,
                 crate_01: 150,
                 tree_01: 300,
-                loot_tier_1: 80,
+                loot_tier_1: 120,
             },
         ],
         fixedSpawns: [
