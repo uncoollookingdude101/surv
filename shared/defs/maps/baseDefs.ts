@@ -191,9 +191,9 @@ export const Main: MapDef = {
             { name: "", count: 1, weight: 1 },
             { name: "outfitFragtastic", count: 1, weight: 0.15 },
         ],
-        tier_turkey_ff: [
+        tier_turkey_outfit: [
             { name: "", count: 1, weight: 1 },
-            { name: "outfitTurkey", count: 1, weight: 0.1 },
+            { name: "outfitTurkey", count: 1, weight: 0.05 },
         ],
         tier_chrys_01: [{ name: "outfitImperial", count: 1, weight: 1 }],
         tier_chrys_02: [{ name: "katana", count: 1, weight: 1 }],

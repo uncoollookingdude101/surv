@@ -8645,8 +8645,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
     }),
     bush_06tr: createBush({
-        collision: collider.createCircle(v2.create(0, 0), 1.75),
-        map: { display: true, color: 0xe2a51a, scale: 1.6 },
+        collision: collider.createCircle(v2.create(0, 0), 2.5),
+        map: { display: true, color: 0xe2a51a, scale: 1 },
         img: {
             sprite: "map-bush-06tr.img",
             residue: "map-bush-res-06.img",
@@ -10119,21 +10119,33 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         collision: collider.createCircle(v2.create(0, 0), 1.25),
         map: { display: false },
         img: {
-            sprite: "map-pumpkin-03.img",
-            residue: "map-pumpkin-res-03.img",
+            sprite: "map-pumpkin-04.img",
+            residue: "map-pumpkin-res-04.img",
         },
         loot: [tierLoot("tier_pumpkin_perks", 1, 1), tierLoot("tier_fruit_xp", 1, 1)],
     }),
     squash_01: createPumpkin({
-        collision: collider.createCircle(v2.create(0, 0), 1.25),
-        map: { display: true, color: 0x8dad49, scale: 1.25 },
+        collision: collider.createCircle(v2.create(0, 0), 1),
+        map: { display: true, color: 0x627344, scale: 1.25 },
         img: {
-            sprite: "map-squash-01.img",
-            residue: "map-squash-res-01.img",
+            sprite: "map-squash-03.img",
+            residue: "map-squash-res-03.img",
         },
         hitParticle: "squashChip",
         explodeParticle: "squashBreak",
-        loot: [autoLoot("turkey_shoot", 1), tierLoot("tier_turkey_ff", 1, 1)], // tierLoot("tier_fruit_xp", 1, 1)], i replaced it with fowl facade %
+        loot: [autoLoot("turkey_shoot", 1), tierLoot("tier_turkey_outfit", 0, 1), tierLoot("tier_world", 0, 1)], // tierLoot("tier_fruit_xp", 1, 1)], i replaced it with fowl facade %
+    }),
+    squash_02: createPumpkin({
+        collision: collider.createCircle(v2.create(0, 0), 1.5),
+        map: { display: true, color: 0xFCD4B1, scale: 1.25 },
+        health: 200,
+        img: {
+            sprite: "map-squash-02.img",
+            residue: "map-squash-res-02.img",
+        },
+        hitParticle: "squashChip",
+        explodeParticle: "squashBreak",
+        loot: [autoLoot("turkey_shoot", 1), autoLoot("turkey_shoot", 1), tierLoot("tier_turkey_outfit", 1, 2), tierLoot("tier_soviet", 1, 2)], // tierLoot("tier_fruit_xp", 1, 1)], i replaced it with fowl facade %
     }),
     refrigerator_01: createRefrigerator({}),
     refrigerator_01b: createRefrigerator({
@@ -13175,24 +13187,6 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "loot_tier_leaf_pile",
-                pos: v2.create(0, 0),
-                scale: 1,
-                ori: 0,
-                inheritOri: false,
-            },
-        ],
-        map: { displayType: "bush_06" },
-    }),
-    cache_03tr: createCache({
-        mapObjects: [
-            {
-                type: "bush_06tr",
-                pos: v2.create(0, 0),
-                scale: 1,
-                ori: 0,
-            },
-            {
-                type: randomObstacleType({ "": 2, loot_tier_leaf_pile: 1 }),
                 pos: v2.create(0, 0),
                 scale: 1,
                 ori: 0,

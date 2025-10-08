@@ -2,6 +2,12 @@ import { util } from "../../utils/util";
 import { Main, type PartialMapDef } from "./baseDefs";
 
 const mapDef: PartialMapDef = {
+        desc: {
+        name: "Turkey",
+        icon: "",
+        buttonCss: "",
+        backgroundImg: "img/main_splash_turkey_01.png",
+    },
     assets: {
         audio: [
             { name: "club_music_01", channel: "ambient" },
@@ -37,13 +43,15 @@ const mapDef: PartialMapDef = {
     mapGen: {
         densitySpawns: [
             {
-                stone_01: 250,
+                squash_01: 25,
+                squash_02: 12,
+                stone_01: 200,
                 barrel_01: 76,
                 silo_01: 9,
-                crate_01: 50,
-                crate_02: 4,
-                crate_03: 8,
-                cache_03tr: 100, // leaf pile turkey
+                crate_01: 45,
+                crate_02: 3,
+                crate_03: 7,
+                bush_06tr: 100, // leaf pile turkey
                 cache_06: 12, // cherry bush
                 tree_07: 20,
                 tree_08: 170,
@@ -58,7 +66,6 @@ const mapDef: PartialMapDef = {
                 outhouse_02: 2, // fire axe outhouse
                 loot_tier_1: 24,
                 loot_tier_beach: 4,
-                squash_01: 24,
                 woodpile_02: 4,
             },
         ],
