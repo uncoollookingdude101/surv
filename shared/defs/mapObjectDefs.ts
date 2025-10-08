@@ -10133,11 +10133,15 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         hitParticle: "squashChip",
         explodeParticle: "squashBreak",
-        loot: [autoLoot("turkey_shoot", 1), tierLoot("tier_turkey_outfit", 0, 1), tierLoot("tier_world", 0, 1)], // tierLoot("tier_fruit_xp", 1, 1)], i replaced it with fowl facade %
+        loot: [
+            autoLoot("turkey_shoot", 1),
+            tierLoot("tier_turkey_outfit", 0, 1),
+            tierLoot("tier_world", 0, 1),
+        ], // tierLoot("tier_fruit_xp", 1, 1)], i replaced it with fowl facade %
     }),
     squash_02: createPumpkin({
         collision: collider.createCircle(v2.create(0, 0), 1.5),
-        map: { display: true, color: 0xFCD4B1, scale: 1.25 },
+        map: { display: true, color: 0xfcd4b1, scale: 1.25 },
         health: 200,
         img: {
             sprite: "map-squash-02.img",
@@ -10145,7 +10149,12 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         hitParticle: "squashChip",
         explodeParticle: "squashBreak",
-        loot: [autoLoot("turkey_shoot", 1), autoLoot("turkey_shoot", 1), tierLoot("tier_turkey_outfit", 1, 2), tierLoot("tier_soviet", 1, 2)], // tierLoot("tier_fruit_xp", 1, 1)], i replaced it with fowl facade %
+        loot: [
+            autoLoot("turkey_shoot", 1),
+            autoLoot("turkey_shoot", 1),
+            tierLoot("tier_turkey_outfit", 1, 2),
+            tierLoot("tier_soviet", 1, 2),
+        ], // tierLoot("tier_fruit_xp", 1, 1)], i replaced it with fowl facade %
     }),
     refrigerator_01: createRefrigerator({}),
     refrigerator_01b: createRefrigerator({

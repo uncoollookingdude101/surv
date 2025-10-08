@@ -2,7 +2,7 @@ import { util } from "../../utils/util";
 import { Main, type PartialMapDef } from "./baseDefs";
 
 const mapDef: PartialMapDef = {
-        desc: {
+    desc: {
         name: "Turkey",
         icon: "",
         buttonCss: "",
