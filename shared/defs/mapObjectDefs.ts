@@ -8468,7 +8468,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("mirv", 1),
         ],
     }),
-    barrel_01f: createBarrel({
+    barrel_01bd: createBarrel({
         explosion: "",
     }),
     barrel_02: createWoodBarrel({ health: 60 }),

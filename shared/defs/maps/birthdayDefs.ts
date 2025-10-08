@@ -1,10 +1,10 @@
-import { GameConfig } from "../../gameConfig";
-import type { DeepPartial } from "../../utils/util";
+import { util } from "../../utils/util";
 import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
 import { MapId } from "../types/misc";
+import { Main, type PartialMapDef } from "./baseDefs";
 
-export const Birthday: MapDef = {
+const mapDef: PartialMapDef = {
     mapId: MapId.Birthday,
     desc: {
         name: "Birthday",
@@ -47,9 +47,6 @@ export const Birthday: MapDef = {
             timings: [],
             crates: [],
         },
-        bagSizes: {},
-        bleedDamage: 2,
-        bleedDamageMult: 1,
     },
     /* STRIP_FROM_PROD_CLIENT:START */
     // NOTE: this loot table is not the original one so its not accurate
@@ -164,12 +161,12 @@ export const Birthday: MapDef = {
         },
         customSpawnRules: {
             locationSpawns: [],
-            placeSpawns: [""],
+            placeSpawns: [],
         },
         densitySpawns: [
             {
                 stone_01: 250,
-                barrel_01f: 70,
+                barrel_01bd: 70,
                 silo_01: 16,
                 crate_01: 120,
                 tree_01: 300,
@@ -183,14 +180,14 @@ export const Birthday: MapDef = {
         ],
         randomSpawns: [
             {
-                spawns: [" "],
+                spawns: [],
                 choose: 0,
             },
         ],
         spawnReplacements: [{}],
-        importantSpawns: [""],
+        importantSpawns: [],
     },
     /* STRIP_FROM_PROD_CLIENT:END */
 };
 
-export type PartialMapDef = DeepPartial<MapDef>;
+export const Woods = util.mergeDeep({}, Main, mapDef) as MapDef;
