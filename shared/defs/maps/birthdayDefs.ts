@@ -1,3 +1,4 @@
+import { GameConfig } from "../../gameConfig";
 import { util } from "../../utils/util";
 import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
@@ -10,7 +11,6 @@ const mapDef: PartialMapDef = {
         name: "Birthday",
         icon: "img/gui/birthday.svg",
         buttonCss: "btn-mode-birthday",
-        backgroundImg: "img/main_splash.png",
     },
     assets: {
         audio: [],
@@ -190,4 +190,4 @@ const mapDef: PartialMapDef = {
     /* STRIP_FROM_PROD_CLIENT:END */
 };
 
-export const Woods = util.mergeDeep({}, Main, mapDef) as MapDef;
+export const Birthday = util.mergeDeep({}, Main, mapDef) as MapDef;
