@@ -45,7 +45,6 @@ const mapDef: PartialMapDef = {
     gameConfig: {
         planes: {
             timings: [],
-            crates: [],
         },
     },
     /* STRIP_FROM_PROD_CLIENT:START */
