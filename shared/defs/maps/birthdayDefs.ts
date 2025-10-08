@@ -4,18 +4,11 @@ import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
 import { MapId } from "../types/misc";
 
-// @NOTE: Entries defined as single-element arrays, like fixedSpawns: [{ }],
-// are done this way so that util.mergeDeep(...) will function as expected
-// when used by derivative maps.
-//
-// Arrays are not mergeable, so the derived map will always redefine all
-// elements if that property is set.
-
 export const Birthday: MapDef = {
     mapId: MapId.Birthday,
     desc: {
         name: "Birthday",
-        icon: "img/emotes/cupcake.svg",
+        icon: "img/gui/birthday.svg",
         buttonCss: "btn-mode-birthday",
         backgroundImg: "img/main_splash.png",
     },
@@ -109,7 +102,7 @@ export const Birthday: MapDef = {
             // CHECK IF THERE ARE ANY OTHER SKINS
             { name: "outfitWhite", count: 1, weight: 0.2 }, // yes
             { name: "outfitWoodland", count: 1, weight: 0.1 }, // yes
-            { name: "outfitKeyLime", count: 1, weight: 0.15 }, 
+            { name: "outfitKeyLime", count: 1, weight: 0.15 },
             { name: "outfitRed", count: 1, weight: 0.1 }, // yes
             { name: "outfitCamo", count: 1, weight: 0.1 },
         ],
@@ -178,9 +171,9 @@ export const Birthday: MapDef = {
                 stone_01: 250,
                 barrel_01f: 70,
                 silo_01: 16,
-                crate_01: 150,
+                crate_01: 120,
                 tree_01: 300,
-                loot_tier_1: 120,
+                loot_tier_1: 100,
             },
         ],
         fixedSpawns: [
