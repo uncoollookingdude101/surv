@@ -464,21 +464,22 @@ export class WeaponManager {
             return;
         }
 
-        let duration = weaponDef.reloadTime;
+        let useAlt = false;
         let action: number = GameConfig.Action.Reload;
 
-        // schedule an alt reload if ammo is 0 and we have more inventory ammo
-        // than a single reload
-        // so if you have a mosin with 0 ammo and 1 ammo in the inventory it will
-        // schedule the single bullet reload instead of longer 5 bullets reload
         if (
             weaponDef.reloadTimeAlt &&
             this.weapons[this.curWeapIdx].ammo === 0 &&
             invAmmo > stats.maxReload
         ) {
-            duration = weaponDef.reloadTimeAlt!;
+            useAlt = true;
             action = GameConfig.Action.ReloadAlt;
         }
+
+        //  Use the perk-aware reload time
+        const duration = this.getTrueReloadTime(weaponDef, useAlt);
+
+        this.player.doAction(this.activeWeapon, action, duration);
 
         this.player.doAction(this.activeWeapon, action, duration);
     }

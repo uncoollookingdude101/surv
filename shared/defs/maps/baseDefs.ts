@@ -109,6 +109,7 @@ export const Main: MapDef = {
             { name: "scarssr", count: 1, weight: 2 },
             { name: "pkp", count: 1, weight: 2 },
             { name: "m249", count: 1, weight: 2 },
+            { name: "pkm", count: 1, weight: 2 },
             { name: "sv98", count: 1, weight: 1 },
             { name: "pan", count: 1, weight: 2 },
             { name: "8xscope", count: 1, weight: 3 },
@@ -241,6 +242,7 @@ export const Main: MapDef = {
             { name: "m249", count: 1, weight: 1 },
             { name: "awc", count: 1, weight: 1 },
             { name: "pkp", count: 1, weight: 1 },
+            { name: "pkm", count: 1, weight: 1 },
         ],
         tier_eye_stone: [
             { name: "vector45", count: 1, weight: 1 },
@@ -253,6 +255,7 @@ export const Main: MapDef = {
             { name: "m249", count: 1, weight: 0.2 },
             { name: "awc", count: 1, weight: 0.1 },
             { name: "pkp", count: 1, weight: 0.1 },
+            { name: "pkm", count: 1, weight: 0.15 },
         ],
         tier_sledgehammer: [{ name: "sledgehammer", count: 1, weight: 1 }],
         tier_chest_04: [
@@ -267,6 +270,7 @@ export const Main: MapDef = {
             { name: "mk12", count: 1, weight: 0.1 },
             { name: "pkp", count: 1, weight: 0.005 },
             { name: "m249", count: 1, weight: 0.006 },
+            { name: "pkp", count: 1, weight: 0.005 },
             { name: "ak47", count: 1, weight: 2.7 },
             { name: "scar", count: 1, weight: 0.01 },
             { name: "dp28", count: 1, weight: 0.5 },
@@ -312,6 +316,7 @@ export const Main: MapDef = {
             { name: "hk416", count: 1, weight: 4 },
             { name: "mk12", count: 1, weight: 0.55 },
             { name: "m249", count: 1, weight: 0.07 },
+            { name: "pkm", count: 1, weight: 0.05 },
             { name: "ak47", count: 1, weight: 4 },
             { name: "scar", count: 1, weight: 0.27 },
             { name: "dp28", count: 1, weight: 0.55 },
@@ -353,6 +358,7 @@ export const Main: MapDef = {
             { name: "qbb97", count: 1, weight: 0.5 }, // ?
             { name: "m249", count: 1, weight: 0.05 }, // ?
             { name: "pkp", count: 1, weight: 0.05 }, // ?
+            { name: "pkm", count: 1, weight: 0.05 },
         ],
         tier_shotguns: [
             { name: "spas12", count: 1, weight: 2 }, // ?
@@ -484,6 +490,7 @@ export const Main: MapDef = {
             { name: "qbb97", count: 1, weight: 1 },
             { name: "pkp", count: 1, weight: 0.1 },
             { name: "m249", count: 1, weight: 0.05 },
+            { name: "pkm", count: 1, weight: 0.05 },
         ],
         tier_class_crate_mythic: [
             { name: "scavenger_adv", count: 1, weight: 1 },
@@ -511,6 +518,7 @@ export const Main: MapDef = {
             { name: "awc", count: 1, weight: 3 },
             { name: "pkp", count: 1, weight: 0.08 },
             { name: "m249", count: 1, weight: 0.1 },
+            { name: "pkp", count: 1, weight: 0.09 },
             { name: "m4a1", count: 1, weight: 4 },
             { name: "scorpion", count: 1, weight: 5 }, // ?
             { name: "ots38_dual", count: 1, weight: 4.5 },
@@ -522,6 +530,7 @@ export const Main: MapDef = {
             { name: "awc", count: 1, weight: 0.1 }, // ?
             { name: "pkp", count: 1, weight: 0.3 }, // ?
             { name: "m249", count: 1, weight: 0.3 }, // ?
+            { name: "pkm", count: 1, weight: 0.25 },
         ],
         tier_airdrop_perk: [],
         tier_airdrop_ammo: [
@@ -649,7 +658,11 @@ export const Main: MapDef = {
             { name: "tier_perks", count: 1, weight: 1 },
         ],
         tier_helm_special: [{ name: "", count: 1, weight: 1 }],
-        tier_custom: [{ name: "", count: 1, weight: 1 }],
+        tier_custom: [
+            { name: "m134", count: 1, weight: 1 },
+            { name: "m79", count: 1, weight: 1 },
+            { name: "m2010", count: 1, weight: 1 },
+        ],
         tier_chest_04b: [{ name: "glock_dual", count: 1, weight: 1 }],
 
         // TODO: Savannah loot tables

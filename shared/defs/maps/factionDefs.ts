@@ -235,6 +235,7 @@ const mapDef: PartialMapDef = {
             { name: "mk12", count: 1, weight: 0.1 },
             { name: "pkp", count: 1, weight: 0.005 },
             { name: "m249", count: 1, weight: 0.006 },
+            { name: "pkm", count: 1, weight: 0.005 },
             { name: "ak47", count: 1, weight: 2.7 },
             { name: "scar", count: 1, weight: 0.01 },
             { name: "dp28", count: 1, weight: 0.5 },
@@ -329,11 +330,10 @@ const mapDef: PartialMapDef = {
             { name: "awc", count: 1, weight: 1 }, // ?
             { name: "pkp", count: 1, weight: 1 }, // ?
             { name: "m249", count: 1, weight: 1 }, // ?
+            { name: "pkm", count: 1, weight: 1 },
             { name: "potato_smg", count: 1, weight: 1 }, // ?
             { name: "potato_cannon", count: 1, weight: 1 }, // ?
-            { name: "m134", count: 1, weight: 1 }, // ?
-            { name: "lasr_gun_dual", count: 1, weight: 1 }, // ?
-            { name: "m79", count: 1, weight: 1 }, // ?
+            { name: "tier_custom", count: 1, weight: 2 },
         ],
         tier_ghillie: [
             {

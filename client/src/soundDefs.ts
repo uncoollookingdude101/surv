@@ -794,6 +794,21 @@ const Sounds: Record<string, Record<string, SoundDef>> = {
             volume: 1,
             maxInstances: 5,
         },
+        m2010_01: {
+            path: "audio/guns/m2010_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
+        m2010_cycle_01: {
+            path: "audio/guns/m2010_cycle_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
+        m2010_reload_01: {
+            path: "audio/guns/m2010_reload_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
         lasr_gun_reload_01: {
             path: "audio/guns/lasr_gun_reload_01.mp3",
             volume: 1,

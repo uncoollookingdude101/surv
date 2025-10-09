@@ -29,9 +29,9 @@ export function getConfig(isProduction: boolean, dir: string) {
         regions: {},
         proxies: {},
         modes: [
-            { mapName: "faction", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "faction", teamMode: TeamMode.Solo, enabled: false },
             { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: true },
-            { mapName: "hidenseek", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "hidenseek", teamMode: TeamMode.Solo, enabled: false },
         ],
         clientTheme: "main",
         gameTps: 100,
@@ -155,7 +155,7 @@ export function getConfig(isProduction: boolean, dir: string) {
     if (isDev) {
         config.regions.local ??= {
             https: false,
-            address: `192.168.1.8:${config.gameServer.port}`,
+            address: `192.168.1.12:${config.gameServer.port}`,
             l10n: "index-local",
         };
     }

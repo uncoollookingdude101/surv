@@ -184,8 +184,9 @@ const mapDef = {
             { name: "famas", count: 1, weight: 0.9 },
             { name: "hk416", count: 1, weight: 4 },
             { name: "mk12", count: 1, weight: 0.1 },
-            { name: "pkp", count: 1, weight: 0.005 },
-            { name: "m249", count: 1, weight: 0.006 },
+            { name: "pkp", count: 1, weight: 0.05 },
+            { name: "m249", count: 1, weight: 0.06 },
+            { name: "pkm", count: 1, weight: 0.05 },
             { name: "ak47", count: 1, weight: 2.7 },
             { name: "scar", count: 1, weight: 0.1 },
             { name: "dp28", count: 1, weight: 0.5 },
@@ -208,10 +209,10 @@ const mapDef = {
             { name: "sv98", count: 1, weight: 0.01 },
             { name: "spas12", count: 1, weight: 1 },
             { name: "qbb97", count: 1, weight: 0.075 },
-            { name: "flare_gun", count: 1, weight: 0.145 }, // !
-            { name: "flare_gun_dual", count: 1, weight: 0.0025 }, // !
+            { name: "flare_gun", count: 1, weight: 0.2 }, // !
+            { name: "flare_gun_dual", count: 1, weight: 0.01 }, // !
             { name: "groza", count: 1, weight: 1 },
-            { name: "scout_elite", count: 1, weight: 0.05 },
+            { name: "scout_elite", count: 1, weight: 0.75 },
             { name: "vss", count: 1, weight: 0.5 }, // !
             { name: "bar", count: 1, weight: 1 },
             { name: "colt45", count: 1, weight: 1 },
@@ -237,6 +238,7 @@ const mapDef = {
             { name: "awc", count: 1, weight: 0.5 },
             { name: "m9", count: 1, weight: 0.5 },
             { name: "flare_gun_dual", count: 1, weight: 0.75 },
+            { name: "pkm", count: 1, weight: 1 },
         ],
         tier_perks: [
             { name: "steelskin", count: 1, weight: 1 },
@@ -279,6 +281,7 @@ const mapDef = {
             { name: "awc", count: 1, weight: 1 },
             { name: "pkp", count: 1, weight: 1 },
             { name: "m249", count: 1, weight: 1 },
+            { name: "pkm", count: 1, weight: 1 },
             { name: "m4a1", count: 1, weight: 1 },
             { name: "scorpion", count: 1, weight: 1 },
             { name: "usas", count: 1, weight: 1 },
@@ -308,7 +311,8 @@ const mapDef = {
         ],
         tier_eye_block: [
             { name: "tier_scavenger_adv", count: 1, weight: 5 },
-            { name: "tier_airdrop_perk", count: 1, weight: 1 },
+            { name: "tier_airdrop_perk", count: 1, weight: 0.5 },
+            { name: "tier_custom", count: 1, weight: 0.5 },
         ],
         tier_helm_special: [
             { name: "helmet02_moon1", count: 1, weight: 1 },
@@ -337,10 +341,6 @@ const mapDef = {
         tier_class_crate_mythic: [{ name: "scavenger_adv", count: 1, weight: 1 }],
         tier_scopes_sniper: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
-        ],
-        tier_custom: [
-            { name: "m134", count: 1, weight: 1 },
-            { name: "m79", count: 1, weight: 1 },
         ],
         tier_chest_04: [
             { name: "p30l_dual", count: 1, weight: 1 }, // ?

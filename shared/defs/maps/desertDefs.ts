@@ -65,6 +65,7 @@ const mapDef: PartialMapDef = {
             { name: "mk12", count: 1, weight: 0.1 },
             { name: "pkp", count: 1, weight: 0.005 },
             { name: "m249", count: 1, weight: 0.006 },
+            { name: "pkm", count: 1, weight: 0.005 },
             { name: "ak47", count: 1, weight: 2.7 },
             { name: "scar", count: 1, weight: 0.01 },
             { name: "dp28", count: 1, weight: 0.5 },
@@ -115,6 +116,7 @@ const mapDef: PartialMapDef = {
             { name: "m249", count: 1, weight: 0.1 },
             { name: "m4a1", count: 1, weight: 4 },
             { name: "ots38_dual", count: 1, weight: 4.5 },
+            { name: "pkp", count: 1, weight: 0.09 },
         ],
         tier_ammo: [
             { name: "45acp", count: 60, weight: 3 },
@@ -157,6 +159,7 @@ const mapDef: PartialMapDef = {
             { name: "hk416", count: 1, weight: 4 },
             { name: "mk12", count: 1, weight: 0.55 },
             { name: "m249", count: 1, weight: 0.07 },
+            { name: "pkm", count: 1, weight: 0.06 },
             { name: "ak47", count: 1, weight: 4 },
             { name: "scar", count: 1, weight: 0.27 },
             { name: "dp28", count: 1, weight: 0.55 },
@@ -183,6 +186,7 @@ const mapDef: PartialMapDef = {
             { name: "mp220", count: 1, weight: 0.15 },
             { name: "pkp", count: 1, weight: 0.01 },
             { name: "m249", count: 1, weight: 0.01 },
+            { name: "pkm", count: 1, weight: 0.01 },
             { name: "m9", count: 1, weight: 0.01 },
         ],
         tier_throwables: [
