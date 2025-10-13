@@ -605,6 +605,7 @@ export class Game {
             this.logger.error(
                 `[${region}] Failed to save game data, saving locally instead`,
             );
+
             const dir = path.resolve("lost_game_data");
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);

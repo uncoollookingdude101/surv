@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 import { saveConfig } from "../../../../../config";
@@ -117,6 +117,26 @@ export const PrivateRouter = new Hono<Context>()
 
         if (!matchData.length) {
             return c.json({ error: "Empty match data" }, 400);
+        }
+
+        const gameIds = [...new Set(data.matchData.map((d) => d.gameId))];
+
+        // i really don't want the game server to insert duplicated games by accident
+        // when saving lost game data...
+        const exists = await db
+            .selectDistinct({
+                gameId: matchDataTable.gameId,
+            })
+            .from(matchDataTable)
+            .where(inArray(matchDataTable.gameId, gameIds));
+
+        if (exists.length) {
+            return c.json(
+                {
+                    error: `Games [${exists.map((d) => d.gameId).join(",")}] are already inserted`,
+                },
+                400,
+            );
         }
 
         await leaderboardCache.invalidateCache(matchData);
