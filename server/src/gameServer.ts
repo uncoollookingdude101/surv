@@ -14,7 +14,6 @@ import {
     forbidden,
     getIp,
     HTTPRateLimit,
-    isBehindProxy,
     logErrorToWebhook,
     readPostedJSON,
     returnJson,
@@ -101,9 +100,9 @@ class GameServer {
         }
     }
 
-    async isIpBanned(ip: string) {
+    async checkIp(ip: string) {
         try {
-            const apiRes = await apiPrivateRouter.moderation.is_ip_banned.$post({
+            const apiRes = await apiPrivateRouter.check_ip.$post({
                 json: {
                     ip,
                 },
@@ -111,13 +110,13 @@ class GameServer {
 
             if (apiRes.ok) {
                 const body = await apiRes.json();
-                return body.banned;
+                return body;
             }
         } catch (err) {
-            this.logger.error(`Failed check if IP is banned: `, err);
+            this.logger.error(`Failed request API fetch_ip: `, err);
         }
 
-        return false;
+        return undefined;
     }
 }
 
@@ -244,10 +243,12 @@ app.ws<GameSocketData>("/play", {
         const socketId = randomUUID();
         let disconnectReason = "";
 
-        if (await isBehindProxy(ip, 0)) {
-            disconnectReason = "behind_proxy";
-        } else if (await server.isIpBanned(ip)) {
+        const ipData = await server.checkIp(ip);
+
+        if (ipData?.banned) {
             disconnectReason = "ip_banned";
+        } else if (ipData?.behindProxy) {
+            disconnectReason = "behind_proxy";
         }
 
         if (res.aborted) return;

@@ -10,6 +10,7 @@ import {
     zRemoveItemParams,
 } from "../../../../../shared/types/moderation";
 import { serverConfigPath } from "../../../config";
+import { isBehindProxy } from "../../../utils/serverHelpers";
 import {
     type SaveGameBody,
     zSetClientThemeBody,
@@ -33,7 +34,7 @@ import {
     usersTable,
 } from "../../db/schema";
 import { MOCK_USER_ID } from "../user/auth/mock";
-import { logPlayerIPs, ModerationRouter } from "./ModerationRouter";
+import { isBanned, logPlayerIPs, ModerationRouter } from "./ModerationRouter";
 
 export const PrivateRouter = new Hono<Context>()
     .use(privateMiddleware)
@@ -200,6 +201,29 @@ export const PrivateRouter = new Hono<Context>()
         await client.flushAll();
         return c.json({ success: true }, 200);
     })
+    .post(
+        "/check_ip",
+        validateParams(
+            z.object({
+                ip: z.string(),
+            }),
+        ),
+        async (c) => {
+            const { ip } = c.req.valid("json");
+
+            const banData = await isBanned(ip, false);
+            if (banData) {
+                return c.json({ banned: true, banData: banData, behindProxy: false });
+            }
+
+            const isProxied = await isBehindProxy(ip, 0);
+            if (isProxied) {
+                return c.json({ banned: false, banData: undefined, behindProxy: true });
+            }
+
+            return c.json({ banned: false, banData: undefined, behindProxy: false });
+        },
+    )
     .post(
         "/test/insert_game",
         databaseEnabledMiddleware,
