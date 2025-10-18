@@ -148,10 +148,6 @@ const mapDef: PartialMapDef = {
                 name: "Fowl Forest",
                 pos: v2.create(0.73, 0.47),
             },
-            {
-                name: "Ranchito Pollo",
-                pos: v2.create(0.53, 0.25),
-            },
         ],
         bridgeTypes: {
             medium: "",
