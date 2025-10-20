@@ -168,6 +168,7 @@ export const LoadoutAtlas: AtlasDef = {
         "emotes/trunk.svg",
         "emotes/turkey-animal.svg",
         "emotes/whale.svg",
+        "emotes/cake.svg",
 
         "gui/audio-off.svg",
         "gui/audio-on.svg",
