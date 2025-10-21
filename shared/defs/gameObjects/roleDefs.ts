@@ -171,12 +171,12 @@ export const RoleDefs: Record<string, RoleDef> = {
                         {
                             [TeamColor.Red]: {
                                 type: "flare_gun_dual",
-                                ammo: 2,
+                                ammo: 10,
                                 fillInv: true,
                             },
                             [TeamColor.Blue]: {
                                 type: "flare_gun_dual",
-                                ammo: 2,
+                                ammo: 10,
                                 fillInv: true,
                             },
                         },
@@ -193,7 +193,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             ],
             backpack: "backpack03",
             helmet: "helmet04_leader",
-            chest: "chest03",
+            chest: "chest04",
             outfit: (teamcolor: TeamColor) =>
                 ({
                     [TeamColor.Red]: "outfitGhillie",
@@ -478,9 +478,9 @@ export const RoleDefs: Record<string, RoleDef> = {
         sound: { dead: "leader_dead_01" },
         mapIndicator: {
             sprite: "player-the-hunted.img",
-            tint: 0x12ff00ff,
-            pulse: false,
-            pulseTint: 0x12ff00ff,
+            tint: 0x00ff00,
+            pulse: true,
+            pulseTint: 0x00ff00,
         },
         perks: ["gotw", "windwalk"],
     },

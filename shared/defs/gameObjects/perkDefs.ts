@@ -18,11 +18,11 @@ export const PerkProperties = {
     },
     small_arms: {
         scale: -0.25,
-        damageReduction: -0.15,
+        damageReduction: -0.1,
     },
     splinter: {
         mainDamageMult: 0.7,
-        splitsDamageMult: 0.5,
+        splitsDamageMult: 0.4,
     },
     ap_rounds: {
         armorPenetration: 0.8,
@@ -44,6 +44,7 @@ export const PerkProperties = {
     gotw: {
         scale: 0.2,
         healthRegen: 5, // per second
+        waterSpeedBoost: 2
     },
     field_medic: {
         speedBoost: 1.25,

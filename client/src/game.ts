@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js-legacy";
+             import * as PIXI from "pixi.js-legacy";
 import { GameObjectDefs } from "../../shared/defs/gameObjectDefs";
 import { RoleDefs } from "../../shared/defs/gameObjects/roleDefs";
 import { GameConfig, Input, TeamMode, WeaponSlot } from "../../shared/gameConfig";
@@ -402,7 +402,7 @@ export class Game {
         this.debugHUD.m_update(dt, this);
 
         if (IS_DEV) {
-            if (false && this.m_input.keyPressed(Key.Tilde)) {
+            if (this.m_input.keyPressed(Key.Plus)) {
                 this.editor.setEnabled(!this.editor.enabled);
             }
             if (this.editor.enabled) {

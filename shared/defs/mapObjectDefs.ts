@@ -8716,6 +8716,23 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         hitParticle: "blackChip",
         map: { display: false, color: 0x6b3500, scale: 0.85 },
     }),
+    case_05b: createCase({
+        health: 140,
+        img: {
+            sprite: "map-case-meteor-01.img",
+            residue: "map-case-meteor-res-01.img",
+        },
+        loot: [
+            autoLoot("flare_gun_dual", 1),
+            autoLoot("flare_gun_dual", 1),
+            autoLoot("strobe", 1),
+            autoLoot("strobe", 1),
+            autoLoot("strobe", 1),
+            autoLoot("strobe", 1),
+        ],
+        hitParticle: "blackChip",
+        map: { display: false, color: 0x6b3500, scale: 0.85 },
+    }),
     case_06: createCase({
         health: 140,
         img: { sprite: "map-case-chrys-01.img" },
