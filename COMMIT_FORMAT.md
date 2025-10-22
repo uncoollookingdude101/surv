@@ -8,7 +8,7 @@ Note: `scope` and `file` are optional.
 
 Example - `fix (server): prevented downed players from interacting with objects`
 
-Any line of the commit message cannot be longer than 100  characters. This makes the message easier to read on GitHub as well as in various git tools.
+Any line of the commit message cannot be longer than 100 characters. This makes the message easier to read on GitHub as well as in various git tools.
 
 ## Type
 Must be one of the following:
