@@ -44,7 +44,7 @@ export const PerkProperties = {
     gotw: {
         scale: 0.2,
         healthRegen: 5, // per second
-        waterSpeedBoost: 2
+        waterSpeedBoost: 2,
     },
     field_medic: {
         speedBoost: 1.25,

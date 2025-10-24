@@ -149,9 +149,7 @@ const mapDef = {
             { name: "strobe", count: 1, weight: 0.5 },
         ],
         tier_airdrop_throwables: [{ name: "strobe", count: 1, weight: 1 }],
-        tier_sv98: [
-            { name: "sv98", count: 1, weight: 1 },
-        ],
+        tier_sv98: [{ name: "sv98", count: 1, weight: 1 }],
         tier_ammo: [
             { name: "9mm", count: 60, weight: 3 },
             { name: "762mm", count: 60, weight: 3 },
