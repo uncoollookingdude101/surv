@@ -151,7 +151,6 @@ const mapDef = {
         tier_airdrop_throwables: [{ name: "strobe", count: 1, weight: 1 }],
         tier_sv98: [
             { name: "sv98", count: 1, weight: 1 },
-            { name: "awc", count: 1, weight: 0.25 },
         ],
         tier_ammo: [
             { name: "9mm", count: 60, weight: 3 },
@@ -178,7 +177,6 @@ const mapDef = {
             { name: "scout_elite", count: 1, weight: 1.5 },
             { name: "mosin", count: 1, weight: 0.75 },
             { name: "model94", count: 1, weight: 3 },
-            { name: "awc", count: 1, weight: 0.1 },
         ],
         tier_guns: [
             { name: "famas", count: 1, weight: 0.9 },
@@ -235,7 +233,6 @@ const mapDef = {
             { name: "usas", count: 1, weight: 2 },
             { name: "m249", count: 1, weight: 1 },
             { name: "pkp", count: 1, weight: 0.75 },
-            { name: "awc", count: 1, weight: 0.5 },
             { name: "m9", count: 1, weight: 0.5 },
             { name: "flare_gun_dual", count: 1, weight: 0.75 },
             { name: "pkm", count: 1, weight: 1 },
@@ -275,7 +272,6 @@ const mapDef = {
             { name: "bonus_assault", count: 1, weight: 1.5 },
         ],
         tier_airdrop_rare: [
-            { name: "awc", count: 1, weight: 1 },
             { name: "pkp", count: 1, weight: 1 },
             { name: "m249", count: 1, weight: 1 },
             { name: "pkm", count: 1, weight: 1 },

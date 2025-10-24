@@ -1039,7 +1039,7 @@ const SkinDefs = {
     }),
     helmet03_leader2: defineSkin("helmet03", {
         name: "Leader Helmet",
-        perk: "bonus_assault",
+        perk: "ap_rounds",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
