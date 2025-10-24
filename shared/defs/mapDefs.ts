@@ -1,6 +1,7 @@
 import type { Vec2 } from "../utils/v2";
 import { Airstrike } from "./maps/airstrike";
 import { Main } from "./maps/baseDefs";
+import { Birthday } from "./maps/birthdayDefs";
 import { Cobalt } from "./maps/cobaltDefs";
 import { Desert } from "./maps/desertDefs";
 import { Faction } from "./maps/factionDefs";
@@ -53,6 +54,7 @@ export const MapDefs = {
     savannah: Savannah,
     cobalt: Cobalt,
     turkey: Turkey,
+    birthday: Birthday,
     flare: Flare,
     airstrike: Airstrike,
     hidenseek: HidenSeek,
@@ -223,15 +225,15 @@ export interface MapDef {
             }>;
             placeSpawns: string[];
         };
-        densitySpawns: Array<Record<string, number>>;
-        fixedSpawns: Array<
-            Record<string, number | { odds: number } | { small: number; large: number }>
-        >;
+        densitySpawns: [Record<string, number>];
+        fixedSpawns: [
+            Record<string, number | { odds: number } | { small: number; large: number }>,
+        ];
         randomSpawns: Array<{
             spawns: string[];
             choose: number;
         }>;
-        spawnReplacements: Array<Record<string, string>>;
+        spawnReplacements: [Record<string, string>];
         importantSpawns: string[];
     };
 }
