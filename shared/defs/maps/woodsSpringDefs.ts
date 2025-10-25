@@ -14,7 +14,7 @@ const mapDef: PartialMapDef = {
             { name: "footstep_08", channel: "sfx" },
             { name: "footstep_09", channel: "sfx" },
             {
-                name: "",
+                name: "helmet03_forest_pickup_01",
                 channel: "ui",
             },
             { name: "ability_stim_01", channel: "sfx" },
