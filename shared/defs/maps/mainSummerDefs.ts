@@ -12,7 +12,6 @@ const mapDef = {
     gameMode: {
         maxPlayers: 80,
         killLeaderEnabled: true,
-        sniperMode: true,
     },
     gameConfig: {
         planes: {
@@ -100,18 +99,12 @@ const mapDef = {
 
     assets: {
         audio: [
-            { name: "spawn_01", channel: "ui" },
+            { name: "helmet03_forest_pickup_01", channel: "ui" },
             { name: "ping_unlock_01", channel: "ui" },
-            { name: "potato_pickup_01", channel: "ui" },
-            {
-                name: "ambient_steam_01",
-                channel: "ambient",
-            },
+            { name: "ambient_steam_01", channel: "ambient"},
             { name: "ambient_lab_01", channel: "ambient" },
             { name: "piano_music_01", channel: "ambient" },
             { name: "pumpkin_break_01", channel: "sfx" },
-            { name: "potato_01", channel: "sfx" },
-            { name: "potato_02", channel: "sfx" },
             { name: "club_music_01", channel: "sfx" },
             { name: "club_music_02", channel: "sfx" },
             { name: "log_11", channel: "sfx" },
@@ -123,7 +116,6 @@ const mapDef = {
             { name: "log_04", channel: "sfx" },
             { name: "footstep_08", channel: "sfx" },
             { name: "footstep_09", channel: "sfx" },
-            { name: "helmet03_forest_pickup_01", channel: "ui" },
         ],
         atlases: [
             "gradient",
@@ -157,6 +149,18 @@ const mapDef = {
             { name: "12gauge", count: 10, weight: 3 },
             { name: "45acp", count: 60, weight: 3 },
             { name: "flare", count: 1, weight: 1 },
+            { name: "50AE", count: 21, weight: 1 },
+            { name: "308sub", count: 5, weight: 1 },
+        ],
+        tier_ammo_crate: [
+            { name: "9mm", count: 120, weight: 1 },
+            { name: "762mm", count: 120, weight: 1 },
+            { name: "556mm", count: 120, weight: 1 },
+            { name: "12gauge", count: 20, weight: 1 },
+            { name: "50AE", count: 42, weight: 1 },
+            { name: "308sub", count: 10, weight: 1 },
+            { name: "flare", count: 1, weight: 1 },
+            { name: "flare", count: 2, weight: 0.25 },
         ],
         tier_cattle_crate: [
             { name: "colt45", count: 1, weight: 1 },
@@ -171,9 +175,9 @@ const mapDef = {
         ],
         tier_cloud_01: [
             { name: "sv98", count: 1, weight: 0.5 },
-            { name: "blr", count: 1, weight: 2 },
-            { name: "scout_elite", count: 1, weight: 1.5 },
-            { name: "mosin", count: 1, weight: 0.75 },
+            { name: "blr", count: 1, weight: 2.5 },
+            { name: "scout_elite", count: 1, weight: 2 },
+            { name: "mosin", count: 1, weight: 1 },
             { name: "model94", count: 1, weight: 3 },
         ],
         tier_guns: [
@@ -219,13 +223,13 @@ const mapDef = {
         tier_cloud_02: [
             { name: "garand", count: 1, weight: 1 },
             { name: "m1014", count: 1, weight: 0.25 },
-            { name: "mk12", count: 1, weight: 2 },
-            { name: "mkg45", count: 1, weight: 1 },
-            { name: "vss", count: 1, weight: 1.5 },
-            { name: "scarssr", count: 1, weight: 0.75 },
-            { name: "l86", count: 1, weight: 1.25 },
+            { name: "mk12", count: 1, weight: 3 },
+            { name: "mkg45", count: 1, weight: 2 },
+            { name: "vss", count: 1, weight: 2 },
+            { name: "scarssr", count: 1, weight: 0.25 },
+            { name: "l86", count: 1, weight: 2 },
             { name: "m39", count: 1, weight: 3 },
-            { name: "svd", count: 1, weight: 1 },
+            { name: "svd", count: 1, weight: 2 },
         ],
         tier_hatchet: [
             { name: "usas", count: 1, weight: 2 },
@@ -246,15 +250,16 @@ const mapDef = {
             { name: "broken_arrow", count: 1, weight: 1 },
             { name: "bonus_9mm", count: 1, weight: 1 },
             { name: "bonus_45", count: 1, weight: 1 },
+            { name: "endless_ammo", count: 1, weight: 1 },
         ],
         tier_hatchet_melee: [
             { name: "helmet03_leader2", count: 1, weight: 5 }, // ?
         ],
         tier_vault_floor: [
-            { name: "helmet03_medic2", count: 1, weight: 0.5 },
-            { name: "bonesaw_rusted", count: 1, weight: 0.5 },
+            { name: "helmet03_medic2", count: 1, weight: 1 },
+            { name: "bonesaw_rusted", count: 1, weight: 1 },
         ],
-        tier_chrys_02: [{ name: "helmet03_forest", count: 1, weight: 1 }],
+        tier_chrys_02: [{ name: "helmet04_forest", count: 1, weight: 1 }],
         tier_chrys_03: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],
@@ -264,10 +269,13 @@ const mapDef = {
             { name: "naginata", count: 1, weight: 1 }, // ?
         ],
         tier_airdrop_perk: [
-            { name: "splinter", count: 1, weight: 1 },
+            { name: "fabricate_m", count: 1, weight: 1 },
+            { name: "small_arms", count: 1, weight: 1 },
+            { name: "field_medic", count: 1, weight: 1 },
+            { name: "windwalk", count: 1, weight: 1 },
             { name: "explosive", count: 1, weight: 1 },
             { name: "ap_rounds", count: 1, weight: 1 },
-            { name: "bonus_assault", count: 1, weight: 1.5 },
+            { name: "bonus_assault", count: 1, weight: 1 },
         ],
         tier_airdrop_rare: [
             { name: "pkp", count: 1, weight: 1 },
@@ -275,13 +283,14 @@ const mapDef = {
             { name: "pkm", count: 1, weight: 1 },
             { name: "m4a1", count: 1, weight: 1 },
             { name: "scorpion", count: 1, weight: 1 },
+            { name: "grozas", count: 1, weight: 1 },
             { name: "usas", count: 1, weight: 1 },
             { name: "potato_smg", count: 1, weight: 1 },
             { name: "potato_cannon", count: 1, weight: 1 },
             { name: "tier_custom", count: 1, weight: 0.5 },
         ],
         tier_airdrop_uncommon: [
-            { name: "scar", count: 1, weight: 0.75 },
+            { name: "scar", count: 1, weight: 1 },
             { name: "mosin", count: 1, weight: 1 },
             { name: "saiga", count: 1, weight: 1 },
             { name: "deagle", count: 1, weight: 1 },
@@ -307,8 +316,8 @@ const mapDef = {
         ],
         tier_helm_special: [
             { name: "helmet02_moon1", count: 1, weight: 1 },
-            { name: "helmet02_moon2", count: 1, weight: 1 },
-            { name: "helmet02_moon3", count: 1, weight: 1 },
+            { name: "helmet02_moon2", count: 1, weight: 0.5 },
+            { name: "helmet02_moon3", count: 1, weight: 0.5 },
             { name: "helmet02_moon4", count: 1, weight: 1 },
         ],
         tier_police: [
@@ -329,7 +338,10 @@ const mapDef = {
             { name: "chest02", count: 1, weight: 6 },
             { name: "chest03", count: 1, weight: 0.2 },
         ],
-        tier_class_crate_mythic: [{ name: "scavenger_adv", count: 1, weight: 1 }],
+        tier_class_crate_mythic: [
+            { name: "scavenger_adv", count: 1, weight: 1 },
+            { name: "splinter", count: 1, weight: 1 },
+        ],
         tier_scopes_sniper: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],

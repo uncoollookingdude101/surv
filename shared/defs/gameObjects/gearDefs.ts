@@ -725,9 +725,32 @@ const SkinDefs = {
             baseSprite: "player-helmet-leader.img",
         },
     }),
-    helmet03_forest: defineSkin("helmet04", {
+    helmet03_forest: defineSkin("helmet03", {
         name: "Shishigami no Kabuto",
         role: "woods_king",
+        mapIndicator: {
+            sprite: "player-king-woods.img",
+            tint: 0xff00,
+            pulse: true,
+            pulseTint: 0xff00,
+        },
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-forest.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-forest.img",
+            border: "loot-circle-outer-01.img",
+            scale: 0.3,
+            rot: 0.5 * Math.PI,
+        },
+    }),
+    helmet04_forest: defineSkin("helmet04", {
+        name: "Shishigami no Kabuto",
+        role: "woods_king2",
         mapIndicator: {
             sprite: "player-king-woods.img",
             tint: 0xff00,
@@ -764,7 +787,7 @@ const SkinDefs = {
     }),
     helmet02_moon1: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
-        perk: "endless_ammo",
+        perk: "bonus_assault",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

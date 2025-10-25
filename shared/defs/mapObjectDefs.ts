@@ -9026,7 +9026,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         destructible: true,
         armorPlated: true,
         hitParticle: "greenChip",
-        loot: [tierLoot("tier_ammo_crate", 1, 1)],
+        loot: [tierLoot("tier_ammo_crate", 3, 1)],
         map: { display: true, color: 0x537054, scale: 0.875 },
         img: { sprite: "map-crate-04.img" },
         sound: {

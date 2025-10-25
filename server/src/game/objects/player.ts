@@ -2963,6 +2963,9 @@ export class Player extends BaseGameObject {
                 if (killCreditSource.role === "woods_king") {
                     this.game.playerBarn.addMapPing("ping_woodsking", this.pos);
                 }
+                if (killCreditSource.role === "woods_king2") {
+                    this.game.playerBarn.addMapPing("ping_woodsking", this.pos);
+                }
             }
             killMsg.killCreditId = killCreditSource.__id;
             killMsg.killerKills = killCreditSource.kills;

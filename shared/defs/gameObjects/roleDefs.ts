@@ -484,6 +484,19 @@ export const RoleDefs: Record<string, RoleDef> = {
         },
         perks: ["gotw", "windwalk"],
     },
+    woods_king2: {
+        type: "role",
+        announce: true,
+        killFeed: { dead: true, color: "#12ff00ff" },
+        sound: { dead: "leader_dead_01" },
+        mapIndicator: {
+            sprite: "player-the-hunted.img",
+            tint: 0x00ff00,
+            pulse: true,
+            pulseTint: 0x00ff00,
+        },
+        perks: ["gotw", "windwalk", "steelskin"],
+    },
     kill_leader: {
         type: "role",
         announce: false,
