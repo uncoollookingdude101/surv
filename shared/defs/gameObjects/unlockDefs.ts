@@ -367,12 +367,9 @@ export const UnlockDefs: Record<UnlockDefKey, UnlockDef> = {
             "emote_flagnonbinary",
             "emote_logocloud",
             "emote_logotwins",
-
-            /* use this to unlock everything :)
             ...new Set([
                 ..._allowedOutfits,
                 ..._allowedMeleeSkins,
-                ..._allowedEmotes,
                 ..._allowedHealEffects,
                 ...PassDefs.pass_survivr1.items.map((item) => item.item),
             ]),
