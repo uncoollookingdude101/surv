@@ -356,7 +356,7 @@ export enum Key {
     V = 86,
     W = 87,
     X = 88,
-    Windows = 91,
+    Windows =         91,
     ContextMenu = 93,
     F1 = 112,
     F2 = 113,
