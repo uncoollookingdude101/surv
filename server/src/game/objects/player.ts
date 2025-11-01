@@ -1943,8 +1943,9 @@ export class Player extends BaseGameObject {
                     }
                     case "perk": {
                         /**
-                         * Prevent mobile players from picking up potentially negative perks.
-                         * This includes non-droppable perks and halloween perks.
+                         * Prevents mobile players from automatically picking up
+                         * halloween perks. Additionally prevents them from auto-picking
+                         * up perks if they already have a droppable perk.
                          * 
                          * NOTE: This is a poor solution (idString checking) and should
                          * not be used as a precedent to allow more idString checking.
