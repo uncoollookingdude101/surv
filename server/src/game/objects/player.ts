@@ -1942,14 +1942,16 @@ export class Player extends BaseGameObject {
                         break;
                     }
                     case "perk": {
-                        // Prevent mobile players from picking up potentially negative perks.
-                        // This includes non-droppable perks and halloween perks.
+                        /**
+                         * Prevent mobile players from picking up potentially negative perks.
+                         * This includes non-droppable perks and halloween perks.
+                         * 
+                         * NOTE: This is a poor solution (idString checking) and should
+                         * not be used as a precedent to allow more idString checking.
+                         */
                         if (
-                            !this.perks.find(
-                                (perk) =>
-                                    perk.droppable &&
-                                    perk.replaceOnDeath !== "halloween_mystery",
-                            )
+                            closestLoot.type !== "halloween_mystery" &&
+                            !this.perks.find((perk) => perk.droppable)
                         ) {
                             this.pickupLoot(closestLoot);
                         }
