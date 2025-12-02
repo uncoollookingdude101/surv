@@ -939,6 +939,14 @@ export class Player extends BaseGameObject {
             // for non faction modes where teamId > 2, just cycles between blue and red teamId
             const clampedTeamId = ((this.teamId - 1) % 2) + 1;
 
+            // give backpack before heals/ammos
+            if (roleDef.defaultItems.backpack) {
+                if (this.backpack) {
+                    this.dropBackPackCopy(this.backpack);
+                }
+                this.backpack = roleDef.defaultItems.backpack;
+            }
+
             // inventory and scope
             for (const [key, value] of Object.entries(roleDef.defaultItems.inventory) as [
                 InventoryItem,
@@ -990,12 +998,6 @@ export class Player extends BaseGameObject {
                     this.dropArmor(this.chest);
                 }
                 this.chest = roleDef.defaultItems.chest;
-            }
-            if (roleDef.defaultItems.backpack) {
-                if (this.backpack) {
-                    this.dropBackPackCopy(this.backpack);
-                }
-                this.backpack = roleDef.defaultItems.backpack;
             }
 
             // weapons
