@@ -13,7 +13,6 @@ import {
     type HealDef,
     type HelmetDef,
     SCOPE_LEVELS,
-    type ScopeDef,
 } from "../../../../shared/defs/gameObjects/gearDefs";
 import type { GunDef } from "../../../../shared/defs/gameObjects/gunDefs";
 import type { MeleeDef } from "../../../../shared/defs/gameObjects/meleeDefs";
@@ -948,20 +947,8 @@ export class Player extends BaseGameObject {
             }
 
             // inventory and scope
-            for (const [key, value] of Object.entries(roleDef.defaultItems.inventory) as [
-                InventoryItem,
-                number,
-            ][]) {
-                if (value == 0) continue; // prevents overwriting existing inventory
-
-                // only sets scope if scope in inventory is higher than current scope
-                const invDef = GameObjectDefs[key];
-                const currScope = GameObjectDefs[this.scope] as ScopeDef;
-                if (invDef.type == "scope" && invDef.level > currScope.level) {
-                    this.scope = key;
-                }
-
-                this.invManager.giveAndDrop(key, value);
+            for (const [key, value] of Object.entries(roleDef.defaultItems.inventory)) {
+                this.invManager.giveAndDrop(key as InventoryItem, value);
             }
 
             // outfit
