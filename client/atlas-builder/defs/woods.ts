@@ -40,5 +40,12 @@ export const WoodsAtlas: AtlasDef = {
 
         "map/map-woodpile-02.svg",
         "map/map-woodpile-res-02.svg",
+
+        "map/map-snow-01.svg",
+        "map/map-snow-03.svg",
+        "map/map-snow-02.svg",
+        "map/map-snow-05.svg",
+        "map/map-snow-04.svg",
+        "map/map-snow-06.svg",
     ],
 };
