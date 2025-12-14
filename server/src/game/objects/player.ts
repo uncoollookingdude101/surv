@@ -3754,6 +3754,17 @@ export class Player extends BaseGameObject {
                         return;
                     }
 
+                    const oldWeapDef = GameObjectDefs[this.weapons[newGunIdx].type] as
+                        | GunDef
+                        | undefined;
+                    if (
+                        oldWeapDef &&
+                        (oldWeapDef.noDrop || !this.weaponManager.canDropFlare(newGunIdx))
+                    ) {
+                        this.pickupTicker = 0;
+                        return;
+                    }
+
                     // if "preloaded" gun add ammo to inventory
                     if (obj.isPreloadedGun) {
                         this.invManager.giveAndDrop(
@@ -3765,17 +3776,6 @@ export class Player extends BaseGameObject {
                     if (freeGunSlot.cause === net.PickupMsgType.AlreadyOwned) {
                         amountLeft = 1;
                         break;
-                    }
-
-                    const oldWeapDef = GameObjectDefs[this.weapons[newGunIdx].type] as
-                        | GunDef
-                        | undefined;
-                    if (
-                        oldWeapDef &&
-                        (oldWeapDef.noDrop || !this.weaponManager.canDropFlare(newGunIdx))
-                    ) {
-                        this.pickupTicker = 0;
-                        return;
                     }
 
                     this.pickupTicker = 0.2;
