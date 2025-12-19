@@ -4322,6 +4322,7 @@ export class Player extends BaseGameObject {
             if (this.debug.teleportToPings) {
                 v2.set(this.pos, msg.pos);
                 this.setPartDirty();
+                this.game.grid.updateObject(this);
             }
 
             if (emoteDef.type !== "ping") {
