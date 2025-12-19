@@ -2013,20 +2013,18 @@ export class Player extends BaseGameObject {
                     util.sameLayer(this.layer, obj.layer) &&
                     !this.game.gas.isInGas(this.pos) // heal regions don't work in gas
                 ) {
-                    const effectiveHealRegions = obj.healRegions.filter((hr) => {
-                        return coldet.testPointAabb(
-                            this.pos,
-                            hr.collision.min,
-                            hr.collision.max,
-                        );
-                    });
+                    let totalHeal = 0;
+                    const c = collider.createCircle(this.pos, 0.1);
 
-                    if (effectiveHealRegions.length != 0) {
-                        const totalHealRate = effectiveHealRegions.reduce(
-                            (total, hr) => total + hr.healRate,
-                            0,
-                        );
-                        this.health += totalHealRate * dt;
+                    for (let j = 0; j < obj.healRegions.length; j++) {
+                        const hr = obj.healRegions[j];
+                        if (coldet.test(c, hr.collision)) {
+                            totalHeal += hr.healRate;
+                        }
+                    }
+
+                    if (totalHeal) {
+                        this.health += totalHeal * dt;
                         this.healEffect = true;
                     }
                 }
