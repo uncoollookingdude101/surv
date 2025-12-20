@@ -113,7 +113,7 @@ export interface MapDef {
         sniperMode?: boolean;
         perkMode?: boolean;
         perkModeRoles?: string[];
-        turkeyMode?: number;
+        turkeyMode?: boolean;
         spookyKillSounds?: boolean;
     };
     gameConfig: {

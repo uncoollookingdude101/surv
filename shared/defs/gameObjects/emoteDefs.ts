@@ -14,7 +14,7 @@ export enum EmoteCategory {
 export interface EmoteDef {
     readonly type: "emote";
     name?: string;
-    rarity?: number;
+    rarity?: Rarity;
     texture: string;
     sound: string;
     channel: string;

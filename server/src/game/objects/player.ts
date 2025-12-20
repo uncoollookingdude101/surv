@@ -27,6 +27,7 @@ import {
     EmoteSlot,
     GameConfig,
     type HasteType,
+    type Input,
     type InventoryItem,
 } from "../../../../shared/gameConfig";
 import * as net from "../../../../shared/net/net";
@@ -3313,7 +3314,7 @@ export class Player extends BaseGameObject {
     toMouseLen = 0;
     mousePos = v2.create(1, 0);
 
-    shouldAcceptInput(input: number): boolean {
+    shouldAcceptInput(input: Input): boolean {
         return (
             !this.downed ||
             input === GameConfig.Input.Interact || // Players can interact with obstacles while downed.
@@ -4709,7 +4710,7 @@ export class Player extends BaseGameObject {
         this.speed = math.clamp(this.speed, 1, 10000);
     }
 
-    sendMsg(type: number, msg: net.AbstractMsg, bytes = 128): void {
+    sendMsg(type: net.MsgType, msg: net.AbstractMsg, bytes = 128): void {
         const stream = new net.MsgStream(new ArrayBuffer(bytes));
         stream.serializeMsg(type, msg);
         this.sendData(stream.getBuffer());

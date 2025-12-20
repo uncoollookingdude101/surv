@@ -107,7 +107,7 @@ const mapDef: PartialMapDef = {
             },
         ],
     },
-    gameMode: { turkeyMode: 1 },
+    gameMode: { turkeyMode: true },
 };
 
 export const Turkey = util.mergeDeep({}, Main, mapDef);
