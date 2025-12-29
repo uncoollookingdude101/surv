@@ -3508,31 +3508,7 @@ export class Player extends BaseGameObject {
                     break;
                 }
                 case GameConfig.Input.SwapWeapSlots: {
-                    const primary = {
-                        ...this.weapons[GameConfig.WeaponSlot.Primary],
-                    };
-                    const secondary = {
-                        ...this.weapons[GameConfig.WeaponSlot.Secondary],
-                    };
-
-                    this.weapons[GameConfig.WeaponSlot.Primary] = secondary;
-                    this.weapons[GameConfig.WeaponSlot.Secondary] = primary;
-
-                    // curWeapIdx's setter method already sets dirty.weapons
-                    if (
-                        this.curWeapIdx == GameConfig.WeaponSlot.Primary ||
-                        this.curWeapIdx == GameConfig.WeaponSlot.Secondary
-                    ) {
-                        this.weaponManager.setCurWeapIndex(
-                            this.curWeapIdx ^ 1,
-                            false,
-                            false,
-                            false,
-                            false,
-                        );
-                    } else {
-                        this.weapsDirty = true;
-                    }
+                    this.weaponManager.swapWeaponSlots();
                     break;
                 }
             }
