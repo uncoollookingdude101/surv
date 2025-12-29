@@ -3738,6 +3738,11 @@ export class Player extends BaseGameObject {
                 }
                 break;
             case "melee":
+                if (this.weapons[GameConfig.WeaponSlot.Melee].type === obj.type) {
+                    pickupMsg.type = net.PickupMsgType.AlreadyEquipped;
+                    amountLeft = 1;
+                    break;
+                }
                 this.weaponManager.dropMelee();
                 this.weaponManager.setWeapon(GameConfig.WeaponSlot.Melee, obj.type, 0);
                 break;
@@ -3893,6 +3898,12 @@ export class Player extends BaseGameObject {
                         pickupMsg.type = net.PickupMsgType.BetterItemEquipped;
                         break;
                     }
+                }
+
+                if (this.outfit === obj.type) {
+                    pickupMsg.type = net.PickupMsgType.AlreadyEquipped;
+                    amountLeft = 1;
+                    break;
                 }
 
                 amountLeft = 1;
