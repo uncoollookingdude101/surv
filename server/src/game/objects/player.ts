@@ -3886,12 +3886,15 @@ export class Player extends BaseGameObject {
                 }
                 break;
             case "outfit":
-                const outfit = GameObjectDefs[this.outfit] as OutfitDef;
-                if (outfit.noDrop) {
-                    amountLeft = 1;
-                    pickupMsg.type = net.PickupMsgType.BetterItemEquipped;
-                    break;
+                if (this.role) {
+                    const roleDef = GameObjectDefs[this.role] as RoleDef;
+                    if (roleDef.defaultItems?.noDropOutfit) {
+                        amountLeft = 1;
+                        pickupMsg.type = net.PickupMsgType.BetterItemEquipped;
+                        break;
+                    }
                 }
+
                 amountLeft = 1;
                 lootToAdd = this.outfit;
                 pickupMsg.type = net.PickupMsgType.Success;
