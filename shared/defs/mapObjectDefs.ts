@@ -2961,7 +2961,7 @@ function createBarnBasement<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 0,
             },
             {
-                type: "loot_tier_sledgehammer",
+                type: e.floor_loot || "loot_tier_sledgehammer",
                 pos: v2.create(0.5, -0.5),
                 scale: 1,
                 ori: 0,
@@ -9776,7 +9776,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     mil_crate_03: createCrate({
         collision: collider.createAabbExtents(v2.create(0, 0), v2.create(2.7, 1.25)),
         health: 100,
-        loot: [autoLoot("ots38_dual", 1)],
+        loot: [autoLoot("ots38_dual", 1), autoLoot("outfitWhite", 1)], // TODO: Remove Arctic Avenger when the survevr pass is added.
         map: { display: false },
         terrain: { grass: true, beach: true },
         img: { sprite: "map-crate-mil-03.img" },
@@ -10394,6 +10394,15 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         loot: [tierLoot("tier_surviv", 2, 3), autoLoot("ak47", 1)],
     }),
+    stone_02x: createStone({
+        map: { display: false, color: 0x9ca2a8, scale: 1 },
+        img: {
+            sprite: "map-stone-01x.img",
+            residue: "map-stone-res-01x.img",
+            tint: 0xe5e5e5,
+        },
+        loot: [tierLoot("tier_surviv", 2, 3), autoLoot("ak47", 1)],
+    }),
     stone_03: createRiverStone({}),
     stone_03b: createRiverStone({
         img: {
@@ -10443,6 +10452,24 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             residue: "map-stone-res-04.img",
         },
     }),
+    stone_04x: createStone({
+        stonePlated: true,
+        scale: {
+            createMin: 0.8,
+            createMax: 0.8,
+            destroy: 0.75,
+        },
+        hitParticle: "rockEyeChip",
+        explodeParticle: "rockEyeBreak",
+        loot: [tierLoot("tier_eye_block", 1, 1)],
+        terrain: { grass: true, beach: true, riverShore: true },
+        map: { display: true, color: 0xb2eaff, scale: 1 },
+        collision: collider.createAabbExtents(v2.create(0, 0), v2.create(1.8, 1.8)),
+        img: {
+            sprite: "map-stone-04x.img",
+            residue: "map-stone-res-04.img",
+        },
+    } as unknown as Partial<ObstacleDef>),
     stone_05: createStone({
         stonePlated: true,
         hitParticle: "rockEyeChip",
@@ -10707,6 +10734,11 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     tree_03: createTree({
         map: { display: false },
         img: { tint: 0xb1b1b1 },
+        loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
+    }),
+    tree_03x: createTree({
+        map: { display: false },
+        img: { sprite: "map-tree-10.img", tint: 0xc8c8c8 },
         loot: [tierLoot("tier_surviv", 2, 3), autoLoot("mosin", 1)],
     }),
     // savannah cache
@@ -11007,9 +11039,19 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         scale: { createMin: 1, createMax: 1 },
         img: {
             sprite: "map-tree-11.img",
-            scale: 0.5,
+            scale: 0.75,
             alpha: 0.92,
             zIdx: 201,
+        },
+    } as unknown as Partial<ObstacleDef>),
+    tree_interior_11: createTree({
+        collision: collider.createCircle(v2.create(0, 0), 1.25),
+        scale: { createMin: 1, createMax: 1 },
+        img: {
+            sprite: "map-tree-11.img",
+            scale: 0.5,
+            alpha: 0.92,
+            zIdx: 200,
         },
     } as unknown as Partial<ObstacleDef>),
     tree_12: createTree({
@@ -12995,6 +13037,24 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         ],
     },
     cache_01: createCache({}),
+    cache_01x: createCache({
+        mapObjects: [
+            {
+                type: "stone_02x",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_initiative_01",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+                inheritOri: false,
+            },
+        ],
+        map: { displayType: "stone_01x" },
+    }),
     cache_01sv: createCache({
         mapObjects: [
             {
@@ -13048,6 +13108,24 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
         map: { displayType: "tree_01" },
+    }),
+    cache_02x: createCache({
+        mapObjects: [
+            {
+                type: "tree_03x",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_initiative_01",
+                pos: v2.create(0, 0),
+                scale: 1.2,
+                ori: 0,
+                inheritOri: false,
+            },
+        ],
+        map: { displayType: "tree_10" },
     }),
     cache_02sv: createCache({
         mapObjects: [
@@ -17081,6 +17159,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     barn_basement_floor_01d: createBarnBasement({
         basement: "barn_basement_floor_02d",
     }),
+    barn_basement_floor_01x: createBarnBasement({
+        floor_loot: "loot_tier_iceaxe",
+    }),
     barn_basement_floor_02: {
         type: "building",
         map: { display: false, color: 0x665a4e, scale: 1 },
@@ -17249,6 +17330,38 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             collider.createAabbExtents(v2.create(3.51, -6), v2.create(4, 4)),
         ],
     },
+    barn_basement_structure_01x: {
+        type: "structure",
+        terrain: { grass: true, beach: false },
+        mapObstacleBounds: [
+            collider.createAabbExtents(v2.create(0, 0), v2.create(30, 30)),
+        ],
+        layers: [
+            {
+                type: "barn_basement_stairs_01",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+            {
+                type: "barn_basement_floor_01x",
+                pos: v2.create(-10, -0.5),
+                ori: 0,
+            },
+        ],
+        stairs: [
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(1.5, 1.5),
+                    v2.create(2, 3.5),
+                ),
+                downDir: v2.create(0, -1),
+            },
+        ],
+        mask: [
+            collider.createAabbExtents(v2.create(-12.5, -1), v2.create(12, 8.5)),
+            collider.createAabbExtents(v2.create(3.51, -6), v2.create(4, 4)),
+        ],
+    },
     barn_wall_int_2: createWall({
         material: "wood",
         extents: v2.create(0.5, 1),
@@ -17369,6 +17482,53 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         bonus_door: "",
         map: { displayType: "barn_01" },
     }),
+    barn_02x: createBarn({
+        ceiling: {
+            imgs: [
+                {
+                    sprite: "map-building-barn-ceiling-01.img",
+                    pos: v2.create(0, -2),
+                    scale: 1,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+                {
+                    sprite: "map-building-barn-ceiling-02.img",
+                    pos: v2.create(0, 13.2),
+                    scale: 0.667,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+                {
+                    sprite: "map-snow-01.img",
+                    pos: v2.create(-14.5, 5.5),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                    rot: 0,
+                },
+                {
+                    sprite: "map-snow-02.img",
+                    pos: v2.create(-0.5, -9),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                    rot: 0,
+                },
+                {
+                    sprite: "map-snow-03.img",
+                    pos: v2.create(14.5, 5.5),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                    rot: 0,
+                },
+            ],
+        },
+        bonus_room: "barn_basement_structure_01x",
+        bonus_door: "",
+        map: { displayType: "barn_01" },
+    } as unknown as Partial<BuildingDef>),
     bank_wall_int_3: createWall({
         material: "wood",
         extents: v2.create(0.5, 1.5),
@@ -17657,6 +17817,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 },
             ],
         },
+        plant: "tree_interior_11",
+        plant_pos: v2.create(-10, -8.5),
+        plant_loot: randomObstacleType({ loot_tier_surviv: 1 }),
     } as unknown as Partial<ExtendedBuildingDef>),
     house_red_02: createHouseRed2({ stand: "stand_01" }),
     house_red_02h: createHouseRed2({
@@ -17691,6 +17854,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 },
             ],
         },
+        plant: "tree_interior_11",
+        plant_pos: v2.create(4, 8.5),
+        plant_loot: randomObstacleType({ loot_tier_surviv: 1 }),
     } as unknown as Partial<ExtendedBuildingDef>),
     cabin_wall_int_5: createWall({
         material: "wood",
@@ -18059,7 +18225,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             ],
         },
         tree: "tree_11",
-        tree_scale: 1,
+        tree_scale: 0.8,
         tree_loot: "loot_tier_1",
         bush_chance: 999,
     } as unknown as Partial<ExtendedBuildingDef>),
@@ -18081,6 +18247,44 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         layers: [
             {
                 type: "mansion_01",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+            {
+                type: "mansion_cellar_01",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+        ],
+        stairs: [
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(28, 1.5),
+                    v2.create(3, 2.55),
+                ),
+                downDir: v2.create(-1, 0),
+                noCeilingReveal: true,
+            },
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(1, 13.5),
+                    v2.create(2, 3.5),
+                ),
+                downDir: v2.create(0, -1),
+            },
+        ],
+        mask: [
+            collider.createAabbExtents(v2.create(10, -0.1), v2.create(15, 10.1)),
+            collider.createAabbExtents(v2.create(17.5, 13.5), v2.create(7.49, 3.49)),
+        ],
+        teamId: 1,
+    },
+    mansion_structure_01x: {
+        type: "structure",
+        terrain: { grass: true, beach: false },
+        layers: [
+            {
+                type: "mansion_01x",
                 pos: v2.create(0, 0),
                 ori: 0,
             },
@@ -19307,6 +19511,11 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         grass_color: 0x629522,
         tree_small: "tree_08su",
         tree_large: "tree_08su",
+    }),
+    teahouse_complex_01x: createTeaHouseComplex({
+        grass_color: 0x9e9e9e,
+        tree_small: "tree_10",
+        tree_large: "tree_10",
     }),
     savannah_patch_01: (function <T extends BuildingDef>(e: Partial<T>): T {
         const t = {
@@ -28990,6 +29199,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     loot_tier_sledgehammer: {
         type: "loot_spawner",
         loot: [tierLoot("tier_sledgehammer", 1, 1)],
+    },
+    loot_tier_iceaxe: {
+        type: "loot_spawner",
+        loot: [tierLoot("tier_iceaxe", 1, 1)],
     },
     loot_tier_hatchet_melee: {
         type: "loot_spawner",
