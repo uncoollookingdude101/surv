@@ -2619,12 +2619,7 @@ export class Player extends BaseGameObject {
             const gameSourceDef = GameObjectDefs[params.gameSourceType ?? ""];
             let isHeadShot = false;
 
-            if (
-                gameSourceDef &&
-                gameSourceDef.type != "melee" &&
-                "headshotMult" in gameSourceDef &&
-                !params.isExplosion
-            ) {
+            if (gameSourceDef && "headshotMult" in gameSourceDef && !params.isExplosion) {
                 isHeadShot = Math.random() < GameConfig.player.headshotChance;
 
                 if (isHeadShot) {

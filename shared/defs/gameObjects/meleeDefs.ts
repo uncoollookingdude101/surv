@@ -11,7 +11,6 @@ export interface MeleeDef {
     damage: number;
     obstacleDamage: number;
     cleave?: boolean;
-    headshotMult: number;
     attack: {
         offset: Vec2;
         rad: number;
@@ -89,7 +88,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 24,
         obstacleDamage: 1,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 1.35,
@@ -126,7 +124,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 24,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         noDropOnDeath: true,
         attack: {
@@ -183,7 +180,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 24,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         noDropOnDeath: true,
         attack: {
@@ -239,7 +235,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 24,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         noDropOnDeath: true,
         attack: {
@@ -294,7 +289,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 24,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         noDropOnDeath: true,
         attack: {
@@ -349,7 +343,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 24,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         noDropOnDeath: true,
         attack: {
@@ -405,7 +398,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 33,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         attack: {
             offset: {
@@ -460,7 +452,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 44,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         attack: {
             offset: {
@@ -517,7 +508,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 36,
         obstacleDamage: 1.92,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 1.35,
@@ -573,7 +563,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 44,
         obstacleDamage: 2.4,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 1.35,
@@ -630,7 +619,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 40,
         obstacleDamage: 1.5,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 1.75,
@@ -687,7 +675,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 56,
         obstacleDamage: 1.92,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 3.5,
@@ -744,7 +731,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 60,
         obstacleDamage: 1.92,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 1.35,
@@ -801,7 +787,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 44,
         obstacleDamage: 2.4,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 1.4,
@@ -856,7 +841,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 18,
         obstacleDamage: 1,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 1.5,
@@ -910,7 +894,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 60,
         obstacleDamage: 0.8,
-        headshotMult: 1,
         attack: {
             offset: {
                 x: 2,
@@ -1000,7 +983,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 40,
         obstacleDamage: 1,
-        headshotMult: 1,
         noPotatoSwap: true,
         attack: {
             offset: {
@@ -1055,7 +1037,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 33,
         obstacleDamage: 1.4,
-        headshotMult: 1,
         noPotatoSwap: true,
         attack: {
             offset: {
