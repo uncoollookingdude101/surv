@@ -6068,7 +6068,206 @@ function createTeaPavilion<T extends BuildingDef>(e: Partial<T>): T {
     };
     return util.mergeDeep(t, e || {});
 }
-function createTeaHouseComplex<T extends BuildingDef>(e: Partial<T>): T {
+
+function createTeahouse(params: { ceilingImgs?: BuildingDef["ceiling_images"] }) {
+    const t = {
+        type: "building",
+        map: {
+            display: true,
+            shapes: [
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(0, 0),
+                        v2.create(14, 9),
+                    ),
+                    color: 0x465164,
+                },
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(0, 0),
+                        v2.create(7.5, 3.75),
+                    ),
+                    color: 0x586881,
+                },
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(9, -10.15),
+                        v2.create(2, 1.5),
+                    ),
+                    color: 0x70390b,
+                },
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(-9, 10.15),
+                        v2.create(2, 1.5),
+                    ),
+                    color: 0x70390b,
+                },
+            ],
+        },
+        terrain: { grass: true, beach: false },
+        floor: {
+            surfaces: [
+                {
+                    type: "shack",
+                    collision: [
+                        collider.createAabbExtents(v2.create(0, 0), v2.create(14, 9)),
+                        collider.createAabbExtents(
+                            v2.create(9, -10.15),
+                            v2.create(2, 1.5),
+                        ),
+                        collider.createAabbExtents(
+                            v2.create(-9, 10.15),
+                            v2.create(2, 1.5),
+                        ),
+                    ],
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-building-teahouse-floor-01.img",
+                    pos: v2.create(0, 0),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+                {
+                    sprite: "map-building-teahouse-floor-02.img",
+                    pos: v2.create(9, -10.25),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+                {
+                    sprite: "map-building-teahouse-floor-02.img",
+                    pos: v2.create(-9, 10.25),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                    rot: 2,
+                },
+            ],
+        },
+        ceiling: {
+            zoomRegions: [
+                {
+                    zoomIn: collider.createAabbExtents(v2.create(0, 0), v2.create(12, 7)),
+                    zoomOut: collider.createAabbExtents(
+                        v2.create(0, 0),
+                        v2.create(14, 9),
+                    ),
+                },
+            ],
+            vision: { width: 4 },
+            imgs: [
+                {
+                    sprite: "map-building-teahouse-ceiling-01.img",
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+                ...(params.ceilingImgs || []),
+            ],
+            destroy: {
+                wallCount: 3,
+                particle: "teahouseBreak",
+                particleCount: 25,
+                residue: "map-building-teahouse-res-01.img",
+            },
+        },
+        mapObjects: [
+            {
+                type: "teahouse_window_open_01",
+                pos: v2.create(-6.5, -6.75),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "teahouse_window_open_01",
+                pos: v2.create(11.75, 1.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "teahouse_wall_int_7",
+                pos: v2.create(11.5, -3.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "teahouse_wall_int_4",
+                pos: v2.create(11.5, 5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "teahouse_door_01",
+                pos: v2.create(-7, 6.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "teahouse_wall_int_18",
+                pos: v2.create(2, 6.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "teahouse_wall_int_3",
+                pos: v2.create(-9.5, -6.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "teahouse_wall_int_12",
+                pos: v2.create(1, -6.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "teahouse_wall_int_14",
+                pos: v2.create(-11.5, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "teahouse_door_01",
+                pos: v2.create(7, -6.5),
+                scale: 1,
+                ori: 3,
+            },
+            {
+                type: "pot_03",
+                pos: v2.create(9.5, 4.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "pot_03",
+                pos: v2.create(-9.5, -1.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "pot_03",
+                pos: v2.create(-9.5, -4.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "case_06",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+        ],
+    };
+    return util.mergeDeep(t, params || {});
+}
+
+function createTeaHouseComplex<T extends BuildingDef>(
+    e: Partial<T> & { tea_house?: string },
+): T {
     const t = {
         type: "building",
         map: { display: true, shapes: [] },
@@ -6091,7 +6290,7 @@ function createTeaHouseComplex<T extends BuildingDef>(e: Partial<T>): T {
         ceiling: { zoomRegions: [], imgs: [] },
         mapObjects: [
             {
-                type: "teahouse_01",
+                type: e.tea_house || "teahouse_01",
                 pos: v2.create(0, 0),
                 scale: 1,
                 ori: 0,
@@ -19299,203 +19498,35 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     teahouse_window_open_01: createLowWall({
         img: { tint: 0xba692b },
     }),
-    teahouse_01: (function (e) {
-        const t = {
-            type: "building",
-            map: {
-                display: true,
-                shapes: [
-                    {
-                        collider: collider.createAabbExtents(
-                            v2.create(0, 0),
-                            v2.create(14, 9),
-                        ),
-                        color: 0x465164,
-                    },
-                    {
-                        collider: collider.createAabbExtents(
-                            v2.create(0, 0),
-                            v2.create(7.5, 3.75),
-                        ),
-                        color: 0x586881,
-                    },
-                    {
-                        collider: collider.createAabbExtents(
-                            v2.create(9, -10.15),
-                            v2.create(2, 1.5),
-                        ),
-                        color: 0x70390b,
-                    },
-                    {
-                        collider: collider.createAabbExtents(
-                            v2.create(-9, 10.15),
-                            v2.create(2, 1.5),
-                        ),
-                        color: 0x70390b,
-                    },
-                ],
+    teahouse_01: createTeahouse({}),
+    teahouse_01x: createTeahouse({
+        ceilingImgs: [
+            {
+                sprite: "map-snow-04.img",
+                pos: v2.create(4, 0.5),
+                scale: 1,
+                alpha: 1,
+                tint: 0xffffff,
+                rot: 0,
             },
-            terrain: { grass: true, beach: false },
-            floor: {
-                surfaces: [
-                    {
-                        type: "shack",
-                        collision: [
-                            collider.createAabbExtents(v2.create(0, 0), v2.create(14, 9)),
-                            collider.createAabbExtents(
-                                v2.create(9, -10.15),
-                                v2.create(2, 1.5),
-                            ),
-                            collider.createAabbExtents(
-                                v2.create(-9, 10.15),
-                                v2.create(2, 1.5),
-                            ),
-                        ],
-                    },
-                ],
-                imgs: [
-                    {
-                        sprite: "map-building-teahouse-floor-01.img",
-                        pos: v2.create(0, 0),
-                        scale: 0.5,
-                        alpha: 1,
-                        tint: 0xffffff,
-                    },
-                    {
-                        sprite: "map-building-teahouse-floor-02.img",
-                        pos: v2.create(9, -10.25),
-                        scale: 0.5,
-                        alpha: 1,
-                        tint: 0xffffff,
-                    },
-                    {
-                        sprite: "map-building-teahouse-floor-02.img",
-                        pos: v2.create(-9, 10.25),
-                        scale: 0.5,
-                        alpha: 1,
-                        tint: 0xffffff,
-                        rot: 2,
-                    },
-                ],
+            {
+                sprite: "map-snow-06.img",
+                pos: v2.create(11.75, -5),
+                scale: 0.75,
+                alpha: 1,
+                tint: 0xffffff,
+                rot: 1,
             },
-            ceiling: {
-                zoomRegions: [
-                    {
-                        zoomIn: collider.createAabbExtents(
-                            v2.create(0, 0),
-                            v2.create(12, 7),
-                        ),
-                        zoomOut: collider.createAabbExtents(
-                            v2.create(0, 0),
-                            v2.create(14, 9),
-                        ),
-                    },
-                ],
-                vision: { width: 4 },
-                imgs: [
-                    {
-                        sprite: "map-building-teahouse-ceiling-01.img",
-                        scale: 0.5,
-                        alpha: 1,
-                        tint: 0xffffff,
-                    },
-                ],
-                destroy: {
-                    wallCount: 3,
-                    particle: "teahouseBreak",
-                    particleCount: 25,
-                    residue: "map-building-teahouse-res-01.img",
-                },
+            {
+                sprite: "map-snow-06.img",
+                pos: v2.create(-11.75, 5),
+                scale: 0.75,
+                alpha: 1,
+                tint: 0xffffff,
+                rot: 3,
             },
-            mapObjects: [
-                {
-                    type: "teahouse_window_open_01",
-                    pos: v2.create(-6.5, -6.75),
-                    scale: 1,
-                    ori: 1,
-                },
-                {
-                    type: "teahouse_window_open_01",
-                    pos: v2.create(11.75, 1.5),
-                    scale: 1,
-                    ori: 0,
-                },
-                {
-                    type: "teahouse_wall_int_7",
-                    pos: v2.create(11.5, -3.5),
-                    scale: 1,
-                    ori: 0,
-                },
-                {
-                    type: "teahouse_wall_int_4",
-                    pos: v2.create(11.5, 5),
-                    scale: 1,
-                    ori: 0,
-                },
-                {
-                    type: "teahouse_door_01",
-                    pos: v2.create(-7, 6.5),
-                    scale: 1,
-                    ori: 1,
-                },
-                {
-                    type: "teahouse_wall_int_18",
-                    pos: v2.create(2, 6.5),
-                    scale: 1,
-                    ori: 1,
-                },
-                {
-                    type: "teahouse_wall_int_3",
-                    pos: v2.create(-9.5, -6.5),
-                    scale: 1,
-                    ori: 1,
-                },
-                {
-                    type: "teahouse_wall_int_12",
-                    pos: v2.create(1, -6.5),
-                    scale: 1,
-                    ori: 1,
-                },
-                {
-                    type: "teahouse_wall_int_14",
-                    pos: v2.create(-11.5, 0),
-                    scale: 1,
-                    ori: 0,
-                },
-                {
-                    type: "teahouse_door_01",
-                    pos: v2.create(7, -6.5),
-                    scale: 1,
-                    ori: 3,
-                },
-                {
-                    type: "pot_03",
-                    pos: v2.create(9.5, 4.5),
-                    scale: 1,
-                    ori: 0,
-                },
-                {
-                    type: "pot_03",
-                    pos: v2.create(-9.5, -1.5),
-                    scale: 1,
-                    ori: 0,
-                },
-                {
-                    type: "pot_03",
-                    pos: v2.create(-9.5, -4.5),
-                    scale: 1,
-                    ori: 0,
-                },
-                {
-                    type: "case_06",
-                    pos: v2.create(0, 0),
-                    scale: 1,
-                    ori: 0,
-                },
-            ],
-        };
-        return util.mergeDeep(t, e || {});
-    })({}),
+        ],
+    }),
     teapavilion_01: createTeaPavilion({ terrain: { lakeCenter: true } }),
     teapavilion_01w: createTeaPavilion({
         center_loot: "loot_tier_helmet_forest",
@@ -19511,6 +19542,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     teahouse_complex_01x: createTeaHouseComplex({
         grass_color: 0x9e9e9e,
+        tea_house: "teahouse_01x",
         tree_small: "tree_10",
         tree_large: "tree_10",
     }),
