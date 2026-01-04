@@ -2961,7 +2961,7 @@ function createBarnBasement<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 0,
             },
             {
-                type: e.floor_loot || "loot_tier_sledgehammer",
+                type: "loot_tier_barn_melee",
                 pos: v2.create(0.5, -0.5),
                 scale: 1,
                 ori: 0,
@@ -17159,9 +17159,6 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     barn_basement_floor_01d: createBarnBasement({
         basement: "barn_basement_floor_02d",
     }),
-    barn_basement_floor_01x: createBarnBasement({
-        floor_loot: "loot_tier_iceaxe",
-    }),
     barn_basement_floor_02: {
         type: "building",
         map: { display: false, color: 0x665a4e, scale: 1 },
@@ -17343,7 +17340,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 0,
             },
             {
-                type: "barn_basement_floor_01x",
+                type: "barn_basement_floor_01",
                 pos: v2.create(-10, -0.5),
                 ori: 0,
             },
@@ -29196,13 +29193,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         type: "loot_spawner",
         loot: [tierLoot("tier_stonehammer", 1, 1)],
     },
-    loot_tier_sledgehammer: {
+    loot_tier_barn_melee: {
         type: "loot_spawner",
-        loot: [tierLoot("tier_sledgehammer", 1, 1)],
-    },
-    loot_tier_iceaxe: {
-        type: "loot_spawner",
-        loot: [tierLoot("tier_iceaxe", 1, 1)],
+        loot: [tierLoot("tier_barn_melee", 1, 1)],
     },
     loot_tier_hatchet_melee: {
         type: "loot_spawner",

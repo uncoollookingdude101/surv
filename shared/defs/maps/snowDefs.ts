@@ -141,6 +141,7 @@ const mapDef: PartialMapDef = {
             { name: "4xscope", count: 1, weight: 0.5 },
             { name: "8xscope", count: 1, weight: 0.25 },
         ],
+        tier_barn_melee: [{ name: "iceaxe", count: 1, weight: 1 }],
         tier_airdrop_melee: [
             { name: "", count: 1, weight: 18 },
             { name: "iceaxe", count: 1, weight: 1 },
