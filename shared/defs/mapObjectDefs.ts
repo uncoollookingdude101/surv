@@ -21589,6 +21589,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                     scale: 0.85,
                     ori: 0,
                     inheritOri: false,
+                    ignoreMapSpawnReplacement: true,
                 },
                 {
                     type: randomObstacleType({
@@ -21600,6 +21601,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                     scale: 0.85,
                     ori: 0,
                     inheritOri: false,
+                    ignoreMapSpawnReplacement: true,
                 },
                 {
                     type: randomObstacleType({
@@ -21611,6 +21613,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                     scale: 0.85,
                     ori: 0,
                     inheritOri: false,
+                    ignoreMapSpawnReplacement: true,
                 },
                 {
                     type: "club_vault",
@@ -21658,6 +21661,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                     scale: 0.75,
                     ori: 0,
                     inheritOri: false,
+                    ignoreMapSpawnReplacement: true,
                 },
                 {
                     type: "decal_barrel_explosion",
