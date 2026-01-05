@@ -49,8 +49,6 @@ export interface ThrowableDef {
     };
     strikeDelay?: number;
     freezeOnImpact?: boolean;
-    healTeam?: boolean;
-    healValue?: number;
     heavyType?: string;
     changeTime?: number; // after changeTime has elapsed, throwable is changed to its "heavyType" variant
     forceMaxThrowDistance?: boolean;
@@ -809,8 +807,6 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         forceMaxThrowDistance: true,
         explodeOnImpact: true,
         playerCollision: true,
-        healTeam: true,
-        healValue: 5,
         fuseTime: 9999,
         aimDistance: 32,
         rad: 1,

@@ -14,6 +14,8 @@ export interface ExplosionDef {
     freezeAmount?: number; // unused atm in favor of gameconfig constant
     freezeDuration?: number; // how long to slow down player on hit
     dropRandomLoot?: boolean;
+    healTeam?: boolean;
+    healAmount?: number;
 }
 
 export const ExplosionDefs: Record<string, ExplosionDef> = {
@@ -227,5 +229,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "",
         explosionEffectType: "coconut",
         decalType: "",
+        healTeam: true,
+        healAmount: 5,
     },
 };

@@ -1,7 +1,5 @@
 import { GameObjectDefs } from "../../../../shared/defs/gameObjectDefs";
 import type { ExplosionDef } from "../../../../shared/defs/gameObjects/explosionsDefs";
-import { ThrowableDefs } from "../../../../shared/defs/gameObjects/throwableDefs";
-import { GameConfig } from "../../../../shared/gameConfig";
 import { ObjectType } from "../../../../shared/net/objectSerializeFns";
 import { collider } from "../../../../shared/utils/collider";
 import { math } from "../../../../shared/utils/math";
@@ -159,16 +157,9 @@ export class ExplosionBarn {
                 explosion.damageParams.source.__type == ObjectType.Player &&
                 explosion.damageParams.source.teamId == obj.teamId;
 
-            // Team and self-healing throwables
-            const throwableDef = explosion.damageParams.gameSourceType
-                ? ThrowableDefs[explosion.damageParams.gameSourceType]
-                : undefined;
-
-            const isHealingThrowable = throwableDef?.healTeam === true;
-
-            if (isHealingThrowable && isSourceTeammate) {
-                const healAmount = throwableDef!.healValue ?? 5; // default to 5 if healValue is not defined
-                obj.health = math.min(obj.health + healAmount, GameConfig.player.health);
+            if (def.healTeam && isSourceTeammate) {
+                const healAmount = def.healAmount ?? 5; // default to 5 if healValue is not defined
+                obj.health += healAmount;
                 obj.healEffectTicker = 0.5;
                 obj.setDirty();
                 return;
