@@ -3487,6 +3487,7 @@ a:active {
   background-image: url(/img/loot/loot-throwable-coconut.svg);
   border-bottom: 4px solid #a08a62;
   height: 41px;
+  color: #343434;
 }
 
 @media (max-width: 850px), (max-width: 900px) and (min-resolution: 3dppx) {
