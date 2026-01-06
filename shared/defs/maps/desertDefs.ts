@@ -293,7 +293,6 @@ const mapDef: PartialMapDef = {
                 tree_02: 3,
                 desert_town_01: 1,
                 desert_town_02: 1,
-                river_town_02: 1,
                 greenhouse_02: 1,
                 stone_05: 6,
             },

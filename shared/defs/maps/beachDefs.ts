@@ -192,7 +192,6 @@ const mapDef: PartialMapDef = {
                     large: 2,
                 },
                 stone_04: 1,
-                club_complex_01: 1,
                 mansion_structure_03: 1,
             },
         ],

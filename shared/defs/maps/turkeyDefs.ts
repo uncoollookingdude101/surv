@@ -97,7 +97,6 @@ const mapDef: PartialMapDef = {
                 mil_crate_02: { odds: 0.25 },
                 tree_02: 4,
                 stone_04: 1,
-                club_complex_01: 1,
             },
         ],
         spawnReplacements: [

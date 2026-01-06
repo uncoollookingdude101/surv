@@ -247,7 +247,6 @@ const mapDef: PartialMapDef = {
                     large: 2,
                 },
                 stone_04x: 3, // had to add the whole table to change this...might want to consider adding some form of partial override - Stu
-                club_complex_01: 1,
             },
         ],
         randomSpawns: [

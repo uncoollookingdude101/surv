@@ -32,7 +32,6 @@ const mapDef: PartialMapDef = {
         },
         fixedSpawns: [
             {
-                logging_complex_01su: 1,
                 logging_complex_02su: 1,
                 logging_complex_03su: 3,
                 teapavilion_01w: 1,
