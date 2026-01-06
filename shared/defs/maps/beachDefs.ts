@@ -31,10 +31,6 @@ const mapDef: PartialMapDef = {
             playerGhillie: 0x7dac66,
         },
     },
-    gameMode: {
-        maxPlayers: 80,
-        killLeaderEnabled: true,
-    },
     /* STRIP_FROM_PROD_CLIENT:START */
     lootTable: {
         tier_soviet: [
@@ -143,7 +139,7 @@ const mapDef: PartialMapDef = {
                 crate_03: 8,
                 crate_09bh: 6,
                 bush_01: 78,
-                cache_06: 12,
+                cache_06bh: 12,
                 tree_01: 75,
                 tree_13bh: 195,
                 tree_14: 35,
@@ -173,8 +169,8 @@ const mapDef: PartialMapDef = {
                 hut_04: 1, // pirate hut
                 shack_03a: 2,
                 shack_03b: { small: 4, large: 6 },
-                cache_01: 1,
-                cache_02: 1,
+                cache_01bh: 1,
+                cache_02bh: 1,
                 cache_07: 1,
                 bunker_structure_01: { odds: 0.25 },
                 bunker_structure_02: 1,
@@ -203,9 +199,6 @@ const mapDef: PartialMapDef = {
         spawnReplacements: [
             {
                 bush_01: "bush_03",
-                cache_01: "cache_01bh",
-                cache_02: "cache_02bh",
-                cache_06: "cache_06bh",
                 stone_03: "stone_03bh",
             },
         ],
