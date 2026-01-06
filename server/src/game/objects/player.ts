@@ -2838,38 +2838,26 @@ export class Player extends BaseGameObject {
                 }
 
                 // Pirate's Bounty (Cutlass-specific)
-                if (killCreditSource.hasPerk("pirate")) {
-                    if (params.gameSourceType) {
-                        const weaponDef = GameObjectDefs[params.gameSourceType];
-                        if (weaponDef?.type === "melee") {
-                            const count = util.randomInt(3, 4);
-                            for (let i = 0; i < count; i++) {
-                                const commonItems =
-                                    this.game.lootBarn.getLootTable("tier_pirate");
-                                const commonItem =
-                                    commonItems[
-                                        util.randomInt(0, commonItems.length - 1)
-                                    ];
-                                this.game.lootBarn.addLoot(
-                                    commonItem.name,
-                                    this.pos,
-                                    this.layer,
-                                    1,
-                                );
-                            }
+                const weaponDef = GameObjectDefs[params.gameSourceType || ""];
+                if (killCreditSource.hasPerk("pirate") && weaponDef?.type == "melee") {
+                    const count = util.randomInt(3, 4);
+                    for (let i = 0; i < count; i++) {
+                        const item = this.game.lootBarn.getLootTable("tier_pirate");
+                        if (!item) continue;
 
-                            if (util.random(0, 1) < 0.12) {
-                                const rareGuns =
-                                    this.game.lootBarn.getLootTable("tier_pirate_rare");
-                                const rareGun =
-                                    rareGuns[util.randomInt(0, rareGuns.length - 1)];
-                                this.game.lootBarn.addLoot(
-                                    rareGun.name,
-                                    this.pos,
-                                    this.layer,
-                                    1,
-                                );
-                            }
+                        this.game.lootBarn.addLoot(item.name, this.pos, this.layer, 1);
+                    }
+
+                    // rare gun
+                    if (Math.random() < 0.12) {
+                        const item = this.game.lootBarn.getLootTable("tier_pirate_rare");
+                        if (item) {
+                            this.game.lootBarn.addLoot(
+                                item.name,
+                                this.pos,
+                                this.layer,
+                                1,
+                            );
                         }
                     }
                 }
@@ -3945,9 +3933,9 @@ export class Player extends BaseGameObject {
                 const isMistery = type === "halloween_mystery";
 
                 if (isMistery) {
-                    type = this.game.lootBarn.getLootTable(
-                        "tier_halloween_mystery_perks",
-                    )[0].name;
+                    type =
+                        this.game.lootBarn.getLootTable("tier_halloween_mystery_perks")
+                            ?.name || type;
                 }
 
                 pickupMsg.item = type;

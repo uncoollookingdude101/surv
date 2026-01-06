@@ -1057,21 +1057,21 @@ export class GameMap {
             }
             case "loot_spawner":
                 for (const tier of def.loot) {
-                    const items = this.game.lootBarn.getLootTable(tier.tier!);
+                    const item = this.game.lootBarn.getLootTable(tier.tier!);
+                    if (!item) break;
 
-                    for (const item of items) {
-                        this.game.lootBarn.addLoot(
-                            item.name,
-                            pos,
-                            layer,
-                            item.count,
-                            undefined,
-                            0,
-                            undefined,
-                            item.preload === true,
-                            "map",
-                        );
-                    }
+                    this.game.lootBarn.addLoot(
+                        item.name,
+                        pos,
+                        layer,
+                        item.count,
+                        undefined,
+                        0,
+                        undefined,
+                        item.preload === true,
+                        "map",
+                    );
+
                     this.grid.addCollider({
                         collision: collider.createCircle(pos, 3),
                         layer,
