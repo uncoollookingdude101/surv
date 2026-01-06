@@ -1188,6 +1188,7 @@ export class Player extends BaseGameObject {
 
     removePerk(type: string): void {
         const idx = this._perks.findIndex((perk) => perk.type === type);
+        if (idx === -1) return;
         this._perks.splice(idx, 1);
         this._perkTypes.splice(this._perkTypes.indexOf(type), 1);
 
@@ -3748,19 +3749,6 @@ export class Player extends BaseGameObject {
                 }
                 this.weaponManager.dropMelee();
                 this.weaponManager.setWeapon(GameConfig.WeaponSlot.Melee, obj.type, 0);
-                // Perks on melee weapons
-                {
-                    const thisType = this.weapons[GameConfig.WeaponSlot.Melee].type;
-                    const thisDef = GameObjectDefs[thisType];
-                    if (thisDef && thisDef.type == "melee" && thisDef.perk) {
-                        this.removePerk(thisDef.perk);
-                    }
-
-                    if (def.type == "melee" && def.perk) {
-                        this.addPerk(def.perk);
-                    }
-                    this.setDirty();
-                }
                 break;
             case "gun":
                 {

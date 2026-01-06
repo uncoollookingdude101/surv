@@ -99,6 +99,7 @@ export interface GunDef {
     reloadTimeAlt?: number;
     toMouseHit?: boolean;
     burstSounds?: number;
+    perk?: string;
 }
 
 function defineGunSkin(baseType: string, params: DeepPartial<GunDef>): GunDef {

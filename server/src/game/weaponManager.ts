@@ -243,6 +243,19 @@ export class WeaponManager {
             this.player.setDirty();
         }
 
+        const newPerk = weaponDef && "perk" in weaponDef ? weaponDef.perk : "";
+        const oldDef = GameObjectDefs[this.weapons[idx].type];
+        const oldPerk = oldDef && "perk" in oldDef ? oldDef.perk : "";
+
+        if (oldPerk && oldPerk !== newPerk) {
+            this.player.removePerk(oldPerk);
+            this.player.setDirty();
+        }
+        if (newPerk && newPerk !== oldPerk) {
+            this.player.addPerk(newPerk);
+            this.player.setDirty();
+        }
+
         // pan is always "worn" if player has it and any other slot is selected
         if (type == "pan" && this.curWeapIdx != WeaponSlot.Melee) {
             this.player.wearingPan = true;
@@ -595,11 +608,6 @@ export class WeaponManager {
     dropMelee(): void {
         const slot = WeaponSlot.Melee;
         if (this.weapons[slot].type != "fists") {
-            const meleeDef = GameObjectDefs[this.weapons[slot].type];
-            // Remove perk from old melee
-            if (meleeDef && meleeDef.type === "melee" && meleeDef.perk) {
-                this.player.removePerk(meleeDef.perk);
-            }
             this.player.dropLoot(this.weapons[slot].type);
             this.setWeapon(slot, "fists", 0);
             if (slot === this.curWeapIdx) this.player.setDirty();
