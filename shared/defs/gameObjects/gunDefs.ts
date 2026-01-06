@@ -3362,18 +3362,21 @@ export const BaseDefs: Record<string, GunDef> = {
 const SkinDefs: Record<string, GunDef> = {
     svd_winter: defineGunSkin("svd", {
         name: "SVD-63",
+        noPotatoSwap: true,
         worldImg: {
             sprite: "gun-svd-02.img",
         },
     }),
     sv98_winter: defineGunSkin("sv98", {
         name: "SV-98",
+        noPotatoSwap: true,
         worldImg: {
             sprite: "gun-sv98-02.img",
         },
     }),
     awc_winter: defineGunSkin("awc", {
         name: "AWM-S",
+        noPotatoSwap: true,
         worldImg: {
             sprite: "gun-awc-02.img",
         },
