@@ -833,7 +833,6 @@ export class Player extends BaseGameObject {
     animType: Anim = GameConfig.Anim.None;
     animSeq = 0;
     private _animTicker = 0;
-    private _animCb?: () => void;
 
     distSinceLastCrawl = 0;
 
@@ -1700,7 +1699,6 @@ export class Player extends BaseGameObject {
                 this._animTicker = 0;
                 this.animSeq++;
                 this.setDirty();
-                this._animCb?.();
             }
         }
 
@@ -4573,12 +4571,11 @@ export class Player extends BaseGameObject {
         this.setDirty();
     }
 
-    playAnim(type: Anim, duration: number, cb?: () => void): void {
+    playAnim(type: Anim, duration: number): void {
         this.animType = type;
         this.animSeq++;
         this.setDirty();
         this._animTicker = duration;
-        this._animCb = cb;
     }
 
     cancelAnim(): void {

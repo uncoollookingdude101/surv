@@ -1133,9 +1133,6 @@ export class WeaponManager {
         this.player.playAnim(
             GameConfig.Anim.Cook,
             itemDef.cookable ? itemDef.fuseTime : Infinity,
-            () => {
-                this.throwThrowable();
-            },
         );
     }
 
