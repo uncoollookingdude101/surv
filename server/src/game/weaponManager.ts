@@ -1140,6 +1140,10 @@ export class WeaponManager {
         if (!this.cookingThrowable) return;
         this.cookingThrowable = false;
 
+        if (this.cookTicker < GameConfig.player.cookTime) {
+            return;
+        }
+
         const oldThrowableType = this.weapons[GameConfig.WeaponSlot.Throwable].type;
         const amount = this.player.invManager.get(oldThrowableType as InventoryItem);
         if (amount <= 0) return;
