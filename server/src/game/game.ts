@@ -413,7 +413,16 @@ export class Game {
             msg = deserialized.msg;
             type = deserialized.type;
         } catch (err) {
-            this.logger.error("Failed to deserialize msg: ", err);
+            this.logger.error(
+                "Failed to deserialize msg: ",
+                err,
+                "msg buffer: ",
+                // JSON.stringify doesn't work on buffers, so need to convert to an Uint8Array first
+                // and then to a regular array... 😭
+                // the slice is to make sure it doesn't overflow the error webhook
+                JSON.stringify([...new Uint8Array(buff.slice(0, 255))]),
+            );
+            this.closeSocket(socketId);
             return;
         }
 
