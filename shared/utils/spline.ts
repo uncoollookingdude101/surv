@@ -2,7 +2,7 @@ import { math } from "./math";
 import { assert } from "./util";
 import { type Vec2, v2 } from "./v2";
 
-function getControlPoints(t: number, points: Vec2[], looped: boolean) {
+export function getControlPoints(t: number, points: Vec2[], looped: boolean) {
     const count = points.length;
     let i: number;
     let i0: number;
@@ -35,7 +35,7 @@ function getControlPoints(t: number, points: Vec2[], looped: boolean) {
 }
 
 // Taken from https://www.mvps.org/directx/articles/catmull/
-function catmullRom(t: number, p0: number, p1: number, p2: number, p3: number) {
+export function catmullRom(t: number, p0: number, p1: number, p2: number, p3: number) {
     return (
         0.5 *
         (2.0 * p1 +

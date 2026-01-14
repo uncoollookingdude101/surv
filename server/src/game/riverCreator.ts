@@ -1,6 +1,7 @@
 import type { MapDef } from "../../../shared/defs/mapDefs";
 import { coldet } from "../../../shared/utils/coldet";
 import { math } from "../../../shared/utils/math";
+import { catmullRom, getControlPoints } from "../../../shared/utils/spline";
 import { util } from "../../../shared/utils/util";
 import { type Vec2, v2 } from "../../../shared/utils/v2";
 import type { GameMap } from "./map";
@@ -180,8 +181,6 @@ export class RiverCreator {
     }
 
     createLake(lake: MapDef["mapGen"]["map"]["rivers"]["lakes"][number]) {
-        const points: Vec2[] = [];
-
         const center = v2.add(
             v2.mulElems(v2.create(this.map.width, this.map.height), lake.spawnBound.pos),
             util.randomPointInCircle(lake.spawnBound.rad, this.randomGenerator),
@@ -191,19 +190,39 @@ export class RiverCreator {
 
         const len = lake.innerRad + width;
 
-        const step = (Math.PI * 2) / 33;
-        const max = Math.PI * 2 - step;
-        for (let i = 0; i < max; i += step) {
-            const dir = v2.create(Math.cos(i), Math.sin(i));
-            const newNode = v2.add(center, v2.mul(dir, len));
-            points.push(v2.add(newNode, util.randomPointInCircle((len * step) / 2)));
+        const points = new Array(20);
+        for (let i = 0; i < points.length; i++) {
+            const rot = (i / points.length) * Math.PI * 2;
+
+            const dir = v2.create(Math.cos(rot), Math.sin(rot));
+            const newNode = v2.add(
+                center,
+                v2.mul(dir, len * this.randomGenerator(0.9, 1.2)),
+            );
+            points[i] = newNode;
+        }
+        points.push(v2.copy(points[0]));
+
+        // smooth out the lake using the spline logic
+        const smoothPoints = new Array(33);
+        for (let i = 0; i < smoothPoints.length; i += 1) {
+            const { pt, p0, p1, p2, p3 } = getControlPoints(
+                i / smoothPoints.length,
+                points,
+                true,
+            );
+
+            smoothPoints[i] = v2.create(
+                catmullRom(pt, p0.x, p1.x, p2.x, p3.x),
+                catmullRom(pt, p0.y, p1.y, p2.y, p3.y),
+            );
         }
 
-        points.push(v2.copy(points[0]));
+        smoothPoints.push(v2.copy(points[0]));
 
         return {
             width,
-            points,
+            points: smoothPoints,
             looped: true,
             center,
         };
