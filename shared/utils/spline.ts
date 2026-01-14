@@ -88,12 +88,7 @@ export class Spline {
     }
 
     getPos(t: number) {
-        const _getControlPoints = getControlPoints(t, this.points, this.looped);
-        const { pt } = _getControlPoints;
-        const { p0 } = _getControlPoints;
-        const { p1 } = _getControlPoints;
-        const { p2 } = _getControlPoints;
-        const { p3 } = _getControlPoints;
+        const { pt, p0, p1, p2, p3 } = getControlPoints(t, this.points, this.looped);
 
         return v2.create(
             catmullRom(pt, p0.x, p1.x, p2.x, p3.x),
@@ -102,12 +97,7 @@ export class Spline {
     }
 
     getTangent(t: number) {
-        const _getControlPoints2 = getControlPoints(t, this.points, this.looped);
-        const { pt } = _getControlPoints2;
-        const { p0 } = _getControlPoints2;
-        const { p1 } = _getControlPoints2;
-        const { p2 } = _getControlPoints2;
-        const { p3 } = _getControlPoints2;
+        const { pt, p0, p1, p2, p3 } = getControlPoints(t, this.points, this.looped);
 
         return v2.create(
             catmullRomDerivative(pt, p0.x, p1.x, p2.x, p3.x),
