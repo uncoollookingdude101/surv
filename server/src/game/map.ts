@@ -631,9 +631,34 @@ export class GameMap {
         //
         // Generate lakes
         //
-        for (const lake of mapConfig.rivers.lakes) {
-            const river = riverCreator.createLake(lake);
-            this.riverDescs.push(river);
+        for (const lakeDef of mapConfig.rivers.lakes) {
+            this.trySpawn(`lake`, () => {
+                const lake = riverCreator.createLake(lakeDef);
+
+                const pointsA = lake.points;
+                for (const other of this.riverDescs) {
+                    if (!other.looped) continue;
+                    const pointsB = other.points;
+
+                    for (let i = 1; i < pointsA.length; i++) {
+                        for (let j = 1; j < pointsB.length; j++) {
+                            const intersection = coldet.intersectSegmentSegment(
+                                pointsA[i - 1],
+                                pointsA[i],
+                                pointsB[j - 1],
+                                pointsB[j],
+                            );
+
+                            if (intersection) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                this.riverDescs.push(lake);
+                return true;
+            });
         }
 
         //
