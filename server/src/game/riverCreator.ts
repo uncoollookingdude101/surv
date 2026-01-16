@@ -1,5 +1,6 @@
 import type { MapDef } from "../../../shared/defs/mapDefs";
 import { coldet } from "../../../shared/utils/coldet";
+import { collider } from "../../../shared/utils/collider";
 import { math } from "../../../shared/utils/math";
 import { catmullRom, getControlPoints } from "../../../shared/utils/spline";
 import { util } from "../../../shared/utils/util";
@@ -220,11 +221,19 @@ export class RiverCreator {
 
         smoothPoints.push(v2.copy(points[0]));
 
+        let aabbMin = v2.create(Number.MAX_VALUE, Number.MAX_VALUE);
+        let aabbMax = v2.create(-Number.MAX_VALUE, -Number.MAX_VALUE);
+        for (let i = 0; i < smoothPoints.length; i++) {
+            aabbMin = v2.minElems(aabbMin, smoothPoints[i]);
+            aabbMax = v2.maxElems(aabbMax, smoothPoints[i]);
+        }
+
         return {
             width,
             points: smoothPoints,
             looped: true,
             center,
+            aabb: collider.createAabb(aabbMin, aabbMax),
         };
     }
 }

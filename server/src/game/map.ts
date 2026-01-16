@@ -635,24 +635,18 @@ export class GameMap {
             this.trySpawn(`lake`, () => {
                 const lake = riverCreator.createLake(lakeDef);
 
-                const pointsA = lake.points;
                 for (const other of this.riverDescs) {
-                    if (!other.looped) continue;
-                    const pointsB = other.points;
+                    if (!other.looped || !other.aabb) continue;
 
-                    for (let i = 1; i < pointsA.length; i++) {
-                        for (let j = 1; j < pointsB.length; j++) {
-                            const intersection = coldet.intersectSegmentSegment(
-                                pointsA[i - 1],
-                                pointsA[i],
-                                pointsB[j - 1],
-                                pointsB[j],
-                            );
-
-                            if (intersection) {
-                                return false;
-                            }
-                        }
+                    if (
+                        coldet.testAabbAabb(
+                            lake.aabb.min,
+                            lake.aabb.max,
+                            other.aabb.min,
+                            other.aabb.max,
+                        )
+                    ) {
+                        return false;
                     }
                 }
 
