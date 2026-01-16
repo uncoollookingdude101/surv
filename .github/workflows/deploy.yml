@@ -91,7 +91,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `**Testing URL:** ${{ steps.deploy.outputs.url }}
+              body: `**Testing URL:** ${{ steps.deploy.outputs.deployment-url }}
 
               hope it works 💃`
             });
