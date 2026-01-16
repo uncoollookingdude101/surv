@@ -284,12 +284,15 @@ export class WeaponManager {
         this.player.weapsDirty = true;
     }
 
+    bufferInput = false;
+
     update(dt: number) {
         const player = this.player;
 
         if (player.downed) {
             return;
         }
+        this.bufferInput = false;
 
         player.freeSwitchTimer -= dt;
 
@@ -341,7 +344,9 @@ export class WeaponManager {
             }
         }
 
-        player.shootStart = false;
+        if (!this.bufferInput) {
+            player.shootStart = false;
+        }
     }
 
     gunUpdate(dt: number) {
@@ -357,9 +362,13 @@ export class WeaponManager {
                 }
                 break;
             case "single":
-                if (player.shootStart && weapon.cooldown < 0) {
-                    this.fireWeapon(this.offHand);
-                    this.offHand = !this.offHand;
+                if (player.shootStart) {
+                    if (weapon.cooldown < 0) {
+                        this.fireWeapon(this.offHand);
+                        this.offHand = !this.offHand;
+                    } else if (weapon.cooldown < 0.1) {
+                        this.bufferInput = true;
+                    }
                 }
                 break;
             case "burst":
