@@ -2844,7 +2844,12 @@ export class Player extends BaseGameObject {
                         const item = this.game.lootBarn.getLootTable("tier_pirate");
                         if (!item) continue;
 
-                        this.game.lootBarn.addLoot(item.name, this.pos, this.layer, 1);
+                        this.game.lootBarn.addLoot(
+                            item.name,
+                            this.pos,
+                            this.layer,
+                            item.count,
+                        );
                     }
 
                     // rare gun
@@ -2855,7 +2860,7 @@ export class Player extends BaseGameObject {
                                 item.name,
                                 this.pos,
                                 this.layer,
-                                1,
+                                item.count,
                             );
                         }
                     }
