@@ -11,13 +11,18 @@ describe.for(maps)("Map %s", (map) => {
 
     describe("Loot Tables", () => {
         test.for(Object.entries(mapDef.lootTable))("Loot table $0", ([, table]) => {
+            const itemsSet = new Set();
             for (const item of table) {
+                itemsSet.add(item.name);
                 if (item.name.startsWith("tier_")) {
                     expect(item.name).toBeValidLootTier();
                 } else if (item.name !== "") {
                     expect(item.name).toBeValidLoot();
                 }
             }
+            expect(itemsSet.size, "Loot table must not have duplicated items").toBe(
+                table.length,
+            );
         });
     });
 
