@@ -19,7 +19,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    concurrency: ci-lint-${{ github.ref }}
+    concurrency: ci-biome-${{ github.ref }}
 
     steps:
       - name: Checkout Repository

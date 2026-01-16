@@ -18,7 +18,7 @@ jobs:
   server:
     name: Server
     runs-on: ubuntu-latest
-    concurrency: ci-nodejs-${{ github.ref }}
+    concurrency: ci-server-${{ github.ref }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
