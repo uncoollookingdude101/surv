@@ -783,6 +783,10 @@ export class Player extends BaseGameObject {
         this.startedSpectating = true;
     }
 
+    spectateCooldown = 0;
+    spectateMsgCount = 0;
+    spectateMsgTicker = 0;
+
     spectators = new Set<Player>();
 
     outfit = "outfitBase";
@@ -1441,6 +1445,16 @@ export class Player extends BaseGameObject {
 
     update(dt: number): void {
         if (this.dead) {
+            this.spectateCooldown -= dt;
+
+            if (this.spectateMsgCount > 0) {
+                this.spectateMsgTicker += dt;
+                if (this.spectateMsgTicker > 3) {
+                    this.spectateMsgCount--;
+                    this.spectateMsgTicker = 0;
+                }
+            }
+
             if (!this.sentDeathEmote) {
                 this.sendDeathEmoteTicker -= dt;
                 if (this.sendDeathEmoteTicker <= 0) {
@@ -2538,6 +2552,25 @@ export class Player extends BaseGameObject {
     }
 
     spectate(spectateMsg: net.SpectateMsg): void {
+        if (this.spectateCooldown >= 0.75) {
+            this.game.closeSocket(this.socketId);
+            this.game.logger.error(
+                `Game ${this.game.id} - Player ${this.name} disconnected for spamming SpectateMsg (cooldown)`,
+            );
+            return;
+        }
+        this.spectateCooldown = 1;
+
+        this.spectateMsgCount++;
+
+        if (this.spectateMsgCount > 50) {
+            this.game.closeSocket(this.socketId);
+            this.game.logger.error(
+                `Game ${this.game.id} - Player ${this.name} Player ${this.name} disconnected for spamming SpectateMsg (count)`,
+            );
+            return;
+        }
+
         // livingPlayers is used here instead of a more "efficient" option because its sorted while other options are not
         const spectatablePlayers = this.game.playerBarn.livingPlayers.filter(
             (p) =>
