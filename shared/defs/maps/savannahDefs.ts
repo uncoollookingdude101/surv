@@ -29,6 +29,7 @@ const mapDef: PartialMapDef = {
         particles: {},
     },
     gameMode: { maxPlayers: 80, sniperMode: true },
+    /* STRIP_FROM_PROD_CLIENT:START */
     lootTable: {
         tier_scopes: [
             { name: "4xscope", count: 1, weight: 5 },
@@ -238,6 +239,7 @@ const mapDef: PartialMapDef = {
             },
         ],
     },
+    /* STRIP_FROM_PROD_CLIENT:END */
 };
 
 export const Savannah = util.mergeDeep({}, Main, mapDef);

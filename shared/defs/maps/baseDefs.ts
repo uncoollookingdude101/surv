@@ -55,6 +55,7 @@ export const Main: MapDef = {
         maxPlayers: 80,
         killLeaderEnabled: true,
     },
+    /* STRIP_FROM_PROD_CLIENT:START */
     gameConfig: {
         planes: {
             timings: [
@@ -78,7 +79,6 @@ export const Main: MapDef = {
         bleedDamage: 2,
         bleedDamageMult: 1,
     },
-    /* STRIP_FROM_PROD_CLIENT:START */
     // NOTE: this loot table is not the original one so its not accurate
     // ? are guesses based on statistics
     // ! are uncertain data based on leak
