@@ -8,7 +8,6 @@ export class SDKManager {
     isAnySDK = false;
 
     respawns: number[] = [];
-    adCallback = () => {};
 
     constructor() {}
 

@@ -95,8 +95,6 @@ export class SDKManager implements BaseSDKManager {
 
     respawns: number[] = [];
 
-    adCallback = () => {};
-
     constructor() {
         this.isAnySDK =
             this.isPoki || this.isCrazyGames || this.isGameMonetize || this.isSpellSync;
@@ -300,7 +298,7 @@ export class SDKManager implements BaseSDKManager {
     private requestGameMonetizeMidgameAd(callback: () => void): void {
         if (window.sdk && window.sdk.showBanner) {
             window.sdk.showBanner();
-            this.adCallback;
+            callback();
         } else {
             callback();
         }
@@ -324,10 +322,6 @@ export class SDKManager implements BaseSDKManager {
             gameId: import.meta.env.VITE_GAMEMONETIZE_ID,
             onEvent: (event: any) => {
                 switch (event.name) {
-                    case "SDK_GAME_START":
-                        this.adCallback();
-                        this.adCallback = () => {};
-                        break;
                     case "SDK_READY":
                         console.log("Successfully loaded GameMonetize SDK"); // never happens for some reasons
                         break;
@@ -465,5 +459,3 @@ export class SDKManager implements BaseSDKManager {
         console.log("Hide sticky ad");
     }
 }
-
-export const SDK = new SDKManager();
