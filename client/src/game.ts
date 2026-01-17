@@ -747,7 +747,7 @@ export class Game {
 
         if (
             specBegin ||
-            (this.m_spectating && this.m_spectateCooldown < 1 && (specNext || specPrev))
+            (this.m_spectating && this.m_spectateCooldown < 0 && (specNext || specPrev))
         ) {
             this.m_spectateCooldown = 1;
 

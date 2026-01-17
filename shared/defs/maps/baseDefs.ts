@@ -230,6 +230,7 @@ export const Main: MapDef = {
             { name: "painkiller", count: 1, weight: 1 },
             { name: "m4a1", count: 1, weight: 0.7 },
             { name: "m249", count: 1, weight: 0.2 },
+            { name: "scarssr", count: 1, weight: 0.1 },
             { name: "awc", count: 1, weight: 0.1 },
             { name: "pkp", count: 1, weight: 0.1 },
         ],
