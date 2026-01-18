@@ -7,11 +7,9 @@ export class EmoteMsg implements AbstractMsg {
     isPing = false;
 
     serialize(s: BitStream) {
-        /* STRIP_FROM_PROD_CLIENT:START */
         s.writeVec(this.pos, 0, 0, 1024, 1024, 16);
         s.writeGameType(this.type);
         s.writeBoolean(this.isPing);
-        /* STRIP_FROM_PROD_CLIENT:END */
     }
 
     deserialize(s: BitStream) {
