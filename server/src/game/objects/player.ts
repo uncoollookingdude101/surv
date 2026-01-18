@@ -357,12 +357,12 @@ export class PlayerBarn {
     }
 
     removePlayer(player: Player) {
-        this.players.splice(this.players.indexOf(player), 1);
-        const livingIdx = this.livingPlayers.indexOf(player);
-        if (livingIdx !== -1) {
-            this.livingPlayers.splice(livingIdx, 1);
+        util.removeFrom(this.players, player);
+
+        if (util.removeFrom(this.livingPlayers, player)) {
             this.aliveCountDirty = true;
         }
+
         this.deletedPlayers.push(player.__id);
         player.destroy();
         if (player.team) {
@@ -372,7 +372,7 @@ export class PlayerBarn {
             player.group.removePlayer(player);
 
             if (player.group.players.length <= 0) {
-                this.groups.splice(this.groups.indexOf(player.group), 1);
+                util.removeFrom(this.groups, player.group);
                 this.groupsByHash.delete(player.group.hash);
             }
         }
@@ -1222,10 +1222,7 @@ export class Player extends BaseGameObject {
                 this.weaponManager.clampGunsAmmo();
                 break;
             case "aoe_heal": {
-                const idx = this.game.playerBarn.aoeHealPlayers.indexOf(this);
-                if (idx !== -1) {
-                    this.game.playerBarn.aoeHealPlayers.splice(idx, 1);
-                }
+                util.removeFrom(this.game.playerBarn.aoeHealPlayers, this);
                 break;
             }
         }
@@ -2829,17 +2826,15 @@ export class Player extends BaseGameObject {
         this.mapIndicator?.kill();
 
         this.game.playerBarn.aliveCountDirty = true;
-        this.game.playerBarn.livingPlayers.splice(
-            this.game.playerBarn.livingPlayers.indexOf(this),
-            1,
-        );
+
+        util.removeFrom(this.game.playerBarn.livingPlayers, this);
 
         this.game.playerBarn.killedPlayers.push(this);
 
         this.group?.checkPlayers();
 
         if (this.team) {
-            this.team.livingPlayers.splice(this.team.livingPlayers.indexOf(this), 1);
+            util.removeFrom(this.team.livingPlayers, this);
         }
 
         if (this.weaponManager.cookingThrowable) {
@@ -3480,8 +3475,7 @@ export class Player extends BaseGameObject {
                         GameConfig.WeaponSlot.Melee,
                     ];
 
-                    const currentTarget = slotTargets.indexOf(this.curWeapIdx);
-                    if (currentTarget != -1) slotTargets.splice(currentTarget, 1);
+                    util.removeFrom(slotTargets, this.curWeapIdx);
 
                     for (let i = 0; i < slotTargets.length; i++) {
                         const slot = slotTargets[i];

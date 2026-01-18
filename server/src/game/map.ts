@@ -1521,7 +1521,7 @@ export class GameMap {
                     this.genAuto(type, pos, 0, ori, scale);
 
                     this.placesToSpawn.splice(placeIdx, 1);
-                    this.placeSpawns.splice(this.placeSpawns.indexOf(type), 1);
+                    util.removeFrom(this.placeSpawns, type);
 
                     return true;
                 },
