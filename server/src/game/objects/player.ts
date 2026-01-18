@@ -784,6 +784,7 @@ export class Player extends BaseGameObject {
     }
 
     spectateCooldown = 0;
+    spectateCooldownCount = 0;
     spectateMsgCount = 0;
     spectateMsgTicker = 0;
 
@@ -2552,11 +2553,17 @@ export class Player extends BaseGameObject {
     }
 
     spectate(spectateMsg: net.SpectateMsg): void {
+        if (!this.dead) return;
+
         if (this.spectateCooldown >= 0.75) {
-            this.game.closeSocket(this.socketId);
-            this.game.logger.error(
-                `Game ${this.game.id} - Player ${this.name} disconnected for spamming SpectateMsg (cooldown)`,
-            );
+            this.spectateCooldownCount++;
+
+            if (this.spectateCooldownCount > 10) {
+                this.game.closeSocket(this.socketId);
+                this.game.logger.error(
+                    `Game ${this.game.id} - Player ${this.name} disconnected for spamming SpectateMsg (cooldown)`,
+                );
+            }
             return;
         }
         this.spectateCooldown = 1;
