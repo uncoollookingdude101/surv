@@ -1,22 +1,8 @@
 {
+  "$schema": "https://www.schemastore.org/tsconfig.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["DOM", "ESNext"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "esModuleInterop": true,
-    "outDir": "./dist",
-    "newLine": "lf",
-    "allowSyntheticDefaultImports": true,
-    "useDefineForClassFields": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
-    "allowJs": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
       "@/sdk": ["./src/sdk/sdk-manager.ts"]
     },
