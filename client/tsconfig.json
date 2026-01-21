@@ -5,14 +5,13 @@
     "lib": ["DOM", "ESNext"],
     "paths": {
       "@/sdk": ["./src/sdk/sdk-manager.ts"]
-    },
-    "types": ["vite/client", "turnstile-types"]
+    }
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.js",
+    "./src/**/*.ts",
+    "./src/**/*.js",
     "../shared/",
-    "atlas-builder/**/*.ts",
-    "global.d.ts"
+    "./atlas-builder/**/*.ts",
+    "./global.d.ts"
   ]
 }

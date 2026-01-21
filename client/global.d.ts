@@ -1,3 +1,6 @@
+/// <reference types="vite/client" />
+/// <reference types="turnstile-types" />
+
 declare global {
     interface Navigator {
         standalone?: boolean;
