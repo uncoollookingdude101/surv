@@ -158,11 +158,6 @@ export class PlayerBarn {
             }
         }
 
-        if (joinMsg.protocol !== GameConfig.protocolVersion) {
-            this.game.closeSocket(socketId, "index-invalid-protocol");
-            return;
-        }
-
         const result = this.getGroupAndTeam(joinData);
         const group = result?.group;
         // solo 50v50 just chooses the smallest team everytime no matter what

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { TeamMode } from "../../../shared/gameConfig";
+import { GameConfig, TeamMode } from "../../../shared/gameConfig";
 import * as net from "../../../shared/net/net";
 import type { Loadout } from "../../../shared/utils/loadout";
 import { math } from "../../../shared/utils/math";
@@ -344,6 +344,7 @@ export class Game {
     deserializeMsg(buff: ArrayBuffer): {
         type: net.MsgType;
         msg: net.AbstractMsg | undefined;
+        error?: string;
     } {
         const msgStream = new net.MsgStream(buff);
         const stream = msgStream.stream;
@@ -362,6 +363,23 @@ export class Game {
 
         switch (type) {
             case net.MsgType.Join: {
+                // read protocol version outside of JoinMsg
+                // reason: if theres a protocol change in JoinMsg it will fail to deserialize the entire msg
+                // and won't give the proper invalid-protocol error
+                // so we read it before deserializing the msg to avoid it throwing and giving the wrong error
+
+                const oldIdx = stream.index;
+                const protocol = stream.readUint32();
+
+                if (protocol !== GameConfig.protocolVersion) {
+                    return {
+                        type: net.MsgType.Join,
+                        msg: undefined,
+                        error: "index-invalid-protocol",
+                    };
+                }
+                stream.index = oldIdx;
+
                 msg = new net.JoinMsg();
                 msg.deserialize(stream);
                 break;
@@ -407,11 +425,13 @@ export class Game {
 
         let msg: net.AbstractMsg | undefined = undefined;
         let type = net.MsgType.None;
+        let error: string | undefined;
 
         try {
             const deserialized = this.deserializeMsg(buff);
             msg = deserialized.msg;
             type = deserialized.type;
+            error = deserialized.error;
         } catch (err) {
             this.logger.error(
                 "Failed to deserialize msg: ",
@@ -423,6 +443,11 @@ export class Game {
                 JSON.stringify([...new Uint8Array(buff.slice(0, 255))]),
             );
             this.closeSocket(socketId);
+            return;
+        }
+
+        if (error) {
+            this.closeSocket(socketId, error);
             return;
         }
 
