@@ -1038,7 +1038,6 @@ const BaseDefs: Record<string, MeleeDef> = {
         switchDelay: 0.25,
         damage: 33,
         obstacleDamage: 1.4,
-        noPotatoSwap: true,
         attack: {
             offset: {
                 x: 1.25,
@@ -1062,7 +1061,7 @@ const BaseDefs: Record<string, MeleeDef> = {
             playerHit: "crowbar_hit_01",
         },
         lootImg: {
-            sprite: "loot-melee-crowbar-scout.img",
+            sprite: "loot-melee-crowbar.img",
             tint: 0xffffff,
             border: "loot-circle-outer-02.img",
             borderTint: 0xffffff,
@@ -1070,7 +1069,7 @@ const BaseDefs: Record<string, MeleeDef> = {
             rot: 0.785,
         },
         worldImg: {
-            sprite: "loot-melee-crowbar-scout.img",
+            sprite: "loot-melee-crowbar.img",
             pos: {
                 x: -1,
                 y: -10,
@@ -1330,11 +1329,13 @@ const SkinDefs: Record<string, MeleeDef> = {
     }),
     crowbar_scout: defineMeleeSkin("crowbar", {
         name: "Scouting Crowbar",
-        noPotatoSwap: false,
+        lootImg: { sprite: "loot-melee-crowbar-scout.img" },
+        worldImg: {
+            sprite: "loot-melee-crowbar-scout.img",
+        },
     }),
     crowbar_recon: defineMeleeSkin("crowbar", {
         name: "Crowbar Carbon",
-        noPotatoSwap: false,
         lootImg: { sprite: "loot-melee-crowbar-recon.img" },
         worldImg: {
             sprite: "loot-melee-crowbar-recon.img",
