@@ -1,5 +1,3 @@
-import { util } from "../../utils/util";
-
 export interface BulletDef {
     readonly type: "bullet";
     damage: number;
@@ -296,7 +294,7 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
     bullet_m9: {
         type: "bullet",
-        damage: 14,
+        damage: 13,
         obstacleDamage: 1,
         falloff: 0.7,
         speed: 85,
@@ -309,7 +307,7 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
     bullet_m9_cursed: {
         type: "bullet",
-        damage: 14,
+        damage: 13,
         obstacleDamage: 1,
         falloff: 0.7,
         speed: 85,

@@ -175,7 +175,9 @@ export class ExplosionBarn {
                     obj.freeze(ori, def.freezeDuration);
                 }
                 if (def.dropRandomLoot) {
-                    obj.dropRandomLoot();
+                    for (let i = 0; i < def.dropRandomLoot; i++) {
+                        obj.dropRandomLoot();
+                    }
                 }
             }
 

@@ -443,7 +443,7 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         throwPhysics: {
             playerVelMult: 0,
             velZ: 3.35,
-            speed: 40,
+            speed: 52,
             spinVel: 10 * Math.PI,
             spinDrag: 1,
             fixedCollisionHeight: 0.25,

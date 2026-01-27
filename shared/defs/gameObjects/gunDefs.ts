@@ -2095,7 +2095,7 @@ export const BaseDefs: Record<string, GunDef> = {
         barrelLength: 2.2,
         barrelOffset: 0,
         recoilTime: 1e10,
-        moveSpread: 3,
+        moveSpread: 5,
         shotSpread: 3,
         bulletCount: 1,
         bulletType: "bullet_m9",
