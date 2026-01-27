@@ -14546,8 +14546,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         extents: v2.create(0.6, 1),
     }),
     warehouse_column: createWall({
-        material: "concrete",
-        extents: v2.create(0.5, 0.5),
+        material: "metal",
+        extents: v2.create(0.6, 0.6),
     }),
     warehouse_01: createWarehouse({
         topLeftObs: "crate_01",

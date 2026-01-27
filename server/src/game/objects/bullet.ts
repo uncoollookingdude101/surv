@@ -60,6 +60,7 @@ export interface BulletParams {
     onHitFx?: string;
     clipDistance?: boolean;
     distance?: number;
+    hasModifier?: boolean;
     speedMult?: number;
     distanceMult?: number;
 }
@@ -166,6 +167,7 @@ export class Bullet {
     damageSelf!: boolean;
     damage!: number;
     damageMult!: number;
+    hasModifier!: boolean;
     speedMult!: number;
     distanceMult!: number;
     onHitFx?: string;
@@ -202,6 +204,7 @@ export class Bullet {
         this.lastShot = params.lastShot ?? false;
         this.speedMult = params.speedMult ?? 1;
         this.speed = bulletDef.speed * this.speedMult * variance;
+        this.hasModifier = this.speedMult !== 1 || this.distanceMult !== 1;
         this.onHitFx = bulletDef.onHit ?? params.onHitFx;
         this.canReflect = this.onHitFx !== "explosion_rounds";
 
@@ -229,7 +232,12 @@ export class Bullet {
             bulletDef.distance /
             Math.pow(GameConfig.bullet.reflectDistDecay, this.reflectCount);
         if (params.clipDistance) {
-            distance = math.min(bulletDef.distance, params.distance!);
+            distance = math.min(
+                bulletDef.distance * (params.distanceMult ?? 1),
+                params.distance!,
+            );
+            // we don't want it to be multiplied twice
+            params.distanceMult = 1;
         }
 
         this.shotSourceType = params.gameSourceType;
@@ -663,6 +671,7 @@ export class Bullet {
             pos,
             dir,
             layer: this.layer,
+            hasModifier: this.hasModifier,
             damageMult: this.damageMult,
             speedMult: this.speedMult,
             distanceMult: this.distanceMult,

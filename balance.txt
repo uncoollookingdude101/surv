@@ -135,10 +135,10 @@ Winter Changes (12/30/2025):
 ~ Tier Throwables: Adjusted Snowball weight (0.5 --> 1).
 + Density Spawns (Classic): Added 30 Palm Trees
 
-Savannah Changes (02/01/2026):
+Savannah Changes (02/02/2026):
 ~ Replaced a Warehouse with the alt. Warehouse in solos / duos.
 + Added an alt. Warehouse in squads.
-~ Same changes made in both Classic (incl. all season reskins) & Winter.
+    ~ Both changes apply to Classic (incl. all season reskins) & Winter.
 
 + Buffed the Snowball & Potato (incl. heavy versions).
 - Nerfed the M9 (single, dual, & cursed).

@@ -390,9 +390,11 @@ export class UpdateMsg implements AbstractMsg {
                     s.writeBits(bullet.reflectCount, 2);
                     s.writeUint16(bullet.reflectObjId);
                 }
-
-                s.writeFloat(bullet.speedMult, 0.5, 2, 8);
-                s.writeFloat(bullet.distanceMult, 0.5, 2, 8);
+                s.writeBoolean(bullet.hasModifier);
+                if (bullet.hasModifier) {
+                    s.writeFloat(bullet.speedMult, 0.5, 2, 8);
+                    s.writeFloat(bullet.distanceMult, 0.5, 2, 8);
+                }
                 s.writeBoolean(bullet.hasSpecialFx);
 
                 if (bullet.hasSpecialFx) {
@@ -599,8 +601,14 @@ export class UpdateMsg implements AbstractMsg {
                     bullet.reflectCount = s.readBits(2);
                     bullet.reflectObjId = s.readUint16();
                 }
-                bullet.speedMult = s.readFloat(0.5, 2, 8);
-                bullet.distanceMult = s.readFloat(0.5, 2, 8);
+                bullet.speedMult = 1;
+                bullet.distanceMult = 1;
+                bullet.hasModifier = s.readBoolean();
+                if (bullet.hasModifier) {
+                    bullet.speedMult = s.readFloat(0.5, 2, 8);
+                    bullet.distanceMult = s.readFloat(0.5, 2, 8);
+                }
+
                 bullet.hasSpecialFx = s.readBoolean();
                 if (bullet.hasSpecialFx) {
                     bullet.shotAlt = s.readBoolean();
@@ -732,6 +740,7 @@ export interface Bullet {
     trailThick: boolean;
     speedMult: number;
     distanceMult: number;
+    hasModifier: boolean;
 }
 
 export interface Explosion {
