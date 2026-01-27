@@ -8888,6 +8888,12 @@ function createWarehouse3<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 0,
             },
             {
+                type: "warehouse_column",
+                pos: v2.create(-11.5, 4.9),
+                scale: 1,
+                ori: 0,
+            },
+            {
                 type: "rail_4",
                 pos: v2.create(-11.5, 3),
                 scale: 1,
