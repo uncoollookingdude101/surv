@@ -135,6 +135,14 @@ const mapDef: PartialMapDef = {
             { name: "strobe", count: 1, weight: 1 },
             { name: "mirv", count: 2, weight: 1 },
         ],
+        tier_crow_case_skin: [
+            { name: "outfitWheat", count: 1, weight: 1 },
+            { name: "outfitCarbonFiber", count: 1, weight: 1 },
+        ],
+        tier_crow_case_melee: [
+            { name: "crowbar", count: 1, weight: 9 },
+            { name: "sledgehammer", count: 1, weight: 1 },
+        ],
     },
     mapGen: {
         map: {
@@ -217,7 +225,8 @@ const mapDef: PartialMapDef = {
                 kopje_patch_01: { small: 2, large: 3 },
                 savannah_patch_01: { small: 4, large: 5 },
                 mansion_structure_01: 1,
-                warehouse_01: { small: 4, large: 5 },
+                warehouse_01: { small: 3, large: 4 },
+                warehouse_03sv: 1,
                 crate_02sv_lake: 1,
                 cache_01sv: 1,
                 cache_02sv: 1, // mosin tree

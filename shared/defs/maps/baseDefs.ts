@@ -208,6 +208,11 @@ export const Main: MapDef = {
             { name: "tier_katanas", count: 1, weight: 3 }, // ?
             { name: "naginata", count: 1, weight: 1 }, // ?
         ],
+        tier_crow_case_melee: [{ name: "crowbar", count: 1, weight: 1 }],
+        tier_crow_case_skin: [
+            { name: "outfitCarbonFiber", count: 1, weight: 1 },
+            { name: "outfitDarkGloves", count: 1, weight: 1 },
+        ],
         tier_eye_02: [{ name: "stonehammer", count: 1, weight: 1 }],
         tier_eye_block: [
             { name: "m9", count: 1, weight: 1 },
@@ -806,7 +811,8 @@ export const Main: MapDef = {
         fixedSpawns: [
             {
                 // small is spawn count for solos and duos, large is spawn count for squads
-                warehouse_01: 2,
+                warehouse_01: { small: 1, large: 2 },
+                warehouse_03: 1,
                 house_red_01: { small: 3, large: 4 },
                 house_red_02: { small: 3, large: 4 },
                 barn_01: { small: 1, large: 3 },

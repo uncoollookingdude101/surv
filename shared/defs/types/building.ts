@@ -113,7 +113,7 @@ export interface BuildingDef {
     bonus_door?: string;
     goreRegion?: AABB;
     tree_08c?: string;
-    crate?: string;
+    crate?: string | Record<string, number>;
     oris?: number[];
     vault?: string;
     scale?: {

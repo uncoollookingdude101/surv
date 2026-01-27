@@ -189,6 +189,10 @@ const mapDef: PartialMapDef = {
             { name: "awc_winter", count: 1, weight: 0.75 },
             { name: "pkp", count: 1, weight: 0.75 },
         ],
+        tier_crow_case_melee: [
+            { name: "crowbar", count: 1, weight: 3 },
+            { name: "iceaxe", count: 1, weight: 1 },
+        ],
     },
     mapGen: {
         densitySpawns: [
@@ -218,7 +222,8 @@ const mapDef: PartialMapDef = {
         fixedSpawns: [
             {
                 // small is spawn count for solos and duos, large is spawn count for squads
-                warehouse_01x: 2,
+                warehouse_01x: { small: 1, large: 2 },
+                warehouse_03x: 1,
                 house_red_01x: { small: 3, large: 4 },
                 house_red_02x: { small: 3, large: 4 },
                 barn_01x: { small: 1, large: 3 },
