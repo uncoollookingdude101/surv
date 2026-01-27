@@ -22,10 +22,6 @@ export interface BulletDef {
     useExplosiveRoundsAlt?: boolean;
 }
 
-function defineBulletSkin(baseType: string, params: Partial<BulletDef>): BulletDef {
-    return util.mergeDeep({}, BaseDefs[baseType], params);
-}
-
 export const BaseDefs: Record<string, BulletDef> = {
     bullet_mp5: {
         type: "bullet",
@@ -804,49 +800,4 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
 };
 
-const SkinDefs: Record<string, BulletDef> = {
-    bullet_mp5_bonus: defineBulletSkin("bullet_mp5", {
-        speed: 106.25,
-        distance: 125,
-    }),
-    bullet_m9_bonus: defineBulletSkin("bullet_m9", {
-        speed: 106.25,
-        distance: 125,
-    }),
-    bullet_mac10_bonus: defineBulletSkin("bullet_mac10", {
-        speed: 93.75,
-        distance: 62.5,
-    }),
-    bullet_ump9_bonus: defineBulletSkin("bullet_ump9", {
-        speed: 125,
-        distance: 125,
-    }),
-    bullet_vector_bonus: defineBulletSkin("bullet_vector", {
-        speed: 110,
-        distance: 57.5,
-    }),
-    bullet_glock_bonus: defineBulletSkin("bullet_glock", {
-        speed: 87.5,
-        distance: 55,
-    }),
-    bullet_m93r_bonus: defineBulletSkin("bullet_m93r", {
-        speed: 106.25,
-        distance: 125,
-    }),
-    bullet_scorpion_bonus: defineBulletSkin("bullet_scorpion", {
-        speed: 112.5,
-        distance: 150,
-        tracerColor: "9mm_suppressed_bonus",
-    }),
-    bullet_vss_bonus: defineBulletSkin("bullet_vss", {
-        speed: 118.75,
-        distance: 156.25,
-        tracerColor: "9mm_suppressed_bonus",
-    }),
-    bullet_p30l_bonus: defineBulletSkin("bullet_p30l", {
-        speed: 117.5,
-        distance: 125,
-    }),
-};
-
-export const BulletDefs: Record<string, BulletDef> = { ...BaseDefs, ...SkinDefs };
+export const BulletDefs: Record<string, BulletDef> = { ...BaseDefs };

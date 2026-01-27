@@ -729,6 +729,8 @@
   "game-inspiration-desc": "Your bugle call grants nearby allies a short burst of speed.",
   "game-final_bugle": "Last Breath",
   "game-final_bugle-desc": "When you die, nearby allies are bloodlusted for a short period of time.",
+  "game-high_velocity": "High-Velocity Rounds",
+  "game-high_velocity-desc": "All your bullets travel significantly faster & further.",
   "game-halloween_mystery": "Trick or Treat?",
   "game-halloween_mystery-desc": "Could be either.",
   "game-trick_nothing": "One With Nothing",
