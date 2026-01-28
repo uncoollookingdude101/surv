@@ -47,7 +47,7 @@ export class AtlasBuilder {
     constructor(public name: Atlas) {
         this.def = Atlases[name];
         this.packer = new MaxRectsPacker(4096, 4096, 4, {
-            border: 2,
+            border: 8,
             square: true,
         });
     }
