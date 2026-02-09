@@ -1607,6 +1607,10 @@ export class Player extends BaseGameObject {
                 damageType: GameConfig.DamageType.Bleeding,
                 dir: this.dir,
             });
+            // don't continue the update if we died
+            if (this.dead) {
+                return;
+            }
         }
 
         this.chattyTicker -= dt;
@@ -1628,6 +1632,10 @@ export class Player extends BaseGameObject {
                 damageType: GameConfig.DamageType.Gas,
                 dir: this.dir,
             });
+            // don't continue the update if we died
+            if (this.dead) {
+                return;
+            }
         }
 
         if (this.reloadAgain && this.actionType !== GameConfig.Action.Revive) {
@@ -1920,7 +1928,7 @@ export class Player extends BaseGameObject {
         // Mobile auto interaction
         //
         this.mobileDropTicker -= dt;
-        if (this.isMobile && this.mobileDropTicker <= 0 && !this.downed) {
+        if (this.isMobile && this.mobileDropTicker <= 0 && !this.downed && !this.dead) {
             const closestLoot = this.getClosestLoot();
 
             if (closestLoot) {
