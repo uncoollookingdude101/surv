@@ -84,7 +84,7 @@ export class Creator {
             const err = {
                 id,
                 ids: Object.keys(this.m_idToObj),
-                stream: s.view.view,
+                stream: [...s.view.view],
             };
             errorLogManager.logError(`getTypeById${JSON.stringify(err)}`);
             errorLogManager.storeGeneric("objectPoolErr", "getTypeById");

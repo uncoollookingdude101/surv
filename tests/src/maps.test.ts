@@ -1,6 +1,6 @@
 import "./testHelpers";
 import { describe, expect, test } from "vitest";
-
+import { Atlases } from "../../client/atlas-builder/atlasDefs";
 import { type MapDef, MapDefs } from "../../shared/defs/mapDefs";
 import { Constants } from "../../shared/net/net";
 
@@ -11,13 +11,18 @@ describe.for(maps)("Map %s", (map) => {
 
     describe("Loot Tables", () => {
         test.for(Object.entries(mapDef.lootTable))("Loot table $0", ([, table]) => {
+            const itemsSet = new Set();
             for (const item of table) {
+                itemsSet.add(item.name);
                 if (item.name.startsWith("tier_")) {
                     expect(item.name).toBeValidLootTier();
                 } else if (item.name !== "") {
                     expect(item.name).toBeValidLoot();
                 }
             }
+            expect(itemsSet.size, "Loot table must not have duplicated items").toBe(
+                table.length,
+            );
         });
     });
 
@@ -91,6 +96,19 @@ describe.for(maps)("Map %s", (map) => {
 
         test.for(mapGen.importantSpawns)("Important Spawn $0", (spawn) => {
             expect(spawn).toBeValidMapObj();
+        });
+    });
+
+    describe("No duplicated sprites", () => {
+        const sprites = new Set<string>();
+
+        test.for(mapDef.assets.atlases)("Atlas $0", (atlas) => {
+            const atlasDef = Atlases[atlas];
+            for (const sprite of atlasDef.images) {
+                expect(sprites.has(sprite), `Duplicated sprite ${sprite}`).toBeFalsy();
+
+                sprites.add(sprite);
+            }
         });
     });
 });

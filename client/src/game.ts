@@ -41,7 +41,7 @@ import { ShotBarn } from "./objects/shot";
 import { SmokeBarn } from "./objects/smoke";
 import { Renderer } from "./renderer";
 import type { ResourceManager } from "./resources";
-import { SDK } from "./sdk";
+import { SDK } from "./sdk/sdk";
 import type { Localization } from "./ui/localization";
 import { Touch } from "./ui/touch";
 import { UiManager } from "./ui/ui";
@@ -97,6 +97,7 @@ export class Game {
     m_playing!: boolean;
     m_gameOver!: boolean;
     m_spectating!: boolean;
+    m_spectateCooldown!: number;
     m_inputMsgTimeout!: number;
     m_prevInputMsg!: net.InputMsg;
     m_playingTicker!: number;
@@ -322,6 +323,7 @@ export class Game {
         this.m_playing = false;
         this.m_gameOver = false;
         this.m_spectating = false;
+        this.m_spectateCooldown = 0;
         this.m_inputMsgTimeout = 0;
         this.m_prevInputMsg = new net.InputMsg();
         this.m_playingTicker = 0;
@@ -723,26 +725,34 @@ export class Game {
                 this.m_config.set("perkModeRole", roleSelectMessage.role);
             }
         }
+
+        this.m_spectateCooldown -= dt;
         const specBegin = this.m_uiManager.specBegin;
-        const specNext =
-            this.m_uiManager.specNext ||
-            (this.m_spectating && this.m_input.keyPressed(Key.Right));
-        const specPrev =
-            this.m_uiManager.specPrev ||
-            (this.m_spectating && this.m_input.keyPressed(Key.Left));
+        const specNext = (this.m_uiManager.specNext ||=
+            this.m_spectating && this.m_input.keyPressed(Key.Right));
+        const specPrev = (this.m_uiManager.specPrev ||=
+            this.m_spectating && this.m_input.keyPressed(Key.Left));
         const specForce =
             this.m_input.keyPressed(Key.Right) || this.m_input.keyPressed(Key.Left);
-        if (specBegin || (this.m_spectating && specNext) || specPrev) {
+
+        if (
+            specBegin ||
+            (this.m_spectating && this.m_spectateCooldown < 0 && (specNext || specPrev))
+        ) {
+            this.m_spectateCooldown = 1;
+
             const specMsg = new net.SpectateMsg();
             specMsg.specBegin = specBegin;
             specMsg.specNext = specNext;
             specMsg.specPrev = specPrev;
             specMsg.specForce = specForce;
             this.m_sendMessage(net.MsgType.Spectate, specMsg, 128);
+
+            this.m_uiManager.specBegin = false;
+            this.m_uiManager.specNext = false;
+            this.m_uiManager.specPrev = false;
         }
-        this.m_uiManager.specBegin = false;
-        this.m_uiManager.specNext = false;
-        this.m_uiManager.specPrev = false;
+
         this.m_uiManager.reloadTouched = false;
         this.m_uiManager.interactionTouched = false;
         this.m_uiManager.swapWeapSlots = false;
@@ -1256,6 +1266,11 @@ export class Game {
                     this.m_audioManager.playSound("notification_start_01", {
                         channel: "ui",
                     });
+                }
+                if (IS_DEV) {
+                    if (this.editor.enabled) {
+                        this.editor.sendMsg = true;
+                    }
                 }
 
                 SDK.gamePlayStart();

@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 import { type MapDef, MapDefs } from "../../../shared/defs/mapDefs";
 import type { TeamMode } from "../../../shared/gameConfig";
 import * as net from "../../../shared/net/net";
+import { util } from "../../../shared/utils/util";
 import { ServerLogger } from "../utils/logger";
 import {
     type FindGamePrivateBody,
@@ -26,6 +27,7 @@ class GameProcess implements GameData {
     process: ChildProcess;
 
     canJoin = true;
+    creating = false;
     teamMode: TeamMode = 1;
     mapName = "";
     id = "";
@@ -59,6 +61,7 @@ class GameProcess implements GameData {
                 case ProcessMsgType.Created:
                     this.created = true;
                     this.stopped = false;
+                    this.creating = false;
                     for (const cb of this.onCreatedCbs) {
                         cb(this);
                     }
@@ -126,6 +129,7 @@ class GameProcess implements GameData {
         this.teamMode = config.teamMode;
         this.mapName = config.mapName;
         this.stopped = false;
+        this.creating = true;
 
         const mapDef = MapDefs[this.mapName as keyof typeof MapDefs] as MapDef;
         this.avaliableSlots = mapDef.gameMode.maxPlayers;
@@ -268,10 +272,7 @@ export class GameProcessManager implements GameManager {
             }
         }, 5000);
 
-        const idx = this.processes.indexOf(gameProc);
-        if (idx !== -1) {
-            this.processes.splice(idx, 1);
-        }
+        util.removeFrom(this.processes, gameProc);
         this.processById.delete(gameProc.id);
     }
 
@@ -283,7 +284,7 @@ export class GameProcessManager implements GameManager {
         let game = this.processes
             .filter((proc) => {
                 return (
-                    proc.canJoin &&
+                    (proc.canJoin || proc.creating) &&
                     proc.avaliableSlots > 0 &&
                     proc.teamMode === body.teamMode &&
                     proc.mapName === body.mapName

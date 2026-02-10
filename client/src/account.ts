@@ -2,6 +2,7 @@ import $ from "jquery";
 import type {
     LoadoutRequest,
     LoadoutResponse,
+    ProfileResponse,
     RefreshQuestRequest,
     RefreshQuestResponse,
     SetItemStatusRequest,
@@ -86,9 +87,7 @@ export class Account {
     loggingIn = false;
     loggedIn = false;
     profile = {
-        linkedGoogle: false,
-        linkedTwitch: false,
-        linkedDiscord: false,
+        linked: false,
         usernameSet: false,
         username: "",
         slug: "",
@@ -218,7 +217,7 @@ export class Account {
 
     loadProfile() {
         this.loggingIn = !this.loggedIn;
-        this.ajaxRequest("/api/user/profile", (err, data /*: ProfileResponse */) => {
+        this.ajaxRequest("/api/user/profile", (err, data: ProfileResponse) => {
             const a = this.loggingIn;
             this.loggingIn = false;
             this.loggedIn = false;

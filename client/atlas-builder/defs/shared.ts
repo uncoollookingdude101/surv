@@ -65,12 +65,12 @@ export const SharedAtlas: AtlasDef = {
         "map/map-bush-res-01.svg",
         "map/map-bush-res-02.svg",
         "map/map-bush-res-04.svg",
-        "map/map-bush-res-06.svg",
 
         "map/map-candle-01.svg",
 
         "map/map-case-basement-01.svg",
         "map/map-case-chrys-01.svg",
+        "map/map-case-crow-01.svg",
         "map/map-case-deagle-01.svg",
         "map/map-case-deagle-02.svg",
         "map/map-case-flare-01.svg",
@@ -155,12 +155,6 @@ export const SharedAtlas: AtlasDef = {
 
         "map/map-grill-01.svg",
 
-        "map/map-gun-mount-01.svg",
-        "map/map-gun-mount-02.svg",
-        "map/map-gun-mount-03.svg",
-        "map/map-gun-mount-04.svg",
-        "map/map-gun-mount-05.svg",
-
         "map/map-hedgehog-01.svg",
         "map/map-hut-res-01.svg",
         "map/map-locker-01.svg",
@@ -204,18 +198,6 @@ export const SharedAtlas: AtlasDef = {
         "map/map-silo-01.svg",
         "map/map-smoke-res.svg",
         "map/map-snow-07.svg",
-
-        "map/map-squash-02.svg", // turkey stuff
-        "map/map-squash-res-02.svg",
-        "map/map-squash-03.svg",
-        "map/map-squash-res-03.svg",
-        "map/map-tree-07.svg",
-        "map/map-tree-08.svg",
-        "map/map-bush-06tr.svg",
-        "map/map-stone-03tr.svg",
-        "map/map-chest-03tr.svg",
-        "map/map-woodpile-02.svg", // keep this for the warehouse thing
-        "map/map-woodpile-res-02.svg", // end
 
         "map/map-stairs-broken-01.svg",
         "map/map-stand-01.svg",

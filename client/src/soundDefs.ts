@@ -1340,6 +1340,11 @@ const Sounds: Record<string, Record<string, SoundDef>> = {
             volume: 1,
             preload: false,
         },
+        coconut_01: {
+            path: "audio/sfx/coconut_01.mp3",
+            volume: 1,
+            preload: false,
+        },
         stow_weapon_01: {
             path: "audio/ui/stow_weapon_01.mp3",
             volume: 1,

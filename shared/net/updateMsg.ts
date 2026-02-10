@@ -1,4 +1,4 @@
-import { GameConfig } from "../gameConfig";
+import { GameConfig, type Plane as PlaneType } from "../gameConfig";
 import { type Vec2, v2 } from "./../utils/v2";
 import { type AbstractMsg, BitSizes, type BitStream, Constants } from "./net";
 import {
@@ -296,6 +296,7 @@ export class UpdateMsg implements AbstractMsg {
     ack = 0;
 
     serialize(s: BitStream) {
+        /* STRIP_FROM_PROD_CLIENT:START */
         let flags = 0;
         const flagsIdx = s.byteIndex;
         s.writeUint16(flags);
@@ -389,7 +390,11 @@ export class UpdateMsg implements AbstractMsg {
                     s.writeBits(bullet.reflectCount, 2);
                     s.writeUint16(bullet.reflectObjId);
                 }
-
+                s.writeBoolean(bullet.hasModifier);
+                if (bullet.hasModifier) {
+                    s.writeFloat(bullet.speedMult, 0.5, 2, 8);
+                    s.writeFloat(bullet.distanceMult, 0.5, 2, 8);
+                }
                 s.writeBoolean(bullet.hasSpecialFx);
 
                 if (bullet.hasSpecialFx) {
@@ -397,6 +402,7 @@ export class UpdateMsg implements AbstractMsg {
                     s.writeBoolean(bullet.splinter);
                     s.writeBoolean(bullet.trailSaturated);
                     s.writeBoolean(bullet.apRounds);
+                    s.writeBoolean(bullet.highVelocity);
                     s.writeBoolean(bullet.trailSmall);
                     s.writeBoolean(bullet.trailThick);
                 }
@@ -480,6 +486,7 @@ export class UpdateMsg implements AbstractMsg {
         s.byteIndex = flagsIdx;
         s.writeUint16(flags);
         s.byteIndex = idx;
+        /* STRIP_FROM_PROD_CLIENT:END */
     }
 
     // @ts-expect-error deserialize only accept one argument for now
@@ -594,12 +601,21 @@ export class UpdateMsg implements AbstractMsg {
                     bullet.reflectCount = s.readBits(2);
                     bullet.reflectObjId = s.readUint16();
                 }
+                bullet.speedMult = 1;
+                bullet.distanceMult = 1;
+                bullet.hasModifier = s.readBoolean();
+                if (bullet.hasModifier) {
+                    bullet.speedMult = s.readFloat(0.5, 2, 8);
+                    bullet.distanceMult = s.readFloat(0.5, 2, 8);
+                }
+
                 bullet.hasSpecialFx = s.readBoolean();
                 if (bullet.hasSpecialFx) {
                     bullet.shotAlt = s.readBoolean();
                     bullet.splinter = s.readBoolean();
                     bullet.trailSaturated = s.readBoolean();
                     bullet.apRounds = s.readBoolean();
+                    bullet.highVelocity = s.readBoolean();
                     bullet.trailSmall = s.readBoolean();
                     bullet.trailThick = s.readBoolean();
                 }
@@ -719,8 +735,12 @@ export interface Bullet {
     splinter: boolean;
     trailSaturated: boolean;
     apRounds: boolean;
+    highVelocity: boolean;
     trailSmall: boolean;
     trailThick: boolean;
+    speedMult: number;
+    distanceMult: number;
+    hasModifier: boolean;
 }
 
 export interface Explosion {
@@ -747,7 +767,7 @@ export interface Plane {
     planeDir: Vec2;
     pos: Vec2;
     actionComplete: boolean;
-    action: number;
+    action: PlaneType;
     id: number;
 }
 

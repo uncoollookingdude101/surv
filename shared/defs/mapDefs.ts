@@ -1,6 +1,7 @@
 import type { Vec2 } from "../utils/v2";
 import { Airstrike } from "./maps/airstrike";
 import { Main } from "./maps/baseDefs";
+import { Beach } from "./maps/beachDefs";
 import { Birthday } from "./maps/birthdayDefs";
 import { Cobalt } from "./maps/cobaltDefs";
 import { Desert } from "./maps/desertDefs";
@@ -35,6 +36,8 @@ export type Atlas =
     | "woods"
     | "cobalt"
     | "savannah"
+    | "turkey"
+    | "beach"
     | "custom";
 
 export const MapDefs = {
@@ -55,6 +58,7 @@ export const MapDefs = {
     cobalt: Cobalt,
     turkey: Turkey,
     birthday: Birthday,
+    beach: Beach,
     flare: Flare,
     airstrike: Airstrike,
     hidenseek: HidenSeek,
@@ -119,7 +123,7 @@ export interface MapDef {
         sniperMode?: boolean;
         perkMode?: boolean;
         perkModeRoles?: string[];
-        turkeyMode?: number;
+        turkeyMode?: boolean;
         spookyKillSounds?: boolean;
     };
     gameConfig: {

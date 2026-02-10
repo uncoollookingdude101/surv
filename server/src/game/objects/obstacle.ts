@@ -283,8 +283,8 @@ export class Obstacle extends BaseGameObject {
         for (let i = 0; i < objs.length; i++) {
             const obj = objs[i];
             if (obj.__type !== ObjectType.Player) continue;
-            if (obj.dead) return false;
-            if (!util.sameLayer(this.layer, obj.layer)) return false;
+            if (obj.dead) continue;
+            if (!util.sameLayer(this.layer, obj.layer)) continue;
 
             const res = collider.intersectCircle(
                 closedColl,
@@ -453,21 +453,20 @@ export class Obstacle extends BaseGameObject {
                 const count = util.randomInt(lootTierOrItem.min!, lootTierOrItem.max!);
 
                 for (let i = 0; i < count; i++) {
-                    const items = this.game.lootBarn.getLootTable(lootTierOrItem.tier!);
+                    const item = this.game.lootBarn.getLootTable(lootTierOrItem.tier!);
+                    if (!item) continue;
 
-                    for (const item of items) {
-                        this.game.lootBarn.addLoot(
-                            item.name,
-                            v2.add(lootPos, v2.mul(v2.randomUnit(), 0.2)),
-                            this.layer,
-                            item.count,
-                            undefined,
-                            undefined, // undefined to use default push speed value
-                            params.dir,
-                            lootTierOrItem.props?.preloadGuns || item.preload,
-                            "obstacle",
-                        );
-                    }
+                    this.game.lootBarn.addLoot(
+                        item.name,
+                        v2.add(lootPos, v2.mul(v2.randomUnit(), 0.2)),
+                        this.layer,
+                        item.count,
+                        undefined,
+                        undefined, // undefined to use default push speed value
+                        params.dir,
+                        lootTierOrItem.props?.preloadGuns || item.preload,
+                        "obstacle",
+                    );
                 }
             } else {
                 this.game.lootBarn.addLoot(

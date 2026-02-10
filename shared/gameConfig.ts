@@ -123,7 +123,7 @@ export const GameConfig = {
     // the protocol we originated from was 78
     // remember to bump this every time a serialization function is changed
     // or a definition item added, removed or moved
-    protocolVersion: 1009,
+    protocolVersion: 1011,
     Input,
     EmoteSlot,
     WeaponSlot,
@@ -216,6 +216,7 @@ export const GameConfig = {
                 mirv: 0,
                 snowball: 0,
                 potato: 0,
+                coconut: 0,
                 bandage: 0,
                 healthkit: 0,
                 soda: 0,
@@ -392,6 +393,7 @@ export const GameConfig = {
         snowball: [10, 20, 30, 40],
         snowball_h: [10, 20, 30, 40],
         potato: [10, 20, 30, 40],
+        coconut: [3, 6, 9, 12],
         bandage: [5, 10, 15, 30],
         healthkit: [1, 2, 3, 4],
         soda: [2, 5, 10, 15],

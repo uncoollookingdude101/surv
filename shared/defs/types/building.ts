@@ -67,6 +67,7 @@ export interface BuildingDef {
     tree_scale?: number;
     tree_loot?: string;
     bush_chance?: number;
+    bush?: string | Record<string, number>;
     decoration_01?: string;
     decoration_02?: string;
     mid_obs_01?: string;
@@ -112,7 +113,7 @@ export interface BuildingDef {
     bonus_door?: string;
     goreRegion?: AABB;
     tree_08c?: string;
-    crate?: string;
+    crate?: string | Record<string, number>;
     oris?: number[];
     vault?: string;
     scale?: {
@@ -136,7 +137,7 @@ export interface BuildingDef {
         volume: number;
     }>;
     healRegions?: Array<{
-        collision: AABB;
+        collision: Collider;
         healRate: number;
     }>;
     center_loot?: string;
@@ -145,7 +146,7 @@ export interface BuildingDef {
     entry_loot?: string;
     obs?: string;
     ceilingImg?: string;
-    specialLoot?: string;
+    specialLoot?: string | Record<string, number>;
     basement?: string;
     grass_color?: number;
     tree_small?: string;

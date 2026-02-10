@@ -25,7 +25,7 @@ const mapDef: PartialMapDef = {
             { name: "xp_drop_02", channel: "sfx" },
             { name: "pumpkin_break_01", channel: "sfx" },
         ],
-        atlases: ["main", "gradient", "loadout", "shared"],
+        atlases: ["gradient", "loadout", "shared", "turkey"],
     },
     biome: {
         colors: {
@@ -40,6 +40,9 @@ const mapDef: PartialMapDef = {
             playerGhillie: 0xa48e2e,
         },
     },
+    gameMode: { turkeyMode: true },
+
+    /* STRIP_FROM_PROD_CLIENT:START */
     mapGen: {
         densitySpawns: [
             {
@@ -51,8 +54,8 @@ const mapDef: PartialMapDef = {
                 crate_01: 45,
                 crate_02: 3,
                 crate_03: 7,
-                bush_06tr: 100, // leaf pile turkey
-                cache_06: 12, // cherry bush
+                bush_06tr: 70, // leaf pile turkey (without loot)
+                cache_03tr: 50, // leaf pile with loot
                 tree_07: 20,
                 tree_08: 170,
                 tree_08b: 4,
@@ -84,7 +87,7 @@ const mapDef: PartialMapDef = {
                 shack_03b: { small: 2, large: 3 },
                 greenhouse_01: 1,
                 cache_01: 1,
-                cache_02: 1, // mosin tree
+                cache_02w: 1, // mosin tree
                 cache_07: 1,
                 bunker_structure_01: { odds: 0.05 },
                 bunker_structure_02: 1,
@@ -97,7 +100,6 @@ const mapDef: PartialMapDef = {
                 mil_crate_02: { odds: 0.25 },
                 tree_02: 4,
                 stone_04: 1,
-                club_complex_01: 1,
             },
         ],
         spawnReplacements: [
@@ -107,7 +109,7 @@ const mapDef: PartialMapDef = {
             },
         ],
     },
-    gameMode: { turkeyMode: 1 },
+    /* STRIP_FROM_PROD_CLIENT:END */
 };
 
 export const Turkey = util.mergeDeep({}, Main, mapDef);

@@ -804,7 +804,7 @@ const SkinDefs: Record<string, OutfitDef> = {
     }),
     outfitCarbonFiber: defineOutfitSkin("outfitBase", {
         name: "Carbon Fiber",
-        noDropOnDeath: true,
+        // noDropOnDeath: true,
         rarity: Rarity.Uncommon,
         lore: "Military-grade, fine spun filament.",
         skinImg: {
@@ -824,7 +824,7 @@ const SkinDefs: Record<string, OutfitDef> = {
     }),
     outfitDarkGloves: defineOutfitSkin("outfitBase", {
         name: "The Professional",
-        noDropOnDeath: true,
+        // noDropOnDeath: true,
         rarity: Rarity.Uncommon,
         lore: "True survivrs wear the dark gloves.",
         skinImg: {
@@ -919,7 +919,7 @@ const SkinDefs: Record<string, OutfitDef> = {
     }),
     outfitRed: defineOutfitSkin("outfitBase", {
         name: "Target Practice",
-        noDropOnDeath: true,
+        // noDropOnDeath: true,
         rarity: Rarity.Common,
         lore: "On the plus side, they won't see you bleed.",
         skinImg: {
@@ -939,7 +939,7 @@ const SkinDefs: Record<string, OutfitDef> = {
     }),
     outfitWhite: defineOutfitSkin("outfitBase", {
         name: "Arctic Avenger",
-        noDropOnDeath: true,
+        // noDropOnDeath: true,
         rarity: Rarity.Common,
         lore: "No business like snow business.",
         skinImg: {
@@ -954,6 +954,80 @@ const SkinDefs: Record<string, OutfitDef> = {
         },
         lootImg: {
             sprite: "loot-shirt-outfitWhite.img",
+            tint: 0xffffff,
+        },
+    }),
+    outfitBeachCamo: defineOutfitSkin("outfitBase", {
+        name: "Beach Shored",
+        skinImg: {
+            baseTint: 0xedca7e,
+            baseSprite: "player-base-01.img",
+            handTint: 0xfae5b6,
+            handSprite: "player-hands-01.img",
+            footTint: 0xfae5b6,
+            footSprite: "player-feet-01.img",
+            backpackTint: 0x7c995b,
+            backpackSprite: "player-circle-base-01.img",
+        },
+        lootImg: {
+            sprite: "loot-shirt-01.img",
+            tint: 0xedca7e,
+        },
+    }),
+    outfitCoconut: defineOutfitSkin("outfitBase", {
+        name: "Coconut Frenzy",
+        rarity: Rarity.Common,
+        lore: "It's the coco fruit!",
+        skinImg: {
+            baseTint: 0x765836,
+            baseSprite: "player-base-01.img",
+            handTint: 0x362d22,
+            handSprite: "player-hands-01.img",
+            footTint: 0xe9edf6,
+            footSprite: "player-feet-01.img",
+            backpackTint: 0xe9edf6,
+            backpackSprite: "player-circle-base-01.img",
+        },
+        lootImg: {
+            sprite: "loot-shirt-01.img",
+            tint: 0x765836,
+        },
+    }),
+    outfitWave: defineOutfitSkin("outfitBase", {
+        name: "Tidal Wave",
+        rarity: Rarity.Common,
+        lore: "Send them to Davy Jones' locker.",
+        skinImg: {
+            baseTint: 0x1198ec,
+            baseSprite: "player-base-02.img",
+            handTint: 0xfdf5f1,
+            handSprite: "player-hands-02.img",
+            footTint: 0xfdf5f1,
+            footSprite: "player-feet-02.img",
+            backpackTint: 0x2178ae,
+            backpackSprite: "player-circle-base-01.img",
+        },
+        lootImg: {
+            sprite: "loot-shirt-outfitWave.img",
+            tint: 0xffffff,
+        },
+    }),
+    outfitParrotfish: defineOutfitSkin("outfitBase", {
+        name: "Parrotfish",
+        rarity: Rarity.Rare,
+        lore: "Show off your scales around the island. Coral, beware!",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseSprite: "player-base-outfitParrotfish.img",
+            handTint: 0x3ac6c6,
+            handSprite: "player-hands-02.img",
+            footTint: 0x306790,
+            footSprite: "player-feet-02.img",
+            backpackTint: 0x37aeab,
+            backpackSprite: "player-circle-base-01.img",
+        },
+        lootImg: {
+            sprite: "loot-shirt-outfitParrotfish.img",
             tint: 0xffffff,
         },
     }),
