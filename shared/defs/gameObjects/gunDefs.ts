@@ -99,8 +99,12 @@ export interface GunDef {
     reloadTimeAlt?: number;
     toMouseHit?: boolean;
     burstSounds?: number;
-    armorPiercing?: boolean;
+    perk?: string;
     stonePiercing?: boolean;
+    armorPiercing?: boolean;
+}
+function defineGunSkin(baseType: string, params: DeepPartial<GunDef>): GunDef {
+    return util.mergeDeep({}, BaseDefs[baseType], params);
 }
 
 export const BaseDefs: Record<string, GunDef> = {
@@ -3731,7 +3735,7 @@ export const BaseDefs: Record<string, GunDef> = {
         shotSpread: 1,
         bulletCount: 1,
         bulletType: "bullet_m79",
-        projType: "mm40_granade",
+        projType: "mm40_grenade",
         headshotMult: 1,
         speed: {
             equip: -3,
@@ -3968,7 +3972,7 @@ export const BaseDefs: Record<string, GunDef> = {
         shotSpread: 5,
         bulletCount: 5,
         bulletType: "bullet_invis",
-        projType: "snowball",
+        projType: "coconut",
         noSplinter: true,
         headshotMult: 2,
         speed: { equip: 0, attack: 0 },
@@ -4040,11 +4044,36 @@ export const BaseDefs: Record<string, GunDef> = {
         sound: {
             shoot: "m2010_01",
             reload: "m2010_reload_01",
-            cycle: "m2010_cycle_01",
             pull: "scout_pull_01",
             pickup: "gun_pickup_01",
             empty: "empty_fire_02",
             deploy: "scout_cycle_01",
         },
     },
-}
+};
+
+const SkinDefs: Record<string, GunDef> = {
+    svd_winter: defineGunSkin("svd", {
+        name: "SVD-63",
+        noPotatoSwap: true,
+        worldImg: {
+            sprite: "gun-svd-02.img",
+        },
+    }),
+    sv98_winter: defineGunSkin("sv98", {
+        name: "SV-98",
+        noPotatoSwap: true,
+        worldImg: {
+            sprite: "gun-sv98-02.img",
+        },
+    }),
+    awc_winter: defineGunSkin("awc", {
+        name: "AWM-S",
+        noPotatoSwap: true,
+        worldImg: {
+            sprite: "gun-awc-02.img",
+        },
+    }),
+};
+
+export const GunDefs: Record<string, GunDef> = { ...BaseDefs, ...SkinDefs };

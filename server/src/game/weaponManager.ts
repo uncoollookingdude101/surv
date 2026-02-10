@@ -426,15 +426,6 @@ export class WeaponManager {
         maxReload: number;
         maxReloadAlt: number | undefined;
     } {
-        if (!weaponDef) {
-            // Return safe defaults if weaponDef is missing
-            return {
-                maxClip: 0,
-                maxReload: 0,
-                maxReloadAlt: undefined,
-            };
-        }
-
         if (this.player.hasPerk("firepower")) {
             return {
                 maxClip: weaponDef.extendedClip,
@@ -450,9 +441,7 @@ export class WeaponManager {
         };
     }
 
-    isInfinite(weaponDef?: GunDef): boolean {
-        if (!weaponDef) return false; // or whatever default you want
-
+    isInfinite(weaponDef: GunDef): boolean {
         return (
             !weaponDef.ignoreEndlessAmmo &&
             (weaponDef.ammoInfinite || this.player.hasPerk("endless_ammo"))
@@ -514,6 +503,10 @@ export class WeaponManager {
         let useAlt = false;
         let action: number = GameConfig.Action.Reload;
 
+        // schedule an alt reload if ammo is 0 and we have more inventory ammo
+        // than a single reload
+        // so if you have a mosin with 0 ammo and 1 ammo in the inventory it will
+        // schedule the single bullet reload instead of longer 5 bullets reload
         if (
             weaponDef.reloadTimeAlt &&
             this.weapons[this.curWeapIdx].ammo === 0 &&
@@ -522,7 +515,6 @@ export class WeaponManager {
             useAlt = true;
             action = GameConfig.Action.ReloadAlt;
         }
-
         //  Use the perk-aware reload time
         const duration = this.getTrueReloadTime(weaponDef, useAlt);
 
@@ -537,11 +529,6 @@ export class WeaponManager {
     reload(curWeapIdx = this.curWeapIdx, fullReload = false): void {
         if (!this.weapons[curWeapIdx].type) return; // prevent rare bug
         const weapon = this.weapons[curWeapIdx];
-        if (!weapon) {
-            // No weapon in this slot — safely return early
-            return;
-        }
-
         const weaponDef = GameObjectDefs[weapon.type] as GunDef;
         const ammoStats = this.getAmmoStats(weaponDef);
         const activeWeaponAmmo = weapon.ammo;
@@ -640,12 +627,6 @@ export class WeaponManager {
 
     dropMelee(): void {
         const slot = WeaponSlot.Melee;
-        const def = GameObjectDefs[this.weapons[slot].type] as GunDef | undefined;
-
-        if (def && def.noDrop) {
-            return;
-        }
-
         if (this.weapons[slot].type != "fists") {
             this.player.dropLoot(this.weapons[slot].type);
             this.setWeapon(slot, "fists", 0);
@@ -821,7 +802,7 @@ export class WeaponManager {
 
         const saturated = this.isBulletSaturated(itemDef.ammo);
         if (saturated) {
-            damageMult *= PerkProperties.ammoBonusDamageMulti;
+            damageMult *= PerkProperties.ammoBonusDamageMult;
         }
 
         if (shouldApplyChambered) {

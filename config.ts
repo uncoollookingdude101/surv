@@ -29,9 +29,9 @@ export function getConfig(isProduction: boolean, dir: string) {
         regions: {},
         proxies: {},
         modes: [
-            { mapName: "faction", teamMode: TeamMode.Solo, enabled: true },
-            { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: true },
             { mapName: "birthday", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "main", teamMode: TeamMode.Duo, enabled: true },
+            { mapName: "main", teamMode: TeamMode.Squad, enabled: true },
         ],
         clientTheme: "main",
         gameTps: 100,
@@ -45,7 +45,7 @@ export function getConfig(isProduction: boolean, dir: string) {
             errorLogs: true,
         },
         database: {
-            enabled: false,
+            enabled: true,
             host: "127.0.0.1",
             user: "survev",
             password: "survev",
@@ -155,7 +155,7 @@ export function getConfig(isProduction: boolean, dir: string) {
     if (isDev) {
         config.regions.local ??= {
             https: false,
-            address: `127.0.0.1:${config.gameServer.port}`,
+            address: `192.168.10.141:${config.gameServer.port}`,
             l10n: "index-local",
         };
     }

@@ -605,7 +605,7 @@ export const Main: MapDef = {
             { name: "m249", count: 1, weight: 0.3 }, // ?
             { name: "pkm", count: 1, weight: 0.25 },
         ],
-        tier_airdrop_perk: [],
+        tier_airdrop_perk: [{ name: "", count: 1, weight: 1 }],
         tier_airdrop_ammo: [
             { name: "9mm", count: 30, weight: 3 },
             { name: "762mm", count: 30, weight: 3 },
@@ -746,7 +746,7 @@ export const Main: MapDef = {
             { name: "m2010", count: 1, weight: 1 },
         ],
         tier_chest_04b: [{ name: "glock_dual", count: 1, weight: 1 }],
-        tier_knives: [],
+        tier_knives: [{ name: "", count: 1, weight: 1 }],
     },
     mapGen: {
         map: {

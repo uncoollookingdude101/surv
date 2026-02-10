@@ -72,7 +72,7 @@ export const PerkProperties = {
         "12gauge": ["treat_12g"],
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
-    ammoBonusDamageMulti: 1.15,
+    ammoBonusDamageMult: 1.2,
 };
 
 export interface PerkDef {

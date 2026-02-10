@@ -232,7 +232,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
     explosion_40mm_granade: {
         type: "explosion",
         damage: 125,
-        obstacleDamage: 1.1,
+        obstacleDamage: 1.3,
         rad: {
             min: 5,
             max: 12,
@@ -256,5 +256,15 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         decalType: "",
         healTeam: true,
         healAmount: 7,
+    },
+    explosion_bb: {
+        type: "explosion",
+        damage: 232,
+        obstacleDamage: 1.5,
+        rad: { min: 17, max: 23 },
+        shrapnelCount: 0,
+        shrapnelType: "shrapnel_frag",
+        explosionEffectType: "frag",
+        decalType: "decal_frag_explosion",
     },
 };

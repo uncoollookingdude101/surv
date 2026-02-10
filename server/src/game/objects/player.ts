@@ -10,16 +10,15 @@ import {
     type BoostDef,
     type ChestDef,
     GEAR_TYPES,
+    GearDefs,
     type HealDef,
     type HelmetDef,
     SCOPE_LEVELS,
 } from "../../../../shared/defs/gameObjects/gearDefs";
-import { GearDefs } from "../../../../shared/defs/gameObjects/gearDefs";
 import type { GunDef } from "../../../../shared/defs/gameObjects/gunDefs";
 import type { MeleeDef } from "../../../../shared/defs/gameObjects/meleeDefs";
 import type { OutfitDef } from "../../../../shared/defs/gameObjects/outfitDefs";
-import { PerkDefs } from "../../../../shared/defs/gameObjects/perkDefs";
-import { PerkProperties } from "../../../../shared/defs/gameObjects/perkDefs";
+import { PerkDefs, PerkProperties } from "../../../../shared/defs/gameObjects/perkDefs";
 import type { RoleDef } from "../../../../shared/defs/gameObjects/roleDefs";
 import type { ThrowableDef } from "../../../../shared/defs/gameObjects/throwableDefs";
 import { UnlockDefs } from "../../../../shared/defs/gameObjects/unlockDefs";

@@ -402,6 +402,16 @@ export class Game {
 
     update(dt: number) {
         this.debugHUD.m_update(dt, this);
+
+        if (IS_DEV) {
+            if (this.m_input.keyPressed(Key.Tilde)) {
+                this.editor.setEnabled(!this.editor.enabled);
+            }
+            if (this.editor.enabled) {
+                this.editor.m_update(this.m_input);
+            }
+        }
+
         let debug: DebugRenderOpts;
         if (IS_DEV) {
             debug = this.m_config.get("debugRenderer")!;

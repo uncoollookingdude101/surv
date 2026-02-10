@@ -559,7 +559,8 @@
   "game-vss": "VSS",
   "game-m870": "M870",
   "game-m870_h": "M870 ???",
-  "game-ak47op": "AK-47",
+  "game-ak47op": "Snowball Machine",
+  "game-ak47op2": "Juice Spewer",
   "game-m1100": "M1100",
   "game-m1014": "M1014",
   "game-mp220": "MP220",
@@ -614,8 +615,11 @@
   "game-bar": "BAR M1918",
   "game-pkp": "PKP Pecheneg",
   "game-m134": "M134",
+  "game-m2010": "M2010",
   "game-m79": "M79",
-  "game-mm40_granade": "M79",
+  "game-lasr_gun": "Lasr Gun",
+  "game-lasr_gun_dual": "Dual Lasr Gun",
+  "game-mm40_granede": "M79",
   "game-frag": "Frag Grenade",
   "game-hud-frag": "Frag",
   "game-smoke": "Smoke Grenade",
@@ -971,5 +975,7 @@
   "game-emote_pooface": "Poo Face",
   "game-emote_ok": "Ok",
   "game-emote_rainbow": "Rainbow",
-  "game-emote_logotwins": "The Twins"
+  "game-emote_logotwins": "The Twins",
+  "game-bb": "Bunker Buster",
+  "game-hud-bb": "BB"
 }

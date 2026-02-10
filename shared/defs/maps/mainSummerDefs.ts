@@ -3,6 +3,7 @@ import { util } from "../../utils/util";
 import { v2 } from "../../utils/v2";
 import type { MapDef } from "../mapDefs";
 import { Main } from "./baseDefs";
+
 const mapDef = {
     desc: {
         name: "Savannah",
@@ -101,7 +102,7 @@ const mapDef = {
         audio: [
             { name: "helmet03_forest_pickup_01", channel: "ui" },
             { name: "ping_unlock_01", channel: "ui" },
-            { name: "ambient_steam_01", channel: "ambient"},
+            { name: "ambient_steam_01", channel: "ambient" },
             { name: "ambient_lab_01", channel: "ambient" },
             { name: "piano_music_01", channel: "ambient" },
             { name: "pumpkin_break_01", channel: "sfx" },

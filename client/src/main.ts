@@ -1,6 +1,8 @@
 import $ from "jquery";
 import * as PIXI from "pixi.js-legacy";
+
 (window as any).PIXI = PIXI; // Expose PIXI globally
+
 import { GameConfig } from "../../shared/gameConfig";
 import * as net from "../../shared/net/net";
 import type {
