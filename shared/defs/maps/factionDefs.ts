@@ -356,7 +356,7 @@ const mapDef: PartialMapDef = {
             },
         ],
         tier_airdrop_throwables: [
-            { name: "frag", count: 2, weight: 1 },
+            { name: "bb", count: 2, weight: 1 },
             { name: "mirv", count: 2, weight: 1 },
             { name: "strobe", count: 2, weight: 1 },
             { name: "smoke", count: 2, weight: 1 },

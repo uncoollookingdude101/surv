@@ -364,7 +364,7 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         type: "throwable",
         quality: 1,
         explosionType: "explosion_strobe",
-        inventoryOrder: 3,
+        inventoryOrder: 5,
         cookable: false,
         explodeOnImpact: false,
         playerCollision: false,

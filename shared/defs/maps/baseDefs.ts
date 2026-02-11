@@ -188,6 +188,7 @@ export const Main: MapDef = {
             { name: "frag", count: 2, weight: 1 }, // !
             { name: "smoke", count: 1, weight: 1 },
             { name: "mirv", count: 2, weight: 0.05 },
+            { name: "bb", count: 2, weight: 0.1 },
         ],
         tier_ammo: [
             { name: "9mm", count: 60, weight: 3 },
@@ -619,8 +620,8 @@ export const Main: MapDef = {
             { name: "outfitGhillie", count: 1, weight: 0.5 },
         ],
         tier_airdrop_throwables: [
-            { name: "frag", count: 2, weight: 1 },
-            { name: "mirv", count: 2, weight: 0.5 },
+            { name: "bb", count: 2, weight: 1 },
+            { name: "mirv", count: 2, weight: 1 },
         ],
         tier_airdrop_melee: [
             { name: "", count: 1, weight: 19 },

@@ -93,6 +93,7 @@ const mapDef = {
         bagSizes: {
             mirv: [3, 6, 9, 12],
             strobe: [3, 6, 9, 12],
+            bb: [3, 6, 9, 12],
         },
         bleedDamage: 2,
         bleedDamageMult: 1,
@@ -134,12 +135,16 @@ const mapDef = {
         ],
     },
     lootTable: {
-        tier_club_melee: [{ name: "pan", count: 1, weight: 1 }],
+        tier_club_melee: [
+            { name: "pan", count: 1, weight: 1 },
+            { name: "cutlass_gold", count: 1, weight: 1 },
+        ],
         tier_throwables: [
             { name: "frag", count: 2, weight: 1 }, // !
             { name: "smoke", count: 1, weight: 1 },
             { name: "mirv", count: 2, weight: 0.5 },
             { name: "strobe", count: 1, weight: 0.5 },
+            { name: "bb", count: 2, weight: 0.5 },
         ],
         tier_airdrop_throwables: [{ name: "strobe", count: 1, weight: 1 }],
         tier_sv98: [{ name: "sv98", count: 1, weight: 1 }],
@@ -174,12 +179,21 @@ const mapDef = {
             { name: "potato_cannon", count: 1, weight: 1 },
             { name: "tier_custom", count: 1, weight: 1 },
         ],
-        tier_cloud_01: [
+        tier_snipers: [
             { name: "sv98", count: 1, weight: 0.5 },
             { name: "blr", count: 1, weight: 2.5 },
             { name: "scout_elite", count: 1, weight: 2 },
             { name: "mosin", count: 1, weight: 1 },
             { name: "model94", count: 1, weight: 3 },
+            { name: "garand", count: 1, weight: 1 },
+            { name: "m1014", count: 1, weight: 0.25 },
+            { name: "mk12", count: 1, weight: 3 },
+            { name: "mkg45", count: 1, weight: 2 },
+            { name: "vss", count: 1, weight: 2 },
+            { name: "scarssr", count: 1, weight: 0.25 },
+            { name: "l86", count: 1, weight: 2 },
+            { name: "m39", count: 1, weight: 3 },
+            { name: "svd", count: 1, weight: 2 },
         ],
         tier_guns: [
             { name: "famas", count: 1, weight: 0.9 },
@@ -221,17 +235,6 @@ const mapDef = {
             { name: "m1911", count: 1, weight: 3 },
             { name: "m1a1", count: 1, weight: 2 },
         ],
-        tier_cloud_02: [
-            { name: "garand", count: 1, weight: 1 },
-            { name: "m1014", count: 1, weight: 0.25 },
-            { name: "mk12", count: 1, weight: 3 },
-            { name: "mkg45", count: 1, weight: 2 },
-            { name: "vss", count: 1, weight: 2 },
-            { name: "scarssr", count: 1, weight: 0.25 },
-            { name: "l86", count: 1, weight: 2 },
-            { name: "m39", count: 1, weight: 3 },
-            { name: "svd", count: 1, weight: 2 },
-        ],
         tier_hatchet: [
             { name: "usas", count: 1, weight: 2 },
             { name: "m249", count: 1, weight: 1 },
@@ -252,6 +255,7 @@ const mapDef = {
             { name: "bonus_9mm", count: 1, weight: 1 },
             { name: "bonus_45", count: 1, weight: 1 },
             { name: "endless_ammo", count: 1, weight: 1 },
+            { name: "high_velocity", count: 1, weight: 1 },
         ],
         tier_hatchet_melee: [
             { name: "helmet03_leader2", count: 1, weight: 5 }, // ?
@@ -267,7 +271,8 @@ const mapDef = {
         tier_chrys_case: [
             { name: "", count: 1, weight: 5 }, // ?
             { name: "tier_katanas", count: 1, weight: 3 }, // ?
-            { name: "naginata", count: 1, weight: 1 }, // ?
+            { name: "naginata", count: 1, weight: 1 },
+            { name: "cutlass_gold", count: 1, weight: 1 }, // ?
         ],
         tier_airdrop_perk: [
             { name: "fabricate_m", count: 1, weight: 1 },
