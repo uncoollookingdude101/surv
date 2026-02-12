@@ -279,7 +279,6 @@ export const BuildingSprites = {
     ],
 
     bunker_chrys: [
-        "map/map-bunker-chrys-chamber-ceiling-01.svg",
         "map/map-bunker-chrys-chamber-floor-01a.svg",
         "map/map-bunker-chrys-chamber-floor-01b.svg",
         "map/map-bunker-chrys-compartment-ceiling-01a.svg",
