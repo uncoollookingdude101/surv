@@ -393,7 +393,6 @@ export const GameConfig = {
         mirv: [2, 4, 6, 8],
         bb: [2, 4, 6, 8],
         snowball: [10, 20, 30, 40],
-        snowball_h: [10, 20, 30, 40],
         potato: [10, 20, 30, 40],
         coconut: [3, 6, 9, 12],
         bandage: [5, 10, 15, 30],

@@ -99,7 +99,6 @@ function createDefaultItems(e: DeepPartial<DefaultItems>): DefaultItems {
             strobe: 0,
             mirv: 0,
             snowball: 0,
-            snowball_h: 0,
             potato: 0,
             bandage: 0,
             healthkit: 0,
@@ -640,13 +639,10 @@ export const RoleDefs: Record<string, RoleDef> = {
             weapons: [
                 { type: "", ammo: 0 },
                 { type: "", ammo: 0 },
-                { type: "crowbar_hider", ammo: 0 },
-                { type: "snowball_h", ammo: 0 },
             ],
             backpack: "backpack01",
             inventory: {
                 "8xscope": 1,
-                snowball_h: 5,
             },
         }),
     },
@@ -669,7 +665,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             weapons: [
                 { type: "m134_s", ammo: 200 },
                 { type: "m9_cursed", ammo: 15 },
-                { type: "naginata_seeker", ammo: 0 },
             ],
             backpack: "backpack03",
             helmet: "helmet04",

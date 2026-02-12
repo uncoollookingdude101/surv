@@ -89,7 +89,6 @@ const mapDef: PartialMapDef = {
         },
         bagSizes: {
             "308sub": [0, 10, 0, 0],
-            snowball_h: [0, 10, 0, 0],
         },
     },
     lootTable: {
@@ -110,7 +109,6 @@ const mapDef: PartialMapDef = {
         tier_vending_soda: [
             { name: "", count: 1, weight: 1 }, // ?
         ],
-        tier_throwables: [{ name: "snowball_h", count: 1, weight: 1 }],
         tier_airdrop_throwables: [{ name: "", count: 2, weight: 1 }],
         tier_ammo: [{ name: "", count: 60, weight: 1 }],
         tier_ammo_crate: [{ name: "", count: 60, weight: 1 }],
