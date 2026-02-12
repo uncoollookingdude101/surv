@@ -968,7 +968,7 @@ export class Player extends BaseGameObject {
 
             // inventory and scope
             for (const [key, value] of Object.entries(roleDef.defaultItems.inventory)) {
-                this.invManager.giveAndDrop(key as InventoryItem, value);
+                this.invManager.giveAndDrop(key as InventoryItem, value!);
             }
 
             // outfit

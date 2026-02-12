@@ -882,6 +882,8 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         fuseTime: 4,
         aimDistance: 0,
         rad: 1,
+        armorPiercing: true,
+        stonePiercing: true,
         throwPhysics: {
             playerVelMult: 0.6,
             velZ: 5,
@@ -926,6 +928,7 @@ export const ThrowableDefs: Record<string, ThrowableDef> = {
         fuseTime: 6.5,
         aimDistance: 0,
         rad: 1.75,
+        armorPiercing: true,
         throwPhysics: {
             playerVelMult: 0.3,
             velZ: 2,

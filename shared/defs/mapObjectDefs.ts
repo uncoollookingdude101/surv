@@ -3928,7 +3928,7 @@ function createLargeHut<T extends BuildingDef>(e: Partial<T>): T {
                 ori: 1,
             },
             {
-                type: "chest_01",
+                type: e.specialLoot || "chest_01",
                 pos: v2.create(6.25, -3.5),
                 scale: 1,
                 ori: 2,
@@ -9522,11 +9522,31 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         hitParticle: "blackChip",
         map: { display: false, color: 0x6b3500, scale: 0.85 },
     }),
+    case_08ms: createCase({
+        health: 140,
+        img: { sprite: "map-case-crow-01.img" },
+        loot: [
+            autoLoot("chest03", 1),
+            autoLoot("helmet03_marksman2", 1),
+            autoLoot("8xscope", 1),
+            tierLoot("tier_crow_case_melee", 1, 1),
+            autoLoot("outfitGhillie", 1),
+        ],
+        hitParticle: "blackChip",
+        map: { display: false, color: 0x6b3500, scale: 0.85 },
+    }),
     chest_01: createChest({
         loot: [
             tierLoot("tier_chest", 3, 4),
             tierLoot("tier_pirate_melee", 1, 1),
             tierLoot("tier_pirate_outfits", 1, 1),
+        ],
+    }),
+    chest_01ms: createChest({
+        loot: [
+            tierLoot("tier_chest", 3, 4),
+            autoLoot("8xscope", 1),
+            autoLoot("coconut_smg", 1),
         ],
     }),
     chest_01cb: createChest({
@@ -10862,11 +10882,11 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [autoLoot("m1100", 1)],
         img: { sprite: "map-gun-mount-05.img" },
     }),
-    gun_mount_05b: createGunMount({
+    gun_mount_06: createGunMount({
         loot: [autoLoot("cutlass_gold", 1)],
         img: { sprite: "map-gun-mount-06.img" },
     }),
-    gun_mount_06: createGunMount({
+    gun_mount_05ev: createGunMount({
         loot: [autoLoot("flare_gun2", 1)],
         img: { sprite: "map-gun-mount-05.img" },
     }),
@@ -15208,6 +15228,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         specialLoot: "pot_05",
     }),
     hut_04: createLargeHut({}),
+    hut_04ms: createLargeHut({
+        specialLoot: "chest_01ms",
+    }),
     warehouse_wall_side: createWall({
         material: "metal",
         extents: v2.create(25, 0.6),
@@ -15335,6 +15358,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     warehouse_03: createWarehouse3({}),
     warehouse_03sv: createWarehouse3({
         specialLoot: "case_08sv",
+    }),
+    warehouse_03ms: createWarehouse3({
+        specialLoot: "case_08ms",
     }),
     warehouse_03x: createWarehouse3({
         crate: randomObstacleType({ crate_03: 3, crate_03x: 1 }),
@@ -20329,7 +20355,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         cabin_mount: "gun_mount_05",
     }),
     cabin_04: createCabin({
-        cabin_mount: "gun_mount_06",
+        cabin_mount: "gun_mount_05ev",
     }),
     cabin_05: createCabin({
         cabin_mount: "gun_mount_07",
