@@ -10,7 +10,6 @@ export const MainAtlas: AtlasDef = {
         ...BuildingSprites.bunker_hydra,
         ...BuildingSprites.warehouse_complex,
 
-        
         "map/map-tree-13.svg",
         "map/map-bush-01f.svg",
     ],
