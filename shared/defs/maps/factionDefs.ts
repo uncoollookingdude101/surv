@@ -343,13 +343,6 @@ const mapDef: PartialMapDef = {
             { name: "potato_cannon", count: 1, weight: 1 }, // ?
             { name: "tier_custom", count: 1, weight: 2 },
         ],
-        tier_ghillie: [
-            {
-                name: "outfitGhillie",
-                count: 1,
-                weight: 0.5,
-            },
-        ],
         tier_airdrop_outfits: [
             { name: "", count: 1, weight: 25 },
             { name: "outfitHeaven", count: 1, weight: 1 },
