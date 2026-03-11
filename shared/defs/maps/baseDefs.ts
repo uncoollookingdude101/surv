@@ -81,7 +81,7 @@ export const Main: MapDef = {
     },
     // NOTE: this loot table is not the original one so its not accurate
     // ? are guesses based on statistics
-    // ! are uncertain data based on leak
+    // ! are uncertain data based on leak   
     lootTable: {
         tier_world: [
             { name: "tier_guns", count: 1, weight: 0.29 }, // TODO get more data on this from original
@@ -745,6 +745,7 @@ export const Main: MapDef = {
             { name: "m134", count: 1, weight: 1 },
             { name: "m79", count: 1, weight: 1 },
             { name: "m2010", count: 1, weight: 1 },
+            { name: "coconut_smg", count: 1, weight: 1 },
         ],
         tier_chest_04b: [{ name: "glock_dual", count: 1, weight: 1 }],
         tier_knives: [{ name: "", count: 1, weight: 1 }],
@@ -865,7 +866,7 @@ export const Main: MapDef = {
                 shack_03b: { small: 2, large: 3 },
                 greenhouse_01: 1,
                 cache_01: 1,
-                cache_02: 1, // mosin tree
+                cache_02: 50, // mosin tree
                 cache_07: 1,
                 bunker_structure_01: { odds: 0.05 },
                 bunker_structure_02: 1,

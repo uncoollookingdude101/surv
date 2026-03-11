@@ -3977,6 +3977,7 @@ export const BaseDefs: Record<string, GunDef> = {
         bulletType: "bullet_invis",
         projType: "coconut",
         headshotMult: 2,
+        noSplinter: true,
         speed: { equip: 0, attack: 0 },
         lootImg: {
             sprite: "loot-weapon-potato-smg.img",

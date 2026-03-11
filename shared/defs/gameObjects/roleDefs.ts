@@ -162,8 +162,8 @@ export const RoleDefs: Record<string, RoleDef> = {
                 (teamcolor: TeamColor) =>
                     getTeamWeapon(
                         {
-                            [TeamColor.Red]: { type: "bugle", ammo: 0 },
-                            [TeamColor.Blue]: { type: "bugle", ammo: 0 },
+                            [TeamColor.Red]: { type: "flare_gun", ammo: 1 },
+                            [TeamColor.Blue]: { type: "flare_gun", ammo: 1 },
                         },
                         teamcolor,
                     ),
@@ -171,14 +171,12 @@ export const RoleDefs: Record<string, RoleDef> = {
                     getTeamWeapon(
                         {
                             [TeamColor.Red]: {
-                                type: "flare_gun_dual",
-                                ammo: 10,
-                                fillInv: true,
+                                type: "",
+                                ammo: 0,
                             },
                             [TeamColor.Blue]: {
-                                type: "flare_gun_dual",
-                                ammo: 10,
-                                fillInv: true,
+                                type: "",
+                                ammo: 0,
                             },
                         },
                         teamcolor,
@@ -195,11 +193,11 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet04_leader",
             chest: "chest04",
-            outfit: (teamcolor: TeamColor) =>
-                ({
-                    [TeamColor.Red]: "outfitGhillie",
-                    [TeamColor.Blue]: "outfitGhillie",
-                })[teamcolor],
+            //outfit: (teamcolor: TeamColor) => 
+                //({
+                    //[TeamColor.Red]: "",
+                    //[TeamColor.Blue]: "",
+                //})[teamcolor],
             noDropOutfit: true,
             inventory: {
                 "15xscope": 1,
@@ -423,38 +421,23 @@ export const RoleDefs: Record<string, RoleDef> = {
             "takedown",
             "splinter",
             "steelskin",
-            () =>
-                util.weightedRandom([
-                    { type: "ap_rounds", weight: 1 },
-                    { type: "splinter", weight: 1 },
-                ]).type,
-            "takedown",
-            () =>
-                util.weightedRandom([
-                    { type: "windwalk", weight: 1 },
-                    { type: "field_medic", weight: 1 },
-                ]).type,
+            "explosive",
+            "bonus_assault",
+            "windwalk",
+            "endless_ammo",
+            "small_arms",
+            "gotw",
+            "targeting",
+            "tree_climbing",
+            "field_medic",
+            "chambered",
+            "fabricate_m",
+            "ap_rounds",
+            "inspiration",
+            "scavenger",
+            "high_velocity",
         ],
         defaultItems: createDefaultItems({
-            weapons: [
-                { type: "", ammo: 0 },
-                (teamcolor: TeamColor) =>
-                    getTeamWeapon(
-                        {
-                            [TeamColor.Red]: util.weightedRandom([
-                                { type: "m249", ammo: 100, fillInv: true, weight: 1 },
-                                { type: "pkp", ammo: 200, fillInv: true, weight: 1 },
-                            ]),
-                            [TeamColor.Blue]: util.weightedRandom([
-                                { type: "m249", ammo: 100, fillInv: true, weight: 1 },
-                                { type: "pkp", ammo: 200, fillInv: true, weight: 1 },
-                            ]),
-                        },
-                        teamcolor,
-                    ),
-                { type: "", ammo: 0 },
-                { type: "mirv", ammo: 8 },
-            ],
             backpack: "backpack03",
             helmet: (teamcolor: TeamColor) =>
                 getTeamHelmet(
@@ -498,7 +481,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             pulse: true,
             pulseTint: 0x00ff00,
         },
-        perks: ["gotw", "windwalk", "steelskin"],
+        perks: ["gotw", "windwalk", "small_"],
     },
     kill_leader: {
         type: "role",

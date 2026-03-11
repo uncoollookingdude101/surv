@@ -112,26 +112,28 @@ const mapDef: PartialMapDef = {
                     wait: 10,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        numPlanes: [{ count: 20, weight: 1 }],
                         airstrikeZoneRad: 100,
                         wait: 0.1,
-                        delay: 0.05,
+                        delay: 0.01,
                     },
                 },
                 {
                     circleIdx: 2,
                     wait: 6,
-                    options: { type: GameConfig.Plane.Airdrop },
+                    options: { 
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_04ct2",}
                 },
                 {
                     circleIdx: 2,
                     wait: 30,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        numPlanes: [{ count: 20, weight: 1 }],
                         airstrikeZoneRad: 100,
                         wait: 0.1,
-                        delay: 0.05,
+                        delay: 0.01,
                     },
                 },
                 {
@@ -139,26 +141,28 @@ const mapDef: PartialMapDef = {
                     wait: 8,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        numPlanes: [{ count: 20, weight: 1 }],
                         airstrikeZoneRad: 100,
                         wait: 0.1,
-                        delay: 0.05,
+                        delay: 0.01,
                     },
                 },
                 {
                     circleIdx: 4,
                     wait: 3,
-                    options: { type: GameConfig.Plane.Airdrop },
+                    options: { 
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_04ct2",}
                 },
                 {
                     circleIdx: 4,
-                    wait: 21,
+                    wait: 30,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        numPlanes: [{ count: 20, weight: 1 }],
                         airstrikeZoneRad: 50,
                         wait: 0.1,
-                        delay: 0.05,
+                        delay: 0.01,
                     },
                 },
                 {
@@ -166,15 +170,15 @@ const mapDef: PartialMapDef = {
                     wait: 6,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 50, weight: 0.1 }],
+                        numPlanes: [{ count: 20, weight: 1 }],
                         airstrikeZoneRad: 25,
                         wait: 0.1,
-                        delay: 0.05,
+                        delay: 0.01,
                     },
                 },
             ],
             crates: [
-                { name: "airdrop_crate_04", weight: 1 },
+                { name: "airdrop_crate_04ct1", weight: 1 },
             ],
         },
         roles: {
@@ -189,87 +193,24 @@ const mapDef: PartialMapDef = {
                     circleIdx: 0,
                     wait: 5,
                 },
-                {
-                    role: "lieutenant",
+                                {
+                    role: "leader",
                     circleIdx: 0,
-                    wait: 54,
-                },
-                {
-                    role: "marksman",
-                    circleIdx: 0,
-                    wait: 58,
-                },
-                {
-                    role: "recon",
-                    circleIdx: 0,
-                    wait: 62,
-                },
-                {
-                    role: "grenadier",
-                    circleIdx: 0,
-                    wait: 66,
-                },
-                // {
-                //     role: () =>
-                //         util.weightedRandom([
-                //             { type: "lieutenant", weight: 1 },
-                //             { type: "marksman", weight: 1 },
-                //             { type: "recon", weight: 1 },
-                //             { type: "grenadier", weight: 1 },
-                //         ]).type,
-                //     circleIdx: 0,
-                //     wait: 54,
-                // },
-                {
-                    role: "medic",
-                    circleIdx: 0,
-                    wait: 70,
-                },
-                {
-                    role: "bugler",
-                    circleIdx: 0,
-                    wait: 74,
+                    wait: 5,
                 },
             ],
         },
-        bagSizes: {},
+        bagSizes: {
+            mirv: [6, 9, 12, 15],
+            strobe: [6, 9, 12, 15],
+            bb: [6, 9, 12, 15],
+        },
         bleedDamage: 2,
         bleedDamageMult: 1.25,
     },
     lootTable: {
         tier_guns: [
-            { name: "famas", count: 1, weight: 0.9 },
-            { name: "hk416", count: 1, weight: 4 },
-            { name: "mk12", count: 1, weight: 0.1 },
-            { name: "pkp", count: 1, weight: 0.005 },
-            { name: "m249", count: 1, weight: 0.006 },
-            { name: "pkm", count: 1, weight: 0.005 },
-            { name: "ak47", count: 1, weight: 2.7 },
-            { name: "scar", count: 1, weight: 0.01 },
-            { name: "dp28", count: 1, weight: 0.5 },
-            { name: "bar", count: 1, weight: 0.05 },
-            { name: "mosin", count: 1, weight: 0.05 },
-            { name: "m39", count: 1, weight: 0.1 },
-            { name: "mp5", count: 1, weight: 10 },
-            { name: "mac10", count: 1, weight: 6 },
-            { name: "ump9", count: 1, weight: 3 },
-            { name: "m870", count: 1, weight: 9 },
-            { name: "m1100", count: 1, weight: 6 },
-            { name: "mp220", count: 1, weight: 2 },
-            { name: "saiga", count: 1, weight: 0.1 },
-            { name: "ot38", count: 1, weight: 8 },
-            { name: "m9", count: 1, weight: 19 },
-            { name: "m93r", count: 1, weight: 5 },
-            { name: "glock", count: 1, weight: 7 },
-            { name: "deagle", count: 1, weight: 0.05, preload: true },
-            { name: "vector", count: 1, weight: 0.01 },
-            { name: "sv98", count: 1, weight: 0.01 },
-            { name: "spas12", count: 1, weight: 1 },
-            { name: "qbb97", count: 1, weight: 0.01 },
-            { name: "flare_gun", count: 1, weight: 0.1, preload: true },
-            { name: "groza", count: 1, weight: 0.8 },
-            { name: "scout_elite", count: 1, weight: 0.1 },
-            { name: "vss", count: 1, weight: 0.1 }, // ?
+            { name: "", count: 1, weight: 0.1 },
         ],
         tier_toilet: [
             { name: "tier_guns", count: 1, weight: 0.1 },
@@ -316,32 +257,10 @@ const mapDef: PartialMapDef = {
             { name: "frag", count: 1, weight: 2 },
         ],
         tier_airdrop_uncommon: [
-            { name: "mk12", count: 1, weight: 2.5 },
-            { name: "scar", count: 1, weight: 0.75 },
-            { name: "bar", count: 1, weight: 1 },
-            { name: "mosin", count: 1, weight: 1.5 },
-            { name: "m39", count: 1, weight: 2.5 },
-            { name: "saiga", count: 1, weight: 1 },
-            { name: "deagle", count: 1, weight: 1 },
-            { name: "vector", count: 1, weight: 1 },
-            { name: "sv98", count: 1, weight: 0.5 },
-            { name: "qbb97", count: 1, weight: 1.5 },
-            { name: "m9", count: 1, weight: 0.01 },
-            { name: "scout_elite", count: 1, weight: 2.5 },
-            { name: "vss", count: 1, weight: 2.5 }, // !
-            { name: "colt45", count: 1, weight: 2.5 },
+            { name: "", count: 1, weight: 2.5 },
         ],
         tier_airdrop_mythic: [
-            { name: "scarssr", count: 1, weight: 1 }, // ?
-            { name: "usas", count: 1, weight: 1 }, // ?
-            { name: "p30l_dual", count: 1, weight: 1 }, // ?
-            { name: "awc", count: 1, weight: 1 }, // ?
-            { name: "pkp", count: 1, weight: 1 }, // ?
-            { name: "m249", count: 1, weight: 1 }, // ?
-            { name: "pkm", count: 1, weight: 1 },
-            { name: "potato_smg", count: 1, weight: 1 }, // ?
-            { name: "potato_cannon", count: 1, weight: 1 }, // ?
-            { name: "tier_custom", count: 1, weight: 2 },
+            { name: "", count: 1, weight: 1 }, // ?
         ],
         tier_ghillie: [
             {
@@ -352,41 +271,36 @@ const mapDef: PartialMapDef = {
         ],
         tier_airdrop_outfits: [
             { name: "", count: 1, weight: 25 },
-            { name: "outfitHeaven", count: 1, weight: 1 },
-            {
-                name: "outfitGhillie",
-                count: 1,
-                weight: 0.5,
-            },
         ],
         tier_airdrop_throwables: [
-            { name: "bb", count: 2, weight: 1 },
-            { name: "mirv", count: 2, weight: 1 },
-            { name: "strobe", count: 2, weight: 1 },
-            { name: "smoke", count: 2, weight: 1 },
+            { name: "bb", count: 8, weight: 1 },
+            { name: "mirv", count: 8, weight: 1 },
+            { name: "strobe", count: 8, weight: 1 },
+            { name: "smoke", count: 8, weight: 1 },
         ],
         tier_ammo_crate: [
-            { name: "9mm", count: 60, weight: 3 },
-            { name: "762mm", count: 60, weight: 3 },
-            { name: "556mm", count: 60, weight: 3 },
-            { name: "12gauge", count: 10, weight: 3 },
-            { name: "50AE", count: 21, weight: 1 },
-            { name: "308sub", count: 5, weight: 1 },
+            { name: "", count: 60, weight: 3 },
         ],
-        tier_mansion_floor: [{ name: "outfitCamo", count: 1, weight: 1 }],
-        tier_conch: [{ name: "outfitKeyLime", count: 1, weight: 1 }],
+        tier_mansion_floor: [{ name: "", count: 1, weight: 1 }],
+        tier_conch: [{ name: "", count: 1, weight: 1 }],
         tier_chrys_01: [
             {
-                name: "outfitCarbonFiber",
+                name: "",
                 count: 1,
                 weight: 1,
             },
         ],
         tier_katanas: [
-            { name: "katana", count: 1, weight: 1 }, // ?
-            { name: "katana_rusted", count: 1, weight: 1 }, // ?
-            { name: "katana_orchid", count: 1, weight: 1 }, // ?
-            { name: "pan", count: 1, weight: 1 }, // ?
+            { name: "", count: 1, weight: 1 }, // ?
+        ],
+        tier_armor: [
+            { name: "", count: 1, weight: 9 }, // !
+        ],
+        tier_packs: [
+            { name: "", count: 1, weight: 9 },
+        ],
+        tier_scopes: [
+            { name: "", count: 1, weight: 9 },
         ],
     },
     mapGen: {
@@ -493,4 +407,4 @@ const mapDef: PartialMapDef = {
     /* STRIP_FROM_PROD_CLIENT:END */
 };
 
-export const Faction = util.mergeDeep({}, Main, mapDef) as MapDef;
+export const Faction2 = util.mergeDeep({}, Main, mapDef) as MapDef;

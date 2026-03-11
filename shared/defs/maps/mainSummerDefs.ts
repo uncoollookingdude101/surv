@@ -24,9 +24,9 @@ const mapDef = {
                     wait: 5,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 25, weight: 1 }],
+                        numPlanes: [{ count: 5, weight: 1 }],
                         airstrikeZoneRad: 50,
-                        wait: 0.25,
+                        wait: 0.5,
                         delay: 0.5,
                     },
                 },
@@ -38,9 +38,9 @@ const mapDef = {
                     wait: 5,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 25, weight: 1 }],
+                        numPlanes: [{ count: 5, weight: 1 }],
                         airstrikeZoneRad: 50,
-                        wait: 0.25,
+                        wait: 0.5,
                         delay: 0.5,
                     },
                 },
@@ -52,9 +52,9 @@ const mapDef = {
                     wait: 5,
                     options: {
                         type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 25, weight: 1 }],
+                        numPlanes: [{ count: 5, weight: 1 }],
                         airstrikeZoneRad: 50,
-                        wait: 0.25,
+                        wait: 0.5,
                         delay: 0.5,
                     },
                 },
@@ -139,7 +139,7 @@ const mapDef = {
     },
     lootTable: {
         tier_chest: [
-            { name: "tier_guns", count: 1, weight: 2.4 },
+            { name: "tier_guns", count: 1, weight: 2 },
             { name: "tier_scopes", count: 1, weight: 1.5 },
             { name: "tier_armor", count: 1, weight: 1.2 },
         ],
@@ -151,7 +151,11 @@ const mapDef = {
             { name: "strobe", count: 1, weight: 0.5 },
             { name: "bb", count: 2, weight: 0.5 },
         ],
-        tier_airdrop_throwables: [{ name: "strobe", count: 1, weight: 1 }],
+        tier_airdrop_throwables: [
+            { name: "strobe", count: 2, weight: 1 },
+            { name: "bb", count: 4, weight: 1 },
+            { name: "mirv", count: 4, weight: 1 },
+        ],
         tier_sv98: [{ name: "sv98", count: 1, weight: 1 }],
         tier_ammo: [
             { name: "9mm", count: 60, weight: 3 },
@@ -267,7 +271,6 @@ const mapDef = {
         ],
         tier_vault_floor: [
             { name: "helmet03_medic2", count: 1, weight: 1 },
-            { name: "bonesaw_rusted", count: 1, weight: 1 },
         ],
         tier_chrys_02: [{ name: "helmet04_forest", count: 1, weight: 1 }],
         tier_chrys_03: [
@@ -342,12 +345,12 @@ const mapDef = {
             { name: "backpack03", count: 1, weight: 1 },
         ],
         tier_armor: [
-            { name: "helmet01", count: 1, weight: 5 },
+            { name: "helmet01", count: 1, weight: 4 },
             { name: "helmet02", count: 1, weight: 1.2 },
-            { name: "helmet03", count: 1, weight: 0.1 },
-            { name: "chest01", count: 1, weight: 3 },
+            { name: "helmet03", count: 1, weight: 0.3 },
+            { name: "chest01", count: 1, weight: 2 },
             { name: "chest02", count: 1, weight: 0.8 },
-            { name: "chest03", count: 1, weight: 0.07 },
+            { name: "chest03", count: 1, weight: 0.2 },
         ],
         tier_class_crate_mythic: [
             { name: "scavenger_adv", count: 1, weight: 1 },
@@ -360,6 +363,29 @@ const mapDef = {
             { name: "p30l_dual", count: 1, weight: 1 }, // ?
         ],
         tier_chest_04b: [{ name: "lasr_gun_dual", count: 1, weight: 1 }],
+        tier_airdrop_melee: [
+            { name: "", count: 1, weight: 5 },
+            { name: "pan", count: 1, weight: 1 },
+            { name: "bonesaw_rusted", count: 1, weight: 1 },
+            { name: "naginata", count: 1, weight: 1 },
+        ],
+        tier_scopes: [
+            { name: "2xscope", count: 1, weight: 8 },
+            { name: "4xscope", count: 1, weight: 5 },
+            { name: "8xscope", count: 1, weight: 1 }, // ?
+            { name: "15xscope", count: 1, weight: 0.02 }, // ?
+        ],
+        tier_packs: [
+            { name: "backpack01", count: 1, weight: 5 }, // !
+            { name: "backpack02", count: 1, weight: 2 },
+            { name: "backpack03", count: 1, weight: 0.85 },
+        ],        
+        tier_medical: [
+            { name: "bandage", count: 5, weight: 10 },
+            { name: "healthkit", count: 1, weight: 4 },
+            { name: "soda", count: 1, weight: 8 },
+            { name: "painkiller", count: 1, weight: 5 },
+        ],
     },
     biome: {
         colors: {
@@ -377,9 +403,9 @@ const mapDef = {
     /* STRIP_FROM_PROD_CLIENT:START */
     mapGen: {
         map: {
-            baseWidth: 650,
-            baseHeight: 650,
-            extension: 75,
+            baseWidth: 700,
+            baseHeight: 700,
+            extension: 100,
             shoreInset: 64,
             grassInset: 48,
         },
@@ -459,7 +485,7 @@ const mapDef = {
                 mansion_structure_01: 1,
                 police_01: 1,
                 bank_01: 1,
-                chest_01: 3,
+                chest_01: 7,
                 chest_03: { odds: 0.2 },
                 mil_crate_02: { odds: 0.25 },
                 tree_02: 3,

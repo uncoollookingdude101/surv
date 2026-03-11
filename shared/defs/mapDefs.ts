@@ -5,6 +5,7 @@ import { Beach } from "./maps/beachDefs";
 import { Birthday } from "./maps/birthdayDefs";
 import { Cobalt } from "./maps/cobaltDefs";
 import { Desert } from "./maps/desertDefs";
+import { Faction2 } from "./maps/faction2Defs";
 import { Faction } from "./maps/factionDefs";
 import { Flare } from "./maps/flareDefs";
 import { Halloween } from "./maps/halloweenDefs";
@@ -62,6 +63,7 @@ export const MapDefs = {
     flare: Flare,
     airstrike: Airstrike,
     hidenseek: HidenSeek,
+    faction2: Faction2,
 
     /* STRIP_FROM_PROD_CLIENT:START */
     test_normal: testNormal,
