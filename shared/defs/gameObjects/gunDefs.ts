@@ -2001,9 +2001,9 @@ export const BaseDefs: Record<string, GunDef> = {
             scale: 0.3,
         },
         worldImg: {
-            sprite: "gun-long-01.img",
-            scale: { x: 0.5, y: 0.4 },
-            tint: 0x2d4251,
+            sprite: "gun-spas12-01.img",
+            scale: { x: 0.5, y: 0.5 },
+            tint: 0xffffff,
             leftHandOffset: { x: 4.9, y: 0 },
             recoil: 1.33,
         },
