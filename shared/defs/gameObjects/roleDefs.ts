@@ -556,4 +556,19 @@ export const RoleDefs: Record<string, RoleDef> = {
         guiImg: "img/gui/role-assault.svg",
         color: 0xffec17,
     },
+    classless: {
+        type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitClassless",
+            helmet: "helmet04_classless",
+            inventory: {},
+        }),
+        announce: false,
+        sound: { assign: "spawn_01" },
+        perks: [],
+        visorImg: {
+            baseSprite: "player-visor-classless.img",
+            spriteScale: 0.3,
+        },
+    },
 };

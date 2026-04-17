@@ -913,6 +913,21 @@ const SkinDefs = {
             rot: 0.5 * Math.PI,
         },
     }),
+    helmet04_classless: defineSkin("helmet04", {
+        name: "Classless Helmet",
+        noDrop: true,
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-classless.img",
+            spriteScale: 0.275,
+        },
+        lootImg: {
+            sprite: "player-helmet-classless.img",
+            rot: 0.5 * Math.PI,
+        },
+    }),
 };
 
 // Shared with the client; move them somewhere

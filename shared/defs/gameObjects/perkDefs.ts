@@ -86,6 +86,23 @@ export const PerkProperties = {
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
     ammoBonusDamageMult: 1.08,
+    // Classless perk list (effectively all class perks in Cobalt, minus martyrdom)
+    classless: {
+        perkPool: [
+            "combat_stims",
+            "field_medic",
+            "steelskin",
+            "endless_ammo",
+            "chambered",
+            "takedown",
+            "small_arms",
+            "tree_climbing",
+            "amped_explosives",
+            "flak_jacket",
+            "firepower",
+            "bonus_assault",
+        ],
+    },
 };
 
 export interface PerkDef {

@@ -11421,6 +11421,17 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         ],
         img: { sprite: "map-class-crate-tank.img" },
     }),
+    class_crate_common_classless: createClassCrate({
+        loot: [
+            tierLoot("tier_guns_common_classless", 1, 1),
+            tierLoot("tier_medical", 1, 2),
+            tierLoot("tier_throwables", 1, 2),
+            tierLoot("tier_armor", 1, 1),
+            tierLoot("tier_ammo", 1, 1),
+            autoLoot("naginata_daemon", 1),
+        ],
+        img: { sprite: "map-class-crate-classless.img" },
+    }),
     class_crate_rare_scout: createClassCrate({
         loot: [
             tierLoot("tier_guns_rare_scout", 1, 1),
@@ -11492,6 +11503,17 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_airdrop_throwables", 1, 1),
         ],
         img: { sprite: "map-class-crate-tank.img" },
+    }),
+    class_crate_rare_classless: createClassCrate({
+        loot: [
+            tierLoot("tier_guns_rare_classless", 1, 1),
+            tierLoot("tier_medical", 2, 3),
+            tierLoot("tier_throwables", 2, 2),
+            tierLoot("tier_armor", 2, 2),
+            tierLoot("tier_ammo", 1, 1),
+            autoLoot("naginata_daemon", 1),
+        ],
+        img: { sprite: "map-class-crate-classless.img" },
     }),
     class_crate_mythic: createClassCrate({
         loot: [tierLoot("tier_class_crate_mythic", 1, 1)],
