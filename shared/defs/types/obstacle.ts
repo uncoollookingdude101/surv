@@ -86,6 +86,7 @@ export interface ObstacleDef {
         interactionText: string;
         useOnce: boolean;
         useType?: string;
+        roleToPromote?: string;
         useDelay: number;
         useDir: Vec2;
         useImg: string;

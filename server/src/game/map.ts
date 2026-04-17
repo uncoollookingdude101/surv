@@ -2012,7 +2012,7 @@ export class GameMap {
             const obj = this.genAuto(
                 partType,
                 partPos,
-                layer,
+                mapObject.layer ?? layer,
                 partOri,
                 mapObject.scale,
                 building.__id,

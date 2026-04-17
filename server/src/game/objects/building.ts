@@ -5,6 +5,7 @@ import type {
     StructureDef,
 } from "../../../../shared/defs/mapObjectsTyping";
 import { Puzzles } from "../../../../shared/defs/puzzles";
+import { DamageType } from "../../../../shared/gameConfig";
 import { ObjectType } from "../../../../shared/net/objectSerializeFns";
 import { type AABB, type Collider, coldet } from "../../../../shared/utils/coldet";
 import { collider } from "../../../../shared/utils/collider";
@@ -301,9 +302,19 @@ export class Building extends BaseGameObject {
                     obj.__type === ObjectType.Obstacle &&
                     obj.type === puzzleDef.completeUseType
                 ) {
-                    setTimeout(() => {
-                        obj.toggleDoor();
-                    }, puzzleDef.completeUseDelay * 1000);
+                    if (puzzleName === "bunker_twins") {
+                        setTimeout(() => {
+                            obj.kill({
+                                damageType: DamageType.Player,
+                                dir: v2.create(0, 0),
+                                source: undefined,
+                            });
+                        }, puzzleDef.completeUseDelay * 1000);
+                    } else {
+                        setTimeout(() => {
+                            obj.toggleDoor();
+                        }, puzzleDef.completeUseDelay * 1000);
+                    }
                 }
             }
             this.puzzleSolved = true;

@@ -61,6 +61,7 @@ export interface BuildingDef {
         ignoreMapSpawnReplacement?: boolean;
         inheritOri?: boolean;
         puzzlePiece?: string;
+        layer?: number;
     }>;
     porch_01?: string;
     stand?: string;

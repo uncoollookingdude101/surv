@@ -80,6 +80,7 @@ export class Obstacle extends BaseGameObject {
         seq: number;
         useOnce: boolean;
         useType: string;
+        roleToPromote?: string;
         useDelay: number;
         useDir: Vec2;
     };
@@ -196,6 +197,7 @@ export class Obstacle extends BaseGameObject {
                 seq: 1,
                 useOnce: def.button.useOnce,
                 useType: def.button.useType!,
+                roleToPromote: def.button.roleToPromote,
                 useDelay: def.button.useDelay,
                 useDir: def.button.useDir,
             };
@@ -429,13 +431,7 @@ export class Obstacle extends BaseGameObject {
         if (def.destroyType) {
             let destroyType: string;
             // in cobalt, class shells need to spawn a pod that corresponds to the player's class (role)
-            if (
-                def.smartLoot &&
-                this.interactedBy &&
-                this.game.map.mapDef.gameMode.perkModeRoles?.includes(
-                    this.interactedBy.role,
-                )
-            ) {
+            if (def.smartLoot && this.interactedBy) {
                 destroyType = `${def.destroyType}_${this.interactedBy.role}`;
             } else {
                 destroyType = def.destroyType;
@@ -629,7 +625,7 @@ export class Obstacle extends BaseGameObject {
         }
 
         if (this.isButton && this.button.canUse) {
-            this.useButton();
+            this.useButton(player);
         }
     }
 
@@ -638,7 +634,7 @@ export class Obstacle extends BaseGameObject {
         this.game.playerBarn.addMapPing("ping_unlock", this.pos);
     }
 
-    useButton(): void {
+    useButton(player?: Player): void {
         if (!this.button.canUse) return;
 
         this.button.onOff = !this.button.onOff;
@@ -663,11 +659,17 @@ export class Obstacle extends BaseGameObject {
                 }
             }
         }
+
+        // Promotion from buttons, checks for a "roleToPromote" field in the button def.
+        if (this.button.roleToPromote && player) {
+            player.promoteToRole(this.button.roleToPromote);
+        }
+
         if (this.button.onOff && this.isPuzzlePiece) {
             this.parentBuilding?.puzzlePieceToggled(this);
         }
         const def = MapObjectDefs[this.type] as ObstacleDef;
-        if (def.button?.destroyOnUse && def.destroyType) {
+        if (def.button?.destroyOnUse) {
             this.killTicker = this.button.useDelay;
         }
         this.setDirty();
