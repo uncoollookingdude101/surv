@@ -530,7 +530,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         }),
         announce: false,
         sound: { assign: "spawn_01" },
-        perks: ["fabricate", "flak_jacket"],
+        perks: ["amped_explosives", "flak_jacket"],
         visorImg: {
             baseSprite: "player-visor-demo.img",
             spriteScale: 0.3,

@@ -1,5 +1,6 @@
 import { GameObjectDefs } from "../../../../shared/defs/gameObjectDefs";
 import type { ExplosionDef } from "../../../../shared/defs/gameObjects/explosionsDefs";
+import { PerkProperties } from "../../../../shared/defs/gameObjects/perkDefs";
 import { ObjectType } from "../../../../shared/net/objectSerializeFns";
 import { coldet } from "../../../../shared/utils/coldet";
 import { collider } from "../../../../shared/utils/collider";
@@ -137,9 +138,30 @@ export class ExplosionBarn {
             }
         }
 
+        const sourcePlayer =
+            explosion.damageParams.source &&
+            explosion.damageParams.source.__type === ObjectType.Player
+                ? explosion.damageParams.source
+                : undefined;
+
+        const shrapnelSpeedMult = sourcePlayer?.hasPerk?.("amped_explosives")
+            ? PerkProperties.amped_explosives.shrapnelSpeedMult
+            : 1;
+
+        const shrapnelDamageMult = sourcePlayer?.hasPerk?.("amped_explosives")
+            ? PerkProperties.amped_explosives.shrapnelDamageMult
+            : 1;
+
+        const shrapnelCountMult = sourcePlayer?.hasPerk?.("amped_explosives")
+            ? PerkProperties.amped_explosives.shrapnelCountMult
+            : 1;
+
+        const shouldApplyChambered = sourcePlayer?.hasPerk?.("amped_explosives");
+        const shrapnelCount = Math.ceil((def.shrapnelCount ?? 0) * shrapnelCountMult);
+
         const bulletDef = GameObjectDefs[def.shrapnelType];
         if (bulletDef && bulletDef.type === "bullet") {
-            for (let i = 0, count = def.shrapnelCount ?? 0; i < count; i++) {
+            for (let i = 0, count = shrapnelCount; i < count; i++) {
                 this.game.bulletBarn.fireBullet({
                     bulletType: def.shrapnelType,
                     pos: explosion.pos,
@@ -147,7 +169,9 @@ export class ExplosionBarn {
                     damageType: explosion.damageParams.damageType,
                     playerId: explosion.damageParams.source?.__id ?? 0,
                     shotFx: false,
-                    damageMult: 1,
+                    damageMult: shrapnelDamageMult,
+                    speedMult: shrapnelSpeedMult,
+                    trailSaturated: shouldApplyChambered,
                     varianceT: Math.random(),
                     gameSourceType: explosion.damageParams.gameSourceType!,
                     mapSourceType: explosion.damageParams.mapSourceType,

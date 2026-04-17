@@ -16,6 +16,13 @@ export const PerkProperties = {
         damageReduction: 0.1,
         explosionDamageReduction: 0.9,
     },
+    amped_explosives: {
+        throwableRangeMult: 1.75,
+        throwableSpeedMult: 2,
+        shrapnelCountMult: 2,
+        shrapnelDamageMult: 1.5,
+        shrapnelSpeedMult: 1.4,
+    },
     small_arms: {
         scale: -0.25,
     },
@@ -473,6 +480,20 @@ export const PerkDefs: Record<string, PerkDef> = {
         type: "perk",
         lootImg: {
             sprite: "loot-perk-flak-jacket.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    amped_explosives: {
+        name: "Hyperfragmentation",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-amped-explosives.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

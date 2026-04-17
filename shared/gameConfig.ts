@@ -347,7 +347,11 @@ export const GameConfig = {
             chambered: 0xb500ff,
             apSaturated: 0x470349,
         },
-        shrapnel: { regular: 0x333333, saturated: 0x333333 },
+        shrapnel: {
+            regular: 0x333333,
+            saturated: 0x333333,
+            chambered: 0x660900,
+        },
         frag: { regular: 0xcb0000, saturated: 0xcb0000, apSaturated: 0xcb0000 },
         invis: { regular: 0, saturated: 0, chambered: 0, apSaturated: 0 },
     },

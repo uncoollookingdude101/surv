@@ -1202,7 +1202,11 @@ export class WeaponManager {
                 ) / GameConfig.player.throwableMaxMouseDist;
         }
 
-        const throwStr = multiplier * throwableDef.throwPhysics.speed;
+        const throwSpeedMult = this.player.hasPerk("amped_explosives")
+            ? PerkProperties.amped_explosives.throwableSpeedMult
+            : 1;
+
+        const throwStr = multiplier * throwableDef.throwPhysics.speed * throwSpeedMult;
 
         // position of throwing hand
         let pos = v2.add(
@@ -1246,11 +1250,16 @@ export class WeaponManager {
         }
 
         let dir = v2.copy(this.player.dir);
+
+        const throwRangeMult = this.player.hasPerk("amped_explosives")
+            ? PerkProperties.amped_explosives.throwableRangeMult
+            : 1;
+
         // Aim toward a point some distance infront of the player
         if (throwableDef.aimDistance > 0.0) {
             const aimTarget = v2.add(
                 this.player.pos,
-                v2.mul(this.player.dir, throwableDef.aimDistance),
+                v2.mul(this.player.dir, throwableDef.aimDistance * throwRangeMult),
             );
             dir = v2.normalizeSafe(v2.sub(aimTarget, spawnPos), v2.create(1.0, 0.0));
         }
