@@ -1744,11 +1744,19 @@ export class Player extends BaseGameObject {
                     if ("heal" in itemDef) {
                         this.applyActionFunc((target: Player) => {
                             target.health += itemDef.heal;
+                            if (this.hasPerk("combat_stims")) {
+                                this.combatStimsActive = true;
+                                this._combatStimsTicker = 5;
+                            }
                         });
                     }
                     if ("boost" in itemDef) {
                         this.applyActionFunc((target: Player) => {
                             target.boost += itemDef.boost;
+                            if (this.hasPerk("combat_stims")) {
+                                this.combatStimsActive = true;
+                                this._combatStimsTicker = 5;
+                            }
                         });
                     }
                     this.invManager.take(this.actionItem as InventoryItem, 1);
@@ -1833,6 +1841,18 @@ export class Player extends BaseGameObject {
                 this._hasteTicker = 0;
                 this.hasteSeq++;
                 this.setDirty();
+            }
+        }
+
+        //
+        // Combat Stimulants Logic
+        //
+        if (this.combatStimsActive) {
+            this._combatStimsTicker -= dt;
+
+            if (this._combatStimsTicker <= 0) {
+                this.combatStimsActive = false;
+                this._lastBreathTicker = 0;
             }
         }
 

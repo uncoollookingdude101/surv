@@ -38,6 +38,7 @@ export const PerkProperties = {
         scale: 0.25,
     },
     final_bugle: {
+        bonusDamageMult: 1.08,
         scaleOnDeath: 0.2,
     },
     broken_arrow: {
@@ -53,6 +54,9 @@ export const PerkProperties = {
     },
     field_medic: {
         speedBoost: 1,
+    },
+    combat_stims: {
+        bonusDamageMult: 1.12,
     },
     tree_climbing: {
         waterSpeedBoost: 2,
@@ -280,10 +284,24 @@ export const PerkDefs: Record<string, PerkDef> = {
         },
     },
     field_medic: {
-        name: "Field Medic",
+        name: "Combat Medic",
         type: "perk",
         lootImg: {
             sprite: "loot-perk-field-medic.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    combat_stims: {
+        name: "Combat Stimulants",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-field-medic.img", // TODO: Make SVG
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

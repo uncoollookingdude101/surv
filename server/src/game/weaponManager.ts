@@ -663,27 +663,29 @@ export class WeaponManager {
         }
     }
 
-    isBulletSaturated(ammo: string): boolean {
+    isBulletSaturated(ammo: string): number {
+        let totalDamageMult = 1;
         if (this.player.lastBreathActive) {
-            return true;
+            totalDamageMult *= PerkProperties.final_bugle.bonusDamageMult;
         }
+
         // avoid other checks if player has no perks
-        if (!this.player.perks.length) return false;
+        if (!this.player.perks.length) return totalDamageMult;
 
         const perks = ["bonus_assault", "treat_super"];
         if (perks.some((p) => this.player.hasPerk(p))) {
-            return true;
+            totalDamageMult *= 1.08;
         }
 
         if (PerkProperties.ammoBonuses[ammo]) {
             for (const perk of this.player.perks) {
                 if (PerkProperties.ammoBonuses[ammo].includes(perk.type)) {
-                    return true;
+                    totalDamageMult *= PerkProperties.ammoBonusDamageMult;
                 }
             }
         }
 
-        return false;
+        return totalDamageMult;
     }
 
     fireWeapon(offHand: boolean, forceFire?: boolean) {
@@ -783,6 +785,7 @@ export class WeaponManager {
         const hasSplinter = this.player.hasPerk("splinter");
         const hasApRounds = this.player.hasPerk("ap_rounds");
         const hasHighVelocity = this.player.hasPerk("high_velocity");
+        const hasCombatStims = this.player.combatStimsActive;
         const shouldApplyChambered =
             this.player.hasPerk("chambered") &&
             itemDef.ammo !== "12gauge" &&
@@ -796,7 +799,11 @@ export class WeaponManager {
 
         const saturated = this.isBulletSaturated(itemDef.ammo);
         if (saturated) {
-            damageMult *= PerkProperties.ammoBonusDamageMult;
+            damageMult *= saturated;
+        }
+
+        if (this.player.combatStimsActive) {
+            damageMult *= PerkProperties.combat_stims.bonusDamageMult;
         }
 
         if (shouldApplyChambered) {
@@ -889,13 +896,14 @@ export class WeaponManager {
                 distanceMult,
                 shotFx: i === 0,
                 shotOffhand: offHand,
-                trailSaturated: shouldApplyChambered || saturated,
+                trailSaturated: shouldApplyChambered || saturated > 1,
                 trailSmall: false,
                 trailThick: shouldApplyChambered,
                 reflectCount: 0,
                 splinter: hasSplinter,
                 apRounds: hasApRounds,
                 highVelocity: hasHighVelocity,
+                combatStims: hasCombatStims,
                 lastShot: weapon.ammo <= 0,
                 reflectObjId: this.player.obstacleOutfit?.__id,
                 onHitFx: hasExplosive ? "explosion_rounds" : undefined,
