@@ -9,6 +9,10 @@ export const CobaltAtlas: AtlasDef = {
         ...BuildingSprites.warehouse_complex,
         ...BuildingSprites.bunker_twins,
 
+        "map/map-bush-07cb.svg",
+
+        "map/map-chest-03cb.svg",
+
         "map/map-class-crate-03.svg",
         "map/map-class-crate-assault.svg",
         "map/map-class-crate-demo.svg",

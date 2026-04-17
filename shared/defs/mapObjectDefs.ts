@@ -10169,6 +10169,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         sound: { enter: "bush_enter_02" },
     }),
     bush_07x: createBush({ img: { sprite: "map-bush-07x.img" } }),
+    bush_07cb: createBush({ img: { sprite: "map-bush-07cb.img" } }),
 
     campfire_01: createCampfire({}),
 
@@ -10271,7 +10272,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [tierLoot("tier_chest", 3, 5), autoLoot("outfitWaterElem", 1)],
     }),
     chest_03cb: createRiverChest({
-        img: { sprite: "map-chest-03.img" },
+        img: { sprite: "map-chest-03cb.img" },
         loot: [tierLoot("tier_chest", 3, 5)],
     }),
     chest_03d: createRiverChest({
@@ -15277,6 +15278,24 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
         map: { displayType: "barrel_01" },
+    }),
+    cache_06cb: createCache({
+        mapObjects: [
+            {
+                type: "bush_07cb",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "loot_tier_leaf_pile",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+                inheritOri: false,
+            },
+        ],
+        map: { displayType: "bush_07cb" },
     }),
     cache_07f: createCache({
         mapObjects: [
@@ -21632,6 +21651,12 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         tea_house: "teahouse_01x",
         tree_small: "tree_10",
         tree_large: "tree_10",
+    }),
+    teahouse_complex_01cb: createTeaHouseComplex({
+        grass_color: 0x414c58,
+        tea_house: "teahouse_01",
+        tree_small: "tree_01cb",
+        tree_large: "tree_01cb",
     }),
     savannah_patch_01: (function <T extends BuildingDef>(e: Partial<T>): T {
         const t = {

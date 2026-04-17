@@ -116,7 +116,7 @@ const mapDef: PartialMapDef = {
                 crate_02: 4,
                 crate_03: 8,
                 bush_01cb: 78,
-                cache_06: 12,
+                cache_06cb: 12,
                 tree_01cb: 320,
                 hedgehog_01: 24,
                 container_01: 5,
@@ -153,7 +153,7 @@ const mapDef: PartialMapDef = {
                 chest_01cb: 1,
                 chest_03cb: { odds: 0.2 },
                 mil_crate_02: { odds: 0.25 },
-                teahouse_complex_01su: {
+                teahouse_complex_01cb: {
                     small: 1,
                     large: 2,
                 },
