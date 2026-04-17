@@ -12373,6 +12373,32 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             zIdx: 10,
         },
     }),
+    // River Stone Caches
+    stone_08: createRiverStone({
+        loot: [
+            tierLoot("tier_medical", 2, 3),
+            tierLoot("tier_surviv", 1, 2),
+            autoLoot("vss", 1),
+        ],
+        img: {
+            sprite: "map-stone-03.img",
+            residue: "",
+            tint: 0xe6e6e6,
+        },
+    }),
+    stone_08cb: createRiverStone({
+        loot: [
+            tierLoot("tier_medical", 2, 3),
+            tierLoot("tier_surviv", 1, 2),
+            autoLoot("svd", 1),
+            autoLoot("helmet02", 1),
+        ],
+        img: {
+            sprite: "map-stone-03cb.img",
+            residue: "",
+            tint: 0xe6e6e6,
+        },
+    }),
     stove_01: createControlPanel({
         obstacleType: "furniture",
         scale: {
@@ -15387,6 +15413,50 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
         map: { displayType: "bush_06" },
+    }),
+    cache_04: createCache({
+        terrain: {
+            grass: false,
+            beach: false,
+            river: { centerWeight: 0.5 },
+            riverShore: false,
+        },
+        mapObjects: [
+            {
+                type: "stone_08",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_caduceus_01",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+        ],
+    }),
+    cache_04cb: createCache({
+        terrain: {
+            grass: false,
+            beach: false,
+            river: { centerWeight: 0.5 },
+            riverShore: false,
+        },
+        mapObjects: [
+            {
+                type: "stone_08cb",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_caduceus_01",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+        ],
     }),
     cache_06: createCache({
         mapObjects: [
@@ -31998,6 +32068,18 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         height: 0,
         img: {
             sprite: "map-decal-initiative.img",
+            scale: 0.5,
+            alpha: 1,
+            tint: 0xffffff,
+            zIdx: 0,
+        },
+    },
+    decal_caduceus_01: {
+        type: "decal",
+        collision: collider.createCircle(v2.create(0, 0), 3),
+        height: 0,
+        img: {
+            sprite: "map-decal-caduceus.img",
             scale: 0.5,
             alpha: 1,
             tint: 0xffffff,

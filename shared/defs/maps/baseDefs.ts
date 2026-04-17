@@ -846,6 +846,7 @@ export const Main: MapDef = {
                 greenhouse_01: 1,
                 cache_01: 1,
                 cache_02: 1, // mosin tree
+                cache_04: 1, // river stone cache
                 cache_07: 1,
                 bunker_structure_01: { odds: 0.05 },
                 bunker_structure_02: 1,
