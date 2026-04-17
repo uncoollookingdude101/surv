@@ -893,6 +893,10 @@ export class Player extends BaseGameObject {
     wearingPan = false;
     healEffect = false;
     healEffectTicker = 0;
+
+    lastStandEffect = false;
+    lastStandEffectTicker = 0;
+
     // if hit by snowball, potato, or coconut: slowed down for "x" seconds
     frozenTicker = 0;
     frozen = false;
@@ -1191,6 +1195,9 @@ export class Player extends BaseGameObject {
             this.game.broadcastMsg(net.MsgType.RoleAnnouncement, msg);
         }
     }
+
+    combatStimsActive = false;
+    private _combatStimsTicker = 0;
 
     lastBreathActive = false;
     private _lastBreathTicker = 0;
@@ -1597,7 +1604,14 @@ export class Player extends BaseGameObject {
                 this.health += healAmount!.heal * dt;
 
                 if (this.boost > this.minBoost) {
-                    this.boost -= GameConfig.player.boostDecay * dt;
+                    if (this.hasPerk("last_stand")) {
+                        this.boost -=
+                            GameConfig.player.boostDecay *
+                            PerkProperties.last_stand.decayMult *
+                            dt;
+                    } else {
+                        this.boost -= GameConfig.player.boostDecay * dt;
+                    }
                 }
             }
         } else {
@@ -2143,6 +2157,15 @@ export class Player extends BaseGameObject {
             this.healEffect = true;
         }
 
+        const oldLastStandEffect = this.lastStandEffect;
+
+        if (this.lastStandEffectTicker > 0) {
+            this.lastStandEffect = true;
+            this.lastStandEffectTicker -= dt;
+        } else {
+            this.lastStandEffect = false;
+        }
+
         let zoomRegionZoom = lowestZoom;
         let insideNoZoomRegion = true;
         let insideSmoke = false;
@@ -2254,6 +2277,10 @@ export class Player extends BaseGameObject {
 
         // only dirty if healEffect changed from last tick to current tick (leaving or entering a heal region)
         if (oldHealEffect != this.healEffect) {
+            this.setDirty();
+        }
+
+        if (oldLastStandEffect != this.lastStandEffect) {
             this.setDirty();
         }
 
@@ -2855,7 +2882,30 @@ export class Player extends BaseGameObject {
             }
         }
 
-        if (this._health - finalDamage < 0) finalDamage = this.health;
+        if (this._health - finalDamage < 0) {
+            if (this.hasPerk("last_stand")) {
+                // Checks to see if the perk can mitigate the damage
+                const excessDamage = finalDamage - this._health + 1; // Amount to mitigate to survive on 1 health.
+                if (
+                    this.boost / PerkProperties.last_stand.conversionRate >=
+                    excessDamage
+                ) {
+                    this.boost -= excessDamage * PerkProperties.last_stand.conversionRate;
+                    finalDamage = this._health - 1;
+                    this.lastStandEffect = true;
+                    this.lastStandEffectTicker = 1;
+                    this.setDirty();
+                }
+                // If the perk cannot mitigate, kill the player
+                else {
+                    finalDamage = this.health;
+                }
+            }
+            // If the player lacks the perk, kill the player
+            else {
+                finalDamage = this.health;
+            }
+        }
 
         this.game.pluginManager.emit("playerDamage", { ...params, player: this });
 
@@ -2988,6 +3038,7 @@ export class Player extends BaseGameObject {
         this.animType = GameConfig.Anim.None;
         this.animSeq++;
         this.healEffect = false;
+        this.lastStandEffect = false;
         this.boostDirty = true;
         this.inventoryDirty = true;
         this.setDirty();

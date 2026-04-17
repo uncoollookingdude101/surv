@@ -52,6 +52,10 @@ export const PerkProperties = {
         scale: 0.2,
         healthRegen: 1, // per second
     },
+    last_stand: {
+        decayMult: 0.75, // Adrenaline decay multiplier
+        conversionRate: 2, // How much adrenaline used per health
+    },
     field_medic: {
         speedBoost: 1,
     },
@@ -271,6 +275,20 @@ export const PerkDefs: Record<string, PerkDef> = {
     },
     takedown: {
         name: "Takedown",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-takedown.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    last_stand: {
+        name: "Last Stand",
         type: "perk",
         lootImg: {
             sprite: "loot-perk-takedown.img",

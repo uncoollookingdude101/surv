@@ -78,6 +78,7 @@ export class Particle {
         parent: PIXI.Container | null,
         zOrd: number,
         valueAdjust: number,
+        tint?: number,
     ) {
         const def = ParticleDefs[type];
         this.active = true;
@@ -116,7 +117,7 @@ export class Particle {
         this.sprite.texture = PIXI.Texture.from(tex);
         this.sprite.visible = false;
         this.valueAdjust = def.ignoreValueAdjust ? 1 : valueAdjust;
-        this.setColor(getColorValue(def.color!));
+        this.setColor(tint !== undefined ? tint : getColorValue(def.color!));
 
         if (SDK.disableBloodParticles() && type == "bloodSplat") {
             this.sprite.renderable = false;
@@ -151,6 +152,7 @@ interface EmitterOptions {
     radius?: number;
     rateMult?: number;
     parent?: PIXI.Container | null;
+    color?: number;
 }
 
 export class Emitter {
@@ -170,6 +172,7 @@ export class Emitter {
     alpha!: number;
     rateMult!: number;
     zOrd!: number;
+    color?: number;
 
     init(type: string, options = {} as EmitterOptions) {
         const def = EmitterDefs[type];
@@ -189,6 +192,7 @@ export class Emitter {
         this.parent = options.parent || null;
         this.alpha = 1;
         this.rateMult = options.rateMult !== undefined ? options.rateMult : 1;
+        this.color = options.color;
         const partDef = ParticleDefs[def.particle];
         this.zOrd =
             def.zOrd !== undefined
@@ -241,6 +245,7 @@ export class ParticleBarn {
         rot?: number,
         parent?: PIXI.Container | null,
         zOrd?: number,
+        tint?: number,
     ) {
         let particle = null;
         for (let i = 0; i < this.particles.length; i++) {
@@ -268,6 +273,7 @@ export class ParticleBarn {
             parent!,
             zOrd,
             this.valueAdjust,
+            tint,
         );
         return particle;
     }
@@ -329,6 +335,9 @@ export class ParticleBarn {
                         e.parent,
                         e.zOrd,
                     );
+                    if (e.color !== undefined) {
+                        particle.setColor(e.color);
+                    }
                     particle.emitterIdx = i;
                     let rate = getRangeValue(def.rate);
                     if (def.maxRate) {

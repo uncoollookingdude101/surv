@@ -488,6 +488,7 @@ export const Main: MapDef = {
             { name: "scavenger_adv", count: 1, weight: 1 },
             { name: "explosive", count: 1, weight: 1 },
             { name: "splinter", count: 1, weight: 1 },
+            { name: "last_stand", count: 1, weight: 1 },
         ],
         tier_scavenger_adv: [
             { name: "m9", count: 1, weight: 1 },
