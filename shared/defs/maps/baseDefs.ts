@@ -449,7 +449,8 @@ export const Main: MapDef = {
         ],
         tier_guns_common_tank: [
             { name: "dp28", count: 1, weight: 1 },
-            { name: "qbb97", count: 1, weight: 0.2 },
+            { name: "imbel", count: 1, weight: 0.5 },
+            { name: "qbb97", count: 1, weight: 0.25 },
             { name: "bar", count: 1, weight: 0.5 },
         ],
         tier_guns_common_classless: [
@@ -477,7 +478,8 @@ export const Main: MapDef = {
             { name: "awc", count: 1, weight: 0.05 },
         ],
         tier_guns_rare_demo: [
-            { name: "saiga", count: 1, weight: 1 },
+            { name: "saiga", count: 1, weight: 0.7 },
+            { name: "spas16", count: 1, weight: 0.2 },
             { name: "usas", count: 1, weight: 0.1 },
             { name: "m1014", count: 1, weight: 0.1 },
         ],
@@ -517,6 +519,10 @@ export const Main: MapDef = {
             { name: "explosive", count: 1, weight: 1 },
             { name: "splinter", count: 1, weight: 1 },
             { name: "last_stand", count: 1, weight: 1 },
+        ],
+        tier_throwables_demo: [
+            { name: "frag", count: 3, weight: 1 },
+            { name: "mirv", count: 2, weight: 1 },
         ],
         tier_scavenger_adv: [
             { name: "m9", count: 1, weight: 1 },
