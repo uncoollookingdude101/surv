@@ -223,7 +223,7 @@ Turkey Cache Changes (2025/11/01):
 0.2.23 (Spring Woods) (2026/03/24):
 + Tier Airdrop Melee: Adjusted Stonehammer weight (1 -> 6) (applies to the Ice Axe in Winter Woods).
 
-0.3.0 (Potato vs Tomato) (2026/04/01):
+0.2.3 (Potato vs Tomato) (2026/04/01):
 + Added Faction-specific Stone & Barrel cache drops.
 ~ Adjusted the Faction tree cache drops.
 
@@ -248,3 +248,12 @@ Turkey Cache Changes (2025/11/01):
 + Tier Airdrop Rare: Added Groza-S, SPAS-16, SV-98, Dual P30L, & Dual DEagle 50 (weights of 3, 2, 2, 0.3, & 0.3, respectively).
 ~ Tier Airdrop Uncommon: Adjusted Vector, VSS, M39 EMR, Mk 12 SPR, Saiga-12, Scout Elite, BAR, SCAR-H, Mosin, & QBB weights (1 -> 2, 2.5 -> 2, 2.5 -> 2, 2.5 -> 2, 1 -> 2, 2.5 -> 2, 1 -> 2, 0.75 -> 1.5, 1.5 -> 1, & 1.5 -> 1, respectively).
 + Tier Airdrop Uncommon: Added Dual OTs-38 & Garand (weights of 1 & 0.5, respectively).
+
+0.3.0 (Cobalt & Pass) (2026/04/17):
++ Tank Common: Added IMD-2 (weight of 0.5).
+~ Tank Common: Adjusted QBB-97 weight (0.2 --> 0.25).
++ Demo Rare: Added SPAS-16 (weight of 0.2).
+~ Demo Rare: Adjusted Saiga-12 weight (1 --> 0.7).
+~ Demo Crate: Replaced MIRV (6x) with Tier Throwable Demo (3-4).
++ Tier CLass Crate Mythic: Added Indomitable Spirit (weight of 1).
+~ Rare Demo Crate: Replaced Airdrop Throwable (1) with Tier Throwable Demo (4-5).
