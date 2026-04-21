@@ -62,6 +62,7 @@ const mapDef: PartialMapDef = {
         tier_mansion_floor: [{ name: "tier_outfits", count: 1, weight: 1 }],
         tier_vault_floor: [{ name: "tier_outfits", count: 1, weight: 1 }],
         tier_police_floor: [{ name: "tier_outfits", count: 1, weight: 1 }],
+        tier_fragtastic: [{ name: "", count: 1, weight: 1 }],
         tier_conch: [{ name: "tier_outfits", count: 1, weight: 1 }],
         tier_noir_outfit: [{ name: "tier_outfits", count: 1, weight: 1 }],
         tier_khaki_outfit: [{ name: "tier_outfits", count: 1, weight: 1 }],

@@ -144,19 +144,18 @@ export class ExplosionBarn {
                 ? explosion.damageParams.source
                 : undefined;
 
-        const shrapnelSpeedMult = sourcePlayer?.hasPerk?.("amped_explosives")
+        const hasAmped = sourcePlayer?.hasPerk?.("amped_explosives");
+
+        const shrapnelSpeedMult = hasAmped
             ? PerkProperties.amped_explosives.shrapnelSpeedMult
             : 1;
-
-        const shrapnelDamageMult = sourcePlayer?.hasPerk?.("amped_explosives")
+        const shrapnelDamageMult = hasAmped
             ? PerkProperties.amped_explosives.shrapnelDamageMult
             : 1;
-
-        const shrapnelCountMult = sourcePlayer?.hasPerk?.("amped_explosives")
+        const shrapnelCountMult = hasAmped
             ? PerkProperties.amped_explosives.shrapnelCountMult
             : 1;
 
-        const shouldApplyChambered = sourcePlayer?.hasPerk?.("amped_explosives");
         const shrapnelCount = Math.ceil((def.shrapnelCount ?? 0) * shrapnelCountMult);
 
         const bulletDef = GameObjectDefs[def.shrapnelType];
@@ -171,7 +170,7 @@ export class ExplosionBarn {
                     shotFx: false,
                     damageMult: shrapnelDamageMult,
                     speedMult: shrapnelSpeedMult,
-                    trailSaturated: shouldApplyChambered,
+                    trailSaturated: hasAmped,
                     varianceT: Math.random(),
                     gameSourceType: explosion.damageParams.gameSourceType!,
                     mapSourceType: explosion.damageParams.mapSourceType,

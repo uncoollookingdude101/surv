@@ -280,6 +280,7 @@ export class LoadoutDisplay {
             actionItem: options.actionItem || "",
             wearingPan: false,
             healEffect: false,
+            lastStandEffect: false,
             frozen: false,
             frozenOri: 0,
             frozenType: "",

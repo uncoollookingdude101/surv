@@ -1210,7 +1210,9 @@ export class WeaponManager {
                 ) / GameConfig.player.throwableMaxMouseDist;
         }
 
-        const throwSpeedMult = this.player.hasPerk("amped_explosives")
+        const isAmped = this.player.hasPerk("amped_explosives");
+
+        const throwSpeedMult = isAmped
             ? PerkProperties.amped_explosives.throwableSpeedMult
             : 1;
 
@@ -1259,7 +1261,7 @@ export class WeaponManager {
 
         let dir = v2.copy(this.player.dir);
 
-        const throwRangeMult = this.player.hasPerk("amped_explosives")
+        const throwRangeMult = isAmped
             ? PerkProperties.amped_explosives.throwableRangeMult
             : 1;
 
