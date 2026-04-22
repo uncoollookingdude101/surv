@@ -19513,6 +19513,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         material: "metal",
         extents: v2.create(1.5, 14.5),
     }),
+    metal_wall_ext_thicker_30: createWall({
+        material: "metal",
+        extents: v2.create(1.5, 0.75),
+    }),
     metal_wall_ext_thicker_32: createWall({
         material: "metal",
         extents: v2.create(1.5, 16),
@@ -30417,13 +30421,13 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         mapObjects: [
             {
                 type: "bunker_twins_stairs_01",
-                pos: v2.create(5, 13.5),
+                pos: v2.create(1, 13.5),
                 scale: 1,
                 ori: 0,
             },
             {
                 type: "bunker_twins_stairs_01",
-                pos: v2.create(-5, -13.5),
+                pos: v2.create(-1, -13.5),
                 scale: 1,
                 ori: 2,
             },
@@ -30516,25 +30520,31 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         mapObjects: [
             {
                 type: "concrete_wall_ext_6",
-                pos: v2.create(5, 17.5),
+                pos: v2.create(1, 17.5),
                 scale: 1,
                 ori: 1,
             },
             {
                 type: "metal_wall_ext_thicker_8",
-                pos: v2.create(1.5, 14),
+                pos: v2.create(-2.5, 14),
                 scale: 1,
                 ori: 0,
             },
             {
                 type: "metal_wall_ext_thicker_8",
-                pos: v2.create(8.5, 14),
+                pos: v2.create(4.5, 14),
                 scale: 1,
                 ori: 0,
             },
             {
                 type: "metal_wall_ext_thicker_15",
-                pos: v2.create(-7.5, 11.5),
+                pos: v2.create(-11.5, 11.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_30",
+                pos: v2.create(6.75, 11.5),
                 scale: 1,
                 ori: 1,
             },
@@ -30552,25 +30562,31 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "concrete_wall_ext_6",
-                pos: v2.create(-5, -17.5),
+                pos: v2.create(-1, -17.5),
                 scale: 1,
                 ori: 1,
             },
             {
                 type: "metal_wall_ext_thicker_8",
-                pos: v2.create(-1.5, -14),
+                pos: v2.create(2.5, -14),
                 scale: 1,
                 ori: 0,
             },
             {
                 type: "metal_wall_ext_thicker_8",
-                pos: v2.create(-8.5, -14),
+                pos: v2.create(-4.5, -14),
                 scale: 1,
                 ori: 0,
             },
             {
                 type: "metal_wall_ext_thicker_15",
-                pos: v2.create(7.5, -11.5),
+                pos: v2.create(11.5, -11.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_30",
+                pos: v2.create(-6.75, -11.5),
                 scale: 1,
                 ori: 1,
             },
@@ -30624,13 +30640,13 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "lab_door_locked_01",
-                pos: v2.create(3, 10.5),
+                pos: v2.create(-1, 10.5),
                 scale: 1,
                 ori: 3,
             },
             {
                 type: "lab_door_locked_01",
-                pos: v2.create(-3, -10.5),
+                pos: v2.create(1, -10.5),
                 scale: 1,
                 ori: 1,
             },
@@ -30696,7 +30712,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "recorder_14",
-                pos: v2.create(0.5, 9),
+                pos: v2.create(-2.5, 8.75),
                 scale: 1,
                 ori: 1,
             },
@@ -30769,7 +30785,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "switch_01o",
-                pos: v2.create(-2.5, 10),
+                pos: v2.create(5.5, 10),
                 scale: 1,
                 ori: 0,
                 puzzlePiece: "tank",
@@ -30879,8 +30895,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         terrain: { grass: true, beach: false },
         ori: 0,
         mapObstacleBounds: [
-            collider.createAabbExtents(v2.create(5, 15.4), v2.create(3.5, 6)),
-            collider.createAabbExtents(v2.create(-5, -15.4), v2.create(3.5, 6)),
+            collider.createAabbExtents(v2.create(1, 15.4), v2.create(3.5, 6)),
+            collider.createAabbExtents(v2.create(-1, -15.4), v2.create(3.5, 6)),
             collider.createAabbExtents(v2.create(20.5, 0), v2.create(6, 3.5)),
             collider.createAabbExtents(v2.create(-20.5, 0), v2.create(6, 3.5)),
             collider.createAabbExtents(v2.create(8, -12.25), v2.create(6, 6)),
@@ -30902,14 +30918,14 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         stairs: [
             {
                 collision: collider.createAabbExtents(
-                    v2.create(5, 14.4),
+                    v2.create(1, 14.4),
                     v2.create(2, 2.6),
                 ),
                 downDir: v2.create(0, -1),
             },
             {
                 collision: collider.createAabbExtents(
-                    v2.create(-5, -14.4),
+                    v2.create(-1, -14.4),
                     v2.create(2, 2.6),
                 ),
                 downDir: v2.create(0, 1),
