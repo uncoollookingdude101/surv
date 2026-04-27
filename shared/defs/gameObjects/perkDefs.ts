@@ -52,7 +52,7 @@ export const PerkProperties = {
         scale: 0.2,
         healthRegen: 1, // per second
     },
-    last_stand: {
+    lifeline: {
         decayMult: 0.75, // Adrenaline decay multiplier
         conversionRate: 2, // How much adrenaline used per health
     },
@@ -304,11 +304,11 @@ export const PerkDefs: Record<string, PerkDef> = {
             pickup: "perk_pickup_01",
         },
     },
-    last_stand: {
-        name: "Last Stand",
+    lifeline: {
+        name: "Indomitable",
         type: "perk",
         lootImg: {
-            sprite: "loot-perk-takedown.img",
+            sprite: "loot-perk-lifeline.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,
@@ -336,7 +336,7 @@ export const PerkDefs: Record<string, PerkDef> = {
         name: "Combat Stimulants",
         type: "perk",
         lootImg: {
-            sprite: "loot-perk-field-medic.img", // TODO: Make SVG
+            sprite: "loot-perk-combat-stims.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

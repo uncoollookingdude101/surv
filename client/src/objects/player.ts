@@ -1237,6 +1237,7 @@ export class Player implements AbstractObject {
                 color: 0x4da6ff,
                 pos: this.m_pos,
                 layer: this.layer,
+                rateMult: 0.33,
             });
         } else if (!this.m_netData.m_adrenalineEffect && this.adrenalineEmitter) {
             this.adrenalineEmitter.stop();

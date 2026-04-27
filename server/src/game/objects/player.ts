@@ -1612,10 +1612,10 @@ export class Player extends BaseGameObject {
                 this.health += healAmount!.heal * dt;
 
                 if (this.boost > this.minBoost) {
-                    if (this.hasPerk("last_stand")) {
+                    if (this.hasPerk("lifeline")) {
                         this.boost -=
                             GameConfig.player.boostDecay *
-                            PerkProperties.last_stand.decayMult *
+                            PerkProperties.lifeline.decayMult *
                             dt;
                     } else {
                         this.boost -= GameConfig.player.boostDecay * dt;
@@ -2891,26 +2891,21 @@ export class Player extends BaseGameObject {
         }
 
         if (this._health - finalDamage < 0) {
-            if (this.hasPerk("last_stand")) {
+            if (this.hasPerk("lifeline")) {
                 // Checks to see if the perk can mitigate the damage
                 const excessDamage = finalDamage - this._health + 1; // Amount to mitigate to survive on 1 health.
-                if (
-                    this.boost / PerkProperties.last_stand.conversionRate >=
-                    excessDamage
-                ) {
-                    this.boost -= excessDamage * PerkProperties.last_stand.conversionRate;
+                if (this.boost / PerkProperties.lifeline.conversionRate >= excessDamage) {
+                    this.boost -= excessDamage * PerkProperties.lifeline.conversionRate;
                     finalDamage = this._health - 1;
                     this.lastStandEffect = true;
                     this.lastStandEffectTicker = 1;
                     this.setDirty();
-                }
-                // If the perk cannot mitigate, kill the player
-                else {
+                } else {
+                    // If the perk cannot mitigate, kill the player
                     finalDamage = this.health;
                 }
-            }
-            // If the player lacks the perk, kill the player
-            else {
+            } else {
+                // If the player lacks the perk, kill the player
                 finalDamage = this.health;
             }
         }
