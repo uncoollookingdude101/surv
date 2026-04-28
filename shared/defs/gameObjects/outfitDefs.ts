@@ -1108,6 +1108,26 @@ const SkinDefs: Record<string, OutfitDef> = {
             tint: 0xffffff,
         },
     }),
+    outfitEvent: defineOutfitSkin("outfitBase", {
+        name: "Event Winnr",
+        rarity: Rarity.Rare,
+        lore: "Shining beacons of the community.",
+        noDropOnDeath: true,
+        skinImg: {
+            baseTint: 0xffffff,
+            baseSprite: "player-base-outfitEvent.img",
+            handTint: 0xad7aeb,
+            handSprite: "player-hands-01.img",
+            footTint: 0xad7aeb,
+            footSprite: "player-feet-02.img",
+            backpackTint: 0xad7aeb,
+            backpackSprite: "player-circle-base-02.img",
+        },
+        lootImg: {
+            sprite: "loot-shirt-outfitEvent.img",
+            tint: 0xffffff,
+        },
+    }),
     outfitBarrel: defineOutfitSkin("outfitBase", {
         name: "Barrel Costume",
         obstacleType: "barrel_01",
