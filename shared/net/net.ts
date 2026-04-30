@@ -360,6 +360,7 @@ export enum PickupMsgType {
     BetterItemEquipped,
     Success,
     GunCannotFire,
+    MaxPerks,
 }
 
 export class UpdatePassMsg {

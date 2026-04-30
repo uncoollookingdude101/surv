@@ -19,6 +19,7 @@ import { Editor } from "./debug/editor";
 
 import { device } from "./device";
 import { EmoteBarn } from "./emote";
+import { errorLogManager } from "./errorLogs";
 import { Gas } from "./gas";
 import { helpers } from "./helpers";
 import { type InputHandler, Key } from "./input";
@@ -415,6 +416,9 @@ export class Game {
         let debug: DebugRenderOpts;
         if (IS_DEV) {
             debug = this.m_config.get("debugRenderer")!;
+            dt *= this.editor.toolParams.gameSpeedEnabled
+                ? this.editor.toolParams.gameSpeed
+                : 1;
         } else {
             debug = {} as DebugRenderOpts;
         }
@@ -1022,7 +1026,7 @@ export class Game {
     m_render(dt: number, debug: DebugRenderOpts) {
         const grassColor = this.m_map.mapLoaded
             ? this.m_map.getMapDef().biome.colors.grass
-            : 8433481;
+            : 0x80af49;
         this.m_pixi.renderer.background.color = grassColor;
         // Module rendering
         this.m_playerBarn.m_render(this.m_camera, debug);
@@ -1149,6 +1153,19 @@ export class Game {
         // Update partial objects
         for (let i = 0; i < msg.partObjects.length; i++) {
             const obj = msg.partObjects[i];
+
+            const clientType = this.m_objectCreator.m_getObjById(obj.__id)?.__type ?? 0;
+            if (obj.__type !== clientType) {
+                const errString = `updateObjPart: type mismatch, received ${obj.__type}, client has ${clientType};`;
+                errorLogManager.logError(errString, {
+                    id: obj.__id,
+                    ids: Object.keys(this.m_objectCreator.m_idToObj),
+                    msg,
+                });
+                console.error(errString);
+                continue;
+            }
+
             this.m_objectCreator.m_updateObjPart(obj.__id, obj, ctx);
         }
         this.m_spectating = this.m_activeId != this.m_localId;

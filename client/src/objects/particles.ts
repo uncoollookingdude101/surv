@@ -1173,6 +1173,82 @@ const ParticleDefs: Record<string, ParticleDef> = {
             return util.rgbToInt(util.hsvToRgb(0.075, 0.43, util.random(0.48, 0.5)));
         },
     },
+    tomatoChip_01: {
+        image: ["part-spark-02.img"],
+        life: 0.5,
+        drag: new Range(1, 10),
+        rotVel: 0,
+        scale: {
+            start: new Range(0.04, 0.08),
+            end: new Range(0.01, 0.02),
+            lerp: new Range(0, 1),
+        },
+        alpha: {
+            start: 1,
+            end: 0,
+            lerp: new Range(0.95, 1),
+        },
+        color: function () {
+            return util.rgbToInt(util.hsvToRgb(0, util.random(0.43, 0.64), 0.7));
+        },
+    },
+    tomatoChip_02: {
+        image: ["part-spark-02.img"],
+        life: 0.5,
+        drag: new Range(1, 10),
+        rotVel: 0,
+        scale: {
+            start: new Range(0.04, 0.08),
+            end: new Range(0.01, 0.02),
+            lerp: new Range(0, 1),
+        },
+        alpha: {
+            start: 1,
+            end: 0,
+            lerp: new Range(0.95, 1),
+        },
+        color: function () {
+            return util.rgbToInt(util.hsvToRgb(0.26, util.random(0.53, 0.63), 0.55));
+        },
+    },
+    tomatoBreak_01: {
+        image: ["part-pumpkin-01.img"],
+        life: new Range(0.8, 1),
+        drag: new Range(1, 5),
+        rotVel: 0,
+        scale: {
+            start: new Range(0.07, 0.12),
+            end: new Range(0.05, 0.1),
+            lerp: new Range(0, 1),
+        },
+        alpha: {
+            start: 1,
+            end: 0,
+            lerp: new Range(0.9, 1),
+        },
+        color: function () {
+            return util.rgbToInt(util.hsvToRgb(0, util.random(0.43, 0.64), 0.7));
+        },
+    },
+    tomatoBreak_02: {
+        image: ["part-pumpkin-01.img"],
+        life: new Range(0.8, 1),
+        drag: new Range(1, 5),
+        rotVel: 0,
+        scale: {
+            start: new Range(0.07, 0.12),
+            end: new Range(0.05, 0.1),
+            lerp: new Range(0, 1),
+        },
+        alpha: {
+            start: 1,
+            end: 0,
+            lerp: new Range(0.9, 1),
+        },
+        color: function () {
+            return util.rgbToInt(util.hsvToRgb(0.26, util.random(0.53, 0.63), 0.55));
+        },
+    },
     pumpkinChip: {
         image: ["part-spark-02.img"],
         life: 0.5,
@@ -2591,6 +2667,30 @@ const ParticleDefs: Record<string, ParticleDef> = {
             return util.rgbToInt(util.hsvToRgb(0, 0, util.random(0.9, 0.95)));
         },
     },
+    potato_factions: {
+        image: ["part-potato-02.img", "part-tomato-02.img"],
+        life: new Range(10, 15),
+        drag: new Range(0, 0),
+        rotVel: new Range(Math.PI * 0.25, Math.PI * 0.5),
+        scale: {
+            start: new Range(0.13, 0.15),
+            end: new Range(0.08, 0.11),
+            lerp: new Range(0, 1),
+        },
+        alpha: {
+            start: 1,
+            end: 0,
+            lerp: new Range(0.9, 1),
+        },
+        alphaIn: {
+            start: 0,
+            end: 1,
+            lerp: new Range(0, 0.05),
+        },
+        color: function () {
+            return util.rgbToInt(util.hsvToRgb(0, 0, util.random(0.9, 0.95)));
+        },
+    },
     snow: {
         image: ["part-snow-01.img"],
         life: new Range(10, 15),
@@ -2672,6 +2772,25 @@ const ParticleDefs: Record<string, ParticleDef> = {
     },
     coconut_impact: {
         image: ["part-coconut-01.img", "part-coconut-02.img", "part-coconut-03.img"],
+        life: new Range(0.5, 1),
+        drag: new Range(0, 0),
+        rotVel: new Range(Math.PI * 0.25, Math.PI * 0.5),
+        scale: {
+            start: new Range(0.13, 0.23),
+            end: new Range(0.07, 0.14),
+            lerp: new Range(0, 1),
+        },
+        alpha: {
+            start: 1,
+            end: 0,
+            lerp: new Range(0.9, 1),
+        },
+        color: function () {
+            return util.rgbToInt(util.hsvToRgb(0, 0, util.random(0.9, 0.95)));
+        },
+    },
+    tomato_impact: {
+        image: ["part-tomato-01.img"],
         life: new Range(0.5, 1),
         drag: new Range(0, 0),
         rotVel: new Range(Math.PI * 0.25, Math.PI * 0.5),
@@ -3179,6 +3298,16 @@ const EmitterDefs: Record<string, EmitterDef> = {
     },
     falling_potato: {
         particle: "potato",
+        rate: new Range(0.2, 0.24),
+        radius: 120,
+        speed: new Range(2, 3),
+        angle: Math.PI * 0.2,
+        rot: new Range(0, Math.PI * 2),
+        maxCount: Number.MAX_VALUE,
+        zOrd: 999,
+    },
+    falling_pvt: {
+        particle: "potato_factions",
         rate: new Range(0.2, 0.24),
         radius: 120,
         speed: new Range(2, 3),

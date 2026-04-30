@@ -255,9 +255,11 @@ class Bot {
                 console.log(
                     `Bot ${this.id} ${msg.gameOver ? "won" : "died"} | kills: ${msg.playerStats[0].kills} | rank: ${msg.teamRank}`,
                 );
-                this.disconnect = true;
-                this.connected = false;
-                this.ws.close();
+                if (!msg.gameOver) {
+                    this.disconnect = true;
+                    this.connected = false;
+                    this.ws.close();
+                }
                 break;
             }
             case net.MsgType.Pickup: {

@@ -222,10 +222,6 @@ export const Main: MapDef = {
             { name: "", count: 1, weight: 1 },
             { name: "outfitFragtastic", count: 1, weight: 0.15 },
         ],
-        tier_turkey_outfit: [
-            { name: "", count: 1, weight: 1 },
-            { name: "outfitTurkey", count: 1, weight: 0.05 },
-        ],
         tier_chrys_01: [{ name: "outfitImperial", count: 1, weight: 1 }],
         tier_chrys_02: [{ name: "katana", count: 1, weight: 1 }],
         tier_chrys_03: [
@@ -241,8 +237,8 @@ export const Main: MapDef = {
         ],
         tier_crow_case_melee: [{ name: "crowbar", count: 1, weight: 1 }],
         tier_crow_case_skin: [
-            { name: "outfitCarbonFiber", count: 1, weight: 1 },
-            { name: "outfitDarkGloves", count: 1, weight: 1 },
+            { name: "tier_outfits", count: 1, weight: 0.8 },
+            { name: "outfitVerde", count: 1, weight: 0.2 },
         ],
         tier_eye_02: [{ name: "stonehammer", count: 1, weight: 1 }],
         tier_eye_block: [
@@ -357,10 +353,7 @@ export const Main: MapDef = {
             { name: "outfitCoral", count: 1, weight: 1 },
         ],
         tier_noir_outfit: [{ name: "outfitNoir", count: 1, weight: 1 }],
-        tier_khaki_outfit: [
-            { name: "outfitKhaki", count: 1, weight: 20 },
-            { name: "outfitParmaPrestige", count: 1, weight: 1 },
-        ],
+        tier_khaki_outfit: [{ name: "outfitKhaki", count: 1, weight: 1 }],
         tier_pirate_melee: [{ name: "hook", count: 1, weight: 1 }],
         tier_hatchet: [
             { name: "vector", count: 1, weight: 0.4 },
@@ -426,15 +419,11 @@ export const Main: MapDef = {
         ],
         tier_forest_helmet: [{ name: "helmet03_forest", count: 1, weight: 1 }],
         tier_outfits: [
-            { name: "outfitCobaltShell", count: 1, weight: 0.2 }, // ?
-            { name: "outfitRed", count: 1, weight: 0.2 }, // ?
-            { name: "outfitWhite", count: 1, weight: 0.2 }, // ?
-            { name: "outfitKeyLime", count: 1, weight: 0.15 }, // ?
-            { name: "outfitWoodland", count: 1, weight: 0.1 }, // ?
-            { name: "outfitCarbonFiber", count: 1, weight: 0.1 }, // ?
-            { name: "outfitDarkGloves", count: 1, weight: 0.1 }, // ?
-            { name: "outfitCamo", count: 1, weight: 0.1 }, // ?
-            { name: "outfitGhillie", count: 1, weight: 0.05 }, // ?
+            { name: "outfitCobaltShell", count: 1, weight: 0.3 },
+            { name: "outfitKeyLime", count: 1, weight: 0.25 },
+            { name: "outfitWoodland", count: 1, weight: 0.3 },
+            { name: "outfitCamo", count: 1, weight: 0.2 },
+            { name: "outfitGhillie", count: 1, weight: 0.05 },
         ],
         tier_outfits_halloween: [
             { name: "outfitBarrel", count: 1, weight: 1 },
@@ -608,12 +597,12 @@ export const Main: MapDef = {
             { name: "ots38_dual", count: 1, weight: 4.5 },
         ],
         tier_airdrop_mythic: [
-            { name: "scarssr", count: 1, weight: 1 }, // ?
-            { name: "usas", count: 1, weight: 0.5 }, // ?
-            { name: "p30l_dual", count: 1, weight: 1 }, // ?
-            { name: "awc", count: 1, weight: 0.1 }, // ?
-            { name: "pkp", count: 1, weight: 0.3 }, // ?
-            { name: "m249", count: 1, weight: 0.3 }, // ?
+            { name: "usas", count: 1, weight: 1 },
+            { name: "scarssr", count: 1, weight: 1 },
+            { name: "sv98", count: 1, weight: 1 },
+            { name: "awc", count: 1, weight: 0.75 },
+            { name: "pkp", count: 1, weight: 1 },
+            { name: "m249", count: 1, weight: 1 },
             { name: "pkm", count: 1, weight: 0.25 },
         ],
         tier_airdrop_perk: [{ name: "", count: 1, weight: 1 }],
@@ -721,9 +710,6 @@ export const Main: MapDef = {
             { name: "outfitVerde", count: 1, weight: 1 },
             { name: "outfitWoodland", count: 1, weight: 1 },
             { name: "outfitKeyLime", count: 1, weight: 1 },
-            { name: "outfitWhite", count: 1, weight: 1 },
-            { name: "outfitCarbonFiber", count: 1, weight: 1 },
-            { name: "outfitDarkGloves", count: 1, weight: 1 },
             { name: "outfitCamo", count: 1, weight: 1 },
         ],
         tier_airdrop_faction_outfits: [{ name: "outfitGhillie", count: 1, weight: 1 }],
@@ -758,6 +744,28 @@ export const Main: MapDef = {
             { name: "coconut_smg", count: 1, weight: 1 },
         ],
         tier_chest_04b: [{ name: "glock_dual", count: 1, weight: 1 }],
+        tier_airdrop_potato: [
+            { name: "potato_cannon", count: 1, weight: 1 },
+            { name: "potato_smg", count: 1, weight: 1 },
+            { name: "potato_lmg", count: 1, weight: 1 },
+        ],
+        tier_dev_guns: [
+            { name: "m1100", count: 1, weight: 11 },
+            { name: "m9", count: 1, weight: 9 },
+            { name: "m1911", count: 1, weight: 3 },
+            { name: "garand", count: 1, weight: 1 },
+            { name: "m9_cursed", count: 1, weight: 0.1 },
+        ],
+        tier_dev_melee: [
+            { name: "bowie_frontier", count: 1, weight: 1 },
+            { name: "bowie_vintage", count: 1, weight: 1 },
+            { name: "huntsman_burnished", count: 1, weight: 1 },
+            { name: "huntsman_rugged", count: 1, weight: 1 },
+            { name: "bayonet_woodland", count: 1, weight: 1 },
+            { name: "bayonet_rugged", count: 1, weight: 1 },
+            { name: "karambit_drowned", count: 1, weight: 1 },
+            { name: "karambit_prismatic", count: 1, weight: 1 },
+        ],
         tier_knives: [{ name: "", count: 1, weight: 1 }],
     },
     mapGen: {

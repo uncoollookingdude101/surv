@@ -14,14 +14,14 @@ type BasicRoleWeapon = {
  */
 type RoleWeapon = BasicRoleWeapon | ((teamcolor: TeamColor) => BasicRoleWeapon);
 
-function getTeamWeapon(
+export function getTeamWeapon(
     colorToWeaponMap: Record<TeamColor, BasicRoleWeapon>,
     teamcolor: TeamColor,
 ): BasicRoleWeapon {
     return colorToWeaponMap[teamcolor];
 }
 
-function getTeamHelmet(
+export function getTeamHelmet(
     colorToHelmetMap: Record<TeamColor, string>,
     teamcolor: TeamColor,
 ) {
@@ -71,7 +71,7 @@ export interface RoleDef {
     color?: number;
 }
 
-function createDefaultItems(e: DeepPartial<DefaultItems>): DefaultItems {
+export function createDefaultItems(e: DeepPartial<DefaultItems>): DefaultItems {
     const defaultItems: DefaultItems = {
         weapons: [
             { type: "", ammo: 0 },

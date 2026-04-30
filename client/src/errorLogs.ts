@@ -23,15 +23,7 @@ class ErrorLog {
         return Math.random() <= 0.01;
     }
 
-    private store(
-        loc: string,
-        data:
-            | {
-                  parent: string;
-                  child: unknown;
-              }
-            | { error: string },
-    ) {
+    private store(loc: string, data: unknown) {
         if (!this.enabled) return;
 
         this.requests++;
@@ -48,7 +40,7 @@ class ErrorLog {
             },
             body: JSON.stringify({
                 loc,
-                ...data,
+                data,
             }),
         });
     }
@@ -64,13 +56,13 @@ class ErrorLog {
 
     logWindowOnError(error: object) {
         if (this.errorLogCount < 2) {
-            this.store("windowOnError", { error: JSON.stringify(error) });
+            this.store("windowOnError", error);
             this.errorLogCount++;
         }
     }
 
-    logError(error: string) {
-        this.store("errorLog", { error });
+    logError(error: string, data?: unknown) {
+        this.store("errorLog", { error, data });
     }
 }
 

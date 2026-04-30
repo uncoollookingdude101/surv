@@ -88,6 +88,7 @@ export interface ObjectsFullData {
 
         frozen: boolean;
         frozenOri: number;
+        frozenType: string;
 
         hasteType: Exclude<HasteType, HasteType.Count>;
         hasteSeq: number;
@@ -214,6 +215,7 @@ export const ObjectSerializeFns: {
             s.writeBoolean(data.frozen);
             if (data.frozen) {
                 s.writeBits(data.frozenOri, 2);
+                s.writeGameType(data.frozenType);
             }
 
             s.writeBoolean(data.hasteType !== HasteType.None);
@@ -279,7 +281,12 @@ export const ObjectSerializeFns: {
             data.healEffect = s.readBoolean();
 
             data.frozen = s.readBoolean();
-            data.frozenOri = data.frozen ? s.readBits(2) : 0;
+            data.frozenOri = 0;
+            data.frozenType = "";
+            if (data.frozen) {
+                data.frozenOri = s.readBits(2);
+                data.frozenType = s.readGameType();
+            }
 
             data.hasteType = HasteType.None;
             data.hasteSeq = -1;

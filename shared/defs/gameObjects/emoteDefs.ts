@@ -1025,6 +1025,16 @@ export const EmotesDefs: Record<string, EmoteDef> = {
         teamOnly: false,
         category: EmoteCategory.Food,
     },
+    emote_tomato: {
+        type: "emote",
+        name: "Tomato",
+        rarity: Rarity.Common,
+        texture: "tomato.img",
+        sound: "emote_01",
+        channel: "ui",
+        teamOnly: false,
+        category: EmoteCategory.Food,
+    },
     emote_cake: {
         type: "emote",
         name: "Cake",

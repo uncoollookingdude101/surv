@@ -1,5 +1,6 @@
 import type { Vec2 } from "../utils/v2";
 import { Airstrike } from "./maps/airstrike";
+import type { RoleDef } from "./gameObjects/roleDefs";
 import { Main } from "./maps/baseDefs";
 import { Beach } from "./maps/beachDefs";
 import { Birthday } from "./maps/birthdayDefs";
@@ -8,6 +9,7 @@ import { Desert } from "./maps/desertDefs";
 import { Faction2 } from "./maps/faction2Defs";
 import { Faction } from "./maps/factionDefs";
 import { Flare } from "./maps/flareDefs";
+import { factionPotato } from "./maps/factionPotatoDefs";
 import { Halloween } from "./maps/halloweenDefs";
 import { HidenSeek } from "./maps/hidenseek";
 import { MainSpring } from "./maps/mainSpringDefs";
@@ -47,6 +49,7 @@ export const MapDefs = {
     main_summer: MainSummer,
     desert: Desert,
     faction: Faction,
+    faction_potato: factionPotato,
     halloween: Halloween,
     potato: Potato,
     potato_spring: PotatoSpring,
@@ -112,7 +115,6 @@ export interface MapDef {
             planeSound: string;
             airdropImg: string;
         };
-        frozenSprites?: string[];
     };
     gameMode: {
         maxPlayers: number;
@@ -156,6 +158,7 @@ export interface MapDef {
                 circleIdx: number;
                 wait: number;
             }>;
+            roleOverrides?: Record<string, Partial<RoleDef>>;
         };
         unlocks?: {
             timings: Array<{
@@ -194,6 +197,7 @@ export interface MapDef {
                     odds: number;
                     innerRad: number;
                     outerRad: number;
+                    centerObj?: string;
                     spawnBound: {
                         pos: Vec2;
                         rad: number;

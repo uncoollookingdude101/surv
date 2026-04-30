@@ -359,7 +359,7 @@ export const PerkDefs: Record<string, PerkDef> = {
         },
     },
     chambered: {
-        name: "One In The Chamber",
+        name: "One in the Chamber",
         type: "perk",
         lootImg: {
             sprite: "loot-perk-chambered.img",
@@ -401,7 +401,7 @@ export const PerkDefs: Record<string, PerkDef> = {
         },
     },
     bonus_45: {
-        name: ".45 In The Chamber",
+        name: ".45 in the Chamber",
         type: "perk",
         lootImg: {
             sprite: "loot-perk-bonus-45.img",
@@ -541,7 +541,7 @@ export const PerkDefs: Record<string, PerkDef> = {
         },
     },
     bonus_assault: {
-        name: "Hollow-points",
+        name: "Hollow-Points",
         type: "perk",
         lootImg: {
             sprite: "loot-perk-bonus-assault.img",
@@ -593,7 +593,7 @@ export const PerkDefs: Record<string, PerkDef> = {
 
     // Halloween Perks
     halloween_mystery: {
-        name: "Trick Or Treat?",
+        name: "Trick or Treat?",
         type: "perk",
         lootImg: {
             sprite: "loot-perk-halloween-mystery.img",

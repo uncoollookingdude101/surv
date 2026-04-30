@@ -320,6 +320,7 @@ export class UpdateMsg implements AbstractMsg {
         }
 
         s.writeArray(this.partObjects, 16, (obj) => {
+            s.writeUint8(obj.__type);
             s.writeBytes(obj.partialStream, 0, obj.partialStream.byteIndex);
         });
 
@@ -527,10 +528,12 @@ export class UpdateMsg implements AbstractMsg {
 
         this.partObjects = s.readArray(16, () => {
             const data = {} as this["partObjects"][0];
+            data.__type = s.readUint8();
             data.__id = s.readUint16();
 
-            const type = objectCreator.m_getTypeById(data.__id, s);
-            ObjectSerializeFns[type].deserializePart(s, data as any);
+            // temporary disabled because of issues
+            // data.__type = objectCreator.m_getTypeById(data.__id, s);
+            ObjectSerializeFns[data.__type].deserializePart(s, data as any);
 
             s.readAlignToNextByte();
             return data;

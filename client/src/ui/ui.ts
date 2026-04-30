@@ -789,7 +789,7 @@ export class UiManager {
                 playing: this.game.m_playingTicker,
                 groupInfo: playerBarn.groupInfo,
             };
-            errorLogManager.logError(`badTeamInfo_1: ${JSON.stringify(err)}`);
+            errorLogManager.logError("badTeamInfo_1", err);
         }
 
         const layoutSm = device.uiLayout == device.UiLayout.Sm;
@@ -1095,7 +1095,6 @@ export class UiManager {
         playerId: number,
         activePlayerId: number,
         playerBarn: PlayerBarn,
-        _factionMode: unknown,
     ) {
         const pingDef = PingDefs[pingType];
         if (pingDef) {

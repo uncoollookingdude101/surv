@@ -215,6 +215,7 @@ export class GameMap {
     riverMasks!: Array<{ pos: Vec2; rad: number }>;
     normalRivers!: Array<River & { looped: false }>;
     lakes!: Array<River & { looped: true }>;
+    lakeObjs!: Array<string>;
     riverAreas!: Map<River, { water: number; shore: number }>;
 
     shoreArea!: number;
@@ -319,6 +320,7 @@ export class GameMap {
         this.structures = [];
         this.bridges = [];
         this.riverDescs = [];
+        this.lakeObjs = [];
         this.grid = new MapGrid(this.width, this.height);
 
         this.msg = new net.MapMsg();
@@ -395,7 +397,9 @@ export class GameMap {
         this.timerEnd("Calculating map areas");
 
         this.timerStart();
-        this.generateObjects();
+        if (!this.generateObjects()) {
+            return;
+        }
         this.timerEnd("Generating all objects");
 
         this.mapStream.stream.index = 0;
@@ -632,6 +636,8 @@ export class GameMap {
         // Generate lakes
         //
         for (const lakeDef of mapConfig.rivers.lakes) {
+            if (randomGenerator() > lakeDef.odds) continue;
+
             this.trySpawn(`lake`, () => {
                 const lake = riverCreator.createLake(lakeDef);
 
@@ -651,6 +657,7 @@ export class GameMap {
                 }
 
                 this.riverDescs.push(lake);
+                this.lakeObjs.push(lakeDef.centerObj ?? "");
                 return true;
             });
         }
@@ -698,27 +705,75 @@ export class GameMap {
             [0.7, 0.85],
         ];
 
+        const bridgeGenData: Array<{ type: string; pos: Vec2; ori: number }> = [];
+
         for (let i = 0; i < bridges.length; i++) {
             inner: for (let j = 0; j < riverTs.length; j++) {
                 const bridgeType = bridges[i];
                 const riverT = riverTs[j];
 
-                const generated = this.genBridge(
-                    bridgeType,
-                    this.normalRivers[0],
-                    riverT,
-                );
+                const data = this.genFactionBridge(bridgeType, riverT);
 
-                if (generated) {
+                if (data) {
+                    bridgeGenData.push(data);
                     riverTs.splice(j, 1);
                     j--;
                     break inner;
+                }
+                if (j == riverTs.length - 1) {
+                    return [];
                 }
                 // if we couldn't spawn it, continue the loop trying other spawn positions
                 // this will make the main town bridge spawn on the sides
                 // if it fails to spawn on the center
             }
         }
+
+        return bridgeGenData;
+    }
+
+    genFactionBridge(type: string, progress: [number, number]) {
+        const river = this.normalRivers[0];
+        const getPosAndOri = () => {
+            // sometimes the position exactly at "progress" is invalid so "canSpawn()" will always fail
+            // we avoid this by adding a tiny bit of random variation to the position so it'll eventually find a valid one
+            const t = math.clamp(util.random(progress[0], progress[1]), 0, 1);
+            const pos = river.spline.getPos(t);
+
+            const norm = river.spline.getNormal(t);
+            let ori = math.radToOri(Math.atan2(norm.y, norm.x));
+
+            if (type == "river_town_01") {
+                // we flip the orientation because river town has red on left and blue on right by default
+                // the faction mode ori that gets us a left/right split vs top/bottom split is 1
+                // so of course we need to flip this value and vice versa for the other case
+                ori = this.factionModeSplitOri ^ 1;
+            }
+
+            return { pos, ori };
+        };
+
+        let bridge:
+            | {
+                  type: string;
+                  pos: Vec2;
+                  ori: number;
+              }
+            | undefined = undefined;
+        this.trySpawn(type, () => {
+            const { pos, ori } = getPosAndOri();
+
+            if (!this.canSpawn(type, pos, ori, 1)) {
+                return false;
+            }
+            bridge = {
+                type,
+                pos,
+                ori,
+            };
+            return true;
+        });
+        return bridge;
     }
 
     /** only called inside generateObjects, separates logic into function to simplify control flow */
@@ -761,13 +816,34 @@ export class GameMap {
                 maxBridges[bridgeSize] * (river.spline.points.length / 33),
             );
             for (let i = 0; i < max; i++) {
-                this.genBridge(bridgeType, river, undefined, false);
+                this.genBridge(bridgeType, river, false);
             }
         }
     }
 
     generateObjects() {
         const mapGen = this.mapDef.mapGen;
+
+        // generate faction bridges here
+        // so we can abort and restart map gen if they fail to spawn
+
+        if (this.factionMode && this.normalRivers.length) {
+            this.timerStart();
+            const bridges = this.generateFactionBridges();
+            this.timerEnd("Generating faction bridges");
+            if (bridges.length) {
+                for (const bridge of bridges) {
+                    this.genAuto(bridge.type, bridge.pos, 0, bridge.ori);
+                }
+            } else {
+                this.game.logger.warn(
+                    "Failed to generate faction bridges, restarting map gen",
+                );
+                this.loggingTimes.length = 0;
+                this.init();
+                return false;
+            }
+        }
 
         type MapSpawn = {
             type: string;
@@ -897,12 +973,17 @@ export class GameMap {
             }
         };
 
-        // faction mode bridges should have highest priority to make sure
-        // nothing breaks their spawning
-        if (this.factionMode) {
-            this.timerStart();
-            this.generateFactionBridges();
-            this.timerEnd("Generating faction bridges");
+        // lake center objects should have highest priority
+        // as they are forced to spawn on a specific position
+        // if anything spawns before them they could overlap
+        if (this.lakeObjs.length) {
+            for (let i = 0; i < this.lakeObjs.length; i++) {
+                const lake = this.lakes[i];
+                const type = this.lakeObjs[i];
+                if (!type) continue;
+
+                this.genAuto(type, lake.center, 0, 0);
+            }
         }
 
         this.timerStart();
@@ -980,6 +1061,8 @@ export class GameMap {
             this.genDensitySpawn(type, densitySpawns[type]);
         }
         this.timerEnd("Generating density spawns");
+
+        return true;
     }
 
     genDensitySpawn(type: string, density: number) {
@@ -1017,8 +1100,6 @@ export class GameMap {
                 this.genOnRiver(type);
             } else if (def.terrain?.bridge) {
                 this.genBridge(type);
-            } else if (def.terrain?.lakeCenter) {
-                this.genOnLakeCenter(type);
             } else if (def.terrain?.grass) {
                 this.genOnGrass(type);
             } else if (def.terrain?.beach) {
@@ -1446,6 +1527,16 @@ export class GameMap {
                     "barn_01",
                 ];
 
+                // obstacles, buildings, and structures that are specific to a team but can spawn anywhere on their side.
+                const teamObjects = [
+                    "potato_01f",
+                    "potato_02f",
+                    "potato_03f",
+                    "tomato_01",
+                    "tomato_02",
+                    "tomato_03",
+                ];
+
                 // obstacles, buildings, and structures that need to spawn away from the sides and closer to the center river
                 const centerObjects = [
                     "greenhouse_01",
@@ -1456,8 +1547,16 @@ export class GameMap {
                 let divisionIdx: number;
                 if ("teamId" in def && def.teamId) {
                     const teamId = def.teamId;
-                    // picks either of the furthest divisions from the center
-                    divisionIdx = (teamId - 1) * (divisions - 1);
+                    if (teamObjects.includes(type)) {
+                        // picks any of the divisions on the team's side (0-4 for red, 5-9 for blue)
+                        divisionIdx = util.randomInt(
+                            (teamId - 1) * (divisions / 2),
+                            teamId * (divisions / 2) - 1,
+                        );
+                    } else {
+                        // picks either of the furthest divisions from the center
+                        divisionIdx = (teamId - 1) * (divisions - 1);
+                    }
                 } else if (edgeObjects.includes(type)) {
                     const teamId = util.randomInt(1, 2);
                     // picks either of the furthest divisions from the center
@@ -1583,12 +1682,7 @@ export class GameMap {
      *
      * 0 would be at the start, 1 would be at the end, 0.5 would be in the middle, etc
      */
-    genBridge(
-        type: string,
-        river?: River,
-        progress?: [number, number],
-        logOnFailure = true,
-    ): boolean {
+    genBridge(type: string, river?: River, logOnFailure = true): boolean {
         if (this.normalRivers.length == 0) {
             return false;
         }
@@ -1607,21 +1701,8 @@ export class GameMap {
             ori = oriAndScale.ori;
             scale = oriAndScale.scale;
 
-            let t: number;
-            if (progress) {
-                // sometimes the position exactly at "progress" is invalid so "canSpawn()" will always fail
-                // we avoid this by adding a tiny bit of random variation to the position so it'll eventually find a valid one
-                t = math.clamp(util.random(progress[0], progress[1]), 0, 1);
-            } else {
-                t = util.random(0, 1);
-            }
-
-            let finalRiver: River;
-            if (type == "river_town_01") {
-                finalRiver = rivers[0];
-            } else {
-                finalRiver = river ?? rivers[util.randomInt(0, rivers.length - 1)];
-            }
+            const t = util.random(0, 1);
+            let finalRiver = river ?? rivers[util.randomInt(0, rivers.length - 1)];
 
             let pos = finalRiver.spline.getPos(t);
 
@@ -1646,12 +1727,6 @@ export class GameMap {
             }
             if (type === "bunker_structure_05") {
                 ori %= 2;
-            }
-            if (type == "river_town_01") {
-                // we flip the orientation because river town has red on left and blue on right by default
-                // the faction mode ori that gets us a left/right split vs top/bottom split is 1
-                // so of course we need to flip this value and vice versa for the other case
-                ori = this.factionModeSplitOri ^ 1;
             }
 
             return { pos, ori };
@@ -1817,14 +1892,6 @@ export class GameMap {
             100,
             false,
         );
-    }
-
-    // todo make this choose a random lake out of available ones instead of filling all of them
-    genOnLakeCenter(type: string) {
-        for (let i = 0; i < this.lakes.length; i++) {
-            const lake = this.lakes[i];
-            this.genAuto(type, lake.center, 0, 0);
-        }
     }
 
     genObstacle(

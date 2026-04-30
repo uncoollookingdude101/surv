@@ -77,6 +77,14 @@ export default defineConfig(({ mode }) => {
                 input: {
                     main: resolve(import.meta.dirname, "index.html"),
                     stats: resolve(import.meta.dirname, "stats/index.html"),
+                    ...(isDev
+                        ? {
+                              "building-editor": resolve(
+                                  import.meta.dirname,
+                                  "building-editor/index.html",
+                              ),
+                          }
+                        : {}),
                 },
                 output: {
                     assetFileNames(assetInfo) {
@@ -110,6 +118,7 @@ export default defineConfig(({ mode }) => {
                     https: data.https,
                 };
             }),
+            PASS_TYPE: JSON.stringify(Config.passType),
             AD_PREFIX: JSON.stringify(Config.secrets.AD_PREFIX),
             VITE_GAMEMONETIZE_ID: JSON.stringify(Config.secrets.GAMEMONETIZE_ID),
             SPELLSYNC_PROJECT_ID: JSON.stringify(Config.secrets.SPELLSYNC_PROJECT_ID),

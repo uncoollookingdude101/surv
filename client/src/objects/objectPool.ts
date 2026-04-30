@@ -86,7 +86,7 @@ export class Creator {
                 ids: Object.keys(this.m_idToObj),
                 stream: [...s.view.view],
             };
-            errorLogManager.logError(`getTypeById${JSON.stringify(err)}`);
+            errorLogManager.logError("getTypeById", err);
             errorLogManager.storeGeneric("objectPoolErr", "getTypeById");
             return ObjectType.Invalid;
         }

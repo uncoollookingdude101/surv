@@ -116,9 +116,7 @@ const badWordsdataSet = new DataSet<{ originalWord: string }>()
     })
     .addPhrase((phrase) =>
         // https://github.com/jo3-l/obscenity/blob/9564653e9f8563e178cd0790ccf256dc2b610494/src/preset/english.ts#L269 only matches it without the "a"??
-        phrase
-            .setMetadata({ originalWord: "faggot" })
-            .addPattern(pattern`faggot`),
+        phrase.setMetadata({ originalWord: "faggot" }).addPattern(pattern`faggot`),
     )
     .addPhrase((phrase) =>
         phrase
@@ -369,11 +367,13 @@ export async function isBehindProxy(ip: string, vpn: 0 | 1 | 2 | 3): Promise<boo
     if (!proxyCheck) return false;
 
     let info: IPAddressInfo | undefined = undefined;
-    const cached = proxyCheckCache.get(ip);
+
+    const key = `${ip}_${vpn}`;
+
+    const cached = proxyCheckCache.get(key);
     if (cached && cached.expiresAt > Date.now()) {
         info = cached.info;
-    }
-    if (!info) {
+    } else {
         try {
             const proxyRes = await proxyCheck.checkIP(ip, {
                 vpn,
@@ -393,16 +393,17 @@ export async function isBehindProxy(ip: string, vpn: 0 | 1 | 2 | 3): Promise<boo
             }
         } catch (error) {
             defaultLogger.error(`Proxycheck error:`, error);
+        }
+
+        if (!info) {
             return false;
         }
+
+        proxyCheckCache.set(key, {
+            info,
+            expiresAt: Date.now() + util.daysToMs(1),
+        });
     }
-    if (!info) {
-        return false;
-    }
-    proxyCheckCache.set(ip, {
-        info,
-        expiresAt: Date.now() + util.daysToMs(1),
-    });
 
     return info.proxy === "yes" || info.vpn === "yes";
 }

@@ -42,7 +42,6 @@ const mapDef: PartialMapDef = {
             playerSubmerge: 0x2b8ca4,
         },
         particles: { camera: "falling_potato" },
-        frozenSprites: ["player-mash-01.img", "player-mash-02.img", "player-mash-03.img"],
     },
     gameMode: { maxPlayers: 80, potatoMode: true },
     /* STRIP_FROM_PROD_CLIENT:START */

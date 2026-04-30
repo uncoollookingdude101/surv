@@ -39,6 +39,7 @@ export interface JoinTokenData {
     userId: string | null;
     findGameIp: string;
     loadout?: Loadout;
+    quests?: string[];
     groupData: {
         autoFill: boolean;
         playerCount: number;
@@ -49,6 +50,8 @@ export interface JoinTokenData {
 export class Game {
     started = false;
     stopped = false;
+    // for debug
+    preventStart = false;
     allowJoin = false;
     over = false;
     startedTime = 0;
@@ -113,6 +116,8 @@ export class Game {
 
     profiler = new Profiler();
 
+    debugSpeedMulti = 1;
+
     constructor(
         id: string,
         config: ServerGameConfig,
@@ -170,13 +175,15 @@ export class Game {
         this.updateData();
     }
 
-    update(dt?: number): void {
+    update(dt?: number) {
         if (!this.allowJoin) return;
         this.profiler.flush();
 
         const now = performance.now();
         if (!this.now) this.now = now;
         dt ??= math.clamp((now - this.now) / 1000, 0.001, 1 / 8);
+
+        dt *= this.debugSpeedMulti;
 
         this.now = now;
 
@@ -188,7 +195,7 @@ export class Game {
             }
         }
 
-        if (!this.started) {
+        if (!this.started && !this.preventStart) {
             this.started = this.modeManager.isGameStarted();
             if (this.started) {
                 this.gas.advanceGasStage();
@@ -418,7 +425,7 @@ export class Game {
         };
     }
 
-    handleMsg(buff: ArrayBuffer | Buffer, socketId: string, ip: string): void {
+    handleMsg(buff: ArrayBuffer | Buffer, socketId: string, ip: string) {
         if (!(buff instanceof ArrayBuffer)) return;
 
         const player = this.playerBarn.socketIdToPlayer.get(socketId);
@@ -442,12 +449,20 @@ export class Game {
                 // the slice is to make sure it doesn't overflow the error webhook
                 JSON.stringify([...new Uint8Array(buff.slice(0, 255))]),
             );
-            this.closeSocket(socketId);
+            if (player) {
+                player.disconnect();
+            } else {
+                this.closeSocket(socketId);
+            }
             return;
         }
 
         if (error) {
-            this.closeSocket(socketId, error);
+            if (player) {
+                player.disconnect();
+            } else {
+                this.closeSocket(socketId);
+            }
             return;
         }
 
@@ -460,6 +475,10 @@ export class Game {
 
         if (!player) {
             this.closeSocket(socketId);
+            return;
+        }
+
+        if (player.disconnected) {
             return;
         }
 
@@ -491,10 +510,11 @@ export class Game {
         }
     }
 
-    handleSocketClose(socketId: string): void {
+    handleSocketClose(socketId: string) {
         const player = this.playerBarn.socketIdToPlayer.get(socketId);
         if (!player) return;
         this.logger.info(`"${player.name}" left`);
+        player.questManager.flushProgress();
         player.disconnected = true;
         player.group?.checkPlayers();
         player.spectating = undefined;
@@ -509,7 +529,20 @@ export class Game {
         this.msgsToSend.serializeMsg(type, msg);
     }
 
-    checkGameOver(): void {
+    sendQuestProgress(userId: string, progress: Array<{ id: string; delta: number }>) {
+        try {
+            apiPrivateRouter.quest_progress.$post({
+                json: {
+                    userId,
+                    progress,
+                },
+            });
+        } catch (err) {
+            this.logger.error(`Failed to save quest progress:`, err);
+        }
+    }
+
+    checkGameOver() {
         if (this.over) return;
         const didGameEnd: boolean = this.modeManager.handleGameEnd();
 
@@ -539,6 +572,7 @@ export class Game {
                 groupData,
                 findGameIp: token.ip,
                 loadout: token.loadout,
+                quests: token.quests,
             });
         }
     }
@@ -556,13 +590,13 @@ export class Game {
         });
     }
 
-    stop(): void {
+    stop() {
         if (this.stopped) return;
         this.stopped = true;
         this.allowJoin = false;
         for (const player of this.playerBarn.players) {
             if (!player.disconnected) {
-                this.closeSocket(player.socketId);
+                player.disconnect();
             }
         }
         this.logger.info("Game Ended");

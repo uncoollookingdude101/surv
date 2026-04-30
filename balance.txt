@@ -122,6 +122,15 @@ Barrel Cache (Woods)
     > Drops a Level 3 Vest, MIRV, Strobe, & a random item from tier_surviv.
     > Not previously in the mode.
 
+Tree Cache (Factions)
+    > Drops an additional 4x Scope and Tier 2 Helmet
+Rock Cache (Factions)
+    > Drops a Tier 2 Vest & Helmet, 5 Bandages, and a 2x Scope.
+    > Drops 1 item from tier_surviv instead of 2-3.
+Barrel Cache (Factions)
+    > Drops 4 MIRVs & 6 Frags from 3 MIRVs
+    > Drops a Tier 2 Vest
+
 ## Other Changes
 Sorted by the patch they were done in.
 
@@ -205,3 +214,37 @@ Turkey Cache Changes (2025/11/01):
 
 0.2.21 (Woods B-Patch) (2026/03/10):
 - Tier Guns: Adjusted MP220 weight (3 -> 2).
+
+0.2.22 (Woods C-Patch) (2026/03/16):
++ Increased .308 Subsonic capcity from 10/20/40/80 to 20/40/60/80.
+~ Tier Eye: Loot table changed to match the one on the Winter map (see 0.2.0 Tier Eye balances).
+- Tier Guns: Adjusted M249, PKP weights (s.t. it matches the old rarity prior to the 0.2.21 changes) (0.012 -> 0.011, 0.008 -> 0.007).
+
+0.2.23 (Spring Woods) (2026/03/24):
++ Tier Airdrop Melee: Adjusted Stonehammer weight (1 -> 6) (applies to the Ice Axe in Winter Woods).
+
+0.3.0 (Potato vs Tomato) (2026/04/01):
++ Added Faction-specific Stone & Barrel cache drops.
+~ Adjusted the Faction tree cache drops.
+
+~ Normal airdrops have the following changes:
+    + tier_airdrop_uncommon: 4-6 -> 7-8
+    + tier_airdrop_armor: 4-5 -> 5-6
+    + tier_airdrop_scopes: 6-8 -> 7-8
+    + tier_airdrop_melee: 5-7 -> 6-7
+    - tier_katanas: 1 -> 0
+
+~ Gold airdrops have following changes:
+    + tier_airdrop_rare: 3-4 -> 5-5
+    - tier_airdrop_faction_melee: 3-4 -> 3
+    + tier_airdro_melee: 0 -> 2-3
+    - tier_katanas: 1 -> 0
+
+~ Tier Airdrop Mythic: Adjusted USAS, AWM-S, PKP, & M249 weights (0.5 -> 1, 0.1 -> 0.75, 0.3 -> 1, & 0.3 -> 1, respectively).
++ Tier Airdrop Mythic: Added SV-98 (weight of 1).
++ Tier Airdrop Melee: Added Tier Katanas, Naginata, Fireaxe, Sledgehammer (weights of 3, 1, 1, & 1, respectively).
+~ Tier Airdrop Melee: Adjusted "" weight (19 -> 2).
+~ Tier Airdrop Rare: Adjusted Garand, AWM-S, PKP, M4A1, CZ-3A1, & Dual OTs-38 weights (6 -> 2, 3 -> 2.25, 0.08 -> 0.1, 5 -> 3, & 4.5 -> 2, respectively).
++ Tier Airdrop Rare: Added Groza-S, SPAS-16, SV-98, Dual P30L, & Dual DEagle 50 (weights of 3, 2, 2, 0.3, & 0.3, respectively).
+~ Tier Airdrop Uncommon: Adjusted Vector, VSS, M39 EMR, Mk 12 SPR, Saiga-12, Scout Elite, BAR, SCAR-H, Mosin, & QBB weights (1 -> 2, 2.5 -> 2, 2.5 -> 2, 2.5 -> 2, 1 -> 2, 2.5 -> 2, 1 -> 2, 0.75 -> 1.5, 1.5 -> 1, & 1.5 -> 1, respectively).
++ Tier Airdrop Uncommon: Added Dual OTs-38 & Garand (weights of 1 & 0.5, respectively).

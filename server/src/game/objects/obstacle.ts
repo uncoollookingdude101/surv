@@ -48,6 +48,8 @@ export class Obstacle extends BaseGameObject {
     interactedBy?: Player;
     interactCooldown = 0;
 
+    obstacleAABB?: AABB = undefined;
+
     get interactable() {
         return this.button?.canUse ?? this.door?.canUse;
     }
@@ -258,13 +260,29 @@ export class Obstacle extends BaseGameObject {
         const def = MapObjectDefs[this.type] as ObstacleDef;
         this.collider = collider.transform(def.collision, this.pos, this.rot, this.scale);
 
-        this.bounds = collider.toAabb(
-            collider.transform(def.collision, v2.create(0, 0), this.rot, this.scale),
-        );
+        if (def.aabb) {
+            this.bounds = collider.transform(
+                def.aabb,
+                v2.create(0, 0),
+                this.rot,
+                this.scale,
+            ) as AABB;
+            this.obstacleAABB = collider.transform(
+                def.aabb,
+                this.pos,
+                this.rot,
+                this.scale,
+            ) as AABB;
+        } else {
+            this.bounds = collider.toAabb(
+                collider.transform(def.collision, v2.create(0, 0), this.rot, this.scale),
+            );
 
-        const margin = v2.create(this.interactionRad, this.interactionRad);
-        v2.set(this.bounds.min, v2.sub(this.bounds.min, margin));
-        v2.set(this.bounds.max, v2.add(this.bounds.max, margin));
+            const margin = v2.create(this.interactionRad, this.interactionRad);
+            v2.set(this.bounds.min, v2.sub(this.bounds.min, margin));
+            v2.set(this.bounds.max, v2.add(this.bounds.max, margin));
+        }
+
         this.game.grid.updateObject(this);
     }
 
@@ -393,6 +411,18 @@ export class Obstacle extends BaseGameObject {
         this.dead = true;
         this.setDirty();
 
+        if (params.source?.__type === ObjectType.Player) {
+            params.source.questManager.trackEvent("destruction", {
+                objectType: this.type,
+            });
+        }
+
+        if (def.airdropCrate && this.interactedBy) {
+            this.interactedBy.questManager.trackEvent("item_used", {
+                itemType: "airdrop_crate",
+            });
+        }
+
         this.scale = this.minScale;
         this.updateCollider();
 
@@ -457,18 +487,40 @@ export class Obstacle extends BaseGameObject {
             if ("tier" in lootTierOrItem) {
                 const count = util.randomInt(lootTierOrItem.min!, lootTierOrItem.max!);
 
+                const colliderRad =
+                    def.collision.type === collider.Type.Aabb
+                        ? coldet.aabbToCircle(def.collision.min, def.collision.max).rad
+                        : def.collision.rad;
+
+                const rad = count > 1 ? math.remap(count, 0, 5, 0, colliderRad) : 0;
+
                 for (let i = 0; i < count; i++) {
                     const item = this.game.lootBarn.getLootTable(lootTierOrItem.tier!);
                     if (!item) continue;
 
+                    const pos = v2.add(lootPos, util.randomPointInCircle(rad));
+
+                    let pushSpeed: number | undefined = undefined;
+                    let dir;
+                    // if spawning more than 5 loot
+                    // ignore the push speed (eg player melee direction)
+                    // and push loot to outside the center of the obstacle
+                    if (count > 5) {
+                        pushSpeed = math.max(count, 14);
+                        dir = v2.normalize(v2.sub(pos, lootPos));
+                    } else {
+                        dir = params.dir;
+                        pushSpeed = 7;
+                    }
+
                     this.game.lootBarn.addLoot(
                         item.name,
-                        v2.add(lootPos, v2.mul(v2.randomUnit(), 0.2)),
+                        pos,
                         this.layer,
                         item.count,
                         undefined,
-                        undefined, // undefined to use default push speed value
-                        params.dir,
+                        pushSpeed,
+                        dir,
                         lootTierOrItem.props?.preloadGuns || item.preload,
                         "obstacle",
                     );

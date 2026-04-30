@@ -274,7 +274,13 @@ export class PlaneBarn {
         }, players[0]);
 
         const pos = v2.add(furthestLosingTeamPlayer.pos, v2.mul(v2.randomUnit(), 5));
-        this.game.planeBarn.addAirdrop(pos, "airdrop_crate_04"); // golden airdrop
+
+        // Faction golden airdrop
+        if (this.game.map.potatoMode) {
+            this.game.planeBarn.addAirdrop(pos, "airdrop_crate_04po"); // Potato factions, specifically
+        } else {
+            this.game.planeBarn.addAirdrop(pos, "airdrop_crate_04");
+        }
 
         this.sentHelp = true;
 
