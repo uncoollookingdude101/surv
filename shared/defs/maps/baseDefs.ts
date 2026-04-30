@@ -81,7 +81,7 @@ export const Main: MapDef = {
     },
     // NOTE: this loot table is not the original one so its not accurate
     // ? are guesses based on statistics
-    // ! are uncertain data based on leak   
+    // ! are uncertain data based on leak
     lootTable: {
         tier_world: [
             { name: "tier_guns", count: 1, weight: 0.29 }, // TODO get more data on this from original

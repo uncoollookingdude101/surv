@@ -269,9 +269,7 @@ const mapDef = {
         tier_hatchet_melee: [
             { name: "helmet03_leader2", count: 1, weight: 1 }, // ?
         ],
-        tier_vault_floor: [
-            { name: "helmet03_medic2", count: 1, weight: 1 },
-        ],
+        tier_vault_floor: [{ name: "helmet03_medic2", count: 1, weight: 1 }],
         tier_chrys_02: [{ name: "helmet04_forest", count: 1, weight: 1 }],
         tier_chrys_03: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
@@ -379,7 +377,7 @@ const mapDef = {
             { name: "backpack01", count: 1, weight: 5 }, // !
             { name: "backpack02", count: 1, weight: 2 },
             { name: "backpack03", count: 1, weight: 0.85 },
-        ],        
+        ],
         tier_medical: [
             { name: "bandage", count: 5, weight: 10 },
             { name: "healthkit", count: 1, weight: 4 },

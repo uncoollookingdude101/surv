@@ -173,9 +173,7 @@ const mapDef: PartialMapDef = {
                     },
                 },
             ],
-            crates: [
-                { name: "airdrop_crate_04", weight: 1 },
-            ],
+            crates: [{ name: "airdrop_crate_04", weight: 1 }],
         },
         roles: {
             timings: [
@@ -184,7 +182,7 @@ const mapDef: PartialMapDef = {
                     circleIdx: 0,
                     wait: 5,
                 },
-                                {
+                {
                     role: "leader",
                     circleIdx: 0,
                     wait: 5,

@@ -193,11 +193,11 @@ export const RoleDefs: Record<string, RoleDef> = {
             backpack: "backpack03",
             helmet: "helmet04_leader",
             chest: "chest04",
-            //outfit: (teamcolor: TeamColor) => 
-                //({
-                    //[TeamColor.Red]: "",
-                    //[TeamColor.Blue]: "",
-                //})[teamcolor],
+            //outfit: (teamcolor: TeamColor) =>
+            //({
+            //[TeamColor.Red]: "",
+            //[TeamColor.Blue]: "",
+            //})[teamcolor],
             noDropOutfit: true,
             inventory: {
                 "15xscope": 1,

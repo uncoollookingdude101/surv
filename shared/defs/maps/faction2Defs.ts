@@ -121,9 +121,10 @@ const mapDef: PartialMapDef = {
                 {
                     circleIdx: 2,
                     wait: 6,
-                    options: { 
+                    options: {
                         type: GameConfig.Plane.Airdrop,
-                        airdropType: "airdrop_crate_04ct2",}
+                        airdropType: "airdrop_crate_04ct2",
+                    },
                 },
                 {
                     circleIdx: 2,
@@ -150,9 +151,10 @@ const mapDef: PartialMapDef = {
                 {
                     circleIdx: 4,
                     wait: 3,
-                    options: { 
+                    options: {
                         type: GameConfig.Plane.Airdrop,
-                        airdropType: "airdrop_crate_04ct2",}
+                        airdropType: "airdrop_crate_04ct2",
+                    },
                 },
                 {
                     circleIdx: 4,
@@ -177,9 +179,7 @@ const mapDef: PartialMapDef = {
                     },
                 },
             ],
-            crates: [
-                { name: "airdrop_crate_04ct1", weight: 1 },
-            ],
+            crates: [{ name: "airdrop_crate_04ct1", weight: 1 }],
         },
         roles: {
             timings: [
@@ -188,12 +188,12 @@ const mapDef: PartialMapDef = {
                     circleIdx: 0,
                     wait: 5,
                 },
-                                {
+                {
                     role: "leader",
                     circleIdx: 0,
                     wait: 5,
                 },
-                                {
+                {
                     role: "leader",
                     circleIdx: 0,
                     wait: 5,
@@ -209,9 +209,7 @@ const mapDef: PartialMapDef = {
         bleedDamageMult: 1.25,
     },
     lootTable: {
-        tier_guns: [
-            { name: "", count: 1, weight: 0.1 },
-        ],
+        tier_guns: [{ name: "", count: 1, weight: 0.1 }],
         tier_toilet: [
             { name: "tier_guns", count: 1, weight: 0.1 },
             { name: "tier_scopes", count: 1, weight: 0.05 },
@@ -256,9 +254,7 @@ const mapDef: PartialMapDef = {
             { name: "painkiller", count: 1, weight: 5 },
             { name: "frag", count: 1, weight: 2 },
         ],
-        tier_airdrop_uncommon: [
-            { name: "", count: 1, weight: 2.5 },
-        ],
+        tier_airdrop_uncommon: [{ name: "", count: 1, weight: 2.5 }],
         tier_airdrop_mythic: [
             { name: "", count: 1, weight: 1 }, // ?
         ],
@@ -269,18 +265,14 @@ const mapDef: PartialMapDef = {
                 weight: 0.5,
             },
         ],
-        tier_airdrop_outfits: [
-            { name: "", count: 1, weight: 25 },
-        ],
+        tier_airdrop_outfits: [{ name: "", count: 1, weight: 25 }],
         tier_airdrop_throwables: [
             { name: "bb", count: 8, weight: 1 },
             { name: "mirv", count: 8, weight: 1 },
             { name: "strobe", count: 8, weight: 1 },
             { name: "smoke", count: 8, weight: 1 },
         ],
-        tier_ammo_crate: [
-            { name: "", count: 60, weight: 3 },
-        ],
+        tier_ammo_crate: [{ name: "", count: 60, weight: 3 }],
         tier_mansion_floor: [{ name: "", count: 1, weight: 1 }],
         tier_conch: [{ name: "", count: 1, weight: 1 }],
         tier_chrys_01: [
@@ -296,12 +288,8 @@ const mapDef: PartialMapDef = {
         tier_armor: [
             { name: "", count: 1, weight: 9 }, // !
         ],
-        tier_packs: [
-            { name: "", count: 1, weight: 9 },
-        ],
-        tier_scopes: [
-            { name: "", count: 1, weight: 9 },
-        ],
+        tier_packs: [{ name: "", count: 1, weight: 9 }],
+        tier_scopes: [{ name: "", count: 1, weight: 9 }],
     },
     mapGen: {
         map: {
