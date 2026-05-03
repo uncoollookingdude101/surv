@@ -457,13 +457,13 @@ export class Obstacle extends BaseGameObject {
             v2.set(lootPos, v2.add(this.pos, v2.rotate(def.lootSpawn.offset, this.rot)));
         }
 
-        const loot = [...def.loot];
+        const lootTablesOrItems = [...def.loot];
 
         if (
             params.source?.__type === ObjectType.Player &&
             params.source.hasPerk("scavenger")
         ) {
-            loot.push({
+            lootTablesOrItems.push({
                 tier: "tier_world",
                 min: 1,
                 max: 1,
@@ -475,7 +475,7 @@ export class Obstacle extends BaseGameObject {
             params.source?.__type === ObjectType.Player &&
             params.source.hasPerk("scavenger_adv")
         ) {
-            loot.push({
+            lootTablesOrItems.push({
                 tier: "tier_scavenger_adv",
                 min: 1,
                 max: 1,
@@ -483,60 +483,81 @@ export class Obstacle extends BaseGameObject {
             });
         }
 
-        for (const lootTierOrItem of loot) {
+        const items: Array<{
+            type: string;
+            preload?: boolean;
+            count: number;
+        }> = [];
+
+        // collect all the items we are spawning into a single array
+        // so we can determine the spawn radius based on it
+
+        for (const lootTierOrItem of lootTablesOrItems) {
             if ("tier" in lootTierOrItem) {
                 const count = util.randomInt(lootTierOrItem.min!, lootTierOrItem.max!);
-
-                const colliderRad =
-                    def.collision.type === collider.Type.Aabb
-                        ? coldet.aabbToCircle(def.collision.min, def.collision.max).rad
-                        : def.collision.rad;
-
-                const rad = count > 1 ? math.remap(count, 0, 5, 0, colliderRad) : 0;
-
                 for (let i = 0; i < count; i++) {
                     const item = this.game.lootBarn.getLootTable(lootTierOrItem.tier!);
                     if (!item) continue;
-
-                    const pos = v2.add(lootPos, util.randomPointInCircle(rad));
-
-                    let pushSpeed: number | undefined = undefined;
-                    let dir;
-                    // if spawning more than 5 loot
-                    // ignore the push speed (eg player melee direction)
-                    // and push loot to outside the center of the obstacle
-                    if (count > 5) {
-                        pushSpeed = math.max(count, 14);
-                        dir = v2.normalize(v2.sub(pos, lootPos));
-                    } else {
-                        dir = params.dir;
-                        pushSpeed = 7;
-                    }
-
-                    this.game.lootBarn.addLoot(
-                        item.name,
-                        pos,
-                        this.layer,
-                        item.count,
-                        undefined,
-                        pushSpeed,
-                        dir,
-                        lootTierOrItem.props?.preloadGuns || item.preload,
-                        "obstacle",
-                    );
+                    items.push({
+                        type: item.name,
+                        preload: lootTierOrItem.props?.preloadGuns || item.preload,
+                        count: item.count,
+                    });
                 }
             } else {
-                this.game.lootBarn.addLoot(
-                    lootTierOrItem.type!,
-                    v2.add(lootPos, v2.mul(v2.randomUnit(), 0.2)),
-                    this.layer,
-                    lootTierOrItem.count!,
-                    undefined,
-                    undefined,
-                    params.dir,
-                    lootTierOrItem.props?.preloadGuns,
-                );
+                items.push({
+                    type: lootTierOrItem.type!,
+                    preload: lootTierOrItem.props?.preloadGuns,
+                    count: lootTierOrItem.count ?? 1,
+                });
             }
+        }
+
+        const colliderRad =
+            def.collision.type === collider.Type.Aabb
+                ? coldet.aabbToCircle(def.collision.min, def.collision.max).rad / 2
+                : def.collision.rad;
+
+        // max items before it changes from pushing in hit direction to
+        // the direction between obstacle center and loot (so it spreads better)
+        const shouldSpreadItems = items.length > 3;
+
+        let rad: number;
+        let pushSpeed;
+
+        if (shouldSpreadItems) {
+            // calculate a radius based on amount of loot and obstacle size
+            rad = math.remap(items.length, 2, 10, 0, colliderRad);
+            pushSpeed = math.remap(items.length, 8, 20, 4, 14);
+        } else if (items.length === 1) {
+            // for exactly 1 loot we just spawn it in the perfect center with a high push speed
+            rad = 0;
+            pushSpeed = 7;
+        } else {
+            // for between 1 and the `shouldSpreadItems` threshold we just have a small radius
+            // and a smaller speed (because the loot will push eachother)
+            rad = 0.1;
+            pushSpeed = 4;
+        }
+
+        for (const item of items) {
+            const pos = v2.add(lootPos, util.randomPointInCircle(rad));
+
+            const dir = shouldSpreadItems
+                ? v2.normalize(v2.sub(pos, lootPos))
+                : params.dir;
+
+            this.game.lootBarn.addLoot(
+                item.type,
+                pos,
+                this.layer,
+                item.count,
+                undefined,
+                pushSpeed,
+                dir,
+                item.preload,
+                "obstacle",
+            );
         }
 
         if (def.createSmoke) {
