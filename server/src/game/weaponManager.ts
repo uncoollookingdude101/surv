@@ -829,15 +829,16 @@ export class WeaponManager {
         let speedMult = 1;
         let distanceMult = 1;
         if (itemDef.ammo == "9mm" && this.player.hasPerk("bonus_9mm")) {
-                spread *= PerkProperties.bonus_9mm.spreadMul;
-                speedMult = PerkProperties.bonus_9mm.speedMult;
-                distanceMult = PerkProperties.bonus_9mm.distanceMult;
+            spread *= PerkProperties.bonus_9mm.spreadMul;
+            speedMult = PerkProperties.bonus_9mm.speedMult;
+            distanceMult = PerkProperties.bonus_9mm.distanceMult;
         }
         if (itemDef.pistol && this.player.hasPerk("pistol_master")) {
-        const pProps = PerkProperties.pistol_master;
-        if (pProps) {
+            const pProps = PerkProperties.pistol_master;
+            if (pProps) {
                 // Use the properties from your config
-                if (typeof pProps.damageMult === "number") damageMult *= pProps.damageMult;
+                if (typeof pProps.damageMult === "number")
+                    damageMult *= pProps.damageMult;
                 if (typeof pProps.spreadMul === "number") spread *= pProps.spreadMul;
                 if (typeof pProps.speedMult === "number") {
                     speedMult *= pProps.speedMult;
@@ -852,7 +853,6 @@ export class WeaponManager {
             speedMult *= PerkProperties.high_velocity.speedMult;
             distanceMult *= PerkProperties.high_velocity.distanceMult;
         }
-        
 
         const bulletCount = itemDef.bulletCount;
         const jitter = itemDef.jitter ?? 0.25;
@@ -1137,27 +1137,29 @@ export class WeaponManager {
             const hit = hits[i];
             const obj = hit.obj;
 
-        if (obj.__type === ObjectType.Obstacle) {
-            obj.damage({
-                amount:
-                    (meleeDef.damage * meleeDef.obstacleDamage) *
-                    (this.player.hasPerk("melee_master")
-                        ? ((PerkProperties.melee_master?.meleeDamageMult as number) ?? 1)
-                        : 1),
-                gameSourceType: this.activeWeapon,
-                damageType: GameConfig.DamageType.Player,
-                source: this.player,
-                dir: v2.neg(hit.dir),
-                weaponSourceType: this.activeWeapon,
-            });
-            if (obj.interactable) obj.interact(this.player);
+            if (obj.__type === ObjectType.Obstacle) {
+                obj.damage({
+                    amount:
+                        meleeDef.damage *
+                        meleeDef.obstacleDamage *
+                        (this.player.hasPerk("melee_master")
+                            ? ((PerkProperties.melee_master?.meleeDamageMult as number) ??
+                              1)
+                            : 1),
+                    gameSourceType: this.activeWeapon,
+                    damageType: GameConfig.DamageType.Player,
+                    source: this.player,
+                    dir: v2.neg(hit.dir),
+                    weaponSourceType: this.activeWeapon,
+                });
+                if (obj.interactable) obj.interact(this.player);
             } else if (obj.__type === ObjectType.Player) {
                 obj.damage({
                     amount:
                         meleeDef.damage *
                         (this.player.hasPerk("melee_master")
-                            ? ((PerkProperties.melee_master
-                                  ?.meleeDamageMult as number) ?? 1)
+                            ? ((PerkProperties.melee_master?.meleeDamageMult as number) ??
+                              1)
                             : 1),
                     gameSourceType: this.activeWeapon,
                     damageType: GameConfig.DamageType.Player,

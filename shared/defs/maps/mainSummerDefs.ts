@@ -412,9 +412,7 @@ const mapDef = {
             { name: "soda", count: 1, weight: 8 },
             { name: "painkiller", count: 1, weight: 5 },
         ],
-        tier_safe: [
-            { name: "explosive", count: 1, weight: 1 },
-        ],
+        tier_safe: [{ name: "explosive", count: 1, weight: 1 }],
         tier_custom: [
             { name: "m2010", count: 1, weight: 1 },
             { name: "m134", count: 1, weight: 1 },
@@ -552,7 +550,7 @@ const mapDef = {
                 shilo_01: 1,
                 shilo_01ms: 1,
                 teahouse_complex_01ms: 1,
-                river_town_02: 1
+                river_town_02: 1,
             },
         ],
         randomSpawns: [],
@@ -563,7 +561,7 @@ const mapDef = {
                 case_01: "case_03",
                 case_02: "case_03",
                 chest_02: "chest_02ms",
-                bunker_hydra_compartment_03: "bunker_hydra_compartment_03ms"
+                bunker_hydra_compartment_03: "bunker_hydra_compartment_03ms",
             },
         ],
         importantSpawns: [
@@ -575,7 +573,7 @@ const mapDef = {
             "shilo_01",
             "shilo_01ms",
             "workshop_complex_01",
-            "teahouse_complex_01ms"
+            "teahouse_complex_01ms",
         ],
     },
     /* STRIP_FROM_PROD_CLIENT:END */

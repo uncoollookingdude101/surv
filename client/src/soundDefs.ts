@@ -911,7 +911,6 @@ const Sounds: Record<string, Record<string, SoundDef>> = {
             volume: 1,
             maxInstances: 5,
         },
-
     },
     hits: {
         stone_bullet_hit_01: {

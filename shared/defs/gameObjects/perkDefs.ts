@@ -72,7 +72,7 @@ export const PerkProperties = {
         damageMult: 1.6,
         spreadMul: 0.4,
         speedMult: 1.3,
-        distanceMult: 1.3, 
+        distanceMult: 1.3,
     },
     // map of ammo type to perk that boosts that ammo
     ammoBonuses: {

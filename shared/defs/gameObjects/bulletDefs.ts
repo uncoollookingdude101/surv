@@ -920,8 +920,8 @@ export const BaseDefs: Record<string, BulletDef> = {
     },
     bullet_m82: {
         type: "bullet",
-        damage: 115, 
-        obstacleDamage: 2.0, 
+        damage: 115,
+        obstacleDamage: 2.0,
         falloff: 0.98,
         distance: 500,
         speed: 138,
