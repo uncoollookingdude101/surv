@@ -486,7 +486,7 @@ export const Main: MapDef = {
         tier_guns_rare_healer: [
             { name: "svd", count: 1, weight: 1 },
             { name: "l86", count: 1, weight: 1 },
-            { name: "garand", count: 1, weight: 0.5 },
+            { name: "garand", count: 1, weight: 0.44 },
             { name: "scarssr", count: 1, weight: 0.05 },
         ],
         tier_guns_rare_assault: [

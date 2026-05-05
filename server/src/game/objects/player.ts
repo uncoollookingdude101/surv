@@ -1127,7 +1127,7 @@ export class Player extends BaseGameObject {
         for (let i = 0; i < this.perks.length; i++) {
             const perkType = this.perks[i].type;
             if (this.perks[i].isFromRole) {
-                if (!(role === "classless") && !newPerks.has(perkType)) {
+                if (role != "classless" && !newPerks.has(perkType)) {
                     this.removePerk(perkType);
                     i--;
                 } else {

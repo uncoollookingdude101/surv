@@ -254,6 +254,7 @@ Turkey Cache Changes (2025/11/01):
 ~ Tank Common: Adjusted QBB-97 weight (0.2 --> 0.25).
 + Demo Rare: Added SPAS-16 (weight of 0.2).
 ~ Demo Rare: Adjusted Saiga-12 weight (1 --> 0.7).
+~ Medic Rare: Adjusted Garand weight (0.5 --> 0.44).
 ~ Demo Crate: Replaced MIRV (6x) with Tier Throwable Demo (3-4).
 + Tier CLass Crate Mythic: Added Indomitable Spirit (weight of 1).
 ~ Rare Demo Crate: Replaced Airdrop Throwable (1) with Tier Throwable Demo (4-5).
