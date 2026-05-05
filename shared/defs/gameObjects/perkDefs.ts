@@ -64,6 +64,16 @@ export const PerkProperties = {
         speedMult: 1.4,
         distanceMult: 1.3,
     },
+    melee_master: {
+        meleeSpeedMult: 1.3,
+        meleeDamageMult: 1.5,
+    },
+    pistol_master: {
+        damageMult: 1.6,
+        spreadMul: 0.4,
+        speedMult: 1.3,
+        distanceMult: 1.3, 
+    },
     // map of ammo type to perk that boosts that ammo
     ammoBonuses: {
         "9mm": ["treat_9mm", "bonus_9mm"],
@@ -72,7 +82,7 @@ export const PerkProperties = {
         "12gauge": ["treat_12g"],
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
-    ammoBonusDamageMult: 1.2,
+    ammoBonusDamageMult: 1.15,
 };
 
 export interface PerkDef {
@@ -756,7 +766,34 @@ export const PerkDefs: Record<string, PerkDef> = {
             pickup: "perk_pickup_01",
         },
     },
-
+    melee_master: {
+        name: "Melee Master",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-melee-master.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    pistol_master: {
+        name: "Pistol Master",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-weapon-ot38-dual.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
     // Cosmetic Perks
     turkey_shoot: {
         name: "Perky Shoot",

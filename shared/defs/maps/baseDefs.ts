@@ -740,8 +740,11 @@ export const Main: MapDef = {
         tier_custom: [
             { name: "m134", count: 1, weight: 1 },
             { name: "m79", count: 1, weight: 1 },
-            { name: "m2010", count: 1, weight: 1 },
             { name: "coconut_smg", count: 1, weight: 1 },
+            { name: "m2010", count: 1, weight: 1 },
+            { name: "p90", count: 1, weight: 1 },
+            { name: "pkm", count: 1, weight: 1 },
+            { name: "m82", count: 1, weight: 1 },
         ],
         tier_chest_04b: [{ name: "glock_dual", count: 1, weight: 1 }],
         tier_airdrop_potato: [

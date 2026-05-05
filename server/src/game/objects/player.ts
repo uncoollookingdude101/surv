@@ -5105,6 +5105,11 @@ export class Player extends BaseGameObject {
             this.speed += PerkProperties.field_medic.speedBoost;
         }
 
+        if ((weaponDef as any).type === "melee" && this.hasPerk("melee_master")) {
+            const mult = PerkProperties.melee_master.meleeSpeedMult as number;
+            if (mult && mult > 0) this.speed *= mult;
+        }
+
         this.speed = math.clamp(this.speed, 1, 10000);
     }
 

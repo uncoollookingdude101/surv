@@ -611,15 +611,17 @@ export class Bullet {
                 // Continue travelling if non-collidable
                 hit = col.collidable;
             } else if (col.type == "player") {
-                if (!shooterDead) {
-                    const isHighValueTarget =
-                        this.player?.hasPerk("targeting") && col.player!.perks.length;
+            if (!shooterDead) {
+                const perks = col.player?.perks;
+                const targetPerksCount = Array.isArray(perks) ? perks.length : 0;
+                const hasTargeting = this.player?.hasPerk("targeting");
 
-                    let multiplier = 1;
-                    if (isHighValueTarget) {
-                        multiplier *= 1.25;
-                    }
+                let multiplier = 1;
 
+                // Apply scaling: 1.1 for the first perk, +0.05 for each additional one
+                if (hasTargeting && targetPerksCount > 0) {
+                    multiplier = 1.1 + (targetPerksCount - 1) * 0.1;
+                }
                     this.bulletManager.damages.push({
                         obj: col.player!,
                         gameSourceType: this.shotSourceType,
@@ -627,7 +629,8 @@ export class Bullet {
                         mapSourceType: this.mapSourceType,
                         source: this.player,
                         damageType: this.damageType,
-                        amount: multiplier * finalDamage,
+                        // The multiplier is now applied here!
+                        amount: multiplier * finalDamage, 
                         dir: this.dir,
                         isExplosion: this.isShrapnel,
                         armorPenetration: this.apRounds

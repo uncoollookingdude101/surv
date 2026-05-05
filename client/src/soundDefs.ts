@@ -884,6 +884,34 @@ const Sounds: Record<string, Record<string, SoundDef>> = {
             path: "audio/ui/stow_weapon_01.mp3",
             volume: 1,
         },
+        m82_01: {
+            path: "audio/guns/m82_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
+        m82_reload_01: {
+            path: "audio/guns/m82_reload_01.mp3",
+            volume: 1,
+        },
+        m82_cycle_01: {
+            path: "audio/guns/m82_cycle_01.mp3",
+            volume: 1,
+        },
+        p90_01: {
+            path: "audio/guns/p90_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
+        p90_reload_01: {
+            path: "audio/guns/p90_reload_01.mp3",
+            volume: 1,
+        },
+        sw500_01: {
+            path: "audio/guns/p90_01.mp3",
+            volume: 1,
+            maxInstances: 5,
+        },
+
     },
     hits: {
         stone_bullet_hit_01: {

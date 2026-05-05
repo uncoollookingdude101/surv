@@ -45,7 +45,7 @@ const ChestDefs: Record<string, ChestDef> = {
         name: "Level 2 Vest",
         type: "chest",
         level: 2,
-        damageReduction: 0.38,
+        damageReduction: 0.45,
         skinImg: {
             baseTint: 0x4b4b4b,
             baseSprite: "player-armor-base-01.img",
@@ -65,7 +65,7 @@ const ChestDefs: Record<string, ChestDef> = {
         name: "Level 3 Vest",
         type: "chest",
         level: 3,
-        damageReduction: 0.45,
+        damageReduction: 0.55,
         skinImg: {
             baseTint: 0x000,
             baseSprite: "player-armor-base-01.img",
@@ -86,7 +86,7 @@ const ChestDefs: Record<string, ChestDef> = {
         type: "chest",
         noDrop: true,
         level: 4,
-        damageReduction: 0.6,
+        damageReduction: 0.7,
         skinImg: {
             baseTint: 0x1c2e06,
             baseSprite: "player-armor-base-01.img",
@@ -131,7 +131,7 @@ const HelmetDefs: Record<string, HelmetDef> = {
         name: "Level 1 Helmet",
         type: "helmet",
         level: 1,
-        damageReduction: 0.25,
+        damageReduction: 0.15,
         skinImg: {
             baseTint: 0x317fff,
             baseTintRed: 0xa76b6b,
@@ -153,7 +153,7 @@ const HelmetDefs: Record<string, HelmetDef> = {
         name: "Level 2 Helmet",
         type: "helmet",
         level: 2,
-        damageReduction: 0.4,
+        damageReduction: 0.35,
         skinImg: {
             baseTint: 0xc6c6c6,
             baseTintRed: 0x990000,
@@ -175,7 +175,7 @@ const HelmetDefs: Record<string, HelmetDef> = {
         name: "Level 3 Helmet",
         type: "helmet",
         level: 3,
-        damageReduction: 0.55,
+        damageReduction: 0.45,
         skinImg: {
             baseTint: 0x252525,
             baseTintRed: 0x260404,
@@ -197,7 +197,7 @@ const HelmetDefs: Record<string, HelmetDef> = {
         name: "Level 4 Helmet",
         type: "helmet",
         level: 4,
-        damageReduction: 0.7,
+        damageReduction: 0.6,
         skinImg: {
             baseTint: 0x252525,
             baseTintRed: 0x260404,
@@ -787,7 +787,7 @@ const SkinDefs = {
     }),
     helmet02_moon2: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
-        perk: "splinter",
+        perk: "targeting",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
@@ -817,7 +817,22 @@ const SkinDefs = {
     }),
     helmet02_moon4: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
-        perk: ["small_arms"],
+        perk: "small_arms",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-moon.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
+        },
+    }),
+    helmet02_moon5: defineSkin("helmet02", {
+        name: "Tsukuyomi no Kabuto",
+        perk: "melee_master",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

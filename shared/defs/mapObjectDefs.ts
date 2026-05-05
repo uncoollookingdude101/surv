@@ -1,3 +1,4 @@
+import { extend } from "zod/mini";
 import { collider } from "../utils/collider";
 import { util } from "../utils/util";
 import { v2 } from "../utils/v2";
@@ -6566,7 +6567,7 @@ function createTeaPavilion<T extends BuildingDef>(e: Partial<T>): T {
     return util.mergeDeep(t, e || {});
 }
 
-function createTeahouse(params: { ceilingImgs?: BuildingDef["ceiling_images"] }) {
+function createTeahouse<T extends BuildingDef>(e: Partial<T> & { ceilingImgs?: BuildingDef["ceiling_images"] }): T {
     const t = {
         type: "building",
         map: {
@@ -6663,7 +6664,7 @@ function createTeahouse(params: { ceilingImgs?: BuildingDef["ceiling_images"] })
                     alpha: 1,
                     tint: 0xffffff,
                 },
-                ...(params.ceilingImgs || []),
+                ...(e.ceilingImgs || []),
             ],
             destroy: {
                 wallCount: 3,
@@ -6752,14 +6753,14 @@ function createTeahouse(params: { ceilingImgs?: BuildingDef["ceiling_images"] })
                 ori: 0,
             },
             {
-                type: "case_06",
+                type: e.specialLoot || "case_06",
                 pos: v2.create(0, 0),
                 scale: 1,
                 ori: 0,
             },
         ],
     };
-    return util.mergeDeep(t, params || {});
+    return util.mergeDeep(t, e || {});
 }
 
 function createTeaHouseComplex<T extends BuildingDef>(
@@ -10186,6 +10187,18 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [tierLoot("tier_hatchet", 1, 1)],
         hitParticle: "blackChip",
     }),
+    case_03ms: createCase({
+        health: 140,
+        img: {
+            sprite: "map-case-hatchet-01.img",
+            residue: "map-case-hatchet-res-01.img",
+        },
+        loot: [
+            autoLoot("p90", 1),
+            autoLoot("endless_ammo", 1)
+        ],
+        hitParticle: "blackChip",
+    }),
     case_04: createCase({
         health: 140,
         img: {
@@ -10236,6 +10249,17 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_chest", 2, 3),
             tierLoot("tier_chrys_case", 1, 1),
             tierLoot("tier_helm_special", 1, 1),
+        ],
+        hitParticle: "blackChip",
+        map: { display: false, color: 0x6b3500, scale: 0.85 },
+    }),
+    case_06ms: createCase({
+        health: 140,
+        img: { sprite: "map-case-chrys-01.img" },
+        loot: [
+            autoLoot("4xscope", 1),
+            autoLoot("katana_orchid", 1),
+            autoLoot("helmet02_moon5", 1),
         ],
         hitParticle: "blackChip",
         map: { display: false, color: 0x6b3500, scale: 0.85 },
@@ -10301,6 +10325,17 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     chest_01cb: createChest({
         loot: [tierLoot("tier_chest", 3, 4), tierLoot("tier_pirate_melee", 1, 1)],
+    }),
+    chest_02ms: createChest({
+        img: { sprite: "map-chest-02.img" },
+        loot: [
+            tierLoot("tier_armor", 3, 3),
+            tierLoot("tier_scopes", 3, 3),
+            tierLoot("tier_medical", 3, 3),
+            tierLoot("tier_custom", 0, 1),
+            autoLoot("flare_gun", 1)
+        ],
+        map: { display: true, color: 7025920, scale: 0.85 },
     }),
     chest_02: createChest({
         img: { sprite: "map-chest-02.img" },
@@ -11886,10 +11921,6 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [autoLoot("flare_gun2", 1)],
         img: { sprite: "map-gun-mount-05.img" },
     }),
-    gun_mount_07: createGunMount({
-        loot: [autoLoot("", 1)],
-        img: { sprite: "map-gun-mount-05.img" },
-    }),
     locker_01: createLocker({
         img: { sprite: "map-locker-01.img" },
         loot: [tierLoot("tier_world", 1, 1)],
@@ -11997,6 +12028,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     pot_05: createBottle({
         img: { sprite: "map-pot-05.img" },
         loot: [autoLoot("scout_elite", 1), tierLoot("tier_islander_outfit", 1, 1)],
+    }),
+    pot_05ms: createBottle({
+        img: { sprite: "map-pot-02.img" },
+        loot: [autoLoot("m82", 1), autoLoot("high_velocity", 1)],
     }),
     potato_01: createPotato({}),
     potato_01f: createPotato({
@@ -12221,6 +12256,16 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         destructible: true,
         health: 2500,
         loot: [autoLoot("potato_smg", 1)],
+        img: {
+            residue: "map-smoke-res.img",
+            tint: 0xff944d,
+        },
+    }),
+    silo_02ms: createSilo({
+        scale: { createMin: 1, createMax: 1, destroy: 0.9 },
+        destructible: true,
+        health: 2500,
+        loot: [autoLoot("potato_lmg", 1)],
         img: {
             residue: "map-smoke-res.img",
             tint: 0xff944d,
@@ -16375,6 +16420,29 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         ceilingImg: "map-building-hut-ceiling-03.img",
         specialLoot: "pot_05",
     }),
+    hut_03ms: createHut({
+        map: {
+            display: true,
+            shapes: [
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(0, 0),
+                        v2.create(7, 7),
+                    ),
+                    color: 0x444444,
+                },
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(0, -18.9),
+                        v2.create(2, 12),
+                    ),
+                    color: 0x444444,
+                },
+            ],
+        },
+        ceilingImg: "map-building-hut-ceiling-03.img",
+        specialLoot: "pot_05ms",
+    }),
     hut_04: createLargeHut({}),
     hut_04ms: createLargeHut({
         specialLoot: "chest_01ms",
@@ -19872,6 +19940,126 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         };
         return util.mergeDeep(t, e || {});
     })({}),
+    shilo_01ms: (function <T extends BuildingDef>(e: Partial<T>): T {
+        const t = {
+            type: "building",
+            map: { display: true, color: 0xC3A069, scale: 1 },
+            terrain: { grass: true, beach: false },
+            teamId: 2,
+            mapObstacleBounds: [
+                collider.createAabbExtents(v2.create(0, -1), v2.create(17, 15)),
+            ],
+            floor: {
+                surfaces: [
+                    {
+                        type: "shack",
+                        collision: [
+                            collider.createAabbExtents(
+                                v2.create(0, 0),
+                                v2.create(15, 12),
+                            ),
+                        ],
+                    },
+                ],
+                imgs: [
+                    {
+                        sprite: "map-building-shilo-floor-01.img",
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                    {
+                        sprite: "map-building-porch-01.img",
+                        pos: v2.create(0, -13),
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                        rot: 2,
+                    },
+                ],
+            },
+            ceiling: {
+                zoomRegions: [
+                    {
+                        zoomIn: collider.createAabbExtents(
+                            v2.create(0, 0),
+                            v2.create(14.5, 11.5),
+                        ),
+                        zoomOut: collider.createAabbExtents(
+                            v2.create(0, 0),
+                            v2.create(14.5, 11.5),
+                        ),
+                    },
+                ],
+                vision: { width: 4 },
+                imgs: [
+                    {
+                        sprite: "map-building-shilo-ceiling-01.img",
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                ],
+            },
+            mapObjects: [
+                {
+                    type: "metal_wall_ext_12_5",
+                    pos: v2.create(7.75, 11.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "metal_wall_ext_12_5",
+                    pos: v2.create(-7.75, 11.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "metal_wall_ext_13",
+                    pos: v2.create(8.5, -11.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "metal_wall_ext_13",
+                    pos: v2.create(-8.5, -11.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "metal_wall_ext_23",
+                    pos: v2.create(-14.5, 0.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "metal_wall_ext_23",
+                    pos: v2.create(14.5, 0.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "silo_02ms",
+                    pos: v2.create(0, 0),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "house_door_01",
+                    pos: v2.create(-2, -12),
+                    scale: 1,
+                    ori: 3,
+                },
+                {
+                    type: "house_window_01",
+                    pos: v2.create(0, 11.75),
+                    scale: 1,
+                    ori: 1,
+                },
+            ],
+        };
+        return util.mergeDeep(t, e || {});
+    })({}),
     shack_wall_ext_2: createWall({
         material: "wood",
         extents: v2.create(0.5, 1),
@@ -21913,7 +22101,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: randomObstacleType({
-                    case_03: 1,
+                    case_01: 1,
+                    case_02: 0.025,
+                    chest_02: 1,
                 }),
                 pos: v2.create(2.5, 0),
                 scale: 1,
@@ -23143,6 +23333,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
     }),
+    teahouse_01ms: createTeahouse({
+        specialLoot: "case_06ms",
+    }),
     teapavilion_01: createTeaPavilion({}),
     teapavilion_01w: createTeaPavilion({
         center_loot: "loot_tier_helmet_forest",
@@ -23160,6 +23353,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         tea_house: "teahouse_01x",
         tree_small: "tree_10",
         tree_large: "tree_10",
+    }),
+    teahouse_complex_01ms: createTeaHouseComplex({
+        tea_house: "teahouse_01ms",
     }),
     savannah_patch_01: (function <T extends BuildingDef>(e: Partial<T>): T {
         const t = {
@@ -28370,6 +28566,102 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
     },
+    bunker_hydra_compartment_03ms: {
+        type: "building",
+        map: { display: false, color: 0x665a4e, scale: 1 },
+        terrain: { grass: true, beach: false },
+        zIdx: 2,
+        floor: {
+            surfaces: [
+                {
+                    type: "bunker",
+                    collision: [
+                        collider.createAabbExtents(v2.create(0, 2), v2.create(9, 8.75)),
+                    ],
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-hydra-compartment-floor-03.img",
+                    pos: v2.create(0, -0.5),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+            ],
+        },
+        ceiling: {
+            zoomRegions: [
+                {
+                    zoomIn: collider.createAabbExtents(
+                        v2.create(0, 0.75),
+                        v2.create(10, 7.75),
+                    ),
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-hydra-compartment-ceiling-03.img",
+                    pos: v2.create(0, 1),
+                    scale: 1,
+                    alpha: 1,
+                    tint: 0x5f5f5f,
+                },
+            ],
+        },
+        mapObjects: [
+            {
+                type: "metal_wall_ext_thicker_17",
+                pos: v2.create(-10.5, -1),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_18",
+                pos: v2.create(0, -8),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_18",
+                pos: v2.create(10.5, -1),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_14",
+                pos: v2.create(2, 6),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "crate_01",
+                pos: v2.create(-6.5, -1.5),
+                scale: 1,
+                ori: 0,
+                ignoreMapSpawnReplacement: true,
+            },
+            {
+                type: "crate_01",
+                pos: v2.create(-1.75, 2),
+                scale: 1,
+                ori: 0,
+                ignoreMapSpawnReplacement: true,
+            },
+            {
+                type: "barrel_01",
+                pos: v2.create(-2, -2),
+                scale: 0.9,
+                ori: 0,
+            },
+            {
+                type: "case_03ms",
+                pos: v2.create(7, -4),
+                scale: 1,
+                ori: 3,
+            },
+        ],
+    },
     bunker_structure_02: {
         type: "structure",
         terrain: { grass: true, beach: false },
@@ -28795,7 +29087,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 0,
             },
             {
-                type: randomObstacleType({ case_03: 1 }),
+                type: randomObstacleType({ case_03: 1, chest_02: 9 }),
                 pos: v2.create(16.5, 0.25),
                 scale: 1,
                 ori: 0,
