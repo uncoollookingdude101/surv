@@ -1226,6 +1226,10 @@ td.data-player-status {
     margin-right: auto;
     padding: initial;
   }
+
+  .ad-block-top-med-rect {
+    display: none;
+  }
 }
 @media (max-width: 736px) {
   #ad-block-top {

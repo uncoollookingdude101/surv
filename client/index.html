@@ -613,10 +613,10 @@
             <div id="ui-stats-logo"></div>
           </div>
           <div id="ui-stats-ad-container-desktop" class="ui-stats-ad-container">
-            <div data-fuse="died_mrec" style="min-height: 250px;"></div>
+            <div id="nitro-died-mrec" data-fuse="died_mrec" style="min-height: 90px;"></div>
           </div>
           <div id="ui-stats-ad-container-mobile" class="ui-stats-ad-container">
-            <div data-fuse="died_mrec_mobile" style="min-height: 200px;"></div>
+            <div id="nitro-died-mrec-mobile" data-fuse="died_mrec_mobile" style="min-height: 200px;"></div>
           </div>
         </div>
       </div>
@@ -657,13 +657,13 @@
           </div>
         </div>
         <div class="ad-block-header hide-on-mobile">
-          <div data-fuse="header" style="min-height: 90px;"></div>
+          <div id="nitro-header" data-fuse="header" style="min-height: 90px;"></div>
         </div>
         <div class="ad-block-left-center hide-on-mobile">
-          <div data-fuse="home_vrec" style="min-height: 250px;"></div>
+          <div id="nitro-home-vrec" data-fuse="home_vrec" style="min-height: 250px;"></div>
         </div>
         <div class="ad-block-right-center hide-on-mobile" style="min-height: 250px;">
-          <div data-fuse="home_mrec"></div>
+          <div id="nitro-home-mrec" data-fuse="home_mrec"></div>
         </div>
         <!-- Accounts Modals -->
         <div id="modal-account-name-change" class="modal modal-account">
@@ -1186,6 +1186,9 @@
       </div>
       <!-- Loadouts -->
       <div id="modal-customize" class="modal">
+        <div class="ad-block-loadouts-left hide-on-mobile">
+          <div id="nitro-loadout-vrec" data-fuse="loadout_vrec" style="min-height: 600px;"></div>
+        </div>
         <div id="modal-customize-wrapper" class="modal-close">
           <div id="modal-content-left" class="modal-content-shadow">
             <div id="modal-customize-cat-title"></div>

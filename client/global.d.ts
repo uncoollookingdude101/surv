@@ -38,6 +38,10 @@ declare global {
             setAllowRefreshCallback: (callback: (slotDivId: string) => boolean) => void;
             destroySticky: () => void;
         };
+        nitroAds?: {
+            queue: Array<unknown>;
+            createAd: (id: string, options: Record<string, unknown>) => Promise<unknown>;
+        };
 
         // SDK
         CrazyGames: any;

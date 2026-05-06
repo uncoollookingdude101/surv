@@ -588,6 +588,7 @@ a:active {
   left: var(--side-pad);
   top: 50%;
   transform: translateY(-50%);
+  width: 160px;
 }
 
 .ad-block-right-center {
@@ -595,6 +596,14 @@ a:active {
   right: var(--side-pad);
   top: 50%;
   transform: translateY(-50%);
+  width: 160px;
+}
+
+@media (max-width: 1200px) {
+  .ad-block-left-center,
+  .ad-block-right-center {
+    display: none;
+  }
 }
 
 .ad-block-med-rect {
@@ -3409,7 +3418,7 @@ a:active {
 
 .btn-mode-faction-potato {
   animation-name: faction-potato-pulse;
-  background-image: url(../img/gui/star.svg);
+  background-image: url(/img/gui/star.svg);
   border-bottom: 4px solid #563619;
 }
 
