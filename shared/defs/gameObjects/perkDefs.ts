@@ -7,6 +7,10 @@ export const PerkProperties = {
         minBoost: 50,
         scale: 0.1,
     },
+    energized: {
+        minBoost: 75,
+        fireDelayMult: 0.8
+    },
     steelskin: {
         scale: 0.25,
         damageReduction: 0.3,
@@ -785,6 +789,20 @@ export const PerkDefs: Record<string, PerkDef> = {
         type: "perk",
         lootImg: {
             sprite: "loot-weapon-ot38-dual.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    energized: {
+        name: "Energized",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-energized.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

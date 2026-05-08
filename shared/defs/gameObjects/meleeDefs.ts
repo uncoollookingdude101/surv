@@ -1329,6 +1329,21 @@ const SkinDefs: Record<string, MeleeDef> = {
     }),
     crowbar_scout: defineMeleeSkin("crowbar", {
         name: "Scouting Crowbar",
+        damage: 36,
+        obstacleDamage: 1.4,
+        attack: {
+            offset: {
+                x: 1.25,
+                y: 0,
+            },
+            rad: 1.25,
+            damageTimes: [0.1],
+            cooldownTime: 0.18,
+        },
+        speed: {
+            equip: 1,
+            attack: 1,
+        },
         lootImg: { sprite: "loot-melee-crowbar-scout.img" },
         worldImg: {
             sprite: "loot-melee-crowbar-scout.img",
@@ -1344,6 +1359,19 @@ const SkinDefs: Record<string, MeleeDef> = {
     kukri_sniper: defineMeleeSkin("machete", {
         name: "Marksman's Recurve",
         noPotatoSwap: false,
+        damage: 43,
+        attack: {
+            offset: {
+                x: 1.5,
+                y: 0,
+            },
+            rad: 1.75,
+            damageTimes: [0.1],
+            cooldownTime: 0.23,
+        },
+        speed: {
+            equip: 1,
+        },
         lootImg: { sprite: "loot-melee-kukri-sniper.img" },
         worldImg: {
             sprite: "loot-melee-kukri-sniper.img",
@@ -1371,7 +1399,7 @@ const SkinDefs: Record<string, MeleeDef> = {
     }),
     warhammer_tank: defineMeleeSkin("stonehammer", {
         name: "Panzerhammer",
-        damage: 64,
+        damage: 73,
         attack: {
             offset: { x: 1.5, y: 0 },
             rad: 1.75,

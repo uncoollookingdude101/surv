@@ -11104,6 +11104,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("lasr_gun_dual", 1),
             autoLoot("coconut_smg", 1),
             autoLoot("m2010", 1),
+            autoLoot("p90", 1),
+            autoLoot("m82", 1),
             autoLoot("mirv", 15),
             autoLoot("strobe", 15),
             autoLoot("bb", 15),
@@ -11682,6 +11684,22 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-crate-mil-01.img" },
         sound: { explode: "crate_break_01" },
     }),
+    mil_crate_01ms: createCrate({
+        collision: collider.createAabbExtents(v2.create(0, 0), v2.create(2.7, 1.25)),
+        health: 100,
+        loot: [
+            autoLoot("pan", 1),
+            autoLoot("bonesaw_healer", 1),
+            autoLoot("kukri_sniper", 1),
+            autoLoot("crowbar_recon", 1),
+            autoLoot("warhammer_tank", 1),
+
+        ],
+        map: { display: false },
+        terrain: { grass: true, beach: true },
+        img: { sprite: "map-crate-mil-01.img" },
+        sound: { explode: "crate_break_01" },
+    }),
     mil_crate_02: createCrate({
         collision: collider.createAabbExtents(v2.create(0, 0), v2.create(2.7, 1.25)),
         health: 100,
@@ -12014,6 +12032,13 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     pot_02: createBottle({
         img: { sprite: "map-pot-02.img" },
         loot: [autoLoot("spas12", 1)],
+    }),
+    pot_02ms: createBottle({
+        img: { sprite: "map-pot-02.img" },
+        loot: [
+            autoLoot("dp12", 1),
+            autoLoot("small_arms", 1)
+        ],
     }),
     pot_03: createBottle({ img: { sprite: "map-pot-03.img" } }),
     pot_03b: createBottle({
@@ -16397,6 +16422,29 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         },
         map: { displayType: "hut_01x" },
     } as unknown as Partial<BuildingDef>),
+    hut_02ms: createHut({
+        map: {
+            display: true,
+            shapes: [
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(0, 0),
+                        v2.create(7, 7),
+                    ),
+                    color: 0xF4D03F,
+                },
+                {
+                    collider: collider.createAabbExtents(
+                        v2.create(0, -18.9),
+                        v2.create(2, 12),
+                    ),
+                    color: 0x5e2d03,
+                },
+            ],
+        },
+        ceilingImg: "map-building-hut-ceiling-02.img",
+        specialLoot: "pot_02ms",
+    }),
     hut_03: createHut({
         map: {
             display: true,
@@ -26204,6 +26252,535 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         };
         return util.mergeDeep(t, e || {});
     })({}),
+    bathhouse_01ms: (function (e) {
+        const t = {
+            type: "building",
+            map: { display: false },
+            terrain: { grass: true, beach: false },
+            mapObstacleBounds: [],
+            zIdx: 0,
+            floor: {
+                surfaces: [
+                    {
+                        type: "tile",
+                        collision: [
+                            collider.createAabbExtents(
+                                v2.create(2, 9.5),
+                                v2.create(20, 22),
+                            ),
+                            collider.createAabbExtents(
+                                v2.create(0, 7.5),
+                                v2.create(26, 48),
+                            ),
+                            collider.createAabbExtents(
+                                v2.create(-26, -26),
+                                v2.create(4, 3),
+                            ),
+                        ],
+                    },
+                ],
+                imgs: [
+                    {
+                        sprite: "map-building-club-gradient-01.img",
+                        pos: v2.create(-3.5, -13.5),
+                        scale: 4,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                    {
+                        sprite: "map-building-bathhouse-basement-01a.img",
+                        pos: v2.create(-33.5, -26),
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                    {
+                        sprite: "map-building-bathhouse-basement-01b.img",
+                        pos: v2.create(-10, -26.5),
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                    {
+                        sprite: "map-building-bathhouse-basement-01c.img",
+                        pos: v2.create(18.5, -35.5),
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                    {
+                        sprite: "map-building-bathhouse-basement-01d.img",
+                        pos: v2.create(23.02, -27.5),
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                    {
+                        sprite: "map-building-bathhouse-basement-01e.img",
+                        pos: v2.create(2, 9),
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                ],
+            },
+            ceiling: {
+                zoomRegions: [
+                    {
+                        zoomIn: collider.createAabbExtents(
+                            v2.create(2, 9.5),
+                            v2.create(20, 22),
+                        ),
+                        zoomOut: collider.createAabbExtents(
+                            v2.create(2, 9.5),
+                            v2.create(22, 24),
+                        ),
+                        zoom: 48,
+                    },
+                    {
+                        zoomIn: collider.createAabbExtents(
+                            v2.create(0, 7.5),
+                            v2.create(26, 48),
+                        ),
+                    },
+                    {
+                        zoomIn: collider.createAabbExtents(
+                            v2.create(-26, -26),
+                            v2.create(4, 3),
+                        ),
+                    },
+                    {
+                        zoomIn: collider.createAabbExtents(
+                            v2.create(30, 0.5),
+                            v2.create(7.5, 6.5),
+                        ),
+                    },
+                    {
+                        zoomIn: collider.createAabbExtents(
+                            v2.create(-26, 16.5),
+                            v2.create(7.5, 6.5),
+                        ),
+                    },
+                ],
+                vision: {
+                    dist: 5.5,
+                    width: 2.75,
+                    linger: 0.5,
+                    fadeRate: 6,
+                },
+                imgs: [],
+            },
+            occupiedEmitters: [
+                {
+                    type: "bathhouse_steam",
+                    pos: v2.create(30, 0.5),
+                    dir: v2.create(-1, 0),
+                    rot: 0,
+                    scale: 1,
+                    layer: 1,
+                    parentToCeiling: false,
+                },
+                {
+                    type: "bathhouse_steam",
+                    pos: v2.create(-26, 16.5),
+                    dir: v2.create(1, 0),
+                    rot: 0,
+                    scale: 1,
+                    layer: 1,
+                    parentToCeiling: false,
+                },
+            ],
+            goreRegion: collider.createAabbExtents(v2.create(2, 8.5), v2.create(20, 23)),
+            puzzle: {
+                name: "club_02",
+                completeUseType: "vault_door_bathhouse",
+                completeOffDelay: 1,
+                completeUseDelay: 2,
+                errorResetDelay: 1,
+                pieceResetDelay: 10,
+                sound: {
+                    fail: "door_error_01",
+                    complete: "none",
+                },
+            },
+            mapObjects: [
+                {
+                    type: "concrete_wall_ext_5",
+                    pos: v2.create(-36.5, -26),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_7",
+                    pos: v2.create(-33.5, -23),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_7",
+                    pos: v2.create(-33.5, -29),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_4",
+                    pos: v2.create(-28, -22),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_6",
+                    pos: v2.create(-27.5, -17.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_11",
+                    pos: v2.create(-23.5, -13),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_11",
+                    pos: v2.create(-24.5, -30),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_6",
+                    pos: v2.create(-20.5, -34.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "club_wall_int_6",
+                    pos: v2.create(-14.5, -34.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "club_wall_int_6",
+                    pos: v2.create(-9.5, -34.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_column_4x24",
+                    pos: v2.create(-8, -22.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_column_4x9",
+                    pos: v2.create(2, -29),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_54",
+                    pos: v2.create(5, -39),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_14",
+                    pos: v2.create(26.5, -30.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_4",
+                    pos: v2.create(23, -25),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_6",
+                    pos: v2.create(19.5, -26.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_10",
+                    pos: v2.create(16, -31),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_19",
+                    pos: v2.create(9.5, -23),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_14",
+                    pos: v2.create(18, -15),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_21",
+                    pos: v2.create(23.5, 20),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_5",
+                    pos: v2.create(23.5, -11),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_19",
+                    pos: v2.create(15.5, 32),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_19",
+                    pos: v2.create(-11.5, 32),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_5",
+                    pos: v2.create(-19.5, 28),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "concrete_wall_ext_thicker_19",
+                    pos: v2.create(-19.5, -2),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "house_door_05",
+                    pos: v2.create(-18, -14),
+                    scale: 1,
+                    ori: 3,
+                },
+                {
+                    type: "glass_wall_9",
+                    pos: v2.create(-0.5, -14),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "glass_wall_9",
+                    pos: v2.create(-9.5, -14),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "house_door_05",
+                    pos: v2.create(8, -14),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "vault_door_bathhouse",
+                    pos: v2.create(6, 34.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "vault_door_bathhouse",
+                    pos: v2.create(-2, 34.5),
+                    scale: 1,
+                    ori: 3,
+                },
+                {
+                    type: "switch_03",
+                    pos: v2.create(8, 30.75),
+                    scale: 1,
+                    ori: 0,
+                    puzzlePiece: "1",
+                },
+                {
+                    type: "house_door_01",
+                    pos: v2.create(2, -37.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "house_door_01",
+                    pos: v2.create(-19.5, -24.5),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: randomObstacleType({ toilet_01: 9, toilet_02: 1 }),
+                    pos: v2.create(-17, -35.25),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: randomObstacleType({ toilet_01: 9, toilet_02: 1 }),
+                    pos: v2.create(-12, -35.25),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: "towelrack_01",
+                    pos: v2.create(-12, -25.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "bathhouse_column_1",
+                    pos: v2.create(-13, -7.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "pot_04",
+                    pos: v2.create(-13, -3),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "towelrack_01",
+                    pos: v2.create(-13, 2.25),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "bathhouse_column_1",
+                    pos: v2.create(-13, 8.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "towelrack_01",
+                    pos: v2.create(-13, 14.75),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "pot_04",
+                    pos: v2.create(-13, 20),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "bathhouse_column_1",
+                    pos: v2.create(-13, 24.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "bathhouse_column_1",
+                    pos: v2.create(17, -7.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "pot_04",
+                    pos: v2.create(17, -3),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "towelrack_01",
+                    pos: v2.create(17, 2.25),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "bathhouse_column_1",
+                    pos: v2.create(17, 8.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "towelrack_01",
+                    pos: v2.create(17, 14.75),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "pot_04",
+                    pos: v2.create(17, 20),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "bathhouse_column_1",
+                    pos: v2.create(17, 24.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "locker_01",
+                    pos: v2.create(-27.5, -28.85),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: "locker_01",
+                    pos: v2.create(-23.5, -28.85),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: "locker_01",
+                    pos: v2.create(10.5, -37.85),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: "locker_01",
+                    pos: v2.create(14.5, -37.85),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: "locker_01",
+                    pos: v2.create(18.5, -37.85),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: "decal_bathhouse_pool_01",
+                    pos: v2.create(2, 8.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "decal_club_01",
+                    pos: v2.create(2, 8.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "decal_club_02",
+                    pos: v2.create(2, 8.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "bathhouse_sideroom_01",
+                    pos: v2.create(-26, 16.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "bathhouse_sideroom_01",
+                    pos: v2.create(30, 0.5),
+                    scale: 1,
+                    ori: 2,
+                },
+                {
+                    type: "bathhouse_sideroom_02ms",
+                    pos: v2.create(2, 44),
+                    scale: 1,
+                    ori: 0,
+                },
+            ],
+        };
+        return util.mergeDeep(t, e || {});
+    })({}),
     bathhouse_sideroom_01: (function (e) {
         const t = {
             type: "building",
@@ -26489,6 +27066,172 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         };
         return util.mergeDeep(t, e || {});
     })({}),
+    bathhouse_sideroom_02ms: (function (e) {
+        const t = {
+            type: "building",
+            map: { display: true, shapes: [] },
+            terrain: { grass: true, beach: false },
+            mapObstacleBounds: [],
+            zIdx: 1,
+            floor: {
+                surfaces: [
+                    {
+                        type: "container",
+                        collision: [
+                            collider.createAabbExtents(
+                                v2.create(0, 0),
+                                v2.create(14, 10),
+                            ),
+                        ],
+                    },
+                ],
+                imgs: [
+                    {
+                        sprite: "map-building-bathhouse-sideroom-02.img",
+                        pos: v2.create(0, 0.5),
+                        scale: 0.5,
+                        alpha: 1,
+                        tint: 0xffffff,
+                    },
+                ],
+            },
+            ceiling: {
+                zoomRegions: [
+                    {
+                        zoomIn: collider.createAabbExtents(
+                            v2.create(0, 0),
+                            v2.create(14, 9.5),
+                        ),
+                    },
+                ],
+                vision: {
+                    dist: 5.5,
+                    width: 2.75,
+                    linger: 0.5,
+                    fadeRate: 6,
+                },
+                imgs: [
+                    {
+                        sprite: "map-building-bathhouse-sideroom-ceiling-02.img",
+                        scale: 1,
+                        alpha: 1,
+                        tint: 0x4b3e2c,
+                    },
+                ],
+            },
+            mapObjects: [
+                {
+                    type: "metal_wall_ext_thick_12",
+                    pos: v2.create(10, -9.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "metal_wall_ext_thick_12",
+                    pos: v2.create(-10, -9.5),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "metal_wall_ext_thicker_19",
+                    pos: v2.create(14.5, 1),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "metal_wall_ext_thicker_19",
+                    pos: v2.create(-14.5, 1),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "metal_wall_ext_thicker_26",
+                    pos: v2.create(0, 9),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: "crate_05",
+                    pos: v2.create(-2.5, -2.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "crate_05",
+                    pos: v2.create(2.5, -1.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "crate_04",
+                    pos: v2.create(-10.75, 5.25),
+                    scale: 0.8,
+                    ori: 0,
+                },
+                {
+                    type: "crate_04",
+                    pos: v2.create(10.75, 5.25),
+                    scale: 0.8,
+                    ori: 0,
+                },
+                {
+                    type: "mil_crate_04",
+                    pos: v2.create(-5.75, 5.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "mil_crate_01ms",
+                    pos: v2.create(5.75, 5.5),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: "case_07",
+                    pos: v2.create(0, 5.25),
+                    scale: 1,
+                    ori: 0,
+                },
+                {
+                    type: randomObstacleType({
+                        deposit_box_01: 0,
+                        deposit_box_02: 1,
+                    }),
+                    pos: v2.create(-13.75, -4.8),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: randomObstacleType({
+                        deposit_box_01: 3,
+                        deposit_box_02: 1,
+                    }),
+                    pos: v2.create(-13.75, 0.45),
+                    scale: 1,
+                    ori: 1,
+                },
+                {
+                    type: randomObstacleType({
+                        deposit_box_01: 3,
+                        deposit_box_02: 1,
+                    }),
+                    pos: v2.create(13.75, -4.8),
+                    scale: 1,
+                    ori: 3,
+                },
+                {
+                    type: randomObstacleType({
+                        deposit_box_01: 3,
+                        deposit_box_02: 1,
+                    }),
+                    pos: v2.create(13.75, 0.45),
+                    scale: 1,
+                    ori: 3,
+                },
+            ],
+        };
+        return util.mergeDeep(t, e || {});
+    })({}),
     club_window_01: createWindow({
         isWindow: false,
         hitParticle: "woodChip",
@@ -26551,6 +27294,60 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 0,
             },
         ],
+    },
+    club_structure_01ms: {
+        type: "structure",
+        structureType: "club",
+        terrain: {
+            grass: true,
+            beach: false,
+            spawnPriority: 10,
+        },
+        mapObstacleBounds: [],
+        layers: [
+            {
+                type: "club_01",
+                pos: v2.create(-3.5, -17.5),
+                ori: 0,
+            },
+            {
+                type: "bathhouse_01ms",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+        ],
+        stairs: [
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(-33, -26),
+                    v2.create(3, 2.55),
+                ),
+                downDir: v2.create(1, 0),
+                noCeilingReveal: true,
+            },
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(23, -28.5),
+                    v2.create(2, 3),
+                ),
+                downDir: v2.create(0, -1),
+            },
+        ],
+        mask: [
+            collider.createAabbExtents(v2.create(-5, 8), v2.create(25, 50)),
+            collider.createAabbExtents(v2.create(23.01, -35.5), v2.create(3, 4)),
+        ],
+        interiorSound: {
+            sound: "club_music_01",
+            soundAlt: "club_music_02",
+            filter: "club",
+            transitionTime: 1,
+            soundAltPlayTime: 90,
+            outsideMaxDist: 10,
+            outsideVolume: 0.25,
+            undergroundVolume: 0.707,
+            puzzle: "club_02",
+        },
     },
     club_structure_01: {
         type: "structure",
@@ -26632,6 +27429,44 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         mapObjects: [
             {
                 type: "club_structure_01",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "shack_01",
+                pos: v2.create(22, -10),
+                scale: 1,
+                ori: 1,
+            },
+        ],
+    },
+    club_complex_01ms: {
+        type: "building",
+        map: { display: true, shapes: [] },
+        terrain: {
+            grass: true,
+            beach: false,
+            spawnPriority: 10,
+        },
+        mapObstacleBounds: [
+            collider.createAabbExtents(v2.create(-16, 15), v2.create(19, 6)),
+            collider.createAabbExtents(v2.create(-8, -15.5), v2.create(26.5, 27.5)),
+            collider.createAabbExtents(v2.create(-2, -47), v2.create(10, 5)),
+            collider.createAabbExtents(v2.create(-37, -26), v2.create(4, 5)),
+            collider.createAabbExtents(v2.create(23, -7), v2.create(8, 10)),
+            collider.createAabbExtents(v2.create(22, -29), v2.create(6, 12)),
+            collider.createAabbExtents(v2.create(-8, -23), v2.create(28, 21)),
+            collider.createAabbExtents(v2.create(2, 0), v2.create(16, 12)),
+            collider.createAabbExtents(v2.create(-16, 0), v2.create(4, 4)),
+            collider.createAabbExtents(v2.create(-28.5, 12.5), v2.create(3.5, 3.5)),
+        ],
+        mapGroundPatches: [],
+        floor: { surfaces: [], imgs: [] },
+        ceiling: { zoomRegions: [], imgs: [] },
+        mapObjects: [
+            {
+                type: "club_structure_01ms",
                 pos: v2.create(0, 0),
                 scale: 1,
                 ori: 0,

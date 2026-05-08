@@ -701,8 +701,11 @@ export class WeaponManager {
         if (weapon.ammo <= 0) return;
 
         const firstShotAccuracy = weapon.recoilTime <= 0;
-
-        weapon.cooldown = itemDef.fireDelay;
+        let fireDelayMult = 1.0;
+        if (this.player.hasPerk("energized")) {
+        fireDelayMult = PerkProperties.energized.fireDelayMult;
+    }
+        weapon.cooldown = itemDef.fireDelay * fireDelayMult;
         weapon.recoilTime = itemDef.recoilTime;
 
         // Check firing location
@@ -785,6 +788,7 @@ export class WeaponManager {
         //
         // Perks
         //
+        const isDP12 = this.activeWeapon === "dp12";
         const hasExplosive = this.player.hasPerk("explosive");
         const hasSplinter = this.player.hasPerk("splinter");
         const hasApRounds = this.player.hasPerk("ap_rounds");
@@ -893,7 +897,6 @@ export class WeaponManager {
             if (itemDef.toMouseHit) {
                 distance = math.max(toMouseLen - gunLen, 0.0);
             }
-
             const params: BulletParams = {
                 playerId: this.player.__id,
                 bulletType: bulletType,
@@ -918,7 +921,7 @@ export class WeaponManager {
                 highVelocity: hasHighVelocity,
                 lastShot: weapon.ammo <= 0,
                 reflectObjId: this.player.obstacleOutfit?.__id,
-                onHitFx: hasExplosive ? "explosion_rounds" : undefined,
+                onHitFx: (hasExplosive || isDP12) ? "explosion_rounds" : undefined,
             };
 
             this.player.game.bulletBarn.fireBullet(params);

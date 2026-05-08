@@ -103,10 +103,11 @@ const mapDef = {
         audio: [
             { name: "helmet03_forest_pickup_01", channel: "ui" },
             { name: "ping_unlock_01", channel: "ui" },
+            { name: "potato_pickup_01", channel: "ui" },
             { name: "ambient_steam_01", channel: "ambient" },
             { name: "ambient_lab_01", channel: "ambient" },
             { name: "piano_music_01", channel: "ambient" },
-            { name: "pumpkin_break_01", channel: "sfx" },
+            { name: "coconut_01", channel: "sfx" },
             { name: "club_music_01", channel: "sfx" },
             { name: "club_music_02", channel: "sfx" },
             { name: "log_11", channel: "sfx" },
@@ -118,8 +119,6 @@ const mapDef = {
             { name: "log_04", channel: "sfx" },
             { name: "footstep_08", channel: "sfx" },
             { name: "footstep_09", channel: "sfx" },
-            { name: "coconut_01", channel: "sfx" },
-            { name: "potato_pickup_01", channel: "ui" },
         ],
         atlases: [
             "gradient",
@@ -167,7 +166,7 @@ const mapDef = {
             { name: "4xscope", count: 1, weight: 1.5 },
             { name: "8xscope", count: 1, weight: 0.65 },
         ],
-        tier_club_melee: [{ name: "pan", count: 1, weight: 1 }],
+        tier_club_melee: [{ name: "energized", count: 1, weight: 1 }],
         tier_throwables: [
             { name: "frag", count: 2, weight: 1 }, // !
             { name: "smoke", count: 1, weight: 1 },
@@ -207,7 +206,7 @@ const mapDef = {
             { name: "m1911", count: 1, weight: 3 },
             { name: "m1a1", count: 1, weight: 2 },
             { name: "flare_gun", count: 1, weight: 1 },
-            { name: "desert_eagle", count: 1, weight: 1 },
+            { name: "deagle", count: 1, weight: 1 },
         ],
         tier_ring_case: [
             { name: "potato_cannon", count: 1, weight: 1 },
@@ -418,6 +417,13 @@ const mapDef = {
             { name: "m134", count: 1, weight: 1 },
             { name: "m79", count: 1, weight: 1 },
         ],
+        tier_knives: [
+            { name: "bonesaw_healer", count: 1, weight: 1 },
+            { name: "warhammer_tank", count: 1, weight: 1 },
+            { name: "kukri_sniper", count: 1, weight: 1 },
+            { name: "crowbar_recon", count: 1, weight: 1 },
+            { name: "pan", count: 1, weight: 1 },
+        ]
     },
     biome: {
         colors: {
@@ -505,21 +511,20 @@ const mapDef = {
                 outhouse_01: 12,
                 loot_tier_1: 50,
                 loot_tier_beach: 7,
-                cache_pumpkin_01: 15,
                 crate_18: 10,
             },
         ],
         fixedSpawns: [
             {
                 kopje_patch_01: 2,
-                bunker_structure_09: 1,
                 savannah_patch_01: 3,
                 warehouse_01: 1,
                 house_red_01: 2,
                 house_red_02: 2,
                 barn_01: 0,
                 barn_02: 1,
-                hut_02: 2,
+                hut_02: 1,
+                hut_02ms: 1,
                 hut_03: 1,
                 hut_03ms: 1,
                 shack_03a: 2,
@@ -543,7 +548,7 @@ const mapDef = {
                 tree_02: 3,
                 teahouse_complex_01su: 2,
                 stone_04: 15,
-                club_complex_01: 1,
+                club_complex_01ms: 1,
                 greenhouse_02: 1,
                 logging_complex_02: 2,
                 hut_04ms: 2, // pirate hut
