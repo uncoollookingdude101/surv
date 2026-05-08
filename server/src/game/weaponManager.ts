@@ -61,8 +61,11 @@ export class WeaponManager {
 
     meleeAttacks: number[] = [];
 
-    cookingThrowable = false;
+    get cookingThrowable() {
+        return this.player.animType === GameConfig.Anim.Cook;
+    }
     cookTicker = 0;
+    throwableCooldown = 0;
 
     get activeWeapon(): string {
         return this.weapons[this.curWeapIdx].type;
@@ -297,6 +300,8 @@ export class WeaponManager {
         player.freeSwitchTimer -= dt;
 
         player.recoilTicker += dt;
+
+        this.throwableCooldown -= dt;
 
         for (let i = 0; i < this.weapons.length; i++) {
             this.weapons[i].cooldown -= dt;
@@ -1135,12 +1140,10 @@ export class WeaponManager {
     }
 
     cookThrowable(): void {
-        if (
-            this.player.animType === GameConfig.Anim.Cook ||
-            this.player.animType === GameConfig.Anim.Throw
-        ) {
+        if (this.cookingThrowable || this.throwableCooldown > 0) {
             return;
         }
+
         this.player.cancelAction();
         const itemDef = GameObjectDefs[this.activeWeapon];
         assert(
@@ -1148,7 +1151,6 @@ export class WeaponManager {
             `Invalid projectile type: ${this.activeWeapon}`,
         );
 
-        this.cookingThrowable = true;
         this.cookTicker = 0;
 
         this.player.playAnim(
@@ -1159,7 +1161,6 @@ export class WeaponManager {
 
     throwThrowable(noSpeed?: boolean): void {
         if (!this.cookingThrowable) return;
-        this.cookingThrowable = false;
 
         if (this.cookTicker < GameConfig.player.cookTime) {
             return;
@@ -1305,8 +1306,12 @@ export class WeaponManager {
             };
         }
 
-        const animationDuration = GameConfig.player.throwTime;
-        this.player.playAnim(GameConfig.Anim.Throw, animationDuration);
+        const throwTime = GameConfig.player.throwTime;
+        // client animation has an extra 0.15 seconds??? (see animData.js on the client)
+        // so thats why throwing grenades didnt feel that smooth on survev before...
+        this.player.playAnim(GameConfig.Anim.Throw, 0.15 + throwTime);
+        // actual cooldown, will prevent throwing more until its over
+        this.throwableCooldown = throwTime;
 
         /**
          * Remove the throwable from the inventory
