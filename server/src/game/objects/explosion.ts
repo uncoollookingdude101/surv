@@ -76,7 +76,11 @@ export class ExplosionBarn {
 
         const centerCircle = collider.createCircle(explosion.pos, 0.01);
 
-        for (let angle = -Math.PI; angle < Math.PI; angle += 0.1) {
+        // this make the amount of raycasts increase with the explosion radius
+        // the 0.75 is the maximum gap between the raycasts
+        const step = math.min(Math.acos(1 - (0.75 / def.rad.max) ** 2 / 2), 0.3);
+
+        for (let angle = -Math.PI; angle < Math.PI; angle += step) {
             // All objects that collided with this line
             const lineCollisions: Array<LineCollision> = [];
 
