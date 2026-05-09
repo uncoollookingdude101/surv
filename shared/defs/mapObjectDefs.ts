@@ -13143,8 +13143,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     vat_03: {
         type: "obstacle",
         scale: { createMin: 1, createMax: 1, destroy: 0.9 },
-        collision: collider.createCircle(v2.create(0, 0), 0.5),
-        height: 0.5,
+        collision: collider.createCircle(v2.create(0, 0), 1.75),
+        height: 0.2,
         collidable: false,
         destructible: false,
         health: 250,
@@ -13169,10 +13169,11 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             enter: "none",
         },
         button: {
-            interactionRad: 0.25,
+            interactionRad: 1.75,
             interactionText: "game-use",
             useOnce: true,
             destroyOnUse: true,
+            isVat: true,
             roleToPromote: "classless",
             useDelay: 0.1,
             useDir: v2.create(-1, 0),

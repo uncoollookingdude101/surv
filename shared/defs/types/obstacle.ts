@@ -86,6 +86,10 @@ export interface ObstacleDef {
         interactionText: string;
         useOnce: boolean;
         useType?: string;
+        /**
+         * Will make interactions require the player to be completely inside the interactionRad
+         */
+        isVat?: boolean;
         roleToPromote?: string;
         useDelay: number;
         useDir: Vec2;

@@ -80,6 +80,7 @@ export class Obstacle extends BaseGameObject {
         seq: number;
         useOnce: boolean;
         useType: string;
+        isVat?: boolean;
         roleToPromote?: string;
         useDelay: number;
         useDir: Vec2;
@@ -197,6 +198,7 @@ export class Obstacle extends BaseGameObject {
                 seq: 1,
                 useOnce: def.button.useOnce,
                 useType: def.button.useType!,
+                isVat: def.button.isVat,
                 roleToPromote: def.button.roleToPromote,
                 useDelay: def.button.useDelay,
                 useDir: def.button.useDir,
@@ -601,6 +603,15 @@ export class Obstacle extends BaseGameObject {
         if (player && !auto) {
             if (this.interactCooldown > 0) return;
             this.interactCooldown = 0.1;
+        }
+
+        if (
+            player &&
+            this.isButton &&
+            this.button.roleToPromote &&
+            player.role === this.button.roleToPromote
+        ) {
+            return;
         }
 
         this.interactedBy = player;
