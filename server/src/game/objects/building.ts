@@ -302,19 +302,19 @@ export class Building extends BaseGameObject {
                     obj.__type === ObjectType.Obstacle &&
                     obj.type === puzzleDef.completeUseType
                 ) {
-                    if (puzzleName === "bunker_twins") {
-                        setTimeout(() => {
+                    setTimeout(() => {
+                        if (obj.isDoor) {
+                            obj.toggleDoor();
+                        } else if (obj.isButton) {
+                            obj.useButton();
+                        } else {
                             obj.kill({
                                 damageType: DamageType.Player,
                                 dir: v2.create(0, 0),
                                 source: undefined,
                             });
-                        }, puzzleDef.completeUseDelay * 1000);
-                    } else {
-                        setTimeout(() => {
-                            obj.toggleDoor();
-                        }, puzzleDef.completeUseDelay * 1000);
-                    }
+                        }
+                    }, puzzleDef.completeUseDelay * 1000);
                 }
             }
             this.puzzleSolved = true;
