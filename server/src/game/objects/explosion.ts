@@ -8,7 +8,9 @@ import { assert, util } from "../../../../shared/utils/util";
 import { type Vec2, v2 } from "../../../../shared/utils/v2";
 import type { Game } from "../game";
 import type { DamageParams, GameObject } from "./gameObject";
-import { EXPLOSION_LOOT_PUSH_FORCE } from "./loot";
+import { EXPLOSION_LOOT_PUSH_FORCE, type Loot } from "./loot";
+import type { Obstacle } from "./obstacle";
+import type { Player } from "./player";
 
 interface LineCollision {
     obj: GameObject;
@@ -51,7 +53,25 @@ export class ExplosionBarn {
         const coll = collider.createCircle(explosion.pos, explosion.rad);
 
         // List of all near objects
-        const objects = this.game.grid.intersectCollider(coll);
+        // filter it first, we iterate over that list many many times...
+        // so filtering first will mean way less iterations when doing the raycasts
+        // specially useful for airstrikes so it doesn't iterate over all the explosion decals
+        const objects = this.game.grid.intersectCollider(coll).filter((obj) => {
+            if (!util.sameLayer(obj.layer, explosion.layer)) return false;
+            if ((obj as { dead?: boolean }).dead) return false;
+            if (
+                !(
+                    obj.__type === ObjectType.Player ||
+                    obj.__type === ObjectType.Obstacle ||
+                    obj.__type === ObjectType.Loot
+                )
+            ) {
+                return false;
+            }
+
+            return true;
+        }) as Array<Player | Obstacle | Loot>;
+
         const damagedObjects = new Map<number, boolean>();
 
         const centerCircle = collider.createCircle(explosion.pos, 0.01);
@@ -65,38 +85,31 @@ export class ExplosionBarn {
                 v2.rotate(v2.create(explosion.rad, 0), angle),
             );
 
-            for (const obj of objects) {
-                if (!util.sameLayer(obj.layer, explosion.layer)) continue;
-                if ((obj as { dead?: boolean }).dead) continue;
-                if (
-                    obj.__type === ObjectType.Player ||
-                    obj.__type === ObjectType.Obstacle ||
-                    obj.__type === ObjectType.Loot
-                ) {
-                    // if the explosion center is inside the object deal max damage
-                    if (coldet.test(obj.collider, centerCircle)) {
-                        lineCollisions.push({
-                            pos: explosion.pos,
-                            obj,
-                            distance: 0,
-                            dir: v2.neg(v2.normalize(v2.sub(explosion.pos, obj.pos))),
-                        });
-                        continue;
-                    }
-                    // check if the object hitbox collides with a line from the explosion center to the explosion max distance
-                    const intersection = collider.intersectSegment(
-                        obj.collider,
-                        explosion.pos,
-                        lineEnd,
-                    );
-                    if (intersection) {
-                        lineCollisions.push({
-                            pos: intersection.point,
-                            obj,
-                            distance: v2.distance(explosion.pos, intersection.point),
-                            dir: v2.neg(v2.normalize(v2.sub(explosion.pos, obj.pos))),
-                        });
-                    }
+            for (let i = 0; i < objects.length; i++) {
+                const obj = objects[i];
+                // if the explosion center is inside the object deal max damage
+                if (coldet.test(obj.collider, centerCircle)) {
+                    lineCollisions.push({
+                        pos: explosion.pos,
+                        obj,
+                        distance: 0,
+                        dir: v2.neg(v2.normalize(v2.sub(explosion.pos, obj.pos))),
+                    });
+                    continue;
+                }
+                // check if the object hitbox collides with a line from the explosion center to the explosion max distance
+                const intersection = collider.intersectSegment(
+                    obj.collider,
+                    explosion.pos,
+                    lineEnd,
+                );
+                if (intersection) {
+                    lineCollisions.push({
+                        pos: intersection.point,
+                        obj,
+                        distance: v2.distance(explosion.pos, intersection.point),
+                        dir: v2.neg(v2.normalize(v2.sub(explosion.pos, obj.pos))),
+                    });
                 }
             }
 
