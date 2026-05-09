@@ -9981,7 +9981,6 @@ const MaterialDefs = {
         reflectBullets: true,
         hitParticle: "barrelChip",
         explodeParticle: "barrelBreak",
-        explosion: "explosion_cobalt",
         sound: {
             bullet: "cobalt_bullet",
             punch: "cobalt_bullet",
@@ -30462,6 +30461,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         material: "cobalt",
         extents: v2.create(0.6, 2),
         img: wallImg("map-wall-04-cobalt.img", 0xffffff),
+        explosion: "explosion_cobalt",
     }),
     bunker_twins_sublevel_01: {
         type: "building",
@@ -30872,7 +30872,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "case_09",
-                pos: v2.create(5, -5.75),
+                pos: v2.create(6.5, -5.65),
                 scale: 1,
                 ori: 0,
                 inheritOri: false,

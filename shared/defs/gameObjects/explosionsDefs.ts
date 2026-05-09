@@ -275,6 +275,6 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelCount: 20,
         shrapnelType: "shrapnel_cobalt",
         explosionEffectType: "barrel",
-        decalType: "",
+        decalType: "decal_barrel_explosion",
     },
 };
