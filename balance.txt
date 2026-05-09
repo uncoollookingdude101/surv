@@ -148,7 +148,7 @@ Factions Changes (2025/07/23):
 
 Cobalt Loot Changes (2025/10/22):
 + Medic Common: Added VSS (weight of 1)
-+ Scout Common: Added Dual M93R, DEagle (weights of 1 & 0.2 respectively).
++ Scout Common: Added Dual M93R, DEagle (weights of 1 & 0.2, respectively).
 + Demo Common: Added MP220 (weight 1).
 + Tank Common: Added BAR M1918 (weight of 0.5), 
 ~ Tank Common: Adjusted QBB-97 weight (0.1 -> 0.2)
@@ -157,7 +157,7 @@ Cobalt Loot Changes (2025/10/22):
 - Demo Rare: Removed MP220
 + Demo Rare: Added Super-90 (weight of 0.1).
 ~ Demo Rare: Adjusted Saiga weight (0.5 -> 1) 
-~ Tank Rare: Adjusted QBB-97 & M249 weights (1 -> 1.3 & 0.05 -> 0.2 respectively).
+~ Tank Rare: Adjusted QBB-97 & M249 weights (1 -> 1.2 & 0.05 -> 0.2, respectively).
 
 Turkey Cache Changes (2025/11/01): 
 + 50 Leafpile Loot Caches
@@ -250,11 +250,13 @@ Turkey Cache Changes (2025/11/01):
 + Tier Airdrop Uncommon: Added Dual OTs-38 & Garand (weights of 1 & 0.5, respectively).
 
 0.3.0 (Cobalt & Pass) (2026/05/04):
++ Assault Common: Added SCAR-H (weight of 0.2).
 + Tank Common: Added IMD-2 (weight of 0.5).
 ~ Tank Common: Adjusted QBB-97 weight (0.2 --> 0.25).
 + Demo Rare: Added SPAS-16 (weight of 0.2).
 ~ Demo Rare: Adjusted Saiga-12 weight (1 --> 0.7).
 ~ Medic Rare: Adjusted Garand weight (0.5 --> 0.44).
+~ Sniper Rare: Adjusted SV, AWM-S weights (0.1 --> 0.15 & 0.05 --> 0.075, respectively).
 ~ Demo Crate: Replaced MIRV (6x) with Tier Throwable Demo (3-4).
 + Tier CLass Crate Mythic: Added Indomitable Spirit (weight of 1).
 ~ Rare Demo Crate: Replaced Airdrop Throwable (1) with Tier Throwable Demo (4-5).

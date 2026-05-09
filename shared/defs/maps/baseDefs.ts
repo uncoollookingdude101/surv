@@ -446,6 +446,7 @@ export const Main: MapDef = {
             { name: "ak47", count: 1, weight: 1 },
             { name: "groza", count: 1, weight: 1 },
             { name: "famas", count: 1, weight: 1 },
+            { name: "scar", count: 1, weight: 0.2 },
         ],
         tier_guns_common_tank: [
             { name: "dp28", count: 1, weight: 1 },
@@ -474,8 +475,8 @@ export const Main: MapDef = {
         ],
         tier_guns_rare_sniper: [
             { name: "mosin", count: 1, weight: 1 },
-            { name: "sv98", count: 1, weight: 0.1 },
-            { name: "awc", count: 1, weight: 0.05 },
+            { name: "sv98", count: 1, weight: 0.15 },
+            { name: "awc", count: 1, weight: 0.075 },
         ],
         tier_guns_rare_demo: [
             { name: "saiga", count: 1, weight: 0.7 },
@@ -496,7 +497,7 @@ export const Main: MapDef = {
             { name: "an94", count: 1, weight: 0.5 },
         ],
         tier_guns_rare_tank: [
-            { name: "qbb97", count: 1, weight: 1.3 },
+            { name: "qbb97", count: 1, weight: 1.2 },
             { name: "pkp", count: 1, weight: 0.1 },
             { name: "m249", count: 1, weight: 0.2 },
         ],
