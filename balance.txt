@@ -249,7 +249,7 @@ Turkey Cache Changes (2025/11/01):
 ~ Tier Airdrop Uncommon: Adjusted Vector, VSS, M39 EMR, Mk 12 SPR, Saiga-12, Scout Elite, BAR, SCAR-H, Mosin, & QBB weights (1 -> 2, 2.5 -> 2, 2.5 -> 2, 2.5 -> 2, 1 -> 2, 2.5 -> 2, 1 -> 2, 0.75 -> 1.5, 1.5 -> 1, & 1.5 -> 1, respectively).
 + Tier Airdrop Uncommon: Added Dual OTs-38 & Garand (weights of 1 & 0.5, respectively).
 
-0.3.0 (Cobalt & Pass) (2026/05/04):
+0.3.0 (Cobalt & Pass) (2026/05/11):
 + Assault Common: Added SCAR-H (weight of 0.2).
 + Tank Common: Added IMD-2 (weight of 0.5).
 ~ Tank Common: Adjusted QBB-97 weight (0.2 --> 0.25).
