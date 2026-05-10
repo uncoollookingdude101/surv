@@ -161,7 +161,10 @@ const mapDef: PartialMapDef = {
                 },
                 stone_04: 1,
                 club_complex_01: 1,
-                class_shell_01: 40,
+                class_shell_01: {
+                    small: 45,
+                    large: 55,
+                },
                 cache_log_13: 1, // recorder crate
             },
         ],

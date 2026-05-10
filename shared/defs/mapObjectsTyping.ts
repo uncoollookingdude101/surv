@@ -25,6 +25,7 @@ interface TerrainSpawnDef {
         radMax: number;
         facingOri: number;
     };
+    minDistanceFromSameType?: number;
 }
 
 export interface LootSpawnDef {

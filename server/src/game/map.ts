@@ -1393,6 +1393,22 @@ export class GameMap {
             }
         }
 
+        if (def.terrain?.minDistanceFromSameType) {
+            const objs = this.game.grid.intersectCollider(
+                coldet.circleToAabb(pos, def.terrain.minDistanceFromSameType),
+            );
+            for (let i = 0; i < objs.length; i++) {
+                const obj = objs[i];
+                if (obj.__type !== ObjectType.Obstacle) continue;
+                if (obj.type !== type) continue;
+
+                const distance = v2.distance(obj.pos, pos);
+                if (distance <= def.terrain.minDistanceFromSameType) {
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
