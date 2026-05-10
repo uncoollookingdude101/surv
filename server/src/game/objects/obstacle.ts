@@ -109,6 +109,10 @@ export class Obstacle extends BaseGameObject {
     killTicker = 0;
     regrowTicker = 0;
 
+    // for cobalt class pods, its the ID of the player that opened the class pod
+    shouldApplyLootOwner = false;
+    ownerId = 0;
+
     constructor(
         game: Game,
         pos: Vec2,
@@ -438,7 +442,19 @@ export class Obstacle extends BaseGameObject {
             } else {
                 destroyType = def.destroyType;
             }
-            this.game.map.genAuto(destroyType, this.pos, this.layer, this.ori);
+            const obj = this.game.map.genAuto(
+                destroyType,
+                this.pos,
+                this.layer,
+                this.ori,
+            );
+
+            if (obj?.__type === ObjectType.Obstacle) {
+                obj.shouldApplyLootOwner = !!def.smartLoot;
+                if (def.smartLoot && params.source?.__type === ObjectType.Player) {
+                    obj.ownerId = params.source.__id;
+                }
+            }
         }
 
         // potatos in potato mode
@@ -479,6 +495,29 @@ export class Obstacle extends BaseGameObject {
                 max: 1,
                 props: {},
             });
+        }
+
+        // cobalt class pod logic
+        let ownerId = 0;
+        if (this.shouldApplyLootOwner) {
+            // default to whoever broke the class pod
+            ownerId =
+                params.source?.__type === ObjectType.Player ? params.source.__id : 0;
+
+            // but then check for the player who unlocked this class pod
+            // if they are still alive and close give it to them instead
+            const podUnlocker = this.game.objectRegister.getById(this.ownerId);
+            if (
+                podUnlocker &&
+                podUnlocker.__type === ObjectType.Player &&
+                !podUnlocker.dead &&
+                util.sameLayer(podUnlocker.layer, this.layer)
+            ) {
+                const distance = v2.distance(this.pos, podUnlocker.pos);
+                if (distance <= 8) {
+                    ownerId = this.ownerId;
+                }
+            }
         }
 
         const items: Array<{
@@ -555,6 +594,7 @@ export class Obstacle extends BaseGameObject {
                 dir,
                 item.preload,
                 "obstacle",
+                ownerId,
             );
         }
 

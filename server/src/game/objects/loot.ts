@@ -104,6 +104,7 @@ export class LootBarn {
         count: number,
         pushSpeed?: number,
         dir?: Vec2,
+        ownerId?: number,
     ) {
         const def = GameObjectDefs[type];
 
@@ -112,7 +113,16 @@ export class LootBarn {
             return;
         }
 
-        const loot = new Loot(this.game, type, pos, layer, count, pushSpeed, dir);
+        const loot = new Loot(
+            this.game,
+            type,
+            pos,
+            layer,
+            count,
+            pushSpeed,
+            dir,
+            ownerId,
+        );
         this._addLoot(loot);
     }
 
@@ -126,6 +136,7 @@ export class LootBarn {
         dir?: Vec2,
         preloadGun?: boolean,
         source?: "player" | "obstacle" | "map",
+        ownerId?: number,
     ) {
         const def = GameObjectDefs[type];
 
@@ -134,7 +145,16 @@ export class LootBarn {
             return;
         }
 
-        const loot = new Loot(this.game, type, pos, layer, count, pushSpeed, dir);
+        const loot = new Loot(
+            this.game,
+            type,
+            pos,
+            layer,
+            count,
+            pushSpeed,
+            dir,
+            ownerId,
+        );
         this._addLoot(loot);
 
         if (
@@ -159,6 +179,7 @@ export class LootBarn {
                 halfAmmo,
                 pushSpeed,
                 dir,
+                ownerId,
             );
             this._addLoot(leftAmmo);
 
@@ -171,6 +192,7 @@ export class LootBarn {
                     ammoCount - halfAmmo,
                     pushSpeed,
                     dir,
+                    ownerId,
                 );
                 this._addLoot(rightAmmo);
             }
@@ -232,8 +254,14 @@ export class Loot extends BaseGameObject {
     bounds: AABB;
 
     isPreloadedGun = false;
-    hasOwner = false;
+
+    get hasOwner() {
+        return this.ownerId !== 0;
+    }
     ownerId = 0;
+
+    removeOwnerTicker = 0;
+
     isOld = false;
 
     forceUpdateTicker = 1;
@@ -262,6 +290,7 @@ export class Loot extends BaseGameObject {
         count: number,
         pushSpeed = 4,
         dir?: Vec2,
+        ownerId?: number,
     ) {
         super(game, pos);
 
@@ -271,6 +300,7 @@ export class Loot extends BaseGameObject {
         this.layer = layer;
         this.type = type;
         this.count = def.type === "gun" ? 1 : count;
+        this.ownerId = ownerId ?? 0;
 
         this.collider = collider.createCircle(pos, GameConfig.lootRadius[def.type]);
         this.collider.pos = this.pos;
@@ -309,6 +339,14 @@ export class Loot extends BaseGameObject {
     }
 
     update(dt: number): void {
+        if (this.hasOwner) {
+            this.removeOwnerTicker += dt;
+            if (this.removeOwnerTicker > 2) {
+                this.ownerId = 0;
+                this.setDirty();
+            }
+        }
+
         const shouldUpdate =
             this.forceUpdateTicker > 0.3 ||
             Math.abs(this.vel.x) > 0.001 ||
