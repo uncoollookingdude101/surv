@@ -68,13 +68,15 @@ export class App {
         this.localization.localizeIndex();
 
         window.addEventListener("load", () => {
-            void SDK.ensureNitroReady().finally(() => {
-                if (helpers.getParameterByName("slug")) {
-                    this.setView("player");
-                } else {
-                    this.setView("main");
-                }
-            });
+            SDK.ensureNitroReady()
+                .catch(() => {})
+                .finally(() => {
+                    if (helpers.getParameterByName("slug")) {
+                        this.setView("player");
+                    } else {
+                        this.setView("main");
+                    }
+                });
         });
     }
 

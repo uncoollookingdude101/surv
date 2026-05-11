@@ -89,6 +89,7 @@ function isWithinPoki(): boolean {
 export class SDKManager implements BaseSDKManager {
     private readonly nitroSiteID = import.meta.env.VITE_NITROPAY_SITE_ID;
     private nitroLoadPromise: Promise<void> | null = null;
+    private nitroDisabled = false;
     private readonly nitroFooterPlacementHome = `${AD_PREFIX}_728x90`;
     private readonly nitroPlacements = {
         home: ["nitro-header", "nitro-home-vrec", "nitro-home-mrec"],
@@ -302,11 +303,22 @@ export class SDKManager implements BaseSDKManager {
             return;
         }
 
-        await this.ensureNitroReady();
+        try {
+            await this.ensureNitroReady();
+        } catch (error) {
+            this.nitroDisabled = true;
+            console.warn("Nitro unavailable, continuing without ads", error);
+            return;
+        }
+
         this.enterMenuAdState();
     }
 
     async ensureNitroReady(): Promise<void> {
+        if (this.nitroDisabled) {
+            return;
+        }
+
         if (this.nitroLoadPromise) {
             return await this.nitroLoadPromise;
         }
@@ -354,6 +366,10 @@ export class SDKManager implements BaseSDKManager {
     }
 
     showNitroPlacements(placementIDs: string[]) {
+        if (this.nitroDisabled) {
+            return;
+        }
+
         if (!this.nitroSiteID) {
             console.warn("[nitro] missing site id", { placementIDs });
             return;
@@ -416,7 +432,7 @@ export class SDKManager implements BaseSDKManager {
     }
 
     private showNitroFooter() {
-        if (!this.nitroSiteID || this.nitroFooterActive) {
+        if (!this.nitroSiteID || this.nitroDisabled || this.nitroFooterActive) {
             return;
         }
 
