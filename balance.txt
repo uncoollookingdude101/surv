@@ -260,3 +260,4 @@ Turkey Cache Changes (2025/11/01):
 ~ Demo Crate: Replaced MIRV (6x) with Tier Throwable Demo (3-4).
 + Tier CLass Crate Mythic: Added Indomitable Spirit (weight of 1).
 ~ Rare Demo Crate: Replaced Airdrop Throwable (1) with Tier Throwable Demo (4-5).
++ 5-15 Class Pods (30 -> 35-45 depending on map size).
