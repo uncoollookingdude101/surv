@@ -351,7 +351,7 @@ export class Projectile extends BaseGameObject {
         if (this.destroyed) return;
 
         const originalLayer = this.layer;
-        this.checkStairs(objs, this.rad);
+        this.checkStairs(objs, 0.01);
 
         if (!this.dead) {
             if (this.layer !== originalLayer) {
