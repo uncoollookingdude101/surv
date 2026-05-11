@@ -2986,6 +2986,10 @@ export class Player extends BaseGameObject {
             this.health = 50;
         }
 
+        if (this.weaponManager.cookingThrowable) {
+            this.weaponManager.throwThrowable(true);
+        }
+
         this.animType = GameConfig.Anim.None;
         this.setDirty();
 
@@ -3038,8 +3042,13 @@ export class Player extends BaseGameObject {
         this.actionSeq++;
         this.hasteType = GameConfig.HasteType.None;
         this.hasteSeq++;
+
+        if (this.weaponManager.cookingThrowable) {
+            this.weaponManager.throwThrowable(true);
+        }
         this.animType = GameConfig.Anim.None;
         this.animSeq++;
+
         this.healEffect = false;
         this.lastStandEffect = false;
         this.boostDirty = true;
@@ -3510,6 +3519,10 @@ export class Player extends BaseGameObject {
                 GameConfig.player.reviveDuration,
                 playerToRevive.__id,
             );
+
+            if (this.weaponManager.cookingThrowable) {
+                this.weaponManager.throwThrowable(true);
+            }
             this.playAnim(GameConfig.Anim.Revive, GameConfig.player.reviveDuration);
         }
     }

@@ -126,6 +126,10 @@ export class WeaponManager {
         )
             return;
 
+        if (this.cookingThrowable && idx !== GameConfig.WeaponSlot.Throwable) {
+            this.throwThrowable(true);
+        }
+
         this.player.cancelAnim();
 
         if (cancelSlowdown) {
