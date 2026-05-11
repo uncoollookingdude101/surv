@@ -5944,6 +5944,12 @@ input [type="image"]:focus {
 }
 
 @media (max-width: 850px), (max-width: 900px) and (min-resolution: 3dppx) {
+  #right-column,
+  #pass-wrapper,
+  #news-wrapper {
+    width: 210px;
+  }
+
   .team-menu-option {
     height: 28px;
     margin-bottom: 8px;
@@ -6071,7 +6077,7 @@ input [type="image"]:focus {
   #news-block {
     width: 200px;
     height: 230px;
-    margin-left: 18px;
+    margin-left: 10px;
     padding: 14px;
     overflow-y: auto;
   }
