@@ -389,7 +389,7 @@ export class Bullet {
             this.bulletManager.game.explosionBarn.addExplosion(
                 this.onHitFx,
                 // spawn the explosion a bit behind the bullet so it won't spawn inside obstacles
-                v2.sub(this.pos, v2.mul(this.dir, 0.01)),
+                v2.sub(this.pos, v2.mul(this.dir, 0.1)),
                 this.layer,
                 {
                     source: this.player,
