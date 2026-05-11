@@ -311,7 +311,7 @@ export class Building extends BaseGameObject {
                             obj.kill({
                                 damageType: DamageType.Player,
                                 dir: v2.create(0, 0),
-                                source: undefined,
+                                source: piece.interactedBy,
                             });
                         }
                     }, puzzleDef.completeUseDelay * 1000);
