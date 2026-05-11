@@ -583,6 +583,12 @@ a:active {
   top: var(--side-pad);
 }
 
+@media (min-width: 851px) and (max-height: 690px) {
+  .ad-block-header {
+    display: none;
+  }
+}
+
 .ad-block-left-center {
   position: absolute;
   left: var(--side-pad);
