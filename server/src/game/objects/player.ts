@@ -3169,6 +3169,7 @@ export class Player extends BaseGameObject {
                         if (newPerk) {
                             killCreditSource.removePerk(perkToReplace);
                             killCreditSource.addPerk(newPerk, false, undefined, true);
+                            killCreditSource.setDirty();
                         }
                     }
                 }
