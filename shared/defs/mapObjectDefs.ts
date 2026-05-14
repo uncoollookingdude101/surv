@@ -12407,6 +12407,18 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tint: 0xe6e6e6,
         },
     }),
+    stone_08x: createRiverStone({
+        loot: [
+            tierLoot("tier_medical", 2, 3),
+            tierLoot("tier_surviv", 1, 2),
+            autoLoot("m39", 1),
+        ],
+        img: {
+            sprite: "map-stone-03x.img",
+            residue: "",
+            tint: 0xe6e6e6,
+        },
+    }),
     stone_08cb: createRiverStone({
         loot: [
             tierLoot("tier_medical", 2, 3),
@@ -15446,6 +15458,28 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         mapObjects: [
             {
                 type: "stone_08",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_caduceus_01",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+        ],
+    }),
+    cache_04x: createCache({
+        terrain: {
+            grass: false,
+            beach: false,
+            river: { centerWeight: 0.5 },
+            riverShore: false,
+        },
+        mapObjects: [
+            {
+                type: "stone_08x",
                 pos: v2.create(0, 0),
                 scale: 1,
                 ori: 0,
