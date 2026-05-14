@@ -1198,6 +1198,18 @@ export class WeaponManager {
         }
         assert(throwableDef.type === "throwable");
 
+        const isAmped = this.player.hasPerk("amped_explosives");
+
+        const throwRangeMult = isAmped
+            ? PerkProperties.amped_explosives.throwableRangeMult
+            : 1;
+
+        const throwSpeedMult = isAmped
+            ? PerkProperties.amped_explosives.throwableSpeedMult
+            : 1;
+
+        const maxDist = GameConfig.player.throwableMaxMouseDist * throwRangeMult;
+
         let multiplier: number;
         if (throwableDef.forceMaxThrowDistance) {
             multiplier = 1;
@@ -1206,19 +1218,8 @@ export class WeaponManager {
             multiplier = 0;
         } else {
             // default throw strength algorithm, just based on mouse distance from player
-            multiplier =
-                math.clamp(
-                    this.player.toMouseLen,
-                    0,
-                    GameConfig.player.throwableMaxMouseDist,
-                ) / GameConfig.player.throwableMaxMouseDist;
+            multiplier = math.clamp(this.player.toMouseLen, 0, maxDist) / maxDist;
         }
-
-        const isAmped = this.player.hasPerk("amped_explosives");
-
-        const throwSpeedMult = isAmped
-            ? PerkProperties.amped_explosives.throwableSpeedMult
-            : 1;
 
         const throwStr = multiplier * throwableDef.throwPhysics.speed * throwSpeedMult;
 
@@ -1265,15 +1266,11 @@ export class WeaponManager {
 
         let dir = v2.copy(this.player.dir);
 
-        const throwRangeMult = isAmped
-            ? PerkProperties.amped_explosives.throwableRangeMult
-            : 1;
-
         // Aim toward a point some distance infront of the player
         if (throwableDef.aimDistance > 0.0) {
             const aimTarget = v2.add(
                 this.player.pos,
-                v2.mul(this.player.dir, throwableDef.aimDistance * throwRangeMult),
+                v2.mul(this.player.dir, throwableDef.aimDistance),
             );
             dir = v2.normalizeSafe(v2.sub(aimTarget, spawnPos), v2.create(1.0, 0.0));
         }
