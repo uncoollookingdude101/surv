@@ -738,7 +738,7 @@
   "game-bonus_9mm": "9mm Overpressure",
   "game-bonus_9mm-desc": "9mm bullets have increased speed, range, damage and spread.",
   "game-flak_jacket": "Flak Jacket",
-  "game-flak_jacket-desc": "Greatly reduces damage from explosions and shrapnel.",
+  "game-flak_jacket-desc": "Greatly reduces damage from explosions & shrapnel.</br>Increased grenade capacity.",
   "game-amped_explosives": "Hyperfragmentation",
   "game-amped_explosives-desc": "Throwables travel farther and faster. Fragmenting explosives release more powerful shrapnel.",
   "game-explosive": "Explosive Rounds",

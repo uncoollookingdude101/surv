@@ -1299,6 +1299,10 @@ export class Player extends BaseGameObject {
                 util.removeFrom(this.game.playerBarn.aoeHealPlayers, this);
                 break;
             }
+            case "flak_jacket": {
+                this.invManager.enforceMaxCapacity("frag");
+                this.invManager.enforceMaxCapacity("mirv");
+            }
         }
 
         this.recalculateScale();

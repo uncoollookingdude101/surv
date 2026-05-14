@@ -1,5 +1,6 @@
 import { GameObjectDefs } from "../../../shared/defs/gameObjectDefs";
 import { SCOPE_LEVELS, type ScopeDef } from "../../../shared/defs/gameObjects/gearDefs";
+import { PerkProperties } from "../../../shared/defs/gameObjects/perkDefs";
 import { GameConfig, type InventoryItem } from "../../../shared/gameConfig";
 import { math } from "../../../shared/utils/math";
 import type { Player } from "./objects/player";
@@ -69,7 +70,25 @@ export class InventoryManager {
 
     getMaxCapacity(item: InventoryItem): number {
         const bagLevel = this.player.getGearLevel(this.player.backpack);
-        return this.bagSizes[item][bagLevel];
+        let amount = this.bagSizes[item][bagLevel];
+        if (this.player.hasPerk("flak_jacket")) {
+            if (item === "frag") {
+                amount += PerkProperties.flak_jacket.fragBonus;
+            } else if (item === "mirv") {
+                amount += PerkProperties.flak_jacket.mirvBonus;
+            }
+        }
+        return amount;
+    }
+
+    enforceMaxCapacity(item: InventoryItem) {
+        const max = this.getMaxCapacity(item);
+        const current = this.get(item);
+
+        if (current > max) {
+            this.set(item, max);
+            this.player.dropLoot(item, current - max, false);
+        }
     }
 
     wipeInventory() {
