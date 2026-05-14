@@ -708,7 +708,7 @@
   "game-field_medic": "Combat Medic",
   "game-field_medic-desc": "Move quickly while healing.",
   "game-combat_stims": "Combat Stimulants",
-  "game-combat_stims-desc": "Consumables grant a short boost to damage.",
+  "game-combat_stims-desc": "Consumables grant a temporary boost to bullet damage and allow them to heal allies.",
   "game-lifeline": "Indomitable Spirit",
   "game-lifeline-desc": "Adrenaline loss slowed. Taking fatal damage consumes adrenaline to mitigate it.",
   "game-tree_climbing": "One With Nature",

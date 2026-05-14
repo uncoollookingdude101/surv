@@ -2837,6 +2837,23 @@ export class Player extends BaseGameObject {
         // teammates can't deal damage to each other
         if (playerSource && params.source !== this) {
             if (playerSource.teamId === this.teamId && !this.disconnected) {
+                // Combat Stimulants Healing
+                const gameSourceDef = GameObjectDefs[params.gameSourceType ?? ""];
+                if (
+                    playerSource._combatStimsTicker > 0 &&
+                    gameSourceDef?.type === "gun"
+                ) {
+                    const healAmount =
+                        params.amount! * PerkProperties.combat_stims.healPercent;
+                    if (healAmount > 0) {
+                        this.health = math.min(
+                            this.health + healAmount,
+                            GameConfig.player.health,
+                        );
+                        this.healEffectTicker = 0.5;
+                        this.setDirty();
+                    }
+                }
                 return;
             }
         }
