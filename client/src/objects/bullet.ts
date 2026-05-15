@@ -78,6 +78,8 @@ export class BulletBarn {
         suppressed: boolean;
         tracerAlphaRate: number;
         tracerAlphaMin: number;
+        combatStims: boolean;
+        particleTicker: number;
     }> = [];
 
     tracerColors: Record<
@@ -147,6 +149,8 @@ export class BulletBarn {
         b.reflectCount = bullet.reflectCount;
         b.reflectObjId = bullet.reflectObjId;
         b.whizHeard = false;
+        b.combatStims = bullet.combatStims;
+        b.particleTicker = util.random(0.05, 0.15);
 
         const angleRadians = Math.atan2(b.dir.x, b.dir.y);
         b.container.rotation = angleRadians - Math.PI / 2;
@@ -215,6 +219,22 @@ export class BulletBarn {
                 const distTravel = math.min(distLeft, dt * b.speed);
                 const posOld = v2.copy(b.pos);
                 b.pos = v2.add(b.pos, v2.mul(b.dir, distTravel));
+
+                b.particleTicker += dt;
+                if (b.combatStims && b.particleTicker >= 0.15) {
+                    particleBarn.addParticle(
+                        "boost_basic",
+                        b.layer,
+                        b.pos,
+                        b.dir,
+                        undefined,
+                        undefined,
+                        undefined,
+                        undefined,
+                        PIXI.Color.shared.setValue(b.bulletTrail.tint).toNumber(),
+                    );
+                    b.particleTicker = util.random(0, 0.1); // Done to make the particles for shotguns less periodic and more continuous
+                }
 
                 if (
                     !activePlayer.m_netData.m_dead &&

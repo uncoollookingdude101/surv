@@ -61,8 +61,11 @@ export class WeaponManager {
 
     meleeAttacks: number[] = [];
 
-    cookingThrowable = false;
+    get cookingThrowable() {
+        return this.player.animType === GameConfig.Anim.Cook;
+    }
     cookTicker = 0;
+    throwableCooldown = 0;
 
     get activeWeapon(): string {
         return this.weapons[this.curWeapIdx].type;
@@ -122,6 +125,10 @@ export class WeaponManager {
             !forceSwitch
         )
             return;
+
+        if (this.cookingThrowable && idx !== GameConfig.WeaponSlot.Throwable) {
+            this.throwThrowable(true);
+        }
 
         this.player.cancelAnim();
 
@@ -297,6 +304,8 @@ export class WeaponManager {
         player.freeSwitchTimer -= dt;
 
         player.recoilTicker += dt;
+
+        this.throwableCooldown -= dt;
 
         for (let i = 0; i < this.weapons.length; i++) {
             this.weapons[i].cooldown -= dt;
@@ -669,27 +678,29 @@ export class WeaponManager {
         }
     }
 
-    isBulletSaturated(ammo: string): boolean {
+    isBulletSaturated(ammo: string): number {
+        let totalDamageMult = 1;
         if (this.player.lastBreathActive) {
-            return true;
+            totalDamageMult *= PerkProperties.final_bugle.bonusDamageMult;
         }
+
         // avoid other checks if player has no perks
-        if (!this.player.perks.length) return false;
+        if (!this.player.perks.length) return totalDamageMult;
 
         const perks = ["bonus_assault", "treat_super"];
         if (perks.some((p) => this.player.hasPerk(p))) {
-            return true;
+            totalDamageMult *= 1.08;
         }
 
         if (PerkProperties.ammoBonuses[ammo]) {
             for (const perk of this.player.perks) {
                 if (PerkProperties.ammoBonuses[ammo].includes(perk.type)) {
-                    return true;
+                    totalDamageMult *= PerkProperties.ammoBonusDamageMult;
                 }
             }
         }
 
-        return false;
+        return totalDamageMult;
     }
 
     fireWeapon(offHand: boolean, forceFire?: boolean) {
@@ -793,6 +804,7 @@ export class WeaponManager {
         const hasSplinter = this.player.hasPerk("splinter");
         const hasApRounds = this.player.hasPerk("ap_rounds");
         const hasHighVelocity = this.player.hasPerk("high_velocity");
+        const hasCombatStims = this.player.combatStimsActive;
         const shouldApplyChambered =
             this.player.hasPerk("chambered") &&
             itemDef.ammo !== "12gauge" &&
@@ -806,7 +818,11 @@ export class WeaponManager {
 
         const saturated = this.isBulletSaturated(itemDef.ammo);
         if (saturated) {
-            damageMult *= PerkProperties.ammoBonusDamageMult;
+            damageMult *= saturated;
+        }
+
+        if (this.player.combatStimsActive) {
+            damageMult *= PerkProperties.combat_stims.bonusDamageMult;
         }
 
         if (shouldApplyChambered) {
@@ -912,13 +928,14 @@ export class WeaponManager {
                 distanceMult,
                 shotFx: i === 0,
                 shotOffhand: offHand,
-                trailSaturated: shouldApplyChambered || saturated,
+                trailSaturated: shouldApplyChambered || saturated > 1,
                 trailSmall: false,
                 trailThick: shouldApplyChambered,
                 reflectCount: 0,
                 splinter: hasSplinter,
                 apRounds: hasApRounds,
                 highVelocity: hasHighVelocity,
+                combatStims: hasCombatStims,
                 lastShot: weapon.ammo <= 0,
                 reflectObjId: this.player.obstacleOutfit?.__id,
                 onHitFx: hasExplosive || isDP12 ? "explosion_rounds" : undefined,
@@ -1181,12 +1198,10 @@ export class WeaponManager {
     }
 
     cookThrowable(): void {
-        if (
-            this.player.animType === GameConfig.Anim.Cook ||
-            this.player.animType === GameConfig.Anim.Throw
-        ) {
+        if (this.cookingThrowable || this.throwableCooldown > 0) {
             return;
         }
+
         this.player.cancelAction();
         const itemDef = GameObjectDefs[this.activeWeapon];
         assert(
@@ -1194,7 +1209,6 @@ export class WeaponManager {
             `Invalid projectile type: ${this.activeWeapon}`,
         );
 
-        this.cookingThrowable = true;
         this.cookTicker = 0;
 
         this.player.playAnim(
@@ -1205,7 +1219,6 @@ export class WeaponManager {
 
     throwThrowable(noSpeed?: boolean): void {
         if (!this.cookingThrowable) return;
-        this.cookingThrowable = false;
 
         if (this.cookTicker < GameConfig.player.cookTime) {
             return;
@@ -1248,7 +1261,13 @@ export class WeaponManager {
         }
         const hasCloser = this.player.hasPerk("closer");
         const speedMult = hasCloser ? 2.0 : 1.0;
-        const throwStr = multiplier * throwableDef.throwPhysics.speed * speedMult;
+        const isAmped = this.player.hasPerk("amped_explosives");
+
+        const throwSpeedMult = isAmped
+            ? PerkProperties.amped_explosives.throwableSpeedMult
+            : 1;
+
+        const throwStr = multiplier * throwableDef.throwPhysics.speed * throwSpeedMult * speedMult;
 
         // position of throwing hand
         let pos = v2.add(
@@ -1292,11 +1311,16 @@ export class WeaponManager {
         }
 
         let dir = v2.copy(this.player.dir);
+
+        const throwRangeMult = isAmped
+            ? PerkProperties.amped_explosives.throwableRangeMult
+            : 1;
+
         // Aim toward a point some distance infront of the player
         if (throwableDef.aimDistance > 0.0) {
             const aimTarget = v2.add(
                 this.player.pos,
-                v2.mul(this.player.dir, throwableDef.aimDistance),
+                v2.mul(this.player.dir, throwableDef.aimDistance * throwRangeMult),
             );
             dir = v2.normalizeSafe(v2.sub(aimTarget, spawnPos), v2.create(1.0, 0.0));
         }
@@ -1350,8 +1374,12 @@ export class WeaponManager {
             };
         }
 
-        const animationDuration = GameConfig.player.throwTime;
-        this.player.playAnim(GameConfig.Anim.Throw, animationDuration);
+        const throwTime = GameConfig.player.throwTime;
+        // client animation has an extra 0.15 seconds??? (see animData.js on the client)
+        // so thats why throwing grenades didnt feel that smooth on survev before...
+        this.player.playAnim(GameConfig.Anim.Throw, 0.15 + throwTime);
+        // actual cooldown, will prevent throwing more until its over
+        this.throwableCooldown = throwTime;
 
         /**
          * Remove the throwable from the inventory

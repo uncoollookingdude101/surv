@@ -57,7 +57,19 @@ export class SDKManager {
 
     removeAllAds() {}
 
-    showStickyAd(): void {}
+    enterMenuAdState(): void {}
 
-    hideStickyAd(): void {}
+    enterGameplayAdState(): void {}
+
+    enterDeathAdState(): void {}
+
+    async ensureNitroReady(): Promise<void> {}
+
+    showNitroPlacements(_placementIDs: string[]): void {}
+
+    hideNitroPlacementsById(_placementIDs: string[]): void {}
+
+    showLoadoutAd(): void {}
+
+    hideLoadoutAd(): void {}
 }

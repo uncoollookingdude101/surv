@@ -1414,6 +1414,11 @@ const SkinDefs: Record<string, MeleeDef> = {
             pos: { x: -10.5, y: -3 },
         },
     }),
+    naginata_daemon: defineMeleeSkin("naginata", {
+        name: "Naginata Daemon",
+        lootImg: { sprite: "loot-melee-naginata-daemon.img" },
+        worldImg: { sprite: "loot-melee-naginata-daemon.img" },
+    }),
     cutlass_gold: defineMeleeSkin("cutlass", {
         name: "Gold Cutlass",
         noPotatoSwap: true,

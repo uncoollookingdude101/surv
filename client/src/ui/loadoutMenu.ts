@@ -12,6 +12,7 @@ import type { Account } from "../account";
 import { crosshair } from "../crosshair";
 import { device } from "../device";
 import { helpers } from "../helpers";
+import { SDK } from "../sdk/sdk";
 import type { Localization } from "./localization";
 import { MenuModal } from "./menuModal";
 import type { LoadoutDisplay } from "./opponentDisplay";
@@ -379,6 +380,9 @@ export class LoadoutMenu {
         this.tryBeginConfirmingItems();
         $("#start-bottom-right, #start-main").fadeOut(200);
         $("#background").hide();
+        if (!device.mobile) {
+            SDK.showLoadoutAd();
+        }
     }
 
     onHide() {
@@ -390,6 +394,7 @@ export class LoadoutMenu {
         this.modalCustomize.css({
             cursor: "initial",
         });
+        SDK.hideLoadoutAd();
         $("#start-bottom-right, #start-main").fadeIn(200);
         $("#background").show();
     }

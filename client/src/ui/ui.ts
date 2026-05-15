@@ -1282,7 +1282,7 @@ export class UiManager {
             }
         }
 
-        SDK.showStickyAd();
+        SDK.enterMenuAdState();
     }
 
     clearUI() {
@@ -1314,7 +1314,7 @@ export class UiManager {
             opacity: 0,
         });
         this.statsContents.stop().hide();
-        SDK.hideStickyAd();
+        SDK.enterGameplayAdState();
     }
 
     teamModeToString(teamMode: TeamMode) {
@@ -1739,9 +1739,16 @@ export class UiManager {
     setBannerAd(time: number, ui2: UiManager2) {
         let delay = Math.max(time - 150, 0);
         setTimeout(() => {
-            const bannerAd = $("#ui-stats-ad-container-desktop");
-            bannerAd.css("display", "inline-block");
-            SDK.showStickyAd();
+            const showMobileBanner = device.mobile && !device.tablet;
+            $("#ui-stats-ad-container-desktop").css(
+                "display",
+                showMobileBanner ? "none" : "inline-block",
+            );
+            $("#ui-stats-ad-container-mobile").css(
+                "display",
+                showMobileBanner ? "inline-block" : "none",
+            );
+            SDK.enterDeathAdState();
 
             ui2.hideKillMessage();
         }, delay);

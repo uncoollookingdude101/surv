@@ -290,6 +290,16 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         frozenSprites: ["player-mash-04.img", "player-mash-05.img"],
         dropRandomLoot: 1,
     },
+    explosion_cobalt: {
+        type: "explosion",
+        damage: 175,
+        obstacleDamage: 1,
+        rad: { min: 5, max: 8 },
+        shrapnelCount: 20,
+        shrapnelType: "shrapnel_cobalt",
+        explosionEffectType: "barrel",
+        decalType: "decal_barrel_explosion",
+    },
     explosion_coconut_pellet: {
         type: "explosion",
         damage: 23,

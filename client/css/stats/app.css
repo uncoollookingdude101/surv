@@ -1219,6 +1219,12 @@ td.data-player-status {
 #ad-block-top {
   position: relative;
 }
+@media (max-width: 991px) {
+  .ad-block-top-med-rect {
+    display: none;
+  }
+}
+
 @media (max-width: 823px) {
   #ad-block-top {
     margin: initial;

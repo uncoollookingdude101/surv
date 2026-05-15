@@ -9,6 +9,15 @@ export const CobaltAtlas: AtlasDef = {
         ...BuildingSprites.warehouse_complex,
         ...BuildingSprites.bunker_twins,
 
+        "map/map-case-twins-01.svg",
+
+        "map/map-bush-07cb.svg",
+
+        "map/map-button-01.svg",
+        "map/map-button-02.svg",
+
+        "map/map-chest-03cb.svg",
+
         "map/map-class-crate-03.svg",
         "map/map-class-crate-assault.svg",
         "map/map-class-crate-demo.svg",
@@ -30,10 +39,15 @@ export const CobaltAtlas: AtlasDef = {
         "particles/part-class-shell-03a.svg",
         "particles/part-class-shell-03b.svg",
 
+        "map/map-class-crate-classless.svg",
+
         "map/map-stone-01cb.svg",
         "map/map-stone-03cb.svg",
         "map/map-stone-res-01cb.svg",
         "map/map-stone-res-02cb.svg",
+
         "map/map-tree-03cb.svg",
+
+        "map/map-vat-03.svg",
     ],
 };

@@ -182,6 +182,23 @@ const SkinDefs: Record<string, OutfitDef> = {
             tint: 0xffffff,
         },
     }),
+    outfitClassless: defineOutfitSkin("outfitBase", {
+        noDrop: true,
+        skinImg: {
+            baseTint: 0x646464,
+            baseSprite: "player-base-02.img",
+            handTint: 0x505050,
+            handSprite: "player-hands-02.img",
+            footTint: 0x505050,
+            footSprite: "player-feet-02.img",
+            backpackTint: 0x323232,
+            backpackSprite: "player-circle-base-02.img",
+        },
+        lootImg: {
+            sprite: "loot-shirt-01.img",
+            tint: 0xffffff,
+        },
+    }),
     outfitTurkey: defineOutfitSkin("outfitBase", {
         name: "Fowl Facade",
         noDropOnDeath: true,
@@ -1088,6 +1105,26 @@ const SkinDefs: Record<string, OutfitDef> = {
         },
         lootImg: {
             sprite: "loot-shirt-outfitParrotfish.img",
+            tint: 0xffffff,
+        },
+    }),
+    outfitEvent: defineOutfitSkin("outfitBase", {
+        name: "Event Winnr",
+        rarity: Rarity.Rare,
+        lore: "Shining beacons of the community.",
+        noDropOnDeath: true,
+        skinImg: {
+            baseTint: 0xffffff,
+            baseSprite: "player-base-outfitEvent.img",
+            handTint: 0xad7aeb,
+            handSprite: "player-hands-01.img",
+            footTint: 0xad7aeb,
+            footSprite: "player-feet-02.img",
+            backpackTint: 0xad7aeb,
+            backpackSprite: "player-circle-base-02.img",
+        },
+        lootImg: {
+            sprite: "loot-shirt-outfitEvent.img",
             tint: 0xffffff,
         },
     }),

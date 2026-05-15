@@ -49,6 +49,7 @@ export interface BulletParams {
     splinter?: boolean;
     apRounds?: boolean;
     highVelocity?: boolean;
+    combatStims?: boolean;
     shotAlt?: boolean;
     trailSaturated?: boolean;
     trailSmall?: boolean;
@@ -159,6 +160,7 @@ export class Bullet {
     splinter!: boolean;
     apRounds!: boolean;
     highVelocity!: boolean;
+    combatStims!: boolean;
     trailSaturated!: boolean;
     trailSmall!: boolean;
     trailThick!: boolean;
@@ -250,6 +252,7 @@ export class Bullet {
         this.splinter = params.splinter ?? false;
         this.apRounds = params.apRounds ?? false;
         this.highVelocity = params.highVelocity ?? false;
+        this.combatStims = params.combatStims ?? false;
         this.trailSaturated = params.trailSaturated ?? false;
         this.trailSmall = params.trailSmall ?? false;
         this.trailThick = params.trailThick ?? false;
@@ -274,6 +277,7 @@ export class Bullet {
             this.splinter ||
             this.apRounds ||
             this.highVelocity ||
+            this.combatStims ||
             this.trailSaturated ||
             this.trailSmall ||
             this.trailThick;
@@ -385,7 +389,7 @@ export class Bullet {
             this.bulletManager.game.explosionBarn.addExplosion(
                 this.onHitFx,
                 // spawn the explosion a bit behind the bullet so it won't spawn inside obstacles
-                v2.sub(this.pos, v2.mul(this.dir, 0.01)),
+                v2.sub(this.pos, v2.mul(this.dir, 0.1)),
                 this.layer,
                 {
                     source: this.player,
@@ -687,6 +691,7 @@ export class Bullet {
             splinter: this.splinter,
             apRounds: this.apRounds,
             highVelocity: this.highVelocity,
+            combatStims: this.combatStims,
             trailSaturated: this.trailSaturated,
             trailSmall: this.trailSmall,
             trailThick: this.trailThick,

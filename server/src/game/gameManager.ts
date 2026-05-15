@@ -103,7 +103,10 @@ export class SingleThreadGameManager implements GameManager {
             id,
             config,
             (id, data) => {
-                this.sockets.get(id)?.send(data, true, false);
+                const socket = this.sockets.get(id);
+                if (socket && !socket.getUserData().closed) {
+                    socket.send(data, true, false);
+                }
             },
             (id, reason) => {
                 const socket = this.sockets.get(id);

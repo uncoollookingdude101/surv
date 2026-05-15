@@ -1,6 +1,6 @@
 {
   "name": "survev",
-  "version": "0.2.31",
+  "version": "0.3.0",
   "type": "module",
   "description": "Open Source Surviv.io Server",
   "scripts": {
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.7",
     "@types/hjson": "^2.4.6",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.6.2",
     "concurrently": "^9.2.1",
     "typescript": "^5.9.3"
   },

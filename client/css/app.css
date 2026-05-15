@@ -583,11 +583,18 @@ a:active {
   top: var(--side-pad);
 }
 
+@media (min-width: 851px) and (max-height: 690px) {
+  .ad-block-header {
+    display: none;
+  }
+}
+
 .ad-block-left-center {
   position: absolute;
   left: var(--side-pad);
   top: 50%;
   transform: translateY(-50%);
+  width: 160px;
 }
 
 .ad-block-right-center {
@@ -595,6 +602,14 @@ a:active {
   right: var(--side-pad);
   top: 50%;
   transform: translateY(-50%);
+  width: 160px;
+}
+
+@media (max-width: 1200px) {
+  .ad-block-left-center,
+  .ad-block-right-center {
+    display: none;
+  }
 }
 
 .ad-block-med-rect {
@@ -3409,7 +3424,7 @@ a:active {
 
 .btn-mode-faction-potato {
   animation-name: faction-potato-pulse;
-  background-image: url(../img/gui/star.svg);
+  background-image: url(/img/gui/star.svg);
   border-bottom: 4px solid #563619;
 }
 
@@ -5929,6 +5944,12 @@ input [type="image"]:focus {
 }
 
 @media (max-width: 850px), (max-width: 900px) and (min-resolution: 3dppx) {
+  #right-column,
+  #pass-wrapper,
+  #news-wrapper {
+    width: 210px;
+  }
+
   .team-menu-option {
     height: 28px;
     margin-bottom: 8px;
@@ -6056,7 +6077,7 @@ input [type="image"]:focus {
   #news-block {
     width: 200px;
     height: 230px;
-    margin-left: 18px;
+    margin-left: 10px;
     padding: 14px;
     overflow-y: auto;
   }

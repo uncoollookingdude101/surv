@@ -912,6 +912,10 @@ export class Player extends BaseGameObject {
     wearingPan = false;
     healEffect = false;
     healEffectTicker = 0;
+
+    lastStandEffect = false;
+    lastStandEffectTicker = 0;
+
     // if hit by snowball, potato, or coconut: slowed down for "x" seconds
     frozenTicker = 0;
     frozen = false;
@@ -1033,7 +1037,7 @@ export class Player extends BaseGameObject {
                 newOutfit = newOutfit(clampedTeamId);
             }
             if (newOutfit) {
-                if (!oldOutfit.noDropOnDeath) {
+                if (!oldOutfit.noDropOnDeath && !oldOutfit.noDrop) {
                     this.dropLoot(this.outfit);
                 }
                 this.setOutfit(newOutfit);
@@ -1104,9 +1108,19 @@ export class Player extends BaseGameObject {
             }
         }
 
-        // we first need to build a list of the new perks to add
+        // A list of the new perks to add must be built first
         const newPerks = new Set<string>();
-        if (roleDef.perks) {
+
+        // Random perk addition logiic
+        if (role === "classless") {
+            const perkPool = PerkProperties.classless.perkPool;
+            const candidatePerks = perkPool.filter((perk) => !this.hasPerk(perk));
+            const newPerk = util.randomItem(candidatePerks);
+
+            if (newPerk) {
+                newPerks.add(newPerk);
+            }
+        } else if (roleDef.perks) {
             // client can only show 4 perks in the UI
             // if this role has 4 or more perks, drop all our droppable perks
             if (roleDef.perks.length >= 4) {
@@ -1127,14 +1141,12 @@ export class Player extends BaseGameObject {
                 newPerks.add(perkType);
             }
         }
-        // then remove perks from the old role
-        // but skip perks we are about to add again and remove them from the list
-        // so they both aren't removed to just be added again
-        // and aren't added twice
+        // Then, remove perks from the old role
+        // But skip perks that are going to be readded to avoid double adding them or removing / readding pointlessly.
         for (let i = 0; i < this.perks.length; i++) {
             const perkType = this.perks[i].type;
             if (this.perks[i].isFromRole) {
-                if (!newPerks.has(perkType)) {
+                if (role != "classless" && !newPerks.has(perkType)) {
                     this.removePerk(perkType);
                     i--;
                 } else {
@@ -1210,6 +1222,9 @@ export class Player extends BaseGameObject {
             this.game.broadcastMsg(net.MsgType.RoleAnnouncement, msg);
         }
     }
+
+    combatStimsActive = false;
+    private _combatStimsTicker = 0;
 
     lastBreathActive = false;
     private _lastBreathTicker = 0;
@@ -1616,7 +1631,14 @@ export class Player extends BaseGameObject {
                 this.health += healAmount!.heal * dt;
 
                 if (this.boost > this.minBoost) {
-                    this.boost -= GameConfig.player.boostDecay * dt;
+                    if (this.hasPerk("lifeline")) {
+                        this.boost -=
+                            GameConfig.player.boostDecay *
+                            PerkProperties.lifeline.decayMult *
+                            dt;
+                    } else {
+                        this.boost -= GameConfig.player.boostDecay * dt;
+                    }
                 }
             }
         } else {
@@ -1763,11 +1785,19 @@ export class Player extends BaseGameObject {
                     if ("heal" in itemDef) {
                         this.applyActionFunc((target: Player) => {
                             target.health += itemDef.heal;
+                            if (this.hasPerk("combat_stims")) {
+                                this.combatStimsActive = true;
+                                this._combatStimsTicker = 5;
+                            }
                         });
                     }
                     if ("boost" in itemDef) {
                         this.applyActionFunc((target: Player) => {
                             target.boost += itemDef.boost;
+                            if (this.hasPerk("combat_stims")) {
+                                this.combatStimsActive = true;
+                                this._combatStimsTicker = 5;
+                            }
                         });
                     }
                     this.invManager.take(this.actionItem as InventoryItem, 1);
@@ -1852,6 +1882,18 @@ export class Player extends BaseGameObject {
                 this._hasteTicker = 0;
                 this.hasteSeq++;
                 this.setDirty();
+            }
+        }
+
+        //
+        // Combat Stimulants Logic
+        //
+        if (this.combatStimsActive) {
+            this._combatStimsTicker -= dt;
+
+            if (this._combatStimsTicker <= 0) {
+                this.combatStimsActive = false;
+                this._lastBreathTicker = 0;
             }
         }
 
@@ -2247,6 +2289,15 @@ export class Player extends BaseGameObject {
             this.healEffect = true;
         }
 
+        const oldLastStandEffect = this.lastStandEffect;
+
+        if (this.lastStandEffectTicker > 0) {
+            this.lastStandEffect = true;
+            this.lastStandEffectTicker -= dt;
+        } else {
+            this.lastStandEffect = false;
+        }
+
         let zoomRegionZoom = lowestZoom;
         let insideNoZoomRegion = true;
         let insideSmoke = false;
@@ -2358,6 +2409,10 @@ export class Player extends BaseGameObject {
 
         // only dirty if healEffect changed from last tick to current tick (leaving or entering a heal region)
         if (oldHealEffect != this.healEffect) {
+            this.setDirty();
+        }
+
+        if (oldLastStandEffect != this.lastStandEffect) {
             this.setDirty();
         }
 
@@ -2959,7 +3014,25 @@ export class Player extends BaseGameObject {
             }
         }
 
-        if (this._health - finalDamage < 0) finalDamage = this.health;
+        if (this._health - finalDamage < 0) {
+            if (this.hasPerk("lifeline")) {
+                // Checks to see if the perk can mitigate the damage
+                const excessDamage = finalDamage - this._health + 1; // Amount to mitigate to survive on 1 health.
+                if (this.boost / PerkProperties.lifeline.conversionRate >= excessDamage) {
+                    this.boost -= excessDamage * PerkProperties.lifeline.conversionRate;
+                    finalDamage = this._health - 1;
+                    this.lastStandEffect = true;
+                    this.lastStandEffectTicker = 1;
+                    this.setDirty();
+                } else {
+                    // If the perk cannot mitigate, kill the player
+                    finalDamage = this.health;
+                }
+            } else {
+                // If the player lacks the perk, kill the player
+                finalDamage = this.health;
+            }
+        }
 
         this.game.pluginManager.emit("playerDamage", { ...params, player: this });
 
@@ -3037,6 +3110,10 @@ export class Player extends BaseGameObject {
             this.health = 50;
         }
 
+        if (this.weaponManager.cookingThrowable) {
+            this.weaponManager.throwThrowable(true);
+        }
+
         this.animType = GameConfig.Anim.None;
         this.setDirty();
 
@@ -3089,9 +3166,15 @@ export class Player extends BaseGameObject {
         this.actionSeq++;
         this.hasteType = GameConfig.HasteType.None;
         this.hasteSeq++;
+
+        if (this.weaponManager.cookingThrowable) {
+            this.weaponManager.throwThrowable(true);
+        }
         this.animType = GameConfig.Anim.None;
         this.animSeq++;
+
         this.healEffect = false;
+        this.lastStandEffect = false;
         this.boostDirty = true;
         this.inventoryDirty = true;
         this.setDirty();
@@ -3185,6 +3268,37 @@ export class Player extends BaseGameObject {
                 }
                 if (killCreditSource.role === "woods_king2") {
                     this.game.playerBarn.addMapPing("ping_woodsking", this.pos);
+                }
+            }
+
+            // "secret" interaction: when all 4 lone perks are equipped, don't swap anymore
+            const lonePerks =
+                killCreditSource.hasPerk("takedown") &&
+                killCreditSource.hasPerk("steelskin") &&
+                killCreditSource.hasPerk("field_medic") &&
+                killCreditSource.hasPerk("splinter");
+
+            if (killCreditSource.role === "classless") {
+                const rolePerks = killCreditSource.perks.filter(
+                    (perk) => perk.isFromRole,
+                );
+                const perkPool = PerkProperties.classless.perkPool;
+
+                if (!lonePerks) {
+                    if (rolePerks.length > 0 && perkPool.length > 0) {
+                        const perkToReplace =
+                            rolePerks[util.randomInt(0, rolePerks.length - 1)].type;
+                        const candidatePerks = perkPool.filter(
+                            (p) => !killCreditSource.hasPerk(p),
+                        );
+                        const newPerk = util.randomItem(candidatePerks);
+
+                        if (newPerk) {
+                            killCreditSource.removePerk(perkToReplace);
+                            killCreditSource.addPerk(newPerk, false, undefined, true);
+                            killCreditSource.setDirty();
+                        }
+                    }
                 }
             }
             killMsg.killCreditId = killCreditSource.__id;
@@ -3533,6 +3647,10 @@ export class Player extends BaseGameObject {
                 GameConfig.player.reviveDuration,
                 playerToRevive.__id,
             );
+
+            if (this.weaponManager.cookingThrowable) {
+                this.weaponManager.throwThrowable(true);
+            }
             this.playAnim(GameConfig.Anim.Revive, GameConfig.player.reviveDuration);
         }
     }
@@ -3940,6 +4058,17 @@ export class Player extends BaseGameObject {
             const obstacle = objs[i];
             if (obstacle.__type !== ObjectType.Obstacle) continue;
             if (!obstacle.dead && util.sameLayer(obstacle.layer, this.layer)) {
+                if (obstacle.isButton && obstacle.button.isVat) {
+                    const distance = v2.distance(this.pos, obstacle.pos);
+                    if (distance + this.rad < obstacle.interactionRad * obstacle.scale) {
+                        obstacles.push({
+                            pen: 0,
+                            obstacle,
+                        });
+                    }
+                    continue;
+                }
+
                 if (obstacle.interactionRad > 0) {
                     const res = collider.intersectCircle(
                         obstacle.collider,

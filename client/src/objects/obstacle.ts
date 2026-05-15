@@ -71,6 +71,8 @@ export class Obstacle implements AbstractObject {
         useId?: number;
         canUse?: boolean;
         onOff?: boolean;
+        isVat?: boolean;
+        roleToPromote?: string;
     };
 
     door!: {
@@ -210,6 +212,8 @@ export class Obstacle implements AbstractObject {
                     interactionText: def.button?.interactionText || "game-use",
                     seq: data.button?.seq!,
                     seqOld: data.button?.seq!,
+                    roleToPromote: def.button?.roleToPromote,
+                    isVat: def.button?.isVat,
                 };
             }
             this.isPuzzlePiece = data.isPuzzlePiece;
@@ -291,8 +295,15 @@ export class Obstacle implements AbstractObject {
         }
     }
 
-    getInteraction() {
+    getInteraction(player: Player) {
         if (this.isButton && this.button.canUse) {
+            if (
+                this.button.roleToPromote &&
+                this.button.roleToPromote === player.m_netData.m_role
+            ) {
+                return null;
+            }
+
             return {
                 rad: this.button.interactionRad,
                 action: this.button.interactionText,

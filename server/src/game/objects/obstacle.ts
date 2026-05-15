@@ -80,6 +80,8 @@ export class Obstacle extends BaseGameObject {
         seq: number;
         useOnce: boolean;
         useType: string;
+        isVat?: boolean;
+        roleToPromote?: string;
         useDelay: number;
         useDir: Vec2;
     };
@@ -106,6 +108,10 @@ export class Obstacle extends BaseGameObject {
 
     killTicker = 0;
     regrowTicker = 0;
+
+    // for cobalt class pods, its the ID of the player that opened the class pod
+    shouldApplyLootOwner = false;
+    ownerId = 0;
 
     constructor(
         game: Game,
@@ -196,6 +202,8 @@ export class Obstacle extends BaseGameObject {
                 seq: 1,
                 useOnce: def.button.useOnce,
                 useType: def.button.useType!,
+                isVat: def.button.isVat,
+                roleToPromote: def.button.roleToPromote,
                 useDelay: def.button.useDelay,
                 useDir: def.button.useDir,
             };
@@ -429,18 +437,24 @@ export class Obstacle extends BaseGameObject {
         if (def.destroyType) {
             let destroyType: string;
             // in cobalt, class shells need to spawn a pod that corresponds to the player's class (role)
-            if (
-                def.smartLoot &&
-                this.interactedBy &&
-                this.game.map.mapDef.gameMode.perkModeRoles?.includes(
-                    this.interactedBy.role,
-                )
-            ) {
+            if (def.smartLoot && this.interactedBy) {
                 destroyType = `${def.destroyType}_${this.interactedBy.role}`;
             } else {
                 destroyType = def.destroyType;
             }
-            this.game.map.genAuto(destroyType, this.pos, this.layer, this.ori);
+            const obj = this.game.map.genAuto(
+                destroyType,
+                this.pos,
+                this.layer,
+                this.ori,
+            );
+
+            if (obj?.__type === ObjectType.Obstacle) {
+                obj.shouldApplyLootOwner = !!def.smartLoot;
+                if (def.smartLoot && params.source?.__type === ObjectType.Player) {
+                    obj.ownerId = params.source.__id;
+                }
+            }
         }
 
         // potatos in potato mode
@@ -457,13 +471,13 @@ export class Obstacle extends BaseGameObject {
             v2.set(lootPos, v2.add(this.pos, v2.rotate(def.lootSpawn.offset, this.rot)));
         }
 
-        const loot = [...def.loot];
+        const lootTablesOrItems = [...def.loot];
 
         if (
             params.source?.__type === ObjectType.Player &&
             params.source.hasPerk("scavenger")
         ) {
-            loot.push({
+            lootTablesOrItems.push({
                 tier: "tier_world",
                 min: 1,
                 max: 1,
@@ -475,7 +489,7 @@ export class Obstacle extends BaseGameObject {
             params.source?.__type === ObjectType.Player &&
             params.source.hasPerk("scavenger_adv")
         ) {
-            loot.push({
+            lootTablesOrItems.push({
                 tier: "tier_scavenger_adv",
                 min: 1,
                 max: 1,
@@ -483,60 +497,105 @@ export class Obstacle extends BaseGameObject {
             });
         }
 
-        for (const lootTierOrItem of loot) {
+        // cobalt class pod logic
+        let ownerId = 0;
+        if (this.shouldApplyLootOwner) {
+            // default to whoever broke the class pod
+            ownerId =
+                params.source?.__type === ObjectType.Player ? params.source.__id : 0;
+
+            // but then check for the player who unlocked this class pod
+            // if they are still alive and close give it to them instead
+            const podUnlocker = this.game.objectRegister.getById(this.ownerId);
+            if (
+                podUnlocker &&
+                podUnlocker.__type === ObjectType.Player &&
+                !podUnlocker.dead &&
+                util.sameLayer(podUnlocker.layer, this.layer)
+            ) {
+                const distance = v2.distance(this.pos, podUnlocker.pos);
+                if (distance <= 8) {
+                    ownerId = this.ownerId;
+                }
+            }
+        }
+
+        const items: Array<{
+            type: string;
+            preload?: boolean;
+            count: number;
+        }> = [];
+
+        // collect all the items we are spawning into a single array
+        // so we can determine the spawn radius based on it
+
+        for (const lootTierOrItem of lootTablesOrItems) {
             if ("tier" in lootTierOrItem) {
                 const count = util.randomInt(lootTierOrItem.min!, lootTierOrItem.max!);
-
-                const colliderRad =
-                    def.collision.type === collider.Type.Aabb
-                        ? coldet.aabbToCircle(def.collision.min, def.collision.max).rad
-                        : def.collision.rad;
-
-                const rad = count > 1 ? math.remap(count, 0, 5, 0, colliderRad) : 0;
-
                 for (let i = 0; i < count; i++) {
                     const item = this.game.lootBarn.getLootTable(lootTierOrItem.tier!);
                     if (!item) continue;
-
-                    const pos = v2.add(lootPos, util.randomPointInCircle(rad));
-
-                    let pushSpeed: number | undefined = undefined;
-                    let dir;
-                    // if spawning more than 5 loot
-                    // ignore the push speed (eg player melee direction)
-                    // and push loot to outside the center of the obstacle
-                    if (count > 5) {
-                        pushSpeed = math.max(count, 14);
-                        dir = v2.normalize(v2.sub(pos, lootPos));
-                    } else {
-                        dir = params.dir;
-                        pushSpeed = 7;
-                    }
-
-                    this.game.lootBarn.addLoot(
-                        item.name,
-                        pos,
-                        this.layer,
-                        item.count,
-                        undefined,
-                        pushSpeed,
-                        dir,
-                        lootTierOrItem.props?.preloadGuns || item.preload,
-                        "obstacle",
-                    );
+                    items.push({
+                        type: item.name,
+                        preload: lootTierOrItem.props?.preloadGuns || item.preload,
+                        count: item.count,
+                    });
                 }
             } else {
-                this.game.lootBarn.addLoot(
-                    lootTierOrItem.type!,
-                    v2.add(lootPos, v2.mul(v2.randomUnit(), 0.2)),
-                    this.layer,
-                    lootTierOrItem.count!,
-                    undefined,
-                    undefined,
-                    params.dir,
-                    lootTierOrItem.props?.preloadGuns,
-                );
+                items.push({
+                    type: lootTierOrItem.type!,
+                    preload: lootTierOrItem.props?.preloadGuns,
+                    count: lootTierOrItem.count ?? 1,
+                });
             }
+        }
+
+        const colliderRad =
+            def.collision.type === collider.Type.Aabb
+                ? coldet.aabbToCircle(def.collision.min, def.collision.max).rad / 2
+                : def.collision.rad;
+
+        // max items before it changes from pushing in hit direction to
+        // the direction between obstacle center and loot (so it spreads better)
+        const shouldSpreadItems = items.length > 3;
+
+        let rad: number;
+        let pushSpeed;
+
+        if (shouldSpreadItems) {
+            // calculate a radius based on amount of loot and obstacle size
+            rad = math.remap(items.length, 2, 10, 0, colliderRad);
+            pushSpeed = math.remap(items.length, 8, 20, 4, 14);
+        } else if (items.length === 1) {
+            // for exactly 1 loot we just spawn it in the perfect center with a high push speed
+            rad = 0;
+            pushSpeed = 7;
+        } else {
+            // for between 1 and the `shouldSpreadItems` threshold we just have a small radius
+            // and a smaller speed (because the loot will push eachother)
+            rad = 0.1;
+            pushSpeed = 4;
+        }
+
+        for (const item of items) {
+            const pos = v2.add(lootPos, util.randomPointInCircle(rad));
+
+            const dir = shouldSpreadItems
+                ? v2.normalize(v2.sub(pos, lootPos))
+                : params.dir;
+
+            this.game.lootBarn.addLoot(
+                item.type,
+                pos,
+                this.layer,
+                item.count,
+                undefined,
+                pushSpeed,
+                dir,
+                item.preload,
+                "obstacle",
+                ownerId,
+            );
         }
 
         if (def.createSmoke) {
@@ -586,7 +645,14 @@ export class Obstacle extends BaseGameObject {
             this.interactCooldown = 0.1;
         }
 
-        this.interactedBy = player;
+        if (
+            player &&
+            this.isButton &&
+            this.button.roleToPromote &&
+            player.role === this.button.roleToPromote
+        ) {
+            return;
+        }
 
         if (this.isDoor && this.door) {
             if (!this.door.canUse) return;
@@ -597,7 +663,7 @@ export class Obstacle extends BaseGameObject {
             if (this.door.openOnce) {
                 this.door.canUse = false;
             }
-
+            this.interactedBy = player;
             this.setDirty();
             if (this.door.openDelay > 0) {
                 this.delayedToggle(this.door.openDelay, player);
@@ -608,7 +674,8 @@ export class Obstacle extends BaseGameObject {
         }
 
         if (this.isButton && this.button.canUse) {
-            this.useButton();
+            this.interactedBy = player;
+            this.useButton(player);
         }
     }
 
@@ -617,7 +684,7 @@ export class Obstacle extends BaseGameObject {
         this.game.playerBarn.addMapPing("ping_unlock", this.pos);
     }
 
-    useButton(): void {
+    useButton(player?: Player): void {
         if (!this.button.canUse) return;
 
         this.button.onOff = !this.button.onOff;
@@ -642,11 +709,17 @@ export class Obstacle extends BaseGameObject {
                 }
             }
         }
+
+        // Promotion from buttons, checks for a "roleToPromote" field in the button def.
+        if (this.button.roleToPromote && player) {
+            player.promoteToRole(this.button.roleToPromote);
+        }
+
         if (this.button.onOff && this.isPuzzlePiece) {
             this.parentBuilding?.puzzlePieceToggled(this);
         }
         const def = MapObjectDefs[this.type] as ObstacleDef;
-        if (def.button?.destroyOnUse && def.destroyType) {
+        if (def.button?.destroyOnUse) {
             this.killTicker = this.button.useDelay;
         }
         this.setDirty();

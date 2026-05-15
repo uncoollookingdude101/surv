@@ -520,7 +520,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         }),
         announce: false,
         sound: { assign: "spawn_01" },
-        perks: ["field_medic", "self_revive"],
+        perks: ["field_medic", "combat_stims"],
         visorImg: {
             baseSprite: "player-visor-healer.img",
             spriteScale: 0.3,
@@ -588,7 +588,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         }),
         announce: false,
         sound: { assign: "spawn_01" },
-        perks: ["fabricate", "flak_jacket"],
+        perks: ["amped_explosives", "flak_jacket"],
         visorImg: {
             baseSprite: "player-visor-demo.img",
             spriteScale: 0.3,
@@ -613,6 +613,21 @@ export const RoleDefs: Record<string, RoleDef> = {
         },
         guiImg: "img/gui/role-assault.svg",
         color: 0xffec17,
+    },
+    classless: {
+        type: "role",
+        defaultItems: createDefaultItems({
+            outfit: "outfitClassless",
+            helmet: "helmet04_classless",
+            inventory: {},
+        }),
+        announce: false,
+        sound: { assign: "spawn_01" },
+        perks: [],
+        visorImg: {
+            baseSprite: "player-visor-classless.img",
+            spriteScale: 0.3,
+        },
     },
     hider: {
         type: "role",

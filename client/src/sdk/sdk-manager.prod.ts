@@ -4,7 +4,7 @@ import type { SDKManager as BaseSDKManager } from "./sdk-manager";
 
 // Prevent Iframe issues
 if (window.self !== window.top) {
-    function preventScroll(event: Event): void {
+    function preventScroll(event: Event) {
         let target = event.target as HTMLElement | null;
 
         while (target && target !== document.body) {
@@ -87,6 +87,16 @@ function isWithinPoki(): boolean {
 }
 
 export class SDKManager implements BaseSDKManager {
+    private readonly nitroSiteID = import.meta.env.VITE_NITROPAY_SITE_ID;
+    private nitroLoadPromise: Promise<void> | null = null;
+    private nitroDisabled = false;
+    private readonly nitroFooterPlacementHome = `${AD_PREFIX}_728x90`;
+    private readonly nitroPlacements = {
+        home: ["nitro-header", "nitro-home-vrec", "nitro-home-mrec"],
+        death: ["nitro-died-mrec", "nitro-died-mrec-mobile"],
+    } as const;
+    private readonly nitroActivePlacements = new Set<string>();
+    private nitroFooterActive = false;
     isPoki = isWithinPoki();
     isCrazyGames = isWithinCrazyGames();
     isGameMonetize = isWithinGameMonetize();
@@ -140,10 +150,7 @@ export class SDKManager implements BaseSDKManager {
                 .css("background-image", "url(./img/survev-kofi.png)")
                 .html(`<a href="https://ko-fi.com/survev" target="_blank"></a>`);
 
-            const fuseScript = document.createElement("script");
-            fuseScript.async = true;
-            fuseScript.src = "https://cdn.fuseplatform.net/publift/tags/2/4018/fuse.js";
-            document.head.appendChild(fuseScript);
+            await this.initNitro();
         }
 
         if (this.isPoki) {
@@ -178,7 +185,7 @@ export class SDKManager implements BaseSDKManager {
         } else if (this.isSpellSync) {
             window.spellSync.gameplayStart();
         }
-        this.hideStickyAd();
+        this.enterGameplayAdState();
     }
     gamePlayStop() {
         if (this.isCrazyGames) {
@@ -188,10 +195,10 @@ export class SDKManager implements BaseSDKManager {
         } else if (this.isSpellSync) {
             window.spellSync.gameplayStop();
         }
-        this.showStickyAd();
+        this.enterMenuAdState();
     }
 
-    requestMidGameAd(callback: () => void): void {
+    requestMidGameAd(callback: () => void) {
         if (this.isPoki) {
             this.requestPokiMidGameAd(callback);
         } else if (this.isGameMonetize) {
@@ -203,7 +210,7 @@ export class SDKManager implements BaseSDKManager {
         }
     }
 
-    requestFullscreenAd(callback: () => void): void {
+    requestFullscreenAd(callback: () => void) {
         if (this.isSpellSync && window.spellSync.ads.isFullscreenAvailable) {
             window.spellSync.ads
                 .showFullscreen({ showCountdownOverlay: true })
@@ -282,10 +289,245 @@ export class SDKManager implements BaseSDKManager {
             window.CrazyGames.SDK.banner.clearAllBanners();
         }
 
-        this.hideStickyAd();
+        window.showAdFlag = false;
+        this.hideNitroPlacementGroup("home");
+        this.hideNitroPlacementGroup("death");
+        this.hideLoadoutAd();
+        this.hideNitroFooter();
+        this.hideLegacyStickyAd();
     }
 
-    private requestCrazyGamesMidGameAd(callback: () => void): void {
+    private async initNitro(): Promise<void> {
+        if (!this.nitroSiteID) {
+            console.warn("NitroPay site id is not configured");
+            return;
+        }
+
+        try {
+            await this.ensureNitroReady();
+        } catch (error) {
+            this.nitroDisabled = true;
+            console.warn("Nitro unavailable, continuing without ads", error);
+            return;
+        }
+
+        this.enterMenuAdState();
+    }
+
+    async ensureNitroReady(): Promise<void> {
+        if (this.nitroDisabled) {
+            return;
+        }
+
+        const nitroDebugParam = new URLSearchParams(window.location.search).get(
+            "nitroads_debug",
+        );
+
+        if (this.nitroLoadPromise) {
+            return await this.nitroLoadPromise;
+        }
+
+        if (!window.nitroAds) {
+            window.nitroAds = {
+                createAd(...args) {
+                    return new Promise((resolve) => {
+                        window.nitroAds?.queue.push(["createAd", args, resolve]);
+                    });
+                },
+                queue: [],
+            } as Window["nitroAds"];
+        }
+
+        this.nitroLoadPromise = new Promise((resolve, reject) => {
+            const existing = document.querySelector(
+                `script[src="https://s.nitropay.com/ads-${this.nitroSiteID}.js"]`,
+            ) as HTMLScriptElement | null;
+
+            if (existing?.dataset.loaded === "true") {
+                resolve();
+                return;
+            }
+
+            const onLoad = () => {
+                script.dataset.loaded = "true";
+                resolve();
+            };
+            const onError = () => reject(new Error("NitroPay SDK load error"));
+
+            const script = existing ?? document.createElement("script");
+            script.dataset.cfasync = "false";
+            if (!nitroDebugParam) {
+                script.dataset.logLevel = "silent";
+            }
+            script.async = true;
+            script.src = `https://s.nitropay.com/ads-${this.nitroSiteID}.js`;
+            script.addEventListener("load", onLoad, { once: true });
+            script.addEventListener("error", onError, { once: true });
+
+            if (!existing) {
+                document.head.appendChild(script);
+            }
+        });
+
+        return await this.nitroLoadPromise;
+    }
+
+    showNitroPlacements(placementIDs: string[]) {
+        if (this.nitroDisabled) {
+            return;
+        }
+
+        if (!this.nitroSiteID) {
+            console.warn("[nitro] missing site id", { placementIDs });
+            return;
+        }
+
+        for (const placementID of placementIDs) {
+            if (this.nitroActivePlacements.has(placementID)) {
+                continue;
+            }
+
+            const element = document.getElementById(placementID);
+            if (!element) {
+                console.warn("[nitro] placement element missing", { placementID });
+                continue;
+            }
+
+            const options = nitroPlacementOptions[placementID as NitroPlacementID];
+            if (!options) {
+                console.warn("[nitro] placement options missing", { placementID });
+                continue;
+            }
+
+            this.nitroActivePlacements.add(placementID);
+            this.ensureNitroReady()
+                .then(() => window.nitroAds?.createAd(placementID, options))
+                .catch((error) => {
+                    this.nitroActivePlacements.delete(placementID);
+                    console.warn("NitroPay createAd failed", placementID, error);
+                });
+        }
+    }
+
+    showNitroPlacementGroup(group: keyof typeof this.nitroPlacements) {
+        this.showNitroPlacements([...this.nitroPlacements[group]]);
+    }
+
+    showLoadoutAd() {
+        this.showNitroPlacements(["nitro-loadout-vrec"]);
+    }
+
+    hideNitroPlacementsById(placementIDs: string[]) {
+        for (const placementID of placementIDs) {
+            this.nitroActivePlacements.delete(placementID);
+
+            const element = document.getElementById(placementID);
+            if (!element) {
+                continue;
+            }
+
+            element.replaceChildren();
+        }
+    }
+
+    private hideNitroPlacementGroup(group: keyof typeof this.nitroPlacements) {
+        this.hideNitroPlacementsById([...this.nitroPlacements[group]]);
+    }
+
+    hideLoadoutAd() {
+        this.hideNitroPlacementsById(["nitro-loadout-vrec"]);
+    }
+
+    private showNitroFooter() {
+        if (!this.nitroSiteID || this.nitroDisabled || this.nitroFooterActive) {
+            return;
+        }
+
+        const element = document.getElementById(this.nitroFooterPlacementHome);
+        if (!element) {
+            return;
+        }
+
+        const options = {
+            sizes: [["728", "90"]],
+            report: {
+                enabled: true,
+                icon: true,
+                wording: "Report Ad",
+                position: "top-right",
+            },
+        };
+
+        this.nitroFooterActive = true;
+        this.ensureNitroReady()
+            .then(() => window.nitroAds?.createAd(this.nitroFooterPlacementHome, options))
+            .catch((error) => {
+                this.nitroFooterActive = false;
+                console.warn("NitroPay footer createAd failed", error);
+            });
+    }
+
+    private hideNitroFooter() {
+        this.nitroFooterActive = false;
+
+        const element = document.getElementById(this.nitroFooterPlacementHome);
+        if (!element) {
+            return;
+        }
+
+        element.replaceChildren();
+    }
+
+    private showLegacyStickyAd() {
+        const sticky = document.querySelector(
+            ".publift-widget-sticky_footer-container",
+        ) as HTMLElement | null;
+        if (sticky) sticky.style.display = "block";
+
+        if (this.isSpellSync) {
+            window.spellSync.ads.showSticky();
+        }
+    }
+
+    private hideLegacyStickyAd() {
+        const sticky = document.querySelector(
+            ".publift-widget-sticky_footer-container",
+        ) as HTMLElement | null;
+        if (sticky) sticky.style.display = "none";
+
+        if (this.isSpellSync) {
+            window.spellSync.ads.closeSticky();
+        }
+    }
+
+    enterMenuAdState() {
+        window.showAdFlag = true;
+
+        this.hideNitroPlacementGroup("death");
+        this.showNitroPlacementGroup("home");
+        this.showNitroFooter();
+        this.showLegacyStickyAd();
+    }
+
+    enterGameplayAdState() {
+        window.showAdFlag = false;
+
+        this.hideNitroPlacementGroup("home");
+        this.hideNitroPlacementGroup("death");
+        this.hideNitroFooter();
+        this.hideLegacyStickyAd();
+    }
+
+    enterDeathAdState() {
+        window.showAdFlag = false;
+
+        this.hideNitroPlacementGroup("home");
+        this.showNitroPlacementGroup("death");
+        this.hideNitroFooter();
+        this.hideLegacyStickyAd();
+    }
+
+    private requestCrazyGamesMidGameAd(callback: () => void) {
         const callbacks = {
             adFinished: callback,
             adError: callback,
@@ -295,7 +537,7 @@ export class SDKManager implements BaseSDKManager {
         window.CrazyGames.SDK.ad.requestAd("midgame", callbacks);
     }
 
-    private requestGameMonetizeMidgameAd(callback: () => void): void {
+    private requestGameMonetizeMidgameAd(callback: () => void) {
         if (window.sdk && window.sdk.showBanner) {
             window.sdk.showBanner();
             callback();
@@ -304,7 +546,7 @@ export class SDKManager implements BaseSDKManager {
         }
     }
 
-    private requestPokiMidGameAd(callback: () => void): void {
+    private requestPokiMidGameAd(callback: () => void) {
         window.PokiSDK.commercialBreak(() => {
             // you can pause any background music or other audio here
         }).then(() => {
@@ -430,32 +672,67 @@ export class SDKManager implements BaseSDKManager {
             console.warn("Failed to request CrazyGames banner:", bannerId, error);
         }
     }
-
-    showStickyAd(): void {
-        window.showAdFlag = true;
-
-        const sticky = document.querySelector(
-            ".publift-widget-sticky_footer-container",
-        ) as HTMLElement | null;
-        if (sticky) sticky.style.display = "block";
-
-        if (this.isSpellSync) {
-            window.spellSync.ads.showSticky();
-        }
-        console.log("Show sticky ad");
-    }
-
-    hideStickyAd(): void {
-        window.showAdFlag = false;
-
-        const sticky = document.querySelector(
-            ".publift-widget-sticky_footer-container",
-        ) as HTMLElement | null;
-        if (sticky) sticky.style.display = "none";
-
-        if (this.isSpellSync) {
-            window.spellSync.ads.closeSticky();
-        }
-        console.log("Hide sticky ad");
-    }
 }
+
+const nitroReportOptions = {
+    enabled: true,
+    icon: true,
+    wording: "Report Ad",
+    position: "top-right",
+} as const;
+
+const nitroPlacementOptions = {
+    "nitro-header": {
+        sizes: [["728", "90"]],
+        report: nitroReportOptions,
+    },
+    "nitro-home-vrec": {
+        sizes: [["160", "600"]],
+        report: nitroReportOptions,
+    },
+    "nitro-home-mrec": {
+        sizes: [["160", "600"]],
+        report: nitroReportOptions,
+    },
+    "nitro-loadout-vrec": {
+        sizes: [["300", "600"]],
+        report: nitroReportOptions,
+    },
+    "nitro-died-mrec": {
+        sizes: [["728", "90"]],
+        report: nitroReportOptions,
+    },
+    "nitro-died-mrec-mobile": {
+        sizes: [
+            ["320", "50"],
+            ["320", "100"],
+        ],
+        report: nitroReportOptions,
+    },
+    survevio_728x90_leaderboard_top: {
+        sizes: [["728", "90"]],
+        report: nitroReportOptions,
+    },
+    survevio_728x90_playerprofile_top: {
+        sizes: [["728", "90"]],
+        report: nitroReportOptions,
+    },
+    survevio_300x250_leaderboard_top: {
+        sizes: [["300", "250"]],
+        report: nitroReportOptions,
+    },
+    survevio_300x250_leaderboard_bottom: {
+        sizes: [["300", "250"]],
+        report: nitroReportOptions,
+    },
+    survevio_300x250_playerprofile_top: {
+        sizes: [["300", "250"]],
+        report: nitroReportOptions,
+    },
+    survevio_300x250_playerprofile_bottom: {
+        sizes: [["300", "250"]],
+        report: nitroReportOptions,
+    },
+} as const;
+
+type NitroPlacementID = keyof typeof nitroPlacementOptions;

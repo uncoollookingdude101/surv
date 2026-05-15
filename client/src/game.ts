@@ -1318,12 +1318,15 @@ export class Game {
                 this.m_particleBarn.onMapLoad(this.m_map);
                 this.m_uiManager.onMapLoad(this.m_map, this.m_camera);
                 if (this.m_map.perkMode) {
-                    const role = this.m_config.get("perkModeRole")!;
-                    this.m_uiManager.setRoleMenuOptions(
-                        role,
-                        this.m_map.getMapDef().gameMode.perkModeRoles!,
-                    );
-                    this.m_uiManager.setRoleMenuActive(true);
+                    const player = this.m_activePlayer as Player | undefined;
+                    if (!player?.m_netData.m_role) {
+                        const role = this.m_config.get("perkModeRole")!;
+                        this.m_uiManager.setRoleMenuOptions(
+                            role,
+                            this.m_map.getMapDef().gameMode.perkModeRoles!,
+                        );
+                        this.m_uiManager.setRoleMenuActive(true);
+                    }
                 } else {
                     this.m_uiManager.setRoleMenuActive(false);
                 }

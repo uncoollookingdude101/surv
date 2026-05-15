@@ -404,6 +404,7 @@ export class UpdateMsg implements AbstractMsg {
                     s.writeBoolean(bullet.trailSaturated);
                     s.writeBoolean(bullet.apRounds);
                     s.writeBoolean(bullet.highVelocity);
+                    s.writeBoolean(bullet.combatStims);
                     s.writeBoolean(bullet.trailSmall);
                     s.writeBoolean(bullet.trailThick);
                 }
@@ -626,6 +627,7 @@ export class UpdateMsg implements AbstractMsg {
                     bullet.trailSaturated = s.readBoolean();
                     bullet.apRounds = s.readBoolean();
                     bullet.highVelocity = s.readBoolean();
+                    bullet.combatStims = s.readBoolean();
                     bullet.trailSmall = s.readBoolean();
                     bullet.trailThick = s.readBoolean();
                 }
@@ -752,6 +754,7 @@ export interface Bullet {
     trailSaturated: boolean;
     apRounds: boolean;
     highVelocity: boolean;
+    combatStims: boolean;
     trailSmall: boolean;
     trailThick: boolean;
     speedMult: number;

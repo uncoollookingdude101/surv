@@ -5,6 +5,7 @@ import type {
     StructureDef,
 } from "../../../../shared/defs/mapObjectsTyping";
 import { Puzzles } from "../../../../shared/defs/puzzles";
+import { DamageType } from "../../../../shared/gameConfig";
 import { ObjectType } from "../../../../shared/net/objectSerializeFns";
 import { type AABB, type Collider, coldet } from "../../../../shared/utils/coldet";
 import { collider } from "../../../../shared/utils/collider";
@@ -302,7 +303,17 @@ export class Building extends BaseGameObject {
                     obj.type === puzzleDef.completeUseType
                 ) {
                     setTimeout(() => {
-                        obj.toggleDoor();
+                        if (obj.isDoor) {
+                            obj.toggleDoor();
+                        } else if (obj.isButton) {
+                            obj.useButton();
+                        } else {
+                            obj.kill({
+                                damageType: DamageType.Player,
+                                dir: v2.create(0, 0),
+                                source: piece.interactedBy,
+                            });
+                        }
                     }, puzzleDef.completeUseDelay * 1000);
                 }
             }

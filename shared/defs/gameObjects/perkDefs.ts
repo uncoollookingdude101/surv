@@ -20,9 +20,16 @@ export const PerkProperties = {
         damageReduction: 0.1,
         explosionDamageReduction: 0.9,
     },
+    amped_explosives: {
+        throwableRangeMult: 1.75,
+        throwableSpeedMult: 2,
+        shrapnelCountMult: 2,
+        shrapnelDamageMult: 1.5,
+        shrapnelSpeedMult: 1.4,
+    },
     small_arms: {
         scale: -0.25,
-        damageReduction: -0.1,
+        damageReduction: -0.2,
     },
     splinter: {
         mainDamageMult: 0.7,
@@ -36,6 +43,7 @@ export const PerkProperties = {
         scale: 0.25,
     },
     final_bugle: {
+        bonusDamageMult: 1.08,
         scaleOnDeath: 0.2,
     },
     broken_arrow: {
@@ -48,10 +56,16 @@ export const PerkProperties = {
     gotw: {
         scale: 0.2,
         healthRegen: 3, // per second
-        waterSpeedBoost: 2,
+    },
+    lifeline: {
+        decayMult: 0.75, // Adrenaline decay multiplier
+        conversionRate: 2, // How much adrenaline used per health
     },
     field_medic: {
         speedBoost: 1.25,
+    },
+    combat_stims: {
+        bonusDamageMult: 1.12,
     },
     tree_climbing: {
         waterSpeedBoost: 3,
@@ -87,6 +101,23 @@ export const PerkProperties = {
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
     ammoBonusDamageMult: 1.15,
+    // Classless perk list (effectively all class perks in Cobalt, minus martyrdom)
+    classless: {
+        perkPool: [
+            "combat_stims",
+            "field_medic",
+            "steelskin",
+            "endless_ammo",
+            "chambered",
+            "takedown",
+            "small_arms",
+            "tree_climbing",
+            "amped_explosives",
+            "flak_jacket",
+            "firepower",
+            "bonus_assault",
+        ],
+    },
 };
 
 export interface PerkDef {
@@ -288,11 +319,39 @@ export const PerkDefs: Record<string, PerkDef> = {
             pickup: "perk_pickup_01",
         },
     },
+    lifeline: {
+        name: "Indomitable",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-lifeline.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
     field_medic: {
-        name: "Field Medic",
+        name: "Combat Medic",
         type: "perk",
         lootImg: {
             sprite: "loot-perk-field-medic.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    combat_stims: {
+        name: "Combat Stimulants",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-combat-stims.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,
@@ -531,6 +590,20 @@ export const PerkDefs: Record<string, PerkDef> = {
         type: "perk",
         lootImg: {
             sprite: "loot-perk-flak-jacket.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    amped_explosives: {
+        name: "Hyperfragmentation",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-amped-explosives.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

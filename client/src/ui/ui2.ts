@@ -697,16 +697,31 @@ export class UiManager2 {
                     !obstacle.dead &&
                     util.sameLayer(obstacle.layer, activePlayer.layer)
                 ) {
-                    const interact = obstacle.getInteraction();
+                    const interact = obstacle.getInteraction(activePlayer);
                     if (interact) {
-                        const res = collider.intersectCircle(
-                            obstacle.collider,
-                            activePlayer.m_netData.m_pos,
-                            interact.rad + activePlayer.m_rad,
-                        );
-                        if (res && res.pen >= closestPen) {
-                            closestObj = obstacle;
-                            closestPen = res.pen;
+                        if (obstacle.isButton && obstacle.button.isVat) {
+                            const distance = v2.distance(
+                                activePlayer.m_pos,
+                                obstacle.pos,
+                            );
+
+                            if (
+                                distance + activePlayer.m_rad <
+                                interact.rad * obstacle.scale
+                            ) {
+                                closestObj = obstacle;
+                                closestPen = 0;
+                            }
+                        } else {
+                            const res = collider.intersectCircle(
+                                obstacle.collider,
+                                activePlayer.m_netData.m_pos,
+                                interact.rad + activePlayer.m_rad,
+                            );
+                            if (res && res.pen >= closestPen) {
+                                closestObj = obstacle;
+                                closestPen = res.pen;
+                            }
                         }
                     }
                 }
@@ -1625,7 +1640,7 @@ export class UiManager2 {
                 }
                 return this.localization.translate("game-revive-teammate");
             case InteractionType.Object: {
-                const x = (object as Obstacle).getInteraction()!;
+                const x = (object as Obstacle).getInteraction(player)!;
                 return `${this.localization.translate(
                     x.action,
                 )} ${this.localization.translate(x.object)}`;
