@@ -76,9 +76,9 @@ const mapDef = {
         unlocks: {
             timings: [
                 {
-                    type: "bunker_twins_sublevel_01",
+                    type: "bunker_twins_sublevel_01ms",
                     stagger: 0.2,
-                    circleIdx: 2,
+                    circleIdx: 1,
                     wait: 40,
                 },
             ],
@@ -292,6 +292,7 @@ const mapDef = {
             { name: "bonus_45", count: 1, weight: 1 },
             { name: "endless_ammo", count: 1, weight: 1 },
             { name: "high_velocity", count: 1, weight: 1 },
+            { name: "closer", count: 1, weight: 1 },
         ],
         tier_hatchet_melee: [
             { name: "helmet03_leader2", count: 1, weight: 1 }, // ?
@@ -309,6 +310,7 @@ const mapDef = {
         ],
         tier_airdrop_perk: [
             { name: "fabricate_m", count: 1, weight: 1 },
+            { name: "fabricate_str", count: 1, weight: 1 },
             { name: "small_arms", count: 1, weight: 1 },
             { name: "field_medic", count: 1, weight: 1 },
             { name: "windwalk", count: 1, weight: 1 },
@@ -377,10 +379,7 @@ const mapDef = {
             { name: "chest02", count: 1, weight: 0.8 },
             { name: "chest03", count: 1, weight: 0.2 },
         ],
-        tier_class_crate_mythic: [
-            { name: "scavenger_adv", count: 1, weight: 1 },
-            { name: "splinter", count: 1, weight: 1 },
-        ],
+        tier_class_crate_mythic: [{ name: "scavenger_adv", count: 1, weight: 1 }],
         tier_scopes_sniper: [
             { name: "15xscope", count: 1, weight: 1 }, // ?
         ],
@@ -389,7 +388,7 @@ const mapDef = {
         ],
         tier_chest_04b: [{ name: "lasr_gun_dual", count: 1, weight: 1 }],
         tier_airdrop_melee: [
-            { name: "", count: 1, weight: 5 },
+            { name: "", count: 1, weight: 10 },
             { name: "pan", count: 1, weight: 1 },
             { name: "bonesaw_rusted", count: 1, weight: 1 },
             { name: "naginata", count: 1, weight: 1 },
@@ -423,7 +422,7 @@ const mapDef = {
             { name: "kukri_sniper", count: 1, weight: 1 },
             { name: "crowbar_recon", count: 1, weight: 1 },
             { name: "pan", count: 1, weight: 1 },
-        ]
+        ],
     },
     biome: {
         colors: {
@@ -457,7 +456,7 @@ const mapDef = {
         customSpawnRules: {
             locationSpawns: [
                 {
-                    type: "bunker_structure_09",
+                    type: "bunker_structure_09ms",
                     pos: v2.create(0.5, 0.5),
                     rad: 1,
                     retryOnFailure: true,

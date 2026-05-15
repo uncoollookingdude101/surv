@@ -157,6 +157,8 @@ export const RoleDefs: Record<string, RoleDef> = {
             "high_velocity",
             "melee_master",
             "pistol_master",
+            "energized",
+            "closer",
         ],
         defaultItems: createDefaultItems({
             weapons: [

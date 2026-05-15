@@ -703,8 +703,8 @@ export class WeaponManager {
         const firstShotAccuracy = weapon.recoilTime <= 0;
         let fireDelayMult = 1.0;
         if (this.player.hasPerk("energized")) {
-        fireDelayMult = PerkProperties.energized.fireDelayMult;
-    }
+            fireDelayMult = PerkProperties.energized.fireDelayMult;
+        }
         weapon.cooldown = itemDef.fireDelay * fireDelayMult;
         weapon.recoilTime = itemDef.recoilTime;
 
@@ -921,21 +921,28 @@ export class WeaponManager {
                 highVelocity: hasHighVelocity,
                 lastShot: weapon.ammo <= 0,
                 reflectObjId: this.player.obstacleOutfit?.__id,
-                onHitFx: (hasExplosive || isDP12) ? "explosion_rounds" : undefined,
+                onHitFx: hasExplosive || isDP12 ? "explosion_rounds" : undefined,
             };
 
             this.player.game.bulletBarn.fireBullet(params);
 
             // Shoot a projectile if defined
             let projectile: Projectile | undefined;
+            console.log(`[Throw] Item: ${itemDef.name} | Proj: ${itemDef.projType}`);
             if (itemDef.projType) {
                 const projDef = GameObjectDefs[itemDef.projType];
                 assert(
                     projDef.type === "throwable",
                     `Invalid projectile type: ${itemDef.projType}`,
                 );
+                // 1. Calculate the speed modifier first
+                const hasCloser = this.player.hasPerk("closer");
+                const speedMult = hasCloser ? 1.5 : 1.0;
+                const finalSpeed = projDef.throwPhysics.speed * speedMult;
 
-                const vel = v2.mul(shotDir, projDef.throwPhysics.speed);
+                // 2. NOW declare 'vel' exactly once
+                const vel = v2.mul(shotDir, finalSpeed);
+
                 projectile = this.player.game.projectileBarn.addProjectile(
                     this.player.__id,
                     itemDef.projType,
@@ -1239,8 +1246,9 @@ export class WeaponManager {
                     GameConfig.player.throwableMaxMouseDist,
                 ) / GameConfig.player.throwableMaxMouseDist;
         }
-
-        const throwStr = multiplier * throwableDef.throwPhysics.speed;
+        const hasCloser = this.player.hasPerk("closer");
+        const speedMult = hasCloser ? 2.0 : 1.0;
+        const throwStr = multiplier * throwableDef.throwPhysics.speed * speedMult;
 
         // position of throwing hand
         let pos = v2.add(
@@ -1293,10 +1301,8 @@ export class WeaponManager {
             dir = v2.normalizeSafe(v2.sub(aimTarget, spawnPos), v2.create(1.0, 0.0));
         }
 
-        // Incorporate some of the player motion into projectile velocity
         const vel = v2.add(
             v2.mul(this.player.moveVel, throwableDef.throwPhysics.playerVelMult),
-            // player mouse position is irrelevant for max throwing distance
             v2.mul(dir, throwStr),
         );
 
@@ -1358,6 +1364,7 @@ export class WeaponManager {
      * switch weapons slot throwable to the next one in the throwables array
      * only call this method after the inventory state has been updated accordingly, this function only changes the weaponManager.weapons' state
      */
+
     showNextThrowable(): void {
         const slot = WeaponSlot.Throwable;
         const startingIndex = throwableList.indexOf(this.weapons[slot].type) + 1;

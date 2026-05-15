@@ -803,6 +803,8 @@
   "game-pistol_master-desc": "Your pistols are much deadlier.",
   "game-energized": "Energized",
   "game-energized-desc": "3/4-full Adrenaline. Faster weapon switch and fire rate",
+  "game-closer": "Closer",
+  "game-closer-desc": "All projectiles files faster (except bullets)",
   "game-xp-drop-desc": "Pass XP",
   "game-xp_book_tallow": "Tallow's Journal",
   "game-xp_book_greene": "Greene's Infinite Wisdom",

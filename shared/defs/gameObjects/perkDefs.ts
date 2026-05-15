@@ -9,7 +9,7 @@ export const PerkProperties = {
     },
     energized: {
         minBoost: 75,
-        fireDelayMult: 0.8
+        fireDelayMult: 0.8,
     },
     steelskin: {
         scale: 0.25,
@@ -803,6 +803,20 @@ export const PerkDefs: Record<string, PerkDef> = {
         type: "perk",
         lootImg: {
             sprite: "loot-perk-energized.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    closer: {
+        name: "Closer",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-closer.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

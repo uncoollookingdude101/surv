@@ -6567,7 +6567,9 @@ function createTeaPavilion<T extends BuildingDef>(e: Partial<T>): T {
     return util.mergeDeep(t, e || {});
 }
 
-function createTeahouse<T extends BuildingDef>(e: Partial<T> & { ceilingImgs?: BuildingDef["ceiling_images"] }): T {
+function createTeahouse<T extends BuildingDef>(
+    e: Partial<T> & { ceilingImgs?: BuildingDef["ceiling_images"] },
+): T {
     const t = {
         type: "building",
         map: {
@@ -10193,10 +10195,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             sprite: "map-case-hatchet-01.img",
             residue: "map-case-hatchet-res-01.img",
         },
-        loot: [
-            autoLoot("p90", 1),
-            autoLoot("endless_ammo", 1)
-        ],
+        loot: [autoLoot("p90", 1), autoLoot("endless_ammo", 1)],
         hitParticle: "blackChip",
     }),
     case_04: createCase({
@@ -10333,7 +10332,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_scopes", 3, 3),
             tierLoot("tier_medical", 3, 3),
             tierLoot("tier_custom", 0, 1),
-            autoLoot("flare_gun", 1)
+            autoLoot("flare_gun", 1),
         ],
         map: { display: true, color: 7025920, scale: 0.85 },
     }),
@@ -11106,6 +11105,8 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("m2010", 1),
             autoLoot("p90", 1),
             autoLoot("m82", 1),
+            autoLoot("dp12", 1),
+            autoLoot("potato_lmg", 1),
             autoLoot("mirv", 15),
             autoLoot("strobe", 15),
             autoLoot("bb", 15),
@@ -11531,6 +11532,21 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         destroyType: "class_crate_mythic",
         explodeParticle: "classShell03b",
     } as unknown as Partial<ObstacleDef>),
+    class_shell_03ms: createAirdrop({
+        collision: collider.createCircle(v2.create(0, 0), 2.25),
+        button: {
+            useImg: "map-class-shell-03b.img",
+            useParticle: "classShell03a",
+            sound: { on: "airdrop_open_01", off: "" },
+        },
+        img: {
+            sprite: "map-class-shell-03a.img",
+            residue: "none",
+            zIdx: 20,
+        },
+        destroyType: "class_crate_mythicms",
+        explodeParticle: "classShell03b",
+    } as unknown as Partial<ObstacleDef>),
     class_crate_common_scout: createClassCrate({
         loot: [
             tierLoot("tier_guns_common_scout", 1, 1),
@@ -11675,6 +11691,14 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [tierLoot("tier_class_crate_mythic", 1, 1)],
         img: { sprite: "map-class-crate-03.img" },
     }),
+    class_crate_mythicms: createClassCrate({
+        loot: [
+            autoLoot("splinter", 1),
+            autoLoot("30xscope", 1),
+            autoLoot("scavenger_adv", 1),
+        ],
+        img: { sprite: "map-class-crate-03.img" },
+    }),
     mil_crate_01: createCrate({
         collision: collider.createAabbExtents(v2.create(0, 0), v2.create(2.7, 1.25)),
         health: 100,
@@ -11693,7 +11717,6 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("kukri_sniper", 1),
             autoLoot("crowbar_recon", 1),
             autoLoot("warhammer_tank", 1),
-
         ],
         map: { display: false },
         terrain: { grass: true, beach: true },
@@ -12035,10 +12058,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     }),
     pot_02ms: createBottle({
         img: { sprite: "map-pot-02.img" },
-        loot: [
-            autoLoot("dp12", 1),
-            autoLoot("small_arms", 1)
-        ],
+        loot: [autoLoot("dp12", 1), autoLoot("small_arms", 1)],
     }),
     pot_03: createBottle({ img: { sprite: "map-pot-03.img" } }),
     pot_03b: createBottle({
@@ -16431,7 +16451,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                         v2.create(0, 0),
                         v2.create(7, 7),
                     ),
-                    color: 0xF4D03F,
+                    color: 0xf4d03f,
                 },
                 {
                     collider: collider.createAabbExtents(
@@ -19991,7 +20011,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     shilo_01ms: (function <T extends BuildingDef>(e: Partial<T>): T {
         const t = {
             type: "building",
-            map: { display: true, color: 0xC3A069, scale: 1 },
+            map: { display: true, color: 0xc3a069, scale: 1 },
             terrain: { grass: true, beach: false },
             teamId: 2,
             mapObstacleBounds: [
@@ -33552,6 +33572,286 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
         ],
     },
+    bunker_twins_sublevel_01ms: {
+        type: "building",
+        map: { display: false, color: 0x665a4e, scale: 1 },
+        terrain: { grass: true, beach: false },
+        zIdx: 0,
+        floor: {
+            surfaces: [
+                {
+                    type: "tile",
+                    data: { isBright: true },
+                    collision: [
+                        collider.createAabbExtents(v2.create(0, 0), v2.create(16, 11)),
+                    ],
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-twins-chamber-floor-01.img",
+                    pos: v2.create(0, 0),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+            ],
+        },
+        ceiling: {
+            zoomRegions: [
+                {
+                    zoomIn: collider.createAabbExtents(
+                        v2.create(0, 0),
+                        v2.create(15.5, 10.5),
+                    ),
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-twins-chamber-ceiling-01.img",
+                    scale: 1,
+                    alpha: 1,
+                    tint: 0x5f5f5f,
+                },
+            ],
+        },
+        mapObjects: [
+            {
+                type: "concrete_wall_ext_6",
+                pos: v2.create(5, 17.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(1.5, 14),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(8.5, 14),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_15",
+                pos: v2.create(-7.5, 11.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_5",
+                pos: v2.create(12.5, 11.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(16.5, 9),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(-16.5, 9),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "concrete_wall_ext_6",
+                pos: v2.create(-5, -17.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(-1.5, -14),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(-8.5, -14),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_15",
+                pos: v2.create(7.5, -11.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_5",
+                pos: v2.create(-12.5, -11.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(-16.5, -9),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(16.5, -9),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "concrete_wall_ext_6",
+                pos: v2.create(22.5, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(19, 3.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(19, -3.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "concrete_wall_ext_6",
+                pos: v2.create(-22.5, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(-19, 3.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_8",
+                pos: v2.create(-19, -3.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "lab_door_locked_01",
+                pos: v2.create(3, 10.5),
+                scale: 1,
+                ori: 3,
+            },
+            {
+                type: "lab_door_locked_01",
+                pos: v2.create(-3, -10.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "lab_door_locked_01",
+                pos: v2.create(15.5, 2),
+                scale: 1,
+                ori: 2,
+            },
+            {
+                type: "lab_door_locked_01",
+                pos: v2.create(-15.5, -2),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "class_shell_03ms",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "vat_01",
+                pos: v2.create(-6.75, 6.75),
+                scale: 1,
+                ori: 3,
+            },
+            {
+                type: "vat_01",
+                pos: v2.create(-12.175, 6.75),
+                scale: 1,
+                ori: 3,
+            },
+            {
+                type: "vat_01",
+                pos: v2.create(6.75, -6.75),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "vat_01",
+                pos: v2.create(12.175, -6.75),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "control_panel_03",
+                pos: v2.create(2.5, -8.25),
+                scale: 1,
+                ori: 2,
+            },
+            {
+                type: "cobalt_wall_int_4",
+                pos: v2.create(-12.5, -10.385),
+                scale: 1,
+                ori: 3,
+            },
+            {
+                type: "barrel_01",
+                pos: v2.create(-10, -8),
+                scale: 0.9,
+                ori: 0,
+            },
+            {
+                type: "barrel_01",
+                pos: v2.create(-13, -6),
+                scale: 0.9,
+                ori: 0,
+            },
+            {
+                type: "recorder_14",
+                pos: v2.create(-13.5, -8.75),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "cobalt_wall_int_4",
+                pos: v2.create(12.5, 10.385),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "barrel_01",
+                pos: v2.create(10, 8),
+                scale: 0.9,
+                ori: 0,
+            },
+            {
+                type: "barrel_01",
+                pos: v2.create(13, 6),
+                scale: 0.9,
+                ori: 0,
+            },
+            {
+                type: "bunker_twins_compartment_01",
+                pos: v2.create(-19.5, -18.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "bunker_twins_compartment_01",
+                pos: v2.create(19.5, 18.5),
+                scale: 1,
+                ori: 2,
+            },
+        ],
+    },
     bunker_twins_compartment_01: {
         type: "building",
         map: { display: false, color: 0x665a4e, scale: 1 },
@@ -33603,6 +33903,61 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "bunker_twins_sublevel_01",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+        ],
+        stairs: [
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(5, 14.4),
+                    v2.create(2, 2.6),
+                ),
+                downDir: v2.create(0, -1),
+            },
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(-5, -14.4),
+                    v2.create(2, 2.6),
+                ),
+                downDir: v2.create(0, 1),
+            },
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(19.5, 0),
+                    v2.create(2.6, 2),
+                ),
+                downDir: v2.create(-1, 0),
+            },
+            {
+                collision: collider.createAabbExtents(
+                    v2.create(-19.5, 0),
+                    v2.create(2.6, 2),
+                ),
+                downDir: v2.create(1, 0),
+            },
+        ],
+        mask: [collider.createAabbExtents(v2.create(0, 0), v2.create(16.75, 11.75))],
+    },
+    bunker_structure_09ms: {
+        type: "structure",
+        terrain: { grass: true, beach: false },
+        ori: 0,
+        mapObstacleBounds: [
+            collider.createAabbExtents(v2.create(5, 15.4), v2.create(3.5, 6)),
+            collider.createAabbExtents(v2.create(-5, -15.4), v2.create(3.5, 6)),
+            collider.createAabbExtents(v2.create(20.5, 0), v2.create(6, 3.5)),
+            collider.createAabbExtents(v2.create(-20.5, 0), v2.create(6, 3.5)),
+            collider.createAabbExtents(v2.create(0, 0), v2.create(2.5, 2.5)),
+        ],
+        layers: [
+            {
+                type: "bunker_twins_01",
+                pos: v2.create(0, 0),
+                ori: 0,
+            },
+            {
+                type: "bunker_twins_sublevel_01ms",
                 pos: v2.create(0, 0),
                 ori: 0,
             },
