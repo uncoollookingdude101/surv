@@ -530,6 +530,7 @@ export const Main: MapDef = {
             { name: "ots38_dual", count: 1, weight: 1 },
             { name: "p30l_dual", count: 1, weight: 1 },
             { name: "saiga", count: 1, weight: 1 },
+            { name: "spas16", count: 1, weight: 1 },
             { name: "deagle_dual", count: 1, weight: 1 },
             { name: "vector", count: 1, weight: 1 },
             { name: "scorpion", count: 1, weight: 1 },
