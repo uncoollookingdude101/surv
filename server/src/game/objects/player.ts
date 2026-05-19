@@ -4719,6 +4719,8 @@ export class Player extends BaseGameObject {
         const emoteIdx = this.loadout.emotes.indexOf(emoteMsg.type);
         const emoteDef = GameObjectDefs[emoteMsg.type];
 
+        if (!emoteDef) return;
+
         if (emoteMsg.isPing) {
             if (this.debug.teleportToPings) {
                 v2.set(this.pos, msg.pos);
