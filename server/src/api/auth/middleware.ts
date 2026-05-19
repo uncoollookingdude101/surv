@@ -58,6 +58,7 @@ export function validateParams<Schema extends z.ZodSchema>(
             return c.json(
                 response ?? {
                     error: "Invalid params",
+                    issues: result.error.issues,
                 },
                 400,
             );
