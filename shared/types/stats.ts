@@ -64,6 +64,7 @@ export type MatchData = {
     damage_taken: number;
     killer_id: number;
     killed_ids: number[];
+    role: string;
 };
 
 //

@@ -11627,10 +11627,12 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         explodeParticle: "airdropCrate02x",
     } as unknown as Partial<ObstacleDef>),
     class_shell_01: createAirdrop({
+        obstacleType: undefined,
         terrain: {
             minDistanceFromSameType: 32,
         },
         collision: collider.createCircle(v2.create(0, 0), 2.25),
+        airdropCrate: false,
         button: {
             useImg: "map-class-shell-01b.img",
             useParticle: "classShell01a",
@@ -11695,9 +11697,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("crowbar_scout", 1),
             autoLoot("helmet01", 1),
             autoLoot("backpack01", 1),
-            autoLoot("soda", 1),
-            autoLoot("soda", 1),
-            autoLoot("soda", 1),
+            autoLoot("soda", 2),
         ],
         img: { sprite: "map-class-crate-scout.img" },
     }),
@@ -11728,7 +11728,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_guns_common_demo", 1, 1),
             autoLoot("katana_demo", 1),
             autoLoot("helmet01", 1),
+            autoLoot("chest01", 1),
             autoLoot("backpack02", 1),
+            autoLoot("2xscope", 1),
             tierLoot("tier_throwables_demo", 3, 4),
         ],
         img: { sprite: "map-class-crate-demo.img" },
@@ -11737,7 +11739,9 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [
             tierLoot("tier_guns_common_assault", 2, 2),
             autoLoot("spade_assault", 1),
+            autoLoot("bandage", 5),
             autoLoot("helmet01", 1),
+            autoLoot("chest01", 1),
             autoLoot("backpack01", 1),
         ],
         img: { sprite: "map-class-crate-assault.img" },
@@ -11757,7 +11761,6 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_guns_common_classless", 1, 1),
             tierLoot("tier_medical", 1, 2),
             tierLoot("tier_throwables", 1, 2),
-            tierLoot("tier_armor", 1, 1),
             tierLoot("tier_ammo", 1, 1),
             autoLoot("naginata_daemon", 1),
         ],
@@ -11838,11 +11841,12 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     class_crate_rare_classless: createClassCrate({
         loot: [
             tierLoot("tier_guns_rare_classless", 1, 1),
-            tierLoot("tier_medical", 2, 3),
-            tierLoot("tier_throwables", 2, 2),
-            tierLoot("tier_armor", 2, 2),
-            tierLoot("tier_ammo", 1, 1),
             autoLoot("naginata_daemon", 1),
+            autoLoot("chest03", 1),
+            tierLoot("tier_medical", 2, 3),
+            tierLoot("tier_airdrop_throwables", 2, 2),
+            tierLoot("tier_airdrop_scopes", 1, 1),
+            tierLoot("tier_airdrop_ammo", 2, 2),
         ],
         img: { sprite: "map-class-crate-classless.img" },
     }),
@@ -12779,6 +12783,18 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         ],
         img: {
             sprite: "map-stone-03.img",
+            residue: "",
+            tint: 0xe6e6e6,
+        },
+    }),
+    stone_08x: createRiverStone({
+        loot: [
+            tierLoot("tier_medical", 2, 3),
+            tierLoot("tier_surviv", 1, 2),
+            autoLoot("m39", 1),
+        ],
+        img: {
+            sprite: "map-stone-03x.img",
             residue: "",
             tint: 0xe6e6e6,
         },
@@ -16375,6 +16391,28 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         mapObjects: [
             {
                 type: "stone_08",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "decal_caduceus_01",
+                pos: v2.create(0, 0),
+                scale: 1,
+                ori: 0,
+            },
+        ],
+    }),
+    cache_04x: createCache({
+        terrain: {
+            grass: false,
+            beach: false,
+            river: { centerWeight: 0.5 },
+            riverShore: false,
+        },
+        mapObjects: [
+            {
+                type: "stone_08x",
                 pos: v2.create(0, 0),
                 scale: 1,
                 ori: 0,

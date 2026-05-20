@@ -47,8 +47,8 @@ const mapDef: PartialMapDef = {
                 {
                     type: "bunker_twins_sublevel_01",
                     stagger: 0.2,
-                    circleIdx: 2,
-                    wait: 5,
+                    circleIdx: 1,
+                    wait: 30,
                 },
             ],
         },
@@ -58,6 +58,14 @@ const mapDef: PartialMapDef = {
         tier_outfits: [
             { name: "chest02", count: 1, weight: 1 },
             { name: "helmet02", count: 1, weight: 1 },
+        ],
+        tier_armor: [
+            { name: "helmet01", count: 1, weight: 4 },
+            { name: "helmet02", count: 1, weight: 4 },
+            { name: "helmet03", count: 1, weight: 0.2 },
+            { name: "chest01", count: 1, weight: 6 },
+            { name: "chest02", count: 1, weight: 4 },
+            { name: "chest03", count: 1, weight: 0.2 },
         ],
         tier_mansion_floor: [{ name: "tier_outfits", count: 1, weight: 1 }],
         tier_vault_floor: [{ name: "tier_outfits", count: 1, weight: 1 }],

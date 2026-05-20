@@ -257,7 +257,24 @@ Turkey Cache Changes (2025/11/01):
 ~ Demo Rare: Adjusted Saiga-12 weight (1 --> 0.7).
 ~ Medic Rare: Adjusted Garand weight (0.5 --> 0.44).
 ~ Sniper Rare: Adjusted SV, AWM-S weights (0.1 --> 0.15 & 0.05 --> 0.075, respectively).
-~ Demo Crate: Replaced MIRV (6x) with Tier Throwable Demo (3-4).
-+ Tier CLass Crate Mythic: Added Indomitable Spirit (weight of 1).
-~ Rare Demo Crate: Replaced Airdrop Throwable (1) with Tier Throwable Demo (4-5).
+~ Demo Pod: Replaced MIRV (6x) with Tier Throwable Demo (3-4).
++ Tier Class Crate Mythic: Added Indomitable Spirit (weight of 1).
+~ Rare Demo Pod: Replaced Airdrop Throwable (1) with Tier Throwable Demo (4-5).
 + 5-15 Class Pods (30 -> 35-45 depending on map size).
+
+0.3.01 (Cobalt B-Patch) (2026/05/18):
+~ Flak Jacket now gives +3 Frag and +2 MIRV capacity (updated perk description to match).
+~ Grenadier now gets 15 Frags and 12 MIRVs on-promotion (to match the Flak Jacket change).
+~ The Twins bunker now opens 30s after first zone closure.
++ Added Tier Armor (T3 armor odds increased by ~2x [~0.5% -> ~1%], T2 armor odds made similar to T1).
+~ Scout Pod: Adjusted the number of Sodas (3 -> 2).
++ Demo Pod: Added Level 1 Chest (1).
++ Demo Pod: Added 2x Scope (1).
++ Assault Pod: Added Bandages (5).
++ Assault Pod: Added Tier 1 Vest (1).
+~ Scout Common: Adjusted DEagle weight (0.2 -> 0.3).
+~ Demo Common: Swapped SPAS-12 & MP220 weights (0.5 <-> 1).
+~ Assault Common: Adjusted SCAR-H weight (0.2 -> 0.4).
+~ Scout Rare: Adjusted Mk 20 SSR weight (0.05 -> 0.2).
+~ Assault Rare: Adjusted AN-94 weight (0.5 -> 1).
+~ Tank Rare: Adjusted QBB weight (1.2 -> 1).

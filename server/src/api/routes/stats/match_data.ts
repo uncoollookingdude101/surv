@@ -37,6 +37,7 @@ matchDataRouter.post(
                 damage_taken: matchDataTable.damageTaken,
                 killer_id: matchDataTable.killerId,
                 killed_ids: matchDataTable.killedIds,
+                role: matchDataTable.role,
             })
             .from(matchDataTable)
             .leftJoin(usersTable, eq(usersTable.id, matchDataTable.userId))

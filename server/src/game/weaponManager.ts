@@ -85,20 +85,11 @@ export class WeaponManager {
     }
 
     /**
-     *
      * @param idx index being swapped to
-     * @param cancelAction cancels current action if true
-     * @param shouldReload will attempt automatic reload at 0 ammo if true
-     * @param changeCooldown Weather to change the weapons cooldown, used by SwapWeapSlots to keep them the same
+     * @param forceSwitch true when no active weapon and switch to melee
      * @returns
      */
-    setCurWeapIndex(
-        idx: number,
-        cancelAction = true,
-        cancelSlowdown = true,
-        forceSwitch = false,
-        changeCooldown = true,
-    ): void {
+    setCurWeapIndex(idx: number, forceSwitch = false): void {
         // if current slot is invalid and next too, switch to melee
         if (!this.activeWeapon && !this.weapons[idx].type) {
             idx = WeaponSlot.Melee;
@@ -132,9 +123,7 @@ export class WeaponManager {
 
         this.player.cancelAnim();
 
-        if (cancelSlowdown) {
-            this.player.shotSlowdownTimer = 0;
-        }
+        this.player.shotSlowdownTimer = 0;
         this.bursts.length = 0;
         this.meleeAttacks.length = 0;
         this.scheduledReload = false;
@@ -145,7 +134,7 @@ export class WeaponManager {
         const nextWeapon = this.weapons[idx];
         let effectiveSwitchDelay = 0;
 
-        if (curWeapon.type && nextWeapon.type && changeCooldown) {
+        if (curWeapon.type && nextWeapon.type) {
             // ensure that player is still holding both weapons (didnt drop one)
             const nextWeaponDef = GameObjectDefs[this.weapons[idx].type] as
                 | GunDef
@@ -182,9 +171,8 @@ export class WeaponManager {
 
         this.lastWeaponIdx = this._curWeapIdx;
         this._curWeapIdx = idx;
-        if (cancelAction) {
-            this.player.cancelAction();
-        }
+
+        this.player.cancelAction();
 
         this.player.wearingPan = false;
         if (
@@ -285,7 +273,7 @@ export class WeaponManager {
         }
 
         if (!this.activeWeapon) {
-            this.setCurWeapIndex(WeaponSlot.Melee, undefined, undefined, true);
+            this.setCurWeapIndex(WeaponSlot.Melee, true);
         }
 
         this.player.weapsDirty = true;
@@ -1255,6 +1243,18 @@ export class WeaponManager {
         }
         assert(throwableDef.type === "throwable");
 
+        const isAmped = this.player.hasPerk("amped_explosives");
+
+        const throwRangeMult = isAmped
+            ? PerkProperties.amped_explosives.throwableRangeMult
+            : 1;
+
+        const throwSpeedMult = isAmped
+            ? PerkProperties.amped_explosives.throwableSpeedMult
+            : 1;
+
+        const maxDist = GameConfig.player.throwableMaxMouseDist * throwRangeMult;
+
         let multiplier: number;
         if (throwableDef.forceMaxThrowDistance) {
             multiplier = 1;
@@ -1263,20 +1263,9 @@ export class WeaponManager {
             multiplier = 0;
         } else {
             // default throw strength algorithm, just based on mouse distance from player
-            multiplier =
-                math.clamp(
-                    this.player.toMouseLen,
-                    0,
-                    GameConfig.player.throwableMaxMouseDist,
-                ) / GameConfig.player.throwableMaxMouseDist;
+            multiplier = math.clamp(this.player.toMouseLen, 0, maxDist) / maxDist;
         }
-        const hasCloser = this.player.hasPerk("closer");
-        const isAmped = this.player.hasPerk("amped_explosives");
-
-        const throwSpeedMult = isAmped
-            ? PerkProperties.amped_explosives.throwableSpeedMult
-            : 1;
-        const speedMult = hasCloser
+        const hasCloser = this.player.hasPerk("closer");        const speedMult = hasCloser
             ? PerkProperties.amped_explosives.throwableSpeedMult
             : 1;
 
@@ -1326,15 +1315,11 @@ export class WeaponManager {
 
         let dir = v2.copy(this.player.dir);
 
-        const throwRangeMult = isAmped
-            ? PerkProperties.amped_explosives.throwableRangeMult
-            : 1;
-
         // Aim toward a point some distance infront of the player
         if (throwableDef.aimDistance > 0.0) {
             const aimTarget = v2.add(
                 this.player.pos,
-                v2.mul(this.player.dir, throwableDef.aimDistance * throwRangeMult),
+                v2.mul(this.player.dir, throwableDef.aimDistance),
             );
             dir = v2.normalizeSafe(v2.sub(aimTarget, spawnPos), v2.create(1.0, 0.0));
         }

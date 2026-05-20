@@ -1294,7 +1294,8 @@ export class UiManager2 {
                 const oe = ie ? ie.level : 0;
                 re.div.style.display = ie ? "block" : "none";
                 re.level.innerHTML = this.localization.translate(`game-level-${oe}`);
-                re.level.style.color = oe >= 3 ? "#ff9900" : "#ffffff";
+                re.level.style.color =
+                    oe === 4 ? "#b30000" : oe === 3 ? "#ff9900" : "#ffffff";
                 re.image.src = helpers.getSvgFromGameType(ae.item);
             }
             if (te.selectable) {

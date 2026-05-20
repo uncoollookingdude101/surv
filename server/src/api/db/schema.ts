@@ -136,6 +136,7 @@ export const matchDataTable = pgTable(
         damageTaken: integer("damage_taken").notNull(),
         killerId: integer("killer_id").notNull(),
         killedIds: integer("killed_ids").array().notNull(),
+        role: text("role").notNull().default(""),
     },
     (table) => [
         index("idx_match_data_user_stats").on(

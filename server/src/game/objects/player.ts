@@ -1318,6 +1318,10 @@ export class Player extends BaseGameObject {
                 util.removeFrom(this.game.playerBarn.aoeHealPlayers, this);
                 break;
             }
+            case "flak_jacket": {
+                this.invManager.enforceMaxCapacity("frag");
+                this.invManager.enforceMaxCapacity("mirv");
+            }
         }
 
         this.recalculateScale();
@@ -2961,6 +2965,23 @@ export class Player extends BaseGameObject {
         // teammates can't deal damage to each other
         if (playerSource && params.source !== this) {
             if (playerSource.teamId === this.teamId && !this.disconnected) {
+                // Combat Stimulants Healing
+                const gameSourceDef = GameObjectDefs[params.gameSourceType ?? ""];
+                if (
+                    playerSource._combatStimsTicker > 0 &&
+                    gameSourceDef?.type === "gun"
+                ) {
+                    const healAmount =
+                        params.amount! * PerkProperties.combat_stims.healPercent;
+                    if (healAmount > 0) {
+                        this.health = math.min(
+                            this.health + healAmount,
+                            GameConfig.player.health,
+                        );
+                        this.healEffectTicker = 0.5;
+                        this.setDirty();
+                    }
+                }
                 return;
             }
         }
@@ -2977,8 +2998,7 @@ export class Player extends BaseGameObject {
         // ignore armor for gas and bleeding damage
         if (
             params.damageType !== GameConfig.DamageType.Gas &&
-            params.damageType !== GameConfig.DamageType.Bleeding &&
-            params.damageType !== GameConfig.DamageType.Airdrop
+            params.damageType !== GameConfig.DamageType.Bleeding
         ) {
             const gameSourceDef = GameObjectDefs[params.gameSourceType ?? ""];
             let isHeadShot = false;
@@ -4826,6 +4846,8 @@ export class Player extends BaseGameObject {
 
         const emoteIdx = this.loadout.emotes.indexOf(emoteMsg.type);
         const emoteDef = GameObjectDefs[emoteMsg.type];
+
+        if (!emoteDef) return;
 
         if (emoteMsg.isPing) {
             if (this.debug.teleportToPings) {
