@@ -742,4 +742,28 @@ const ExplosionEffectDefs: Record<string, ExplotionDef> = {
         shakeDur: 0,
         lifetime: 0.5,
     },
+    potato_cluster: {
+        burst: {
+            particle: "explosionPotato",
+            scale: 0.25,
+            sound: {
+                grass: "explosion_05",
+                water: "explosion_02",
+                detune: 400,
+                volume: 0.25,
+            },
+        },
+        scatter: {
+            particle: "potato_impact",
+            count: 4,
+            speed: {
+                min: 5,
+                max: 8,
+            },
+        },
+        rippleCount: 5,
+        shakeStr: 0,
+        shakeDur: 0,
+        lifetime: 1.25,
+    },
 };

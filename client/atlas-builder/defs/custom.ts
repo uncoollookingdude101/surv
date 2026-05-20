@@ -13,6 +13,7 @@ export const CustomAtlas: AtlasDef = {
         "loot/loot-weapon-pkm.svg",
         "guns/gun-pkm-01.svg",
         "guns/gun-dp12-01.svg",
+        "guns/gun-splitter-01.svg",
         "loot/loot-weapon-m82.svg",
         "loot/loot-weapon-p90.svg",
         "loot/loot-perk-melee-master.svg",

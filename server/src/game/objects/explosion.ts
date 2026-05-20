@@ -50,6 +50,40 @@ export class ExplosionBarn {
             this.game.smokeBarn.addEmitter(explosion.pos, explosion.layer);
             return;
         }
+        const sourcePlayer =
+            explosion.damageParams.source &&
+            explosion.damageParams.source.__type === ObjectType.Player
+                ? explosion.damageParams.source
+                : undefined;
+
+        const hasAmped = sourcePlayer?.hasPerk?.("amped_explosives");
+
+        // 1. DEFINE MULTIPLIERS
+        const explosionDamageMult = hasAmped
+            ? PerkProperties.amped_explosives.explosionDamageMult
+            : 1;
+        // You can use a custom property if it exists, or reuse shrapnelCountMult/damageMult for scale (e.g., 1.25x radius)
+        const explosionRadMult = hasAmped
+            ? (PerkProperties.amped_explosives.explosionRadMult ?? 1.25)
+            : 1;
+
+        // 2. ADJUST EXPLOSION INSTANCE RADIUS BEFORE RAYCASTS
+        if (hasAmped) {
+            explosion.rad = explosion.rad * explosionRadMult;
+        }
+
+        // 3. CREATE AMPED DEFINITION COPY FOR DAMAGE AND MATH LOOKUPS
+        const activeDef: ExplosionDef = hasAmped
+            ? {
+                  ...def,
+                  damage: def.damage * explosionDamageMult,
+                  obstacleDamage: def.obstacleDamage * explosionDamageMult,
+                  rad: {
+                      min: def.rad.min * explosionRadMult,
+                      max: def.rad.max * explosionRadMult,
+                  },
+              }
+            : def;
 
         const coll = collider.createCircle(explosion.pos, explosion.rad);
 
@@ -79,7 +113,7 @@ export class ExplosionBarn {
 
         // this make the amount of raycasts increase with the explosion radius
         // the 0.75 is the maximum gap between the raycasts
-        const step = math.min(Math.acos(1 - (0.75 / def.rad.max) ** 2 / 2), 0.3);
+        const step = math.min(Math.acos(1 - (0.75 / activeDef.rad.max) ** 2 / 2), 0.3);
 
         for (let angle = -Math.PI; angle < Math.PI; angle += step) {
             // All objects that collided with this line
@@ -126,7 +160,24 @@ export class ExplosionBarn {
 
                 if (!damagedObjects.has(obj.__id)) {
                     damagedObjects.set(obj.__id, true);
+
+                    const baseDamage =
+                        obj.__type === ObjectType.Obstacle
+                            ? def.obstacleDamage
+                            : def.damage;
+                    const finalDamage =
+                        obj.__type === ObjectType.Obstacle
+                            ? activeDef.obstacleDamage
+                            : activeDef.damage;
+
+                    // Intercept the dynamic lookup inside damageObject by temporarily swapping the global definition entry
+                    const originalDef = GameObjectDefs[explosion.type];
+                    GameObjectDefs[explosion.type] = activeDef;
+
                     this.damageObject(explosion, collision);
+
+                    // Instantly restore original configuration definitions to prevent side effects
+                    GameObjectDefs[explosion.type] = originalDef;
                 }
 
                 if (
@@ -137,14 +188,6 @@ export class ExplosionBarn {
                     break;
             }
         }
-
-        const sourcePlayer =
-            explosion.damageParams.source &&
-            explosion.damageParams.source.__type === ObjectType.Player
-                ? explosion.damageParams.source
-                : undefined;
-
-        const hasAmped = sourcePlayer?.hasPerk?.("amped_explosives");
 
         const shrapnelSpeedMult = hasAmped
             ? PerkProperties.amped_explosives.shrapnelSpeedMult

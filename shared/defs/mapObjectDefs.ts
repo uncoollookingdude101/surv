@@ -10420,6 +10420,42 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         ],
         hitParticle: "blackChip",
     }),
+    case_09msa: createCase({
+        health: 140,
+        img: {
+            sprite: "map-case-twins-01.img",
+            residue: "map-case-hatchet-res-01.img",
+        },
+        loot: [
+            autoLoot("field_medic", 1),
+            autoLoot("helmet04_classless2", 1),
+            autoLoot("healthkit", 4),
+            autoLoot("soda", 4),
+            autoLoot("15xscope", 1),
+            autoLoot("chest03", 1),
+            autoLoot("backpack03", 1),
+            autoLoot("naginata_daemon", 1),
+        ],
+        hitParticle: "blackChip",
+    }),
+    case_09msb: createCase({
+        health: 140,
+        img: {
+            sprite: "map-case-twins-01.img",
+            residue: "map-case-hatchet-res-01.img",
+        },
+        loot: [
+            autoLoot("potato_lmg", 1),
+            autoLoot("helmet03_grenadier2", 1),
+            autoLoot("healthkit", 4),
+            autoLoot("soda", 4),
+            autoLoot("15xscope", 1),
+            autoLoot("chest03", 1),
+            autoLoot("backpack03", 1),
+            autoLoot("naginata_daemon", 1),
+        ],
+        hitParticle: "blackChip",
+    }),
     chest_01: createChest({
         loot: [
             tierLoot("tier_chest", 3, 4),
@@ -11815,11 +11851,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-class-crate-03.img" },
     }),
     class_crate_mythicms: createClassCrate({
-        loot: [
-            autoLoot("splinter", 1),
-            autoLoot("30xscope", 1),
-            autoLoot("scavenger_adv", 1),
-        ],
+        loot: [tierLoot("tier_class_crate_mythic", 1, 1), autoLoot("30xscope", 1)],
         img: { sprite: "map-class-crate-03.img" },
     }),
     mil_crate_01: createCrate({
@@ -33995,7 +34027,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             completeOffDelay: 1,
             completeUseDelay: 2,
             errorResetDelay: 1,
-            pieceResetDelay: 6,
+            pieceResetDelay: 15,
             sound: {
                 fail: "door_error_01",
                 complete: "",
@@ -34225,13 +34257,13 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 0,
             },
             {
-                type: "bunker_twins_compartment_01",
+                type: "bunker_twins_compartment_01msa",
                 pos: v2.create(-19.5, -18.5),
                 scale: 1,
                 ori: 0,
             },
             {
-                type: "bunker_twins_compartment_01",
+                type: "bunker_twins_compartment_01msb",
                 pos: v2.create(19.5, 18.5),
                 scale: 1,
                 ori: 2,
@@ -34368,6 +34400,188 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             },
             {
                 type: "vat_03",
+                pos: v2.create(-5, -0.5),
+                scale: 1.25,
+                ori: 0,
+            },
+        ],
+    },
+    bunker_twins_compartment_01msb: {
+        type: "building",
+        map: { display: false, color: 0x665a4e, scale: 1 },
+        terrain: { grass: true, beach: false },
+        zIdx: 2,
+        floor: {
+            surfaces: [
+                {
+                    type: "bunker",
+                    collision: [
+                        collider.createAabbExtents(v2.create(0, 2), v2.create(9, 8.75)),
+                    ],
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-twins-compartment-floor-01.img",
+                    pos: v2.create(0, -2),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+            ],
+        },
+        ceiling: {
+            zoomRegions: [
+                {
+                    zoomIn: collider.createAabbExtents(
+                        v2.create(0, 0.75),
+                        v2.create(10, 7.75),
+                    ),
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-hydra-compartment-ceiling-03.img",
+                    pos: v2.create(0, 0),
+                    scale: 1,
+                    alpha: 1,
+                    tint: 0x5f5f5f,
+                    rot: 0,
+                    mirrorX: true,
+                },
+            ],
+        },
+        mapObjects: [
+            {
+                type: "metal_wall_ext_thicker_17",
+                pos: v2.create(-10.5, -2),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_18",
+                pos: v2.create(0, -9),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_18",
+                pos: v2.create(10.5, -0.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_49",
+                pos: v2.create(-2, 6),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "case_09msb",
+                pos: v2.create(6.5, -5.65),
+                scale: 1,
+                ori: 0,
+                inheritOri: false,
+            },
+            {
+                type: "control_panel_03",
+                pos: v2.create(-6.75, -5.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "",
+                pos: v2.create(-5, -0.5),
+                scale: 1.25,
+                ori: 0,
+            },
+        ],
+    },
+    bunker_twins_compartment_01msa: {
+        type: "building",
+        map: { display: false, color: 0x665a4e, scale: 1 },
+        terrain: { grass: true, beach: false },
+        zIdx: 2,
+        floor: {
+            surfaces: [
+                {
+                    type: "bunker",
+                    collision: [
+                        collider.createAabbExtents(v2.create(0, 2), v2.create(9, 8.75)),
+                    ],
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-twins-compartment-floor-01.img",
+                    pos: v2.create(0, -2),
+                    scale: 0.5,
+                    alpha: 1,
+                    tint: 0xffffff,
+                },
+            ],
+        },
+        ceiling: {
+            zoomRegions: [
+                {
+                    zoomIn: collider.createAabbExtents(
+                        v2.create(0, 0.75),
+                        v2.create(10, 7.75),
+                    ),
+                },
+            ],
+            imgs: [
+                {
+                    sprite: "map-bunker-hydra-compartment-ceiling-03.img",
+                    pos: v2.create(0, 0),
+                    scale: 1,
+                    alpha: 1,
+                    tint: 0x5f5f5f,
+                    rot: 0,
+                    mirrorX: true,
+                },
+            ],
+        },
+        mapObjects: [
+            {
+                type: "metal_wall_ext_thicker_17",
+                pos: v2.create(-10.5, -2),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_18",
+                pos: v2.create(0, -9),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "metal_wall_ext_thicker_18",
+                pos: v2.create(10.5, -0.5),
+                scale: 1,
+                ori: 0,
+            },
+            {
+                type: "metal_wall_ext_thicker_49",
+                pos: v2.create(-2, 6),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "case_09msa",
+                pos: v2.create(6.5, -5.65),
+                scale: 1,
+                ori: 0,
+                inheritOri: false,
+            },
+            {
+                type: "control_panel_03",
+                pos: v2.create(-6.75, -5.5),
+                scale: 1,
+                ori: 1,
+            },
+            {
+                type: "",
                 pos: v2.create(-5, -0.5),
                 scale: 1.25,
                 ori: 0,

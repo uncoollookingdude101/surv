@@ -8,7 +8,7 @@ export const PerkProperties = {
         scale: 0.1,
     },
     energized: {
-        minBoost: 75,
+        minBoost: 25,
         fireDelayMult: 0.8,
     },
     steelskin: {
@@ -26,6 +26,9 @@ export const PerkProperties = {
         shrapnelCountMult: 2,
         shrapnelDamageMult: 1.5,
         shrapnelSpeedMult: 1.4,
+        explosionDamageMult: 1.25,
+        explosionRadMult: 1.25,
+        projSpeedMult: 1.5,
     },
     small_arms: {
         scale: -0.25,
@@ -59,13 +62,13 @@ export const PerkProperties = {
     },
     lifeline: {
         decayMult: 0.75, // Adrenaline decay multiplier
-        conversionRate: 2, // How much adrenaline used per health
+        conversionRate: 1.5, // How much adrenaline used per health
     },
     field_medic: {
         speedBoost: 1.25,
     },
     combat_stims: {
-        bonusDamageMult: 1.12,
+        bonusDamageMult: 1.18,
     },
     tree_climbing: {
         waterSpeedBoost: 3,
@@ -87,10 +90,14 @@ export const PerkProperties = {
         meleeDamageMult: 1.5,
     },
     pistol_master: {
-        damageMult: 1.6,
+        damageMult: 1.4,
         spreadMul: 0.4,
         speedMult: 1.3,
         distanceMult: 1.3,
+    },
+    closer: {
+        speedMult: 1.5,
+        projSpeedMult: 1.3,
     },
     // map of ammo type to perk that boosts that ammo
     ammoBonuses: {
@@ -100,7 +107,7 @@ export const PerkProperties = {
         "12gauge": ["treat_12g"],
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
-    ammoBonusDamageMult: 1.15,
+    ammoBonusDamageMult: 1.1,
     // Classless perk list (effectively all class perks in Cobalt, minus martyrdom)
     classless: {
         perkPool: [

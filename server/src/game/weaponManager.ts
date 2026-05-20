@@ -945,17 +945,28 @@ export class WeaponManager {
 
             // Shoot a projectile if defined
             let projectile: Projectile | undefined;
-            console.log(`[Throw] Item: ${itemDef.name} | Proj: ${itemDef.projType}`);
             if (itemDef.projType) {
                 const projDef = GameObjectDefs[itemDef.projType];
                 assert(
                     projDef.type === "throwable",
                     `Invalid projectile type: ${itemDef.projType}`,
                 );
-                // 1. Calculate the speed modifier first
+
+                // 1. Check for the perks
                 const hasCloser = this.player.hasPerk("closer");
-                const speedMult = hasCloser ? 1.5 : 1.0;
-                const finalSpeed = projDef.throwPhysics.speed * speedMult;
+                const isAmped = this.player.hasPerk("amped_explosives"); // or "amped", match your perk ID
+
+                // 2. Fetch the multipliers safely from PerkProperties
+                const closerSpeedMult = hasCloser
+                    ? (PerkProperties.closer?.projSpeedMult ?? 1.5)
+                    : 1.0;
+                const ampedSpeedMult = isAmped
+                    ? (PerkProperties.amped_explosives?.projSpeedMult ?? 1.3)
+                    : 1.0;
+
+                // 3. Combine them into finalSpeed
+                const finalSpeed =
+                    projDef.throwPhysics.speed * closerSpeedMult * ampedSpeedMult;
 
                 // 2. NOW declare 'vel' exactly once
                 const vel = v2.mul(shotDir, finalSpeed);
@@ -1260,14 +1271,17 @@ export class WeaponManager {
                 ) / GameConfig.player.throwableMaxMouseDist;
         }
         const hasCloser = this.player.hasPerk("closer");
-        const speedMult = hasCloser ? 2.0 : 1.0;
         const isAmped = this.player.hasPerk("amped_explosives");
 
         const throwSpeedMult = isAmped
             ? PerkProperties.amped_explosives.throwableSpeedMult
             : 1;
+        const speedMult = hasCloser
+            ? PerkProperties.amped_explosives.throwableSpeedMult
+            : 1;
 
-        const throwStr = multiplier * throwableDef.throwPhysics.speed * throwSpeedMult * speedMult;
+        const throwStr =
+            multiplier * throwableDef.throwPhysics.speed * throwSpeedMult * speedMult;
 
         // position of throwing hand
         let pos = v2.add(

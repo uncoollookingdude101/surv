@@ -1416,6 +1416,18 @@ const SkinDefs: Record<string, MeleeDef> = {
     }),
     naginata_daemon: defineMeleeSkin("naginata", {
         name: "Naginata Daemon",
+        damage: 78,
+        obstacleDamage: 1.92,
+        stonePiercing: true,
+        attack: {
+            offset: {
+                x: 3.5,
+                y: 0,
+            },
+            rad: 2,
+            damageTimes: [0.27],
+            cooldownTime: 0.47,
+        },
         lootImg: { sprite: "loot-melee-naginata-daemon.img" },
         worldImg: { sprite: "loot-melee-naginata-daemon.img" },
     }),

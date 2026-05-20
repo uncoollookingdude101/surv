@@ -494,6 +494,24 @@ export const RoleDefs: Record<string, RoleDef> = {
             dead: "leader_dead_01",
         },
     },
+    absoluteunit: {
+        type: "role",
+        announce: false,
+        killFeed: { assign: false },
+        sound: {
+            assign: "spawn_01",
+        },
+        perks: ["steelskin", "lifeline"],
+    },
+    bombastic: {
+        type: "role",
+        announce: false,
+        killFeed: { assign: false },
+        sound: {
+            assign: "spawn_01",
+        },
+        perks: ["amped_explosives", "fabricate_m", "flak_jacket"],
+    },
     the_hunted: {
         type: "role",
         announce: true,
@@ -509,6 +527,22 @@ export const RoleDefs: Record<string, RoleDef> = {
             pulseTint: 0xff8400,
         },
         perks: ["hunted"],
+    },
+    the_tested: {
+        type: "role",
+        announce: true,
+        killFeed: { assign: true, dead: true, color: "#ff8400" },
+        sound: {
+            assign: "leader_assigned_01",
+            dead: "leader_dead_01",
+        },
+        mapIndicator: {
+            sprite: "player-the-hunted.img",
+            tint: 0xff8400,
+            pulse: true,
+            pulseTint: 0xff8400,
+        },
+        perks: ["hunted", "lifeline", "energized"],
     },
     healer: {
         type: "role",

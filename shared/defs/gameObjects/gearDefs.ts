@@ -845,6 +845,21 @@ const SkinDefs = {
             rot: 0.5 * Math.PI,
         },
     }),
+    helmet02_moontest: defineSkin("helmet02", {
+        name: "Tsukuyomi no Kabuto",
+        role: "the_tested",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-moon.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
+        },
+    }),
     helmet03_lt: defineSkin("helmet03", {
         name: "Lieutenant Helmet",
         noDrop: true,
@@ -946,6 +961,21 @@ const SkinDefs = {
         lootImg: {
             sprite: "player-helmet-grenadier.img",
             scale: 0.3,
+            rot: 0.5 * Math.PI,
+        },
+    }),
+    helmet03_grenadier2: defineSkin("helmet03", {
+        name: "Grenadier Helmet",
+        role: "bombastic",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-grenadier.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-grenadier.img",
             rot: 0.5 * Math.PI,
         },
     }),
@@ -1063,6 +1093,21 @@ const SkinDefs = {
     helmet04_classless: defineSkin("helmet04", {
         name: "Classless Helmet",
         noDrop: true,
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-classless.img",
+            spriteScale: 0.275,
+        },
+        lootImg: {
+            sprite: "player-helmet-classless.img",
+            rot: 0.5 * Math.PI,
+        },
+    }),
+    helmet04_classless2: defineSkin("helmet04", {
+        name: "Classless Helmet",
+        role: "absoluteunit",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

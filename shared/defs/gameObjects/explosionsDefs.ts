@@ -203,7 +203,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
     },
     explosion_potato_smgshot: {
         type: "explosion",
-        damage: 13,
+        damage: 18,
         obstacleDamage: 1.5,
         teamDamage: false,
         rad: { min: 1.25, max: 1.75 },
@@ -302,7 +302,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
     },
     explosion_coconut_pellet: {
         type: "explosion",
-        damage: 23,
+        damage: 13,
         obstacleDamage: 1.5,
         teamDamage: false,
         rad: { min: 1.75, max: 2 },
@@ -312,7 +312,19 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         decalType: "",
         freezeDuration: 1,
         healTeam: true,
-        healAmount: 14,
+        healAmount: 3,
         frozenSprites: ["player-mash-01.img", "player-mash-02.img", "player-mash-03.img"],
+    },
+    explosion_potato_cluster: {
+        type: "explosion",
+        damage: 16,
+        obstacleDamage: 2.5,
+        teamDamage: false,
+        rad: { min: 2.5, max: 4.5 },
+        shrapnelCount: 0,
+        shrapnelType: "",
+        explosionEffectType: "potato_cluster",
+        decalType: "",
+        dropRandomLoot: 1,
     },
 };
