@@ -161,11 +161,11 @@ export class ExplosionBarn {
                 if (!damagedObjects.has(obj.__id)) {
                     damagedObjects.set(obj.__id, true);
 
-                    const baseDamage =
+                    const _baseDamage =
                         obj.__type === ObjectType.Obstacle
                             ? def.obstacleDamage
                             : def.damage;
-                    const finalDamage =
+                    const _finalDamage =
                         obj.__type === ObjectType.Obstacle
                             ? activeDef.obstacleDamage
                             : activeDef.damage;

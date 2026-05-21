@@ -1,6 +1,6 @@
 import type { Vec2 } from "../utils/v2";
-import { Airstrike } from "./maps/airstrike";
 import type { RoleDef } from "./gameObjects/roleDefs";
+import { Airstrike } from "./maps/airstrike";
 import { Main } from "./maps/baseDefs";
 import { Beach } from "./maps/beachDefs";
 import { Birthday } from "./maps/birthdayDefs";
@@ -8,8 +8,8 @@ import { Cobalt } from "./maps/cobaltDefs";
 import { Desert } from "./maps/desertDefs";
 import { Faction2 } from "./maps/faction2Defs";
 import { Faction } from "./maps/factionDefs";
-import { Flare } from "./maps/flareDefs";
 import { factionPotato } from "./maps/factionPotatoDefs";
+import { Flare } from "./maps/flareDefs";
 import { Halloween } from "./maps/halloweenDefs";
 import { HidenSeek } from "./maps/hidenseek";
 import { MainSpring } from "./maps/mainSpringDefs";

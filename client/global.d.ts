@@ -96,4 +96,5 @@ declare module "pixi.js-legacy" {
         __layerIdx: number;
     }
 }
+
 export {};
