@@ -10427,7 +10427,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             residue: "map-case-hatchet-res-01.img",
         },
         loot: [
-            autoLoot("field_medic", 1),
+            tierLoot("tier_custom", 1, 1),
             autoLoot("helmet04_classless2", 1),
             autoLoot("healthkit", 4),
             autoLoot("soda", 4),
@@ -10445,7 +10445,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             residue: "map-case-hatchet-res-01.img",
         },
         loot: [
-            autoLoot("potato_lmg", 1),
+            tierLoot("tier_custom", 1, 1),
             autoLoot("helmet03_grenadier2", 1),
             autoLoot("healthkit", 4),
             autoLoot("soda", 4),
@@ -11345,6 +11345,19 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-crate-21.img" },
         sound: { explode: "crate_break_01" },
     }),
+    crate_21ms: createCrate({
+        health: 140,
+        loot: [
+            tierLoot("tier_guns", 1, 2),
+            tierLoot("tier_snipers", 2, 1),
+            tierLoot("tier_cloud_02", 1, 1),
+            tierLoot("tier_perks", 2, 1),
+        ],
+        map: { display: true, color: 0x496f, scale: 0.875 },
+        terrain: { grass: true, beach: false },
+        img: { sprite: "map-crate-21.img" },
+        sound: { explode: "crate_break_01" },
+    }),
     crate_22: createCrate({
         health: 140,
         loot: [
@@ -12148,6 +12161,10 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
         loot: [autoLoot("cutlass_gold", 1)],
         img: { sprite: "map-gun-mount-06.img" },
     }),
+    gun_mount_06ms: createGunMount({
+        loot: [autoLoot("cutlass", 1)],
+        img: { sprite: "map-gun-mount-06.img" },
+    }),
     gun_mount_07: createGunMount({
         loot: [autoLoot("spas16", 1)],
         img: { sprite: "map-gun-mount-07.img" },
@@ -12500,11 +12517,21 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
             tint: 0xff944d,
         },
     }),
+    silo_01ms: createSilo({
+        scale: { createMin: 1, createMax: 1, destroy: 0.9 },
+        destructible: true,
+        health: 2500,
+        loot: [autoLoot("potato_smg", 1), autoLoot("splitter", 1), autoLoot("closer", 1)],
+        img: {
+            residue: "map-smoke-res.img",
+            tint: 0xff944d,
+        },
+    }),
     silo_02ms: createSilo({
         scale: { createMin: 1, createMax: 1, destroy: 0.9 },
         destructible: true,
         health: 2500,
-        loot: [autoLoot("potato_lmg", 1)],
+        loot: [autoLoot("potato_lmg", 1), autoLoot("closer", 1)],
         img: {
             residue: "map-smoke-res.img",
             tint: 0xff944d,
@@ -20371,7 +20398,7 @@ export const MapObjectDefs: Record<string, MapObjectDef> = {
     shilo_01ms: (function <T extends BuildingDef>(e: Partial<T>): T {
         const t = {
             type: "building",
-            map: { display: true, color: 0xc3a069, scale: 1 },
+            map: { display: true, color: 0x964b00, scale: 1 },
             terrain: { grass: true, beach: false },
             teamId: 2,
             mapObstacleBounds: [

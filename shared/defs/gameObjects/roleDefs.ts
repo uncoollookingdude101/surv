@@ -501,7 +501,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         sound: {
             assign: "spawn_01",
         },
-        perks: ["steelskin", "lifeline"],
+        perks: ["steelskin", "lifeline", "holy_shield"],
     },
     bombastic: {
         type: "role",
@@ -543,6 +543,19 @@ export const RoleDefs: Record<string, RoleDef> = {
             pulseTint: 0xff8400,
         },
         perks: ["hunted", "lifeline", "energized"],
+    },
+    methicc: {
+        type: "role",
+        announce: true,
+        killFeed: { dead: true, color: "#820000" },
+        sound: { assign: "medic_assigned_01" },
+        mapIndicator: {
+            sprite: "player-medic.img",
+            tint: 0x820000,
+            pulse: true,
+            pulseTint: 0x820000,
+        },
+        perks: ["field_medic", "combat_stims", "aoe_heal"],
     },
     healer: {
         type: "role",

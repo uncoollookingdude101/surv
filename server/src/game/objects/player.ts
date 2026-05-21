@@ -3033,6 +3033,23 @@ export class Player extends BaseGameObject {
                 reduceDamage(helmet.damageReduction * (isHeadShot ? 1 : 0.3));
             }
         }
+        if (this.hasPerk("holy_shield") && !this.downed) {
+            const dmgcap = 25; // Change this to whatever max value you prefer
+
+            // We ignore environmental hazards like Gas and Bleeding
+            if (
+                params.damageType !== GameConfig.DamageType.Gas &&
+                params.damageType !== GameConfig.DamageType.Bleeding
+            ) {
+                if (finalDamage > dmgcap) {
+                    finalDamage = dmgcap;
+
+                    // Optional: Visual indicator tracking
+                    // (Matches how the game handles other dynamic status effects)
+                    this.setDirty();
+                }
+            }
+        }
 
         if (this._health - finalDamage < 0) {
             if (this.hasPerk("lifeline")) {
@@ -3064,6 +3081,20 @@ export class Player extends BaseGameObject {
                     amount: finalDamage,
                     weaponType: params.gameSourceType ?? "",
                 });
+                if (playerSource.hasPerk("vampire") && !playerSource.dead) {
+                    const lifestealPercent = 0.33;
+                    const healAmount = finalDamage * lifestealPercent;
+
+                    if (healAmount > 0) {
+                        playerSource.health = math.min(
+                            playerSource.health + healAmount,
+                            GameConfig.player.health,
+                        );
+
+                        playerSource.healEffectTicker = 0.5;
+                        playerSource.setDirty();
+                    }
+                }
             }
             this.lastDamagedBy = playerSource;
         }

@@ -1013,7 +1013,7 @@ const SkinDefs = {
     }),
     helmet03_medic2: defineSkin("helmet03", {
         name: "Aged Medic Helmet",
-        perk: "field_medic",
+        role: "methicc",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,

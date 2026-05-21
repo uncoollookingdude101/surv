@@ -217,7 +217,7 @@ export const Main: MapDef = {
         ],
         tier_mansion_floor: [{ name: "outfitCasanova", count: 1, weight: 1 }],
         tier_vault_floor: [{ name: "outfitJester", count: 1, weight: 1 }],
-        tier_police_floor: [{ name: "outfitPrisoner", count: 1, weight: 1 }],
+        tier_police_floor: [{ name: "m96", count: 1, weight: 1 }],
         tier_fragtastic: [
             { name: "", count: 1, weight: 1 },
             { name: "outfitFragtastic", count: 1, weight: 0.15 },

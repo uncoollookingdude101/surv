@@ -71,7 +71,7 @@ export const PerkProperties = {
     },
     combat_stims: {
         bonusDamageMult: 1.18,
-        healPercent: 0.06,
+        healPercent: 0.2,
     },
     tree_climbing: {
         waterSpeedBoost: 3,
@@ -900,6 +900,34 @@ export const PerkDefs: Record<string, PerkDef> = {
         type: "perk",
         lootImg: {
             sprite: "loot-perk-closer.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    holy_shield: {
+        name: "Holy Shield",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-holy-shield.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    vampire: {
+        name: "Vampire's Touch",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-vampire.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

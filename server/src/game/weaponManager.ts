@@ -1265,7 +1265,8 @@ export class WeaponManager {
             // default throw strength algorithm, just based on mouse distance from player
             multiplier = math.clamp(this.player.toMouseLen, 0, maxDist) / maxDist;
         }
-        const hasCloser = this.player.hasPerk("closer");        const speedMult = hasCloser
+        const hasCloser = this.player.hasPerk("closer");
+        const speedMult = hasCloser
             ? PerkProperties.amped_explosives.throwableSpeedMult
             : 1;
 
