@@ -10,8 +10,14 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # Copy your workspace blueprint configurations first (for caching efficiency)
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
 
-# Install all dependencies across the entire workspace structure
-RUN pnpm install --frozen-lockfile
+# Copy all project package manifests so pnpm knows the topology of your sub-folders
+COPY server/package.json* ./server/
+COPY client/package.json* ./client/
+COPY bot/package.json* ./bot/
+
+# Install dependencies across the workspace with public hoisting enabled
+# This ensures packages like 'esbuild' are safely accessible by server scripts
+RUN pnpm install --frozen-lockfile --shamefully-hoist
 
 # Copy the rest of your game source files into the container
 COPY . .
