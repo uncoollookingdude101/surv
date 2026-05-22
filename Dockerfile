@@ -1,36 +1,37 @@
-# Use the working trixie tag with modern GLIBC
+# Use a modern Node image that ships with Debian 13 Trixie (has GLIBC 2.40+)
 FROM node:22-trixie
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Core setup for pnpm
+# Core setup to make sure pnpm is available and ready
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy workspace blueprints
+# Copy your workspace blueprint configurations first (for caching efficiency)
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
 
-# Install all dependencies
-RUN pnpm install
+# Install all dependencies across the entire workspace structure
+RUN pnpm install --frozen-lockfile
 
-# Copy the rest of your game source files
+# Copy the rest of your game source files into the container
 COPY . .
 
-# --- FIX FOR THE GIT REVISION ERROR ---
-# Initialize a dummy git repository and create a fake commit info block
-# This satisfies 'git rev-parse HEAD' without touching any game files.
+# Fix for the Git revision error: Initialize a dummy git repository 
+# so 'git rev-parse HEAD' passes during the Vite asset build phase
 RUN git init && \
     git config user.email "deploy@render.com" && \
     git config user.name "Render Deploy" && \
     git add package.json && \
     git commit -m "production container build"
-# --------------------------------------
 
-# Tell Render exactly what port the container wants to communicate on
+# Build the production assets (compiles TypeScript and bundles your client/Vite files)
+RUN pnpm run build
+
+# Tell Render what port the container wants to communicate on
 ENV PORT=3000
 EXPOSE 3000
 EXPOSE 8000
 EXPOSE 8001
 
-# Run the dev command but force host binding out to the container network
-CMD ["pnpm", "-r", "dev", "--", "--host", "0.0.0.0"]
+# Run the project using production start binaries instead of development hot-reloaders
+CMD ["pnpm", "start"]
