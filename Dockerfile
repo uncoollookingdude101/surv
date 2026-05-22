@@ -39,4 +39,4 @@ EXPOSE 8000
 EXPOSE 8001
 
 # Boot the production API and Game Engines concurrently inside the server workspace
-CMD ["npx", "concurrently", "\"pnpm --filter @survev/server run start:api\"", \"pnpm --filter @survev/server run start:game\""]
+CMD npx concurrently "pnpm --filter @survev/server run start:api" "pnpm --filter @survev/server run start:game"
