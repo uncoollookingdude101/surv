@@ -16,7 +16,6 @@ COPY client/package.json* ./client/
 COPY bot/package.json* ./bot/
 
 # Install dependencies across the workspace with public hoisting enabled
-# This ensures packages like 'esbuild' are safely accessible by server scripts
 RUN pnpm install --frozen-lockfile --shamefully-hoist
 
 # Copy the rest of your game source files into the container
@@ -39,5 +38,5 @@ EXPOSE 3000
 EXPOSE 8000
 EXPOSE 8001
 
-# Run the project using production start binaries instead of development hot-reloaders
-CMD ["pnpm", "start"]
+# Boot the production API and Game Engines concurrently inside the server workspace
+CMD ["npx", "concurrently", "\"pnpm --filter @survev/server run start:api\"", \"pnpm --filter @survev/server run start:game\""]
