@@ -323,8 +323,9 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         rad: { min: 2.5, max: 4.5 },
         shrapnelCount: 0,
         shrapnelType: "",
+        freezeDuration: 1,
+        frozenSprites: ["player-mash-01.img", "player-mash-02.img", "player-mash-03.img"],
         explosionEffectType: "potato_cluster",
         decalType: "",
-        dropRandomLoot: 1,
     },
 };
