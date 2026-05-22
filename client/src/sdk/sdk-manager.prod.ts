@@ -90,13 +90,13 @@ export class SDKManager implements BaseSDKManager {
     private readonly nitroSiteID = import.meta.env.VITE_NITROPAY_SITE_ID;
     private nitroLoadPromise: Promise<void> | null = null;
     private nitroDisabled = false;
-    private readonly nitroFooterPlacementHome = `${AD_PREFIX}_728x90`;
+    private readonly nitroFooterPlacementId = "survevio_728x90";
     private readonly nitroPlacements = {
         home: ["nitro-header", "nitro-home-vrec", "nitro-home-mrec"],
         death: ["nitro-died-mrec", "nitro-died-mrec-mobile"],
     } as const;
-    private readonly nitroActivePlacements = new Set<string>();
-    private nitroFooterActive = false;
+    private readonly nitroRenderedPlacements = new Set<string>();
+    private nitroFooterRendered = false;
     isPoki = isWithinPoki();
     isCrazyGames = isWithinCrazyGames();
     isGameMonetize = isWithinGameMonetize();
@@ -383,13 +383,14 @@ export class SDKManager implements BaseSDKManager {
         }
 
         for (const placementID of placementIDs) {
-            if (this.nitroActivePlacements.has(placementID)) {
-                continue;
-            }
-
             const element = document.getElementById(placementID);
             if (!element) {
                 console.warn("[nitro] placement element missing", { placementID });
+                continue;
+            }
+
+            if (this.nitroRenderedPlacements.has(placementID)) {
+                element.style.display = "block";
                 continue;
             }
 
@@ -399,11 +400,12 @@ export class SDKManager implements BaseSDKManager {
                 continue;
             }
 
-            this.nitroActivePlacements.add(placementID);
+            element.style.display = "block";
+            this.nitroRenderedPlacements.add(placementID);
             this.ensureNitroReady()
                 .then(() => window.nitroAds?.createAd(placementID, options))
                 .catch((error) => {
-                    this.nitroActivePlacements.delete(placementID);
+                    this.nitroRenderedPlacements.delete(placementID);
                     console.warn("NitroPay createAd failed", placementID, error);
                 });
         }
@@ -419,14 +421,12 @@ export class SDKManager implements BaseSDKManager {
 
     hideNitroPlacementsById(placementIDs: string[]) {
         for (const placementID of placementIDs) {
-            this.nitroActivePlacements.delete(placementID);
-
             const element = document.getElementById(placementID);
             if (!element) {
                 continue;
             }
 
-            element.replaceChildren();
+            element.style.display = "none";
         }
     }
 
@@ -439,12 +439,18 @@ export class SDKManager implements BaseSDKManager {
     }
 
     private showNitroFooter() {
-        if (!this.nitroSiteID || this.nitroDisabled || this.nitroFooterActive) {
+        if (!this.nitroSiteID || this.nitroDisabled) {
             return;
         }
 
-        const element = document.getElementById(this.nitroFooterPlacementHome);
+        const element = document.getElementById(this.nitroFooterPlacementId);
         if (!element) {
+            return;
+        }
+
+        element.style.display = "block";
+
+        if (this.nitroFooterRendered) {
             return;
         }
 
@@ -458,24 +464,22 @@ export class SDKManager implements BaseSDKManager {
             },
         };
 
-        this.nitroFooterActive = true;
+        this.nitroFooterRendered = true;
         this.ensureNitroReady()
-            .then(() => window.nitroAds?.createAd(this.nitroFooterPlacementHome, options))
+            .then(() => window.nitroAds?.createAd(this.nitroFooterPlacementId, options))
             .catch((error) => {
-                this.nitroFooterActive = false;
+                this.nitroFooterRendered = false;
                 console.warn("NitroPay footer createAd failed", error);
             });
     }
 
     private hideNitroFooter() {
-        this.nitroFooterActive = false;
-
-        const element = document.getElementById(this.nitroFooterPlacementHome);
+        const element = document.getElementById(this.nitroFooterPlacementId);
         if (!element) {
             return;
         }
 
-        element.replaceChildren();
+        element.style.display = "none";
     }
 
     private showLegacyStickyAd() {
