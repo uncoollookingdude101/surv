@@ -1,5 +1,5 @@
 # Use a modern Node image that ships with Ubuntu 24.04 (has GLIBC 2.39+)
-FROM node:22-noble
+FROM node:22-trixie
 
 # Set the working directory
 WORKDIR /app
