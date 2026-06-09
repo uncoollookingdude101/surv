@@ -5,7 +5,6 @@ import {
     type BoostDef,
     type ChestDef,
     GEAR_TYPES,
-    GearDefs,
     type HealDef,
     type HelmetDef,
     SCOPE_LEVELS,
@@ -48,6 +47,7 @@ import { BaseGameObject, type DamageParams, type GameObject } from "./gameObject
 import type { Loot } from "./loot.ts";
 import type { MapIndicator } from "./mapIndicator.ts";
 import type { Obstacle } from "./obstacle.ts";
+
 
 type MoveObjsMode = {
     enabled: boolean;
@@ -587,24 +587,6 @@ export class PlayerBarn {
 
 export class Player extends BaseGameObject {
     override readonly __type = ObjectType.Player;
-    helmetPerk: string | null = null;
-    setHelmetPerk(perk: string) {
-        this.helmetPerk = perk;
-    }
-    equip(item: string, _amount: number) {
-        if (GearDefs[item] && "perk" in GearDefs[item]) {
-            const gearDef = GearDefs[item] as { perk: string };
-            console.log("PerkDefs[gearDef.perk].type", PerkDefs[gearDef.perk].type);
-            this.setHelmetPerk(PerkDefs[gearDef.perk].type);
-        }
-        // ...
-        if (item === "helmet" && this.helmetPerk) {
-            console.log("Applying perk:", this.helmetPerk);
-            this.addPerk(this.helmetPerk, false);
-            this.helmetPerk = null;
-        }
-        // ...
-    }
 
     bounds = collider.createAabbExtents(
         v2.create(0, 0),
@@ -3009,10 +2991,6 @@ export class Player extends BaseGameObject {
             }
 
             if (this.hasPerk("steelskin")) {
-                reduceDamage(PerkProperties.steelskin.damageReduction);
-            }
-
-            if (this.hasPerk("holy_shield")) {
                 reduceDamage(PerkProperties.steelskin.damageReduction);
             }
 

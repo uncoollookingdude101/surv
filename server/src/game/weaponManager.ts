@@ -449,13 +449,6 @@ export class WeaponManager {
             ? weaponDef.reloadTimeAlt * speedMult
             : weaponDef.reloadTime * speedMult;
     }
-    getTrueReloadTime(weaponDef: GunDef, useAlt = false): number {
-        const speedMult = (this.player.hasPerk("firepower") && 0.7) || 1;
-
-        return useAlt && weaponDef.reloadTimeAlt
-            ? weaponDef.reloadTimeAlt * speedMult
-            : weaponDef.reloadTime * speedMult;
-    }
 
     /**
      * Try to schedule a reload action if all conditions are met
@@ -924,12 +917,7 @@ export class WeaponManager {
                 speedMult,
                 distanceMult,
                 shotFx: i === 0,
-                shotOconst projDef = GameObjectDefs[itemDef.projType];
-                assert(
-                    projDef.type === "throwable",
-                    `Invalid projectile type: ${itemDef.projType}`,
-                );
-ffhand: offHand,
+                shotOffhand: offHand,
                 trailSaturated: shouldApplyChambered || saturated > 1,
                 trailSmall: false,
                 trailThick: shouldApplyChambered,
@@ -948,7 +936,8 @@ ffhand: offHand,
             // Shoot a projectile if defined
             let projectile: Projectile | undefined;
             if (itemDef.projType) {
-                
+                const projDef = GameObjectDefs.typeToDef(itemDef.projType, "throwable");
+
                 // 1. Check for the perks
                 const hasCloser = this.player.hasPerk("closer");
                 const isAmped = this.player.hasPerk("amped_explosives"); // or "amped", match your perk ID

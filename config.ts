@@ -29,13 +29,13 @@ export function getConfig(isProduction: boolean, dir: string) {
         regions: {},
         proxies: {},
         modes: [
-            { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: false },
-            { mapName: "main_summer", teamMode: TeamMode.Squad, enabled: false },
-            { mapName: "main_summer", teamMode: TeamMode.Squad, enabled: true },
+            { mapName: "main", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "main", teamMode: TeamMode.Duo, enabled: true },
+            { mapName: "main", teamMode: TeamMode.Squad, enabled: true },
         ],
         clientTheme: "main",
         passType: "pass_survivr1",
-        gameTps: 150,
+        gameTps: 100,
         netSyncTps: 33,
         logging: {
             logDate: true,
