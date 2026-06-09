@@ -8,12 +8,11 @@ export const PerkProperties = {
         scale: 0.1,
     },
     energized: {
-        minBoost: 25,
-        fireDelayMult: 0.8,
+        fireDelayMult: 0.75,
     },
     steelskin: {
         scale: 0.25,
-        damageReduction: 0.3,
+        damageReduction: 0.4,
     },
     flak_jacket: {
         scale: 0.05,
@@ -71,7 +70,7 @@ export const PerkProperties = {
     },
     combat_stims: {
         bonusDamageMult: 1.18,
-        healPercent: 0.2,
+        healPercent: 0.33,
     },
     tree_climbing: {
         waterSpeedBoost: 3,
@@ -94,13 +93,21 @@ export const PerkProperties = {
     },
     pistol_master: {
         damageMult: 1.4,
-        spreadMul: 0.4,
-        speedMult: 1.3,
-        distanceMult: 1.3,
+        spreadMul: 0.6,
+        speedMult: 1.2,
+        distanceMult: 1.2,
     },
     closer: {
         speedMult: 1.5,
         projSpeedMult: 1.3,
+    },
+    holy_shield: {
+        damageReduction: 0.25
+    },
+    deadeye: {
+        spreadMul: 0.2,
+        speedMult: 1.2,
+        distanceMult: 1.2,
     },
     // map of ammo type to perk that boosts that ammo
     ammoBonuses: {
@@ -110,7 +117,7 @@ export const PerkProperties = {
         "12gauge": ["treat_12g"],
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
-    ammoBonusDamageMult: 1.1,
+    ammoBonusDamageMult: 1.2,
     // Classless perk list (effectively all class perks in Cobalt, minus martyrdom)
     classless: {
         perkPool: [
@@ -944,6 +951,20 @@ export const PerkDefs: Record<string, PerkDef> = {
         emoteOnPickup: "emote_turkeyanimal",
         lootImg: {
             sprite: "loot-perk-turkey_shoot.img",
+            tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    deadeye: {
+        name: "Deadly Accurate",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-deadeye.img",
             tint: 0xffffff,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,

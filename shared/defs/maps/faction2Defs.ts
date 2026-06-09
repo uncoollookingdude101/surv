@@ -108,44 +108,11 @@ const mapDef: PartialMapDef = {
         planes: {
             timings: [
                 {
-                    circleIdx: 1,
-                    wait: 10,
-                    options: {
-                        type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 20, weight: 1 }],
-                        airstrikeZoneRad: 100,
-                        wait: 0.1,
-                        delay: 0.01,
-                    },
-                },
-                {
                     circleIdx: 2,
                     wait: 6,
                     options: {
                         type: GameConfig.Plane.Airdrop,
                         airdropType: "airdrop_crate_04ct2",
-                    },
-                },
-                {
-                    circleIdx: 2,
-                    wait: 30,
-                    options: {
-                        type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 20, weight: 1 }],
-                        airstrikeZoneRad: 100,
-                        wait: 0.1,
-                        delay: 0.01,
-                    },
-                },
-                {
-                    circleIdx: 3,
-                    wait: 8,
-                    options: {
-                        type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 20, weight: 1 }],
-                        airstrikeZoneRad: 100,
-                        wait: 0.1,
-                        delay: 0.01,
                     },
                 },
                 {
@@ -154,28 +121,6 @@ const mapDef: PartialMapDef = {
                     options: {
                         type: GameConfig.Plane.Airdrop,
                         airdropType: "airdrop_crate_04ct2",
-                    },
-                },
-                {
-                    circleIdx: 4,
-                    wait: 30,
-                    options: {
-                        type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 20, weight: 1 }],
-                        airstrikeZoneRad: 50,
-                        wait: 0.1,
-                        delay: 0.01,
-                    },
-                },
-                {
-                    circleIdx: 5,
-                    wait: 6,
-                    options: {
-                        type: GameConfig.Plane.Airstrike,
-                        numPlanes: [{ count: 20, weight: 1 }],
-                        airstrikeZoneRad: 25,
-                        wait: 0.1,
-                        delay: 0.01,
                     },
                 },
             ],

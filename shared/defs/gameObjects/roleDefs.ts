@@ -159,6 +159,9 @@ export const RoleDefs: Record<string, RoleDef> = {
             "pistol_master",
             "energized",
             "closer",
+            "amped_explosives",
+            "holy_shield",
+            "vampire"
         ],
         defaultItems: createDefaultItems({
             weapons: [
@@ -501,7 +504,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         sound: {
             assign: "spawn_01",
         },
-        perks: ["steelskin", "lifeline", "holy_shield"],
+        perks: ["vampire", "lifeline", "holy_shield"],
     },
     bombastic: {
         type: "role",
@@ -511,6 +514,15 @@ export const RoleDefs: Record<string, RoleDef> = {
             assign: "spawn_01",
         },
         perks: ["amped_explosives", "fabricate_m", "flak_jacket"],
+    },
+    deadeyes: {
+        type: "role",
+        announce: false,
+        killFeed: { assign: false },
+        sound: {
+            assign: "",
+        },
+        perks: ["deadeye", "targeting"],
     },
     the_hunted: {
         type: "role",

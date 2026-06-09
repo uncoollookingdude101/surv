@@ -17,8 +17,24 @@ const mapDef = {
     gameConfig: {
         planes: {
             timings: [
-                { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 1, wait: 5, options: { type: GameConfig.Plane.Airdrop } },
+                {
+                    circleIdx: 1,
+                    wait: 5,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_02",
+                    },
+                },
+
+                {
+                    circleIdx: 1,
+                    wait: 5,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_02",
+                    },
+                },
+                
                 {
                     circleIdx: 1,
                     wait: 5,
@@ -31,8 +47,22 @@ const mapDef = {
                     },
                 },
 
-                { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 2, wait: 10, options: { type: GameConfig.Plane.Airdrop } },
+                {
+                    circleIdx: 2,
+                    wait: 10,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_02",
+                    },
+                },
+                {
+                    circleIdx: 2,
+                    wait: 10,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_02",
+                    },
+                },
                 {
                     circleIdx: 2,
                     wait: 5,
@@ -45,8 +75,22 @@ const mapDef = {
                     },
                 },
 
-                { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
-                { circleIdx: 3, wait: 2, options: { type: GameConfig.Plane.Airdrop } },
+                {
+                    circleIdx: 3,
+                    wait: 2,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_02",
+                    },
+                },
+                {
+                    circleIdx: 3,
+                    wait: 2,
+                    options: {
+                        type: GameConfig.Plane.Airdrop,
+                        airdropType: "airdrop_crate_02",
+                    },
+                },
                 {
                     circleIdx: 3,
                     wait: 5,
@@ -69,8 +113,8 @@ const mapDef = {
                 },
             ],
             crates: [
-                { name: "airdrop_crate_01a", weight: 3 },
-                { name: "airdrop_crate_02", weight: 0.75 },
+                { name: "airdrop_crate_01a", weight: 2 },
+                { name: "airdrop_crate_02", weight: 1 },
             ],
         },
         unlocks: {
@@ -78,7 +122,7 @@ const mapDef = {
                 {
                     type: "bunker_twins_sublevel_01ms",
                     stagger: 0.2,
-                    circleIdx: 2,
+                    circleIdx: 1,
                     wait: 5,
                 },
             ],
@@ -321,9 +365,10 @@ const mapDef = {
             { name: "field_medic", count: 1, weight: 0.75 },
             { name: "windwalk", count: 1, weight: 1 },
             { name: "explosive", count: 1, weight: 0.75 },
-            { name: "ap_rounds", count: 1, weight: 0.75 },
-            { name: "vampire", count: 1, weight: 0.5 },
-            { name: "holy_shield", count: 1, weight: 0.5 },
+            { name: "ap_rounds", count: 1, weight: 1 },
+            { name: "vampire", count: 1, weight: 0.75 },
+            { name: "holy_shield", count: 1, weight: 0.75 },
+            { name: "amped_explosives", count: 1, weight: 0.75 },
         ],
         tier_airdrop_rare: [
             { name: "pkp", count: 1, weight: 1 },
@@ -432,6 +477,7 @@ const mapDef = {
             { name: "pkm", count: 1, weight: 1 },
             { name: "lasr_gun_dual", count: 1, weight: 1 },
             { name: "p90", count: 1, weight: 1 },
+            { name: "skorpion_dual", count: 1, weight: 1 },
         ],
         tier_knives: [
             { name: "bonesaw_healer", count: 1, weight: 1 },
@@ -480,8 +526,8 @@ const mapDef = {
     /* STRIP_FROM_PROD_CLIENT:START */
     mapGen: {
         map: {
-            baseWidth: 725,
-            baseHeight: 725,
+            baseWidth: 700,
+            baseHeight: 700,
             extension: 100,
             shoreInset: 64,
             grassInset: 48,
@@ -521,19 +567,19 @@ const mapDef = {
                 {
                     type: "greenhouse_01as",
                     pos: v2.create(0.85, 0.25),
-                    rad: 25,
+                    rad: 50,
                     retryOnFailure: true,
                 },
                 {
-                    type: "river_town_02",
+                    type: "bunker_structure_01as",
                     pos: v2.create(0.25, 0.25),
-                    rad: 25,
+                    rad: 50,
                     retryOnFailure: true,
                 },
                 {
                     type: "shilo_01ms",
                     pos: v2.create(0.25, 0.85),
-                    rad: 25,
+                    rad: 50,
                     retryOnFailure: true,
                 },
             ],
@@ -568,6 +614,7 @@ const mapDef = {
         fixedSpawns: [
             {
                 kopje_patch_01: 2,
+                desert_town_01: 1,
                 savannah_patch_01: 3,
                 warehouse_01: 1,
                 house_red_01: 2,
@@ -605,6 +652,7 @@ const mapDef = {
                 shilo_01: 1,
                 teahouse_complex_01ms: 1,
                 logging_complex_01: 1,
+                river_town_02: 1
             },
         ],
         randomSpawns: [],
@@ -619,6 +667,8 @@ const mapDef = {
                 crate_21: "crate_21ms",
                 silo_01po: "silo_01ms",
                 gun_mount_06: "gun_mount_06ms",
+                crate_07as: "crate_07as2",
+                saloon_structure_01: "saloon_structure_01ms",
             },
         ],
         importantSpawns: [

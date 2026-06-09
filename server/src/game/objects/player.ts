@@ -1791,7 +1791,7 @@ export class Player extends BaseGameObject {
                             target.health += itemDef.heal;
                             if (this.hasPerk("combat_stims")) {
                                 this.combatStimsActive = true;
-                                this._combatStimsTicker = 5;
+                                this._combatStimsTicker = 10;
                             }
                         });
                     }
@@ -1800,7 +1800,7 @@ export class Player extends BaseGameObject {
                             target.boost += itemDef.boost;
                             if (this.hasPerk("combat_stims")) {
                                 this.combatStimsActive = true;
-                                this._combatStimsTicker = 5;
+                                this._combatStimsTicker = 10;
                             }
                         });
                     }
@@ -3023,6 +3023,10 @@ export class Player extends BaseGameObject {
                 reduceDamage(PerkProperties.steelskin.damageReduction);
             }
 
+            if (this.hasPerk("holy_shield")) {
+                reduceDamage(PerkProperties.steelskin.damageReduction);
+            }
+
             const chest = GameObjectDefs[this.chest] as ChestDef;
             if (chest && !isHeadShot) {
                 reduceDamage(chest.damageReduction);
@@ -3034,9 +3038,7 @@ export class Player extends BaseGameObject {
             }
         }
         if (this.hasPerk("holy_shield") && !this.downed) {
-            const dmgcap = 25; // Change this to whatever max value you prefer
-
-            // We ignore environmental hazards like Gas and Bleeding
+            const dmgcap = 15; 
             if (
                 params.damageType !== GameConfig.DamageType.Gas &&
                 params.damageType !== GameConfig.DamageType.Bleeding

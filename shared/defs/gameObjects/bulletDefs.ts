@@ -999,6 +999,19 @@ export const BaseDefs: Record<string, BulletDef> = {
         tracerWidth: 0.18,
         tracerLength: 1,
     },
+    bullet_skorpion: {
+        type: "bullet",
+        damage: 11,
+        obstacleDamage: 1,
+        falloff: 0.75,
+        speed: 90,
+        distance: 69,
+        variance: 0,
+        shrapnel: false,
+        tracerColor: "9mm",
+        tracerWidth: 0.1,
+        tracerLength: 0.7,
+    },
 };
 
 export const BulletDefs: Record<string, BulletDef> = { ...BaseDefs };

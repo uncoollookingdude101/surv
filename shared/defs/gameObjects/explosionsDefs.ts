@@ -200,6 +200,8 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         shrapnelType: "",
         explosionEffectType: "potato_cannonball",
         decalType: "decal_frag_small_explosion",
+        freezeDuration: 1.5,
+        frozenSprites: ["player-mash-01.img", "player-mash-02.img", "player-mash-03.img"],
     },
     explosion_potato_smgshot: {
         type: "explosion",

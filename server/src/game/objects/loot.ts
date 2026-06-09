@@ -234,7 +234,7 @@ export class LootBarn {
             this.game.map.mapDef.lootTable[tier],
             `Unknown loot tier with type ${tier}`,
         );
-
+    
         let item: LootTierItem | undefined = this._getLootTable(tier);
 
         if (!item.name) {

@@ -793,6 +793,7 @@ export class WeaponManager {
         const hasApRounds = this.player.hasPerk("ap_rounds");
         const hasHighVelocity = this.player.hasPerk("high_velocity");
         const hasCombatStims = this.player.combatStimsActive;
+        const hasDeadEye = this.player.hasPerk("deadeye");
         const shouldApplyChambered =
             this.player.hasPerk("chambered") &&
             itemDef.ammo !== "12gauge" &&
@@ -814,7 +815,7 @@ export class WeaponManager {
         }
 
         if (shouldApplyChambered) {
-            damageMult *= 1.25;
+            damageMult *= 1.32;
         }
 
         //
@@ -841,10 +842,14 @@ export class WeaponManager {
             speedMult = PerkProperties.bonus_9mm.speedMult;
             distanceMult = PerkProperties.bonus_9mm.distanceMult;
         }
+        if (hasDeadEye) {
+            spread *= PerkProperties.deadeye.spreadMul;
+            speedMult = PerkProperties.deadeye.speedMult;
+            distanceMult = PerkProperties.deadeye.distanceMult;
+        }
         if (itemDef.pistol && this.player.hasPerk("pistol_master")) {
             const pProps = PerkProperties.pistol_master;
             if (pProps) {
-                // Use the properties from your config
                 if (typeof pProps.damageMult === "number")
                     damageMult *= pProps.damageMult;
                 if (typeof pProps.spreadMul === "number") spread *= pProps.spreadMul;

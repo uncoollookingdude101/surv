@@ -787,7 +787,7 @@ const SkinDefs = {
     }),
     helmet02_moon2: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
-        perk: "targeting",
+        perk: "endless_ammo",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
@@ -920,6 +920,21 @@ const SkinDefs = {
     helmet03_marksman2: defineSkin("helmet03", {
         name: "Marksman Helmet",
         perk: "high_velocity",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-marksman.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-marksman.img",
+            rot: 0.5 * Math.PI,
+        },
+    }),
+    helmet03_marksman3: defineSkin("helmet03", {
+        name: "Deadeye Helmet",
+        role: "deadeyes",
         skinImg: {
             baseTint: 0xffffff,
             baseTintRed: 0xffffff,
