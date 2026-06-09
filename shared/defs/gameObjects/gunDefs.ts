@@ -1,5 +1,5 @@
-import { type DeepPartial, util } from "../../utils/util";
-import type { Vec2 } from "../../utils/v2";
+import { type DeepPartial, util } from "../../utils/util.ts";
+import type { Vec2 } from "../../utils/v2.ts";
 
 export interface GunDef {
     readonly type: "gun";
@@ -2232,7 +2232,7 @@ export const BaseDefs: Record<string, GunDef> = {
         isDual: true,
         pistol: true,
         ammo: "9mm",
-        ammoSpawnCount: 45,
+        ammoSpawnCount: 90,
         maxClip: 30,
         maxReload: 30,
         extendedClip: 60,
@@ -2384,7 +2384,7 @@ export const BaseDefs: Record<string, GunDef> = {
         isDual: true,
         pistol: true,
         ammo: "9mm",
-        ammoSpawnCount: 60,
+        ammoSpawnCount: 120,
         maxClip: 40,
         maxReload: 40,
         extendedClip: 60,
@@ -2483,7 +2483,7 @@ export const BaseDefs: Record<string, GunDef> = {
         fireMode: "auto",
         caseTiming: "shoot",
         ammo: "9mm",
-        ammoSpawnCount: 51,
+        ammoSpawnCount: 102,
         isDual: true,
         pistol: true,
         maxClip: 34,
@@ -2681,7 +2681,7 @@ export const BaseDefs: Record<string, GunDef> = {
         fireMode: "single",
         caseTiming: "reload",
         ammo: "762mm",
-        ammoSpawnCount: 20,
+        ammoSpawnCount: 40,
         isDual: true,
         pistol: true,
         maxClip: 10,
@@ -2879,7 +2879,7 @@ export const BaseDefs: Record<string, GunDef> = {
         fireMode: "auto",
         caseTiming: "reload",
         ammo: "45acp",
-        ammoSpawnCount: 48,
+        ammoSpawnCount: 96,
         isDual: true,
         pistol: true,
         maxClip: 12,
@@ -2980,7 +2980,7 @@ export const BaseDefs: Record<string, GunDef> = {
         isDual: true,
         pistol: true,
         ammo: "45acp",
-        ammoSpawnCount: 28,
+        ammoSpawnCount: 56,
         maxClip: 14,
         maxReload: 14,
         extendedClip: 24,

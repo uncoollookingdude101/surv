@@ -1,9 +1,9 @@
-import { util } from "../../utils/util";
-import { getTeamWeapon } from "../gameObjects/roleDefs";
-import type { MapDef } from "../mapDefs";
-import { MapId } from "../types/misc";
-import type { PartialMapDef } from "./baseDefs";
-import { Faction } from "./factionDefs";
+import { util } from "../../utils/util.ts";
+import { getTeamWeapon } from "../gameObjects/roleDefs.ts";
+import type { MapDef } from "../mapDefs.ts";
+import { MapId } from "../types/misc.ts";
+import type { PartialMapDef } from "./baseDefs.ts";
+import { Faction } from "./factionDefs.ts";
 
 export enum TeamColor {
     Red = 1,
@@ -88,6 +88,9 @@ const mapDef: PartialMapDef = {
                 name: "bugle_03",
                 channel: "otherPlayers",
             },
+            { name: "log_05", channel: "sfx" },
+            { name: "vault_change_03", channel: "sfx" },
+            { name: "watering_01", channel: "sfx" },
         ],
         atlases: ["gradient", "loadout", "shared", "faction", "potato"],
     },

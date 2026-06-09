@@ -1,8 +1,8 @@
-import { randomUUID } from "crypto";
 import type { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import type { UpgradeWebSocket, WSContext } from "hono/ws";
-import type { FindGameError } from "../../shared/types/api";
+import { randomUUID } from "node:crypto";
+import type { FindGameError } from "../../shared/types/api.ts";
 import {
     type ClientRoomData,
     type ClientToServerTeamMsg,
@@ -13,23 +13,18 @@ import {
     type TeamMenuPlayer,
     type TeamPlayGameMsg,
     zTeamClientMsg,
-} from "../../shared/types/team";
-import { assert, util } from "../../shared/utils/util";
-import type { ApiServer } from "./api/apiServer";
-import { validateSessionToken } from "./api/auth";
-import { hashIp, isBanned } from "./api/routes/private/ModerationRouter";
-import { Config } from "./config";
-import { ServerLogger } from "./utils/logger";
-import { getFindGamePlayerData } from "./utils/playerData";
-import {
-    getHonoIp,
-    HTTPRateLimit,
-    isBehindProxy,
-    validateUserName,
-    verifyTurnsStile,
-    WebSocketRateLimit,
-} from "./utils/serverHelpers";
-import type { FindGamePrivateBody } from "./utils/types";
+} from "../../shared/types/team.ts";
+import { assert, util } from "../../shared/utils/util.ts";
+import { getFindGamePlayerData, getHonoIp, verifyTurnsStile } from "./api/apiHelpers.ts";
+import type { ApiServer } from "./api/apiServer.ts";
+import { validateSessionToken } from "./api/auth/index.ts";
+import { hashIp, isBanned } from "./api/routes/private/ModerationRouter.ts";
+import { Config } from "./config.ts";
+import { validateUserName } from "./utils/badWords.ts";
+import { ServerLogger } from "./utils/logger.ts";
+import { isBehindProxy } from "./utils/proxyCheck.ts";
+import { HTTPRateLimit, WebSocketRateLimit } from "./utils/rateLimit.ts";
+import type { FindGamePrivateBody } from "./utils/types.ts";
 
 interface SocketData {
     rateLimit: Record<symbol, number>;
@@ -340,8 +335,7 @@ class Room {
     sendState() {
         const players = this.players.map((p) => p.data);
         // all players must be logged in to disable it
-        this.data.captchaEnabled =
-            this.teamMenu.server.captchaEnabled && !this.players.every((p) => !!p.userId);
+        this.data.captchaEnabled = this.teamMenu.server.captchaEnabled && !this.players.every((p) => !!p.userId);
         for (const player of this.players) {
             player.send("state", {
                 localPlayerId: player.playerId,
@@ -417,9 +411,9 @@ export class TeamMenu {
 
                 let closeReason: TeamMenuErrorType | undefined;
                 if (
-                    !ip ||
-                    httpRateLimit.isRateLimited(ip) ||
-                    wsRateLimit.isIpRateLimited(ip)
+                    !ip
+                    || httpRateLimit.isRateLimited(ip)
+                    || wsRateLimit.isIpRateLimited(ip)
                 ) {
                     closeReason = "rate_limited";
                 }
@@ -461,12 +455,14 @@ export class TeamMenu {
 
                         if (closeReason) {
                             ws.send(
-                                JSON.stringify({
-                                    type: "error",
-                                    data: {
-                                        type: closeReason as TeamMenuErrorType,
-                                    },
-                                } satisfies TeamErrorMsg),
+                                JSON.stringify(
+                                    {
+                                        type: "error",
+                                        data: {
+                                            type: closeReason as TeamMenuErrorType,
+                                        },
+                                    } satisfies TeamErrorMsg,
+                                ),
                             );
                             teamMenu.logger.warn(`closed socket for ${closeReason}`);
                             ws.close();

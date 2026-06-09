@@ -1,10 +1,10 @@
+import hjson from "hjson";
 import { randomBytes } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import hjson from "hjson";
-import type { ConfigType, PartialConfig } from "./configType";
-import { TeamMode } from "./shared/gameConfig";
-import { util } from "./shared/utils/util";
+import type { ConfigType, PartialConfig } from "./configType.ts";
+import { TeamMode } from "./shared/gameConfig.ts";
+import { util } from "./shared/utils/util.ts";
 
 export const configFileName = "survev-config.hjson";
 
@@ -37,7 +37,6 @@ export function getConfig(isProduction: boolean, dir: string) {
         passType: "pass_survivr1",
         gameTps: 150,
         netSyncTps: 33,
-        processMode: isDev ? "single" : "multi",
         logging: {
             logDate: true,
             infoLogs: true,
@@ -57,7 +56,6 @@ export function getConfig(isProduction: boolean, dir: string) {
         oauthBasePath: "/",
         secrets: {
             SURVEV_API_KEY: "",
-            SURVEV_LOADOUT_SECRET: "",
             SURVEV_IP_SECRET: "",
         },
         captchaEnabled: false,
@@ -89,7 +87,6 @@ export function getConfig(isProduction: boolean, dir: string) {
             // always specify default random keys..
             secrets: {
                 SURVEV_API_KEY: randomBytes(64).toString("base64"),
-                SURVEV_LOADOUT_SECRET: randomBytes(32).toString("base64"),
                 SURVEV_IP_SECRET: randomBytes(32).toString("base64"),
             },
         };
@@ -118,14 +115,14 @@ export function getConfig(isProduction: boolean, dir: string) {
         config.secrets.GOOGLE_CLIENT_ID && config.secrets.GOOGLE_SECRET_ID
     );
     const discordLogin = !!(
-        config.secrets.DISCORD_CLIENT_ID && config.secrets.DISCORD_CLIENT_ID
+        config.secrets.DISCORD_CLIENT_ID && config.secrets.DISCORD_SECRET_ID
     );
 
     config.proxies[baseUrl.hostname] = {
         google: googleLogin,
         discord: discordLogin,
         mock: config.debug.allowMockAccount,
-        ...(config.proxies[baseUrl.hostname] ?? {}),
+        ...config.proxies[baseUrl.hostname],
     };
 
     if (isDev) {

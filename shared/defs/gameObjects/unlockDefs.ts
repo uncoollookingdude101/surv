@@ -1,4 +1,4 @@
-import { HealEffectDefs } from "./healEffectDefs";
+import { HealEffectDefs } from "./healEffectDefs.ts";
 import { PassDefs } from "./passDefs";
 
 const _allowedHealEffects = Object.keys(HealEffectDefs);
@@ -368,6 +368,7 @@ export const UnlockDefs: Record<UnlockDefKey, UnlockDef> = {
             "emote_flaggay",
             "emote_flagasexual",
             "emote_flagnonbinary",
+            "emote_flagbisexual",
             "emote_flaglibya",
             "emote_flagbosnia",
             "emote_logocloud",

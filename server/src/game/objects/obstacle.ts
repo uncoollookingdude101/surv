@@ -1,17 +1,15 @@
-import { GameObjectDefs } from "../../../../shared/defs/gameObjectDefs";
-import { MapObjectDefs } from "../../../../shared/defs/mapObjectDefs";
-import type { ObstacleDef } from "../../../../shared/defs/mapObjectsTyping";
-import { DamageType, GameConfig } from "../../../../shared/gameConfig";
-import { ObjectType } from "../../../../shared/net/objectSerializeFns";
-import { type AABB, type Collider, coldet } from "../../../../shared/utils/coldet";
-import { collider } from "../../../../shared/utils/collider";
-import { math } from "../../../../shared/utils/math";
-import { util } from "../../../../shared/utils/util";
-import { type Vec2, v2 } from "../../../../shared/utils/v2";
-import type { Game } from "../game";
-import type { Building } from "./building";
-import { BaseGameObject, type DamageParams } from "./gameObject";
-import type { Player } from "./player";
+import { GameObjectDefs, MapObjectDefs } from "../../../../shared/defs/register.ts";
+import { DamageType, GameConfig } from "../../../../shared/gameConfig.ts";
+import { ObjectType } from "../../../../shared/net/objectSerializeFns.ts";
+import { type AABB, coldet, type Collider } from "../../../../shared/utils/coldet.ts";
+import { collider } from "../../../../shared/utils/collider.ts";
+import { math } from "../../../../shared/utils/math.ts";
+import { util } from "../../../../shared/utils/util.ts";
+import { v2, type Vec2 } from "../../../../shared/utils/v2.ts";
+import type { Game } from "../game.ts";
+import type { Building } from "./building.ts";
+import { BaseGameObject, type DamageParams } from "./gameObject.ts";
+import type { Player } from "./player.ts";
 
 export class Obstacle extends BaseGameObject {
     override readonly __type = ObjectType.Obstacle;
@@ -139,13 +137,10 @@ export class Obstacle extends BaseGameObject {
 
         this.isPuzzlePiece = !!puzzlePiece;
         this.puzzlePiece = puzzlePiece;
-        const def = MapObjectDefs[type];
+        const def = MapObjectDefs.typeToDef(type, "obstacle");
 
         this.rot = math.oriToRad(ori);
 
-        if (def.type !== "obstacle") {
-            throw new Error(`Invalid obstacle with type ${type}`);
-        }
         this.bounds = collider.toAabb(
             collider.transform(def.collision, v2.create(0, 0), this.rot, this.scale),
         );
@@ -223,10 +218,10 @@ export class Obstacle extends BaseGameObject {
                 // to avoid it closing for a single tick to open again
                 if (
                     !(
-                        this.door &&
-                        this.door.open &&
-                        this.door.autoClose &&
-                        this.checkNearByPlayers()
+                        this.door
+                        && this.door.open
+                        && this.door.autoClose
+                        && this.checkNearByPlayers()
                     )
                 ) {
                     this.toggleDoor(this.togglePlayer, this.toggleDir);
@@ -265,7 +260,7 @@ export class Obstacle extends BaseGameObject {
     }
 
     updateCollider() {
-        const def = MapObjectDefs[this.type] as ObstacleDef;
+        const def = MapObjectDefs.typeToDef(this.type, "obstacle");
         this.collider = collider.transform(def.collision, this.pos, this.rot, this.scale);
 
         if (def.aabb) {
@@ -303,7 +298,7 @@ export class Obstacle extends BaseGameObject {
         );
         const objs = this.game.grid.intersectCollider(coll);
 
-        const def = MapObjectDefs[this.type] as ObstacleDef;
+        const def = MapObjectDefs.typeToDef(this.type, "obstacle");
         const closedColl = collider.transform(
             def.collision,
             this.door.closedPos,
@@ -339,6 +334,7 @@ export class Obstacle extends BaseGameObject {
         this.healthT = 1;
 
         this.updateCollider();
+        this.game.lootBarn.forceLootUpdates(this.collider, this.layer);
 
         this.setDirty();
     }
@@ -347,7 +343,7 @@ export class Obstacle extends BaseGameObject {
         // @hack this door shouldn't switch layers
         if (this.type === "saloon_door_secret" || this.type === "house_door_01") return;
         let newLayer = this.originalLayer;
-        const def = MapObjectDefs[this.type] as ObstacleDef;
+        const def = MapObjectDefs.typeToDef(this.type, "obstacle");
         const coll = collider.createCircle(this.pos, def.door!.interactionRad + 1);
         const objs = this.game.grid.intersectCollider(coll);
         for (const obj of objs) {
@@ -370,19 +366,19 @@ export class Obstacle extends BaseGameObject {
     damage(params: DamageParams): void {
         if (this.isSkin) return;
 
-        const def = MapObjectDefs[this.type] as ObstacleDef;
         if (this.health === 0 || !this.destructible) return;
+        const def = MapObjectDefs.typeToDef(this.type, "obstacle");
 
         if (params.damageType === DamageType.Player) {
             let armorPiercing = false;
             let stonePiercing = false;
 
             if (params.gameSourceType) {
-                const sourceDef = GameObjectDefs[params.gameSourceType] as
+                const sourceDef = GameObjectDefs.typeToDefSafe(params.gameSourceType) as
                     | {
-                          armorPiercing?: boolean;
-                          stonePiercing?: boolean;
-                      }
+                        armorPiercing?: boolean;
+                        stonePiercing?: boolean;
+                    }
                     | undefined;
                 armorPiercing = sourceDef?.armorPiercing ?? false;
                 stonePiercing = sourceDef?.stonePiercing ?? false;
@@ -400,6 +396,7 @@ export class Obstacle extends BaseGameObject {
         if (this.minScale < 1) {
             this.scale = math.lerp(this.healthT, this.minScale, this.maxScale);
             this.updateCollider();
+            this.game.lootBarn.forceLootUpdates(this.collider, this.layer);
         }
 
         // need to send full object for obstacles with explosions
@@ -414,7 +411,7 @@ export class Obstacle extends BaseGameObject {
     }
 
     kill(params: DamageParams) {
-        const def = MapObjectDefs[this.type] as ObstacleDef;
+        const def = MapObjectDefs.typeToDef(this.type, "obstacle");
         this.health = this.healthT = 0;
         this.dead = true;
         this.setDirty();
@@ -467,15 +464,17 @@ export class Obstacle extends BaseGameObject {
         }
 
         const lootPos = v2.copy(this.pos);
+        let pushSpeed = 4.75;
         if (def.lootSpawn) {
             v2.set(lootPos, v2.add(this.pos, v2.rotate(def.lootSpawn.offset, this.rot)));
+            pushSpeed *= def.lootSpawn.speedMult;
         }
 
         const lootTablesOrItems = [...def.loot];
 
         if (
-            params.source?.__type === ObjectType.Player &&
-            params.source.hasPerk("scavenger")
+            params.source?.__type === ObjectType.Player
+            && params.source.hasPerk("scavenger")
         ) {
             lootTablesOrItems.push({
                 tier: "tier_world",
@@ -486,8 +485,8 @@ export class Obstacle extends BaseGameObject {
         }
 
         if (
-            params.source?.__type === ObjectType.Player &&
-            params.source.hasPerk("scavenger_adv")
+            params.source?.__type === ObjectType.Player
+            && params.source.hasPerk("scavenger_adv")
         ) {
             lootTablesOrItems.push({
                 tier: "tier_scavenger_adv",
@@ -501,17 +500,16 @@ export class Obstacle extends BaseGameObject {
         let ownerId = 0;
         if (this.shouldApplyLootOwner) {
             // default to whoever broke the class pod
-            ownerId =
-                params.source?.__type === ObjectType.Player ? params.source.__id : 0;
+            ownerId = params.source?.__type === ObjectType.Player ? params.source.__id : 0;
 
             // but then check for the player who unlocked this class pod
             // if they are still alive and close give it to them instead
             const podUnlocker = this.game.objectRegister.getById(this.ownerId);
             if (
-                podUnlocker &&
-                podUnlocker.__type === ObjectType.Player &&
-                !podUnlocker.dead &&
-                util.sameLayer(podUnlocker.layer, this.layer)
+                podUnlocker
+                && podUnlocker.__type === ObjectType.Player
+                && !podUnlocker.dead
+                && util.sameLayer(podUnlocker.layer, this.layer)
             ) {
                 const distance = v2.distance(this.pos, podUnlocker.pos);
                 if (distance <= 8) {
@@ -550,52 +548,23 @@ export class Obstacle extends BaseGameObject {
             }
         }
 
-        const colliderRad =
-            def.collision.type === collider.Type.Aabb
-                ? coldet.aabbToCircle(def.collision.min, def.collision.max).rad / 2
-                : def.collision.rad;
+        let rad = 0;
 
-        // max items before it changes from pushing in hit direction to
-        // the direction between obstacle center and loot (so it spreads better)
-        const shouldSpreadItems = items.length > 3;
-
-        let rad: number;
-        let pushSpeed;
-
-        if (shouldSpreadItems) {
-            // calculate a radius based on amount of loot and obstacle size
-            rad = math.remap(items.length, 2, 10, 0, colliderRad);
-            pushSpeed = math.remap(items.length, 8, 20, 4, 14);
-        } else if (items.length === 1) {
-            // for exactly 1 loot we just spawn it in the perfect center with a high push speed
-            rad = 0;
-            pushSpeed = 7;
-        } else {
-            // for between 1 and the `shouldSpreadItems` threshold we just have a small radius
-            // and a smaller speed (because the loot will push eachother)
+        if (items.length > 1) {
             rad = 0.1;
-            pushSpeed = 4;
+            pushSpeed *= 1 / items.length;
         }
 
         for (const item of items) {
             const pos = v2.add(lootPos, util.randomPointInCircle(rad));
 
-            const dir = shouldSpreadItems
-                ? v2.normalize(v2.sub(pos, lootPos))
-                : params.dir;
-
-            this.game.lootBarn.addLoot(
-                item.type,
-                pos,
-                this.layer,
-                item.count,
-                undefined,
+            this.game.lootBarn.addLoot(item.type, pos, this.layer, item.count, {
                 pushSpeed,
-                dir,
-                item.preload,
-                "obstacle",
+                dir: params.dir,
+                preloadGun: item.preload,
+                source: "obstacle",
                 ownerId,
-            );
+            });
         }
 
         if (def.createSmoke) {
@@ -646,10 +615,10 @@ export class Obstacle extends BaseGameObject {
         }
 
         if (
-            player &&
-            this.isButton &&
-            this.button.roleToPromote &&
-            player.role === this.button.roleToPromote
+            player
+            && this.isButton
+            && this.button.roleToPromote
+            && player.role === this.button.roleToPromote
         ) {
             return;
         }
@@ -697,9 +666,9 @@ export class Obstacle extends BaseGameObject {
         if (this.button.useType && this.parentBuilding) {
             for (const obj of this.parentBuilding.childObjects) {
                 if (
-                    obj.__type === ObjectType.Obstacle &&
-                    obj.type === this.button.useType &&
-                    obj.isDoor
+                    obj.__type === ObjectType.Obstacle
+                    && obj.type === this.button.useType
+                    && obj.isDoor
                 ) {
                     obj.delayedToggle(
                         this.button.useDelay,
@@ -718,7 +687,7 @@ export class Obstacle extends BaseGameObject {
         if (this.button.onOff && this.isPuzzlePiece) {
             this.parentBuilding?.puzzlePieceToggled(this);
         }
-        const def = MapObjectDefs[this.type] as ObstacleDef;
+        const def = MapObjectDefs.typeToDef(this.type, "obstacle");
         if (def.button?.destroyOnUse) {
             this.killTicker = this.button.useDelay;
         }
@@ -770,6 +739,7 @@ export class Obstacle extends BaseGameObject {
         this.rot = math.oriToRad(this.ori);
 
         this.updateCollider();
+        this.game.lootBarn.forceLootUpdates(this.collider, this.layer);
 
         this.checkLayer();
         this.setDirty();
@@ -791,8 +761,9 @@ export class Obstacle extends BaseGameObject {
             this.parentBuildingId,
             this.puzzlePiece,
         );
-        if (newObstacle.parentBuilding)
+        if (newObstacle.parentBuilding) {
             newObstacle.parentBuilding.childObjects.push(newObstacle);
+        }
         this.destroy();
     }
 }

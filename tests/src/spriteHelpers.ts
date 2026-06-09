@@ -1,7 +1,6 @@
-import { Atlases } from "../../client/atlas-builder/atlasDefs";
-import { type MapDef, MapDefs } from "../../shared/defs/mapDefs";
-import { MapObjectDefs } from "../../shared/defs/mapObjectDefs";
-import type { BuildingDef, ObstacleDef } from "../../shared/defs/mapObjectsTyping";
+import { Atlases } from "../../client/atlas-builder/atlasDefs.ts";
+import { type MapDef, MapDefs } from "../../shared/defs/mapDefs.ts";
+import { MapObjectDefs } from "../../shared/defs/register.ts";
 
 export function getAllAtlasSprites(map: keyof typeof MapDefs) {
     const def = MapDefs[map] as MapDef;
@@ -18,7 +17,7 @@ export function getAllAtlasSprites(map: keyof typeof MapDefs) {
 }
 
 function getObstacleSprites(type: string, sprites: Set<string>) {
-    const def = MapObjectDefs[type] as ObstacleDef;
+    const def = MapObjectDefs.typeToDef(type, "obstacle");
 
     if (def.img.sprite) {
         sprites.add(def.img.sprite);
@@ -44,7 +43,7 @@ function getObstacleSprites(type: string, sprites: Set<string>) {
 }
 
 function getBuildingSprites(type: string, sprites: Set<string>) {
-    const def = MapObjectDefs[type] as BuildingDef;
+    const def = MapObjectDefs.typeToDef(type, "building");
 
     for (const sprite of def.ceiling.imgs) {
         sprites.add(sprite.sprite);
@@ -60,7 +59,7 @@ function getBuildingSprites(type: string, sprites: Set<string>) {
             const types = [];
             if (typeof obj.type === "string") {
                 types.push(obj.type);
-            } else if (typeof obj.type == "object") {
+            } else if (typeof obj.type === "object") {
                 types.push(...Object.keys(obj.type));
             }
             for (const t of types) {
@@ -70,9 +69,17 @@ function getBuildingSprites(type: string, sprites: Set<string>) {
     }
 }
 
+function getStructureSprites(type: string, sprites: Set<string>) {
+    const def = MapObjectDefs.typeToDef(type, "structure");
+
+    for (const layer of def.layers) {
+        getBuildingSprites(layer.type, sprites);
+    }
+}
+
 function getObjSprites(type: string, sprites: Set<string>) {
     if (!type) return;
-    const def = MapObjectDefs[type];
+    const def = MapObjectDefs.typeToDefSafe(type);
     if (!def) return;
 
     switch (def.type) {
@@ -83,6 +90,10 @@ function getObjSprites(type: string, sprites: Set<string>) {
             getBuildingSprites(type, sprites);
             break;
         case "structure":
+            getStructureSprites(type, sprites);
+            break;
+        case "decal":
+            sprites.add(def.img.sprite);
             break;
     }
 }

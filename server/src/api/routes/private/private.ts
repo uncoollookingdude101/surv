@@ -1,43 +1,25 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
-import { saveConfig } from "../../../../../config";
-import { GameObjectDefs } from "../../../../../shared/defs/gameObjectDefs";
-import { QuestDefs } from "../../../../../shared/defs/gameObjects/questDefs";
-import { MapDefs } from "../../../../../shared/defs/mapDefs";
-import { TeamMode } from "../../../../../shared/gameConfig";
-import {
-    zGiveItemParams,
-    zRemoveItemParams,
-} from "../../../../../shared/types/moderation";
-import { serverConfigPath } from "../../../config";
-import { isBehindProxy } from "../../../utils/serverHelpers";
-import {
-    type SaveGameBody,
-    zSetClientThemeBody,
-    zSetGameModeBody,
-    zUpdateRegionBody,
-} from "../../../utils/types";
-import type { Context } from "../..";
-import { server } from "../../apiServer";
-import {
-    databaseEnabledMiddleware,
-    privateMiddleware,
-    validateParams,
-} from "../../auth/middleware";
-import { getRedisClient } from "../../cache";
-import { leaderboardCache } from "../../cache/leaderboard";
-import { db } from "../../db";
-import {
-    itemsTable,
-    type MatchDataTable,
-    matchDataTable,
-    userQuestTable,
-    usersTable,
-} from "../../db/schema";
-import { MOCK_USER_ID } from "../user/auth/mock";
-import { isBanned, logPlayerIPs, ModerationRouter } from "./ModerationRouter";
-import { incrementPassXp } from "./passXp";
+import { saveConfig } from "../../../../../config.ts";
+import { QuestDefs } from "../../../../../shared/defs/gameObjects/questDefs.ts";
+import { MapDefs } from "../../../../../shared/defs/mapDefs.ts";
+import { GameObjectDefs } from "../../../../../shared/defs/register.ts";
+import { TeamMode } from "../../../../../shared/gameConfig.ts";
+import { zGiveItemParams, zRemoveItemParams } from "../../../../../shared/types/moderation.ts";
+import { serverConfigPath } from "../../../config.ts";
+import { isBehindProxy } from "../../../utils/proxyCheck.ts";
+import { type SaveGameBody, zSetClientThemeBody, zSetGameModeBody, zUpdateRegionBody } from "../../../utils/types.ts";
+import { server } from "../../apiServer.ts";
+import { databaseEnabledMiddleware, privateMiddleware, validateParams } from "../../auth/middleware.ts";
+import { getRedisClient } from "../../cache/index.ts";
+import { leaderboardCache } from "../../cache/leaderboard.ts";
+import { db } from "../../db/index.ts";
+import { itemsTable, type MatchDataTable, matchDataTable, userQuestTable, usersTable } from "../../db/schema.ts";
+import type { Context } from "../../index.ts";
+import { MOCK_USER_ID } from "../user/auth/mock.ts";
+import { isBanned, logPlayerIPs, ModerationRouter } from "./ModerationRouter.ts";
+import { incrementPassXp } from "./passXp.ts";
 
 export const PrivateRouter = new Hono<Context>()
     .use(privateMiddleware)
@@ -163,8 +145,7 @@ export const PrivateRouter = new Hono<Context>()
                         }),
                     )
                     .refine(
-                        (entries) =>
-                            new Set(entries.map((e) => e.id)).size === entries.length,
+                        (entries) => new Set(entries.map((e) => e.id)).size === entries.length,
                         { message: "duplicate quest ids" },
                     ),
             }),
@@ -244,7 +225,7 @@ export const PrivateRouter = new Hono<Context>()
         async (c) => {
             const { item, slug, source } = c.req.valid("json");
 
-            const def = GameObjectDefs[item];
+            const def = GameObjectDefs.typeToDefSafe(item);
 
             if (!def) {
                 return c.json({ message: "Invalid item type" }, 200);
@@ -344,30 +325,37 @@ export const PrivateRouter = new Hono<Context>()
             }),
         ),
         async (c) => {
+            if (process.env.NODE_ENV === "production") {
+                return c.json({}, 403);
+            }
+
             const data = c.req.valid("json");
             const matchData: MatchDataTable = {
-                ...{
-                    gameId: crypto.randomUUID(),
-                    userId: MOCK_USER_ID,
-                    createdAt: new Date(),
-                    region: "na",
-                    mapId: 0,
-                    mapSeed: 9834567801234,
-                    username: MOCK_USER_ID,
-                    playerId: 9834,
-                    teamMode: TeamMode.Solo,
-                    teamCount: 4,
-                    teamTotal: 25,
-                    teamId: 7,
-                    timeAlive: 842,
-                    rank: 3,
-                    died: true,
-                    kills: 5,
-                    damageDealt: 1247,
-                    damageTaken: 862,
-                    killerId: 18765,
-                    killedIds: [12543, 13587, 14298, 15321, 16754],
-                },
+                gameId: crypto.randomUUID(),
+                userId: MOCK_USER_ID,
+                createdAt: new Date(),
+                region: "na",
+                mapId: 0,
+                mapSeed: 9834567801234,
+                username: MOCK_USER_ID,
+                playerId: 9834,
+                teamMode: TeamMode.Solo,
+                teamCount: 4,
+                teamTotal: 25,
+                teamId: 7,
+                timeAlive: 842,
+                rank: 3,
+                died: true,
+                damageDealt: 1247,
+                damageTaken: 862,
+                killerId: 18765,
+                killedIds: [
+                    12543,
+                    13587,
+                    14298,
+                    15321,
+                    16754,
+                ],
                 ...data,
             };
             await leaderboardCache.invalidateCache([matchData]);

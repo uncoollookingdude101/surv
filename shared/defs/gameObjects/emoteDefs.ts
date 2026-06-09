@@ -1,4 +1,4 @@
-import { Rarity } from "../../gameConfig";
+import { Rarity } from "../../gameConfig.ts";
 
 export enum EmoteCategory {
     Locked,
@@ -1660,6 +1660,16 @@ export const EmotesDefs: Record<string, EmoteDef> = {
         name: "Flag Non-Binary",
         rarity: Rarity.Common,
         texture: "flag-nonbinary.img",
+        sound: "emote_01",
+        channel: "ui",
+        teamOnly: false,
+        category: EmoteCategory.Flags,
+    },
+    emote_flagbisexual: {
+        type: "emote",
+        name: "Flag Bisexual",
+        rarity: Rarity.Common,
+        texture: "flag-bisexual.img",
         sound: "emote_01",
         channel: "ui",
         teamOnly: false,
