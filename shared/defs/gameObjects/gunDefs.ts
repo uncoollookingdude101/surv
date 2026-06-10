@@ -3649,7 +3649,7 @@ export const BaseDefs: Record<string, GunDef> = {
             sprite: "gun-m134-01.img",
             scale: { x: 0.5, y: 0.5 },
             tint: 16777215,
-            leftHandOffset: { x: 13.5, y: -5, },
+            leftHandOffset: { x: 13.5, y: -5 },
             gunOffset: { x: 0, y: 0 },
             recoil: 1.33,
         },

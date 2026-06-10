@@ -20475,7 +20475,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         };
         return util.mergeDeep(t, e || {});
     })({}),
-    shilo_01ms: (function <T extends BuildingDef>(e: Partial<T>): T {
+    shilo_01ms: (function<T extends BuildingDef>(e: Partial<T>): T {
         const t = {
             type: "building",
             map: { display: true, color: 0x964b00, scale: 1 },
@@ -27484,7 +27484,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         };
         return util.mergeDeep(t, e || {});
     })({}),
-    bathhouse_01ms: (function (e) {
+    bathhouse_01ms: (function(e) {
         const t = {
             type: "building",
             map: { display: false },
@@ -28298,7 +28298,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         };
         return util.mergeDeep(t, e || {});
     })({}),
-    bathhouse_sideroom_02ms: (function (e) {
+    bathhouse_sideroom_02ms: (function(e) {
         const t = {
             type: "building",
             map: { display: true, shapes: [] },

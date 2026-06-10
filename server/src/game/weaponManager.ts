@@ -847,8 +847,9 @@ export class WeaponManager {
         if (itemDef.pistol && this.player.hasPerk("pistol_master")) {
             const pProps = PerkProperties.pistol_master;
             if (pProps) {
-                if (typeof pProps.damageMult === "number")
+                if (typeof pProps.damageMult === "number") {
                     damageMult *= pProps.damageMult;
+                }
                 if (typeof pProps.spreadMul === "number") spread *= pProps.spreadMul;
                 if (typeof pProps.speedMult === "number") {
                     speedMult *= pProps.speedMult;
@@ -951,8 +952,7 @@ export class WeaponManager {
                     : 1.0;
 
                 // 3. Combine them into finalSpeed
-                const finalSpeed =
-                    projDef.throwPhysics.speed * closerSpeedMult * ampedSpeedMult;
+                const finalSpeed = projDef.throwPhysics.speed * closerSpeedMult * ampedSpeedMult;
 
                 // 2. NOW declare 'vel' exactly once
                 const vel = v2.mul(shotDir, finalSpeed);
@@ -1162,12 +1162,11 @@ export class WeaponManager {
 
             if (obj.__type === ObjectType.Obstacle) {
                 obj.damage({
-                    amount:
-                        meleeDef.damage *
-                        meleeDef.obstacleDamage *
-                        (this.player.hasPerk("melee_master")
-                            ? ((PerkProperties.melee_master?.meleeDamageMult as number) ??
-                              1)
+                    amount: meleeDef.damage
+                        * meleeDef.obstacleDamage
+                        * (this.player.hasPerk("melee_master")
+                            ? ((PerkProperties.melee_master?.meleeDamageMult as number)
+                                ?? 1)
                             : 1),
                     gameSourceType: this.activeWeapon,
                     damageType: GameConfig.DamageType.Player,
@@ -1178,11 +1177,10 @@ export class WeaponManager {
                 if (obj.interactable) obj.interact(this.player);
             } else if (obj.__type === ObjectType.Player) {
                 obj.damage({
-                    amount:
-                        meleeDef.damage *
-                        (this.player.hasPerk("melee_master")
-                            ? ((PerkProperties.melee_master?.meleeDamageMult as number) ??
-                              1)
+                    amount: meleeDef.damage
+                        * (this.player.hasPerk("melee_master")
+                            ? ((PerkProperties.melee_master?.meleeDamageMult as number)
+                                ?? 1)
                             : 1),
                     gameSourceType: this.activeWeapon,
                     damageType: GameConfig.DamageType.Player,
@@ -1260,8 +1258,7 @@ export class WeaponManager {
             ? PerkProperties.amped_explosives.throwableSpeedMult
             : 1;
 
-        const throwStr =
-            multiplier * throwableDef.throwPhysics.speed * throwSpeedMult * speedMult;
+        const throwStr = multiplier * throwableDef.throwPhysics.speed * throwSpeedMult * speedMult;
 
         // position of throwing hand
         let pos = v2.add(

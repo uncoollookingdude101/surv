@@ -48,7 +48,6 @@ import type { Loot } from "./loot.ts";
 import type { MapIndicator } from "./mapIndicator.ts";
 import type { Obstacle } from "./obstacle.ts";
 
-
 type MoveObjsMode = {
     enabled: boolean;
     selectedObj?: Loot | Obstacle | Building;
@@ -3009,10 +3008,10 @@ export class Player extends BaseGameObject {
             }
         }
         if (this.hasPerk("holy_shield") && !this.downed) {
-            const dmgcap = 15; 
+            const dmgcap = 15;
             if (
-                params.damageType !== GameConfig.DamageType.Gas &&
-                params.damageType !== GameConfig.DamageType.Bleeding
+                params.damageType !== GameConfig.DamageType.Gas
+                && params.damageType !== GameConfig.DamageType.Bleeding
             ) {
                 if (finalDamage > dmgcap) {
                     finalDamage = dmgcap;

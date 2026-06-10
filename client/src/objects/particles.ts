@@ -1795,7 +1795,7 @@ const ParticleDefs: Record<string, ParticleDef> = {
             end: 0,
             lerp: new Range(0.95, 1),
         },
-        color: function () {
+        color: function() {
             return 16777215;
         },
     },

@@ -102,7 +102,7 @@ export const PerkProperties = {
         projSpeedMult: 1.3,
     },
     holy_shield: {
-        damageReduction: 0.25
+        damageReduction: 0.25,
     },
     deadeye: {
         spreadMul: 0.2,

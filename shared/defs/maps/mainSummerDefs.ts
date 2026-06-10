@@ -34,7 +34,7 @@ const mapDef = {
                         airdropType: "airdrop_crate_02",
                     },
                 },
-                
+
                 {
                     circleIdx: 1,
                     wait: 5,
@@ -652,7 +652,7 @@ const mapDef = {
                 shilo_01: 1,
                 teahouse_complex_01ms: 1,
                 logging_complex_01: 1,
-                river_town_02: 1
+                river_town_02: 1,
             },
         ],
         randomSpawns: [],
