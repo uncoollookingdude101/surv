@@ -29,9 +29,9 @@ export function getConfig(isProduction: boolean, dir: string) {
         regions: {},
         proxies: {},
         modes: [
-            { mapName: "main", teamMode: TeamMode.Solo, enabled: true },
-            { mapName: "main", teamMode: TeamMode.Duo, enabled: true },
-            { mapName: "main", teamMode: TeamMode.Squad, enabled: true },
+            { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: false },
+            { mapName: "main", teamMode: TeamMode.Duo, enabled: false },
+            { mapName: "main_summer", teamMode: TeamMode.Squad, enabled: true },
         ],
         clientTheme: "main",
         passType: "pass_survivr1",
@@ -128,7 +128,7 @@ export function getConfig(isProduction: boolean, dir: string) {
     if (isDev) {
         config.regions.local ??= {
             https: false,
-            address: `192.168.10.141:${config.gameServer.port}`,
+            address: `192.168.1.70:${config.gameServer.port}`,
             l10n: "index-local",
         };
     }

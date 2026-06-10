@@ -1911,9 +1911,8 @@ export const BaseDefs: Record<string, GunDef> = {
         },
         worldImg: {
             sprite: "gun-mp220-01.img",
-            scale: { x: 0.5, y: 0.51 },
+            scale: { x: 0.5, y: 0.5 },
             tint: 0xffffff,
-            leftHandOffset: { x: 0, y: 0 },
             recoil: 1.33,
         },
         particle: { shellScale: 1, shellOffset: 0.35 },
@@ -3648,19 +3647,10 @@ export const BaseDefs: Record<string, GunDef> = {
         },
         worldImg: {
             sprite: "gun-m134-01.img",
-            scale: {
-                x: 0.5,
-                y: 0.5,
-            },
+            scale: { x: 0.5, y: 0.5 },
             tint: 16777215,
-            leftHandOffset: {
-                x: 13.5,
-                y: -5,
-            },
-            gunOffset: {
-                x: 0,
-                y: -4,
-            },
+            leftHandOffset: { x: 13.5, y: -5, },
+            gunOffset: { x: 0, y: 0 },
             recoil: 1.33,
         },
         particle: {

@@ -4380,6 +4380,14 @@ export class Player extends BaseGameObject {
                         }
 
                         if (def.type == "helmet" && def.perk) {
+                            const manualPerkMatch = this.perks.find(p => p.type === def.perk);
+
+                            if (manualPerkMatch) {
+                                if (manualPerkMatch.droppable) {
+                                    this.dropLoot(manualPerkMatch.type);
+                                }
+                                this.removePerk(manualPerkMatch.type);
+                            }
                             this.addPerk(def.perk);
                         }
 
