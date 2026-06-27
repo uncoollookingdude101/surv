@@ -69,7 +69,7 @@ export const PerkProperties = {
         speedBoost: 1.25,
     },
     combat_stims: {
-        bonusDamageMult: 1.18,
+        bonusDamageMult: 1.14,
         healPercent: 0.33,
     },
     tree_climbing: {
@@ -98,14 +98,14 @@ export const PerkProperties = {
         distanceMult: 1.2,
     },
     closer: {
-        speedMult: 1.5,
-        projSpeedMult: 1.3,
+        speedMult: 1.2,
+        projSpeedMult: 1.2,
     },
     holy_shield: {
         damageReduction: 0.25,
     },
     deadeye: {
-        spreadMul: 0.2,
+        spreadMul: 0.35,
         speedMult: 1.2,
         distanceMult: 1.2,
     },

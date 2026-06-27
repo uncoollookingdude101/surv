@@ -120,10 +120,24 @@ class GameServer {
 
         const files = await fs.readdir(dir);
 
+        // Track successfully read files so we only delete those later
+        const processedFiles: string[] = [];
+
         for (const fileName of files) {
             const filePath = path.resolve(dir, fileName);
-            const data = JSON.parse(await fs.readFile(filePath, "utf8"));
-            games.push(...data);
+
+            try {
+                const fileContent = await fs.readFile(filePath, "utf8");
+                const data = JSON.parse(fileContent);
+                games.push(...data);
+
+                // Keep track that this specific file was parsed properly
+                processedFiles.push(fileName);
+            } catch (fileErr) {
+                // If a single file is corrupted, log it and keep going!
+                this.logger.error(`Skipping corrupted file ${fileName}:`, fileErr);
+                continue;
+            }
         }
 
         if (games.length < 2) return;
@@ -143,8 +157,8 @@ class GameServer {
 
         if (res?.ok) {
             this.logger.info(`successfully saved lost games!`);
-            // if we successfully saved the games we can remove them
-            for (const fileName of files) {
+            // ONLY remove the files that we successfully managed to read and parse
+            for (const fileName of processedFiles) {
                 const filePath = path.resolve(dir, fileName);
                 await fs.rm(filePath);
             }
@@ -251,7 +265,7 @@ const gameWsRateLimit = new WebSocketRateLimit(500, 1000, 5);
 
 app.ws<GameSocketData>("/play", {
     idleTimeout: 30,
-    maxPayloadLength: 1024,
+    maxPayloadLength: 8192,
 
     async upgrade(res, req, context): Promise<void> {
         res.onAborted((): void => {

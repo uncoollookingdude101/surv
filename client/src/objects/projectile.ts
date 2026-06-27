@@ -326,7 +326,12 @@ export class ProjectileBarn {
                         p.strobeDir *= -1;
                     }
                 }
-                p.sprite.rotation = p.rot;
+                if (itemDef.throwPhysics.spinVel === 0) {
+                    // Swapping x and y fixes engines where 0 degrees starts at North/South
+                    p.sprite.rotation = Math.atan2(p.dir.x, p.dir.y);
+                } else {
+                    p.sprite.rotation = p.rot;
+                }
                 p.sprite.alpha = p.inWater ? 0.3 : 1;
 
                 // Trail

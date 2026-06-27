@@ -114,6 +114,15 @@ export const EmotesDefs: Record<string, EmoteDef> = {
         noCustom: true,
         category: EmoteCategory.Locked,
     },
+    emote_ammoexplosives: {
+        type: "emote",
+        texture: "ammo-explosives.img",
+        sound: "emote_01",
+        channel: "ui",
+        teamOnly: true,
+        noCustom: true,
+        category: EmoteCategory.Locked,
+    },
     emote_loot: {
         type: "emote",
         texture: "",

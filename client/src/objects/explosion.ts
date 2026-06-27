@@ -761,4 +761,32 @@ const ExplosionEffectDefs: Record<string, ExplotionDef> = {
         shakeDur: 0,
         lifetime: 1.25,
     },
+    rocket_m72: {
+        burst: {
+            particle: "explosionBurst",
+            scale: 1,
+            sound: {
+                grass: "explosion_01",
+                water: "explosion_02",
+            },
+        },
+        rippleCount: 10,
+        shakeStr: 0.2,
+        shakeDur: 0.35,
+        lifetime: 2,
+    },
+    rocket_m202: {
+        burst: {
+            particle: "explosionBurst",
+            scale: 1,
+            sound: {
+                grass: "explosion_01",
+                water: "explosion_02",
+            },
+        },
+        rippleCount: 10,
+        shakeStr: 0.2,
+        shakeDur: 0.35,
+        lifetime: 2,
+    },
 };

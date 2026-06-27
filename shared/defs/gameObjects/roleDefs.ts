@@ -162,6 +162,8 @@ export const RoleDefs: Record<string, RoleDef> = {
             "amped_explosives",
             "holy_shield",
             "vampire",
+            "deadeye",
+            "combat_stims",
         ],
         defaultItems: createDefaultItems({
             weapons: [

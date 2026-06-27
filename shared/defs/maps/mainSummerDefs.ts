@@ -235,6 +235,7 @@ const mapDef = {
             { name: "flare", count: 1, weight: 1 },
             { name: "50AE", count: 21, weight: 1 },
             { name: "308sub", count: 5, weight: 1 },
+            { name: "explosives", count: 5, weight: 1 },
         ],
         tier_ammo_crate: [
             { name: "9mm", count: 120, weight: 1 },
@@ -245,6 +246,7 @@ const mapDef = {
             { name: "308sub", count: 10, weight: 1 },
             { name: "flare", count: 1, weight: 1 },
             { name: "flare", count: 2, weight: 0.25 },
+            { name: "explosives", count: 10, weight: 1 },
         ],
         tier_cattle_crate: [
             { name: "colt45", count: 1, weight: 1.5 },
@@ -256,7 +258,7 @@ const mapDef = {
         ],
         tier_ring_case: [
             { name: "potato_cannon", count: 1, weight: 1 },
-            { name: "splitter", count: 1, weight: 1 },
+            { name: "tier_explosives", count: 1, weight: 1 },
             { name: "m134", count: 1, weight: 1 },
         ],
         tier_snipers: [
@@ -264,18 +266,18 @@ const mapDef = {
             { name: "m2010", count: 1, weight: 0.8 },
             { name: "m82", count: 1, weight: 0.4 },
             { name: "m96", count: 1, weight: 0.8 },
-            { name: "blr", count: 1, weight: 2 },
+            { name: "blr", count: 1, weight: 2.5 },
             { name: "scout_elite", count: 1, weight: 1.5 },
             { name: "mosin", count: 1, weight: 1 },
             { name: "model94", count: 1, weight: 2 },
             { name: "garand", count: 1, weight: 1.3 },
             { name: "m1014", count: 1, weight: 0.6 },
-            { name: "mk12", count: 1, weight: 2 },
+            { name: "mk12", count: 1, weight: 2.5 },
             { name: "mkg45", count: 1, weight: 1.7 },
             { name: "vss", count: 1, weight: 1.7 },
             { name: "scarssr", count: 1, weight: 0.4 },
             { name: "l86", count: 1, weight: 1.5 },
-            { name: "m39", count: 1, weight: 2 },
+            { name: "m39", count: 1, weight: 2.5 },
             { name: "svd", count: 1, weight: 1.5 },
         ],
         tier_guns: [
@@ -478,6 +480,8 @@ const mapDef = {
             { name: "lasr_gun_dual", count: 1, weight: 1 },
             { name: "p90", count: 1, weight: 1 },
             { name: "skorpion_dual", count: 1, weight: 1 },
+            { name: "m72", count: 1, weight: 1 },
+            { name: "m202", count: 1, weight: 1 },
         ],
         tier_knives: [
             { name: "bonesaw_healer", count: 1, weight: 1 },
@@ -509,6 +513,12 @@ const mapDef = {
             { name: "usas", count: 1, weight: 1 },
             { name: "spas16", count: 1, weight: 1 },
         ],
+        tier_explosives: [
+            { name: "m79", count: 1, weight: 1 },
+            { name: "m72", count: 1, weight: 1 },
+            { name: "m202", count: 1, weight: 1 },
+        ],
+        tier_police_floor: [{ name: "m96", count: 1, weight: 1 }],
     },
     biome: {
         colors: {
@@ -617,8 +627,10 @@ const mapDef = {
                 desert_town_01: 1,
                 savannah_patch_01: 3,
                 warehouse_01: 1,
-                house_red_01: 2,
-                house_red_02: 2,
+                house_red_01ms: 1,
+                house_red_01: 1,
+                house_red_02: 1,
+                house_red_02ms: 1,
                 barn_01: 0,
                 barn_02: 1,
                 hut_02: 1,

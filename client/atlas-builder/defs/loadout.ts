@@ -13,6 +13,7 @@ export const LoadoutAtlas: AtlasDef = {
         "emotes/ammo-9mm.svg",
         "emotes/ammo-box.svg",
         "emotes/ammo-flare.svg",
+        "emotes/ammo-explosives.svg",
         "emotes/baguette.svg",
         "emotes/bugle-final-blue.svg",
         "emotes/bugle-final-red.svg",

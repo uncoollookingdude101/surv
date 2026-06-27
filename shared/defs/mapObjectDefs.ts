@@ -7935,7 +7935,7 @@ function createHouseRed<T extends ExtendedBuildingDef>(e: Partial<T>): T {
                 ori: 3,
             },
             {
-                type: randomObstacleType({ drawers_01: 7, drawers_02: 1 }),
+                type: e.drawer || randomObstacleType({ drawers_01: 7, drawers_02: 1 }),
                 pos: v2.create(7.75, -6),
                 scale: 1,
                 ori: 0,
@@ -8310,7 +8310,7 @@ function createHouseRed2<T extends ExtendedBuildingDef>(e: Partial<T>): T {
                 ori: 0,
             },
             {
-                type: randomObstacleType({ toilet_01: 5, toilet_02: 1 }),
+                type: e.toilet || randomObstacleType({ toilet_01: 5, toilet_02: 1 }),
                 pos: v2.create(-11.75, 0.5),
                 scale: 1,
                 ori: 1,
@@ -10454,6 +10454,19 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         ],
         hitParticle: "blackChip",
     }),
+    case_10ms: createCase({
+        health: 140,
+        img: { sprite: "map-case-bomb-01.img" },
+        loot: [
+            autoLoot("backpack03", 1),
+            autoLoot("explosives", 10),
+            autoLoot("4xscope", 1),
+            autoLoot("amped_explosives", 1),
+            tierLoot("tier_explosives", 1, 1),
+        ],
+        hitParticle: "blackChip",
+        map: { display: false, color: 0x6b3500, scale: 0.85 },
+    }),
     chest_01: createChest({
         loot: [
             tierLoot("tier_chest", 3, 4),
@@ -10474,8 +10487,9 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
     chest_02ms: createChest({
         img: { sprite: "map-chest-02.img" },
         loot: [
-            tierLoot("tier_armor", 3, 3),
-            tierLoot("tier_scopes", 3, 3),
+            autoLoot("chest02", 1),
+            autoLoot("helmet02", 1),
+            autoLoot("backpack02", 1),
             tierLoot("tier_medical", 3, 3),
             tierLoot("tier_custom", 0, 1),
             autoLoot("flare_gun", 1),
@@ -11258,6 +11272,9 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("potato_lmg", 1),
             autoLoot("splitter", 1),
             autoLoot("m96", 1),
+            autoLoot("skorpion_dual", 1),
+            autoLoot("m72", 1),
+            autoLoot("m202", 1),
             autoLoot("mirv", 15),
             autoLoot("strobe", 15),
             autoLoot("bb", 15),
@@ -12370,6 +12387,14 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
             tierLoot("tier_outfits", 1, 1),
         ],
     }),
+    pumpkin_02ms: createPumpkin({
+        health: 140,
+        img: { sprite: "map-pumpkin-02.img" },
+        loot: [
+            tierLoot("tier_guns", 2, 4),
+            tierLoot("tier_pumpkin_candy", 1, 2),
+        ],
+    }),
     pumpkin_03: createPumpkin({
         collision: collider.createCircle(v2.create(0, 0), 1.25),
         map: { display: false },
@@ -12999,6 +13024,13 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
             tint: 0xb4b4b4,
         },
         loot: [autoLoot("fireaxe", 1)],
+    }),
+    toilet_02ms: createToilet({
+        img: {
+            sprite: "map-toilet-02.img",
+            tint: 0xb4b4b4,
+        },
+        loot: [autoLoot("vampire", 1)],
     }),
     toilet_03: createToilet({
         reflectBullets: true,
@@ -22277,6 +22309,11 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         img: wallImg("map-column-01.img", 0x554232),
     }),
     house_red_01: createHouseRed({ stand: "stand_01" }),
+    house_red_01ms: createHouseRed({
+        stand: "stand_01",
+        porch_01: "barrel_01b",
+        drawer: "case_10ms",
+    }),
     house_red_01h: createHouseRed({
         porch_01: "cache_pumpkin_02",
         stand: "stand_01",
@@ -22314,6 +22351,11 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
     house_red_02h: createHouseRed2({
         porch_01: "cache_pumpkin_02",
         stand: "stand_01",
+    }),
+    house_red_02ms: createHouseRed2({
+        porch_01: "cache_pumpkin_02",
+        stand: "stand_01",
+        toilet: "toilet_02ms",
     }),
     house_red_02x: createHouseRed2({
         ceiling: {

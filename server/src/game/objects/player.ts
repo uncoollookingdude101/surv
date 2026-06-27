@@ -5097,7 +5097,7 @@ export class Player extends BaseGameObject {
     }
 
     decrementViewDistance() {
-        this.viewDistModifier += 1.5;
+        this.viewDistModifier += 1.50;
         this.viewDistModifier = math.min(this.viewDistModifier, 32);
         this.viewDistTicker = 2.5;
         this.zoomDirty = true;

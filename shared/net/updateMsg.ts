@@ -392,8 +392,8 @@ export class UpdateMsg implements AbstractMsg {
                 }
                 s.writeBoolean(bullet.hasModifier);
                 if (bullet.hasModifier) {
-                    s.writeFloat(bullet.speedMult, 0.5, 2, 8);
-                    s.writeFloat(bullet.distanceMult, 0.5, 2, 8);
+                    s.writeFloat(bullet.speedMult, 0.5, 2.5, 8);
+                    s.writeFloat(bullet.distanceMult, 0.5, 2.5, 8);
                 }
                 s.writeBoolean(bullet.hasSpecialFx);
 

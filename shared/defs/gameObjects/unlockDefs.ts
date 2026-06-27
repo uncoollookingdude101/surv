@@ -56,6 +56,13 @@ const _allowedOutfits = [
     "outfitCamo",
     "outfitRed",
     "outfitWhite",
+    "outfitEvent",
+    "outfitParrotfish",
+    "outfitWave",
+    "outfitCoconut",
+    "outfitBeachCamo",
+    "outfitBlackIce",
+    "outfitSnow",
 ];
 const _allowedEmotes = [
     "emote_thumbsup",

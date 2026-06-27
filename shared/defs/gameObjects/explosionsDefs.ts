@@ -241,7 +241,7 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         explosionEffectType: "bomb_iron",
         decalType: "decal_bomb_iron_explosion",
     },
-    explosion_40mm_granade: {
+    explosion_grenade_m79: {
         type: "explosion",
         damage: 125,
         obstacleDamage: 1.3,
@@ -331,5 +331,27 @@ export const ExplosionDefs: Record<string, ExplosionDef> = {
         frozenSprites: ["player-mash-01.img", "player-mash-02.img", "player-mash-03.img"],
         explosionEffectType: "potato_cluster",
         decalType: "",
+    },
+    explosion_rocket_m72: {
+        type: "explosion",
+        damage: 132,
+        obstacleDamage: 1.5,
+        teamDamage: false,
+        rad: { min: 6.5, max: 8.0 },
+        shrapnelCount: 7,
+        shrapnelType: "",
+        explosionEffectType: "rocket_m72",
+        decalType: "decal_frag_explosion",
+    },
+    explosion_rocket_m202: {
+        type: "explosion",
+        damage: 68,
+        obstacleDamage: 1.3,
+        teamDamage: false,
+        rad: { min: 5.5, max: 7.0 },
+        shrapnelCount: 4,
+        shrapnelType: "",
+        explosionEffectType: "rocket_m202",
+        decalType: "decal_frag_explosion",
     },
 };
