@@ -164,6 +164,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             "vampire",
             "deadeye",
             "combat_stims",
+            "aoe_heal"
         ],
         defaultItems: createDefaultItems({
             weapons: [
@@ -212,7 +213,7 @@ export const RoleDefs: Record<string, RoleDef> = {
                 "8xscope": 1,
                 "4xscope": 1,
                 "2xscope": 1,
-                healthkit: 4,
+                healthkit: 30,
                 bandage: 30,
                 painkiller: 4,
                 soda: 15,
@@ -443,6 +444,16 @@ export const RoleDefs: Record<string, RoleDef> = {
             "inspiration",
             "scavenger",
             "high_velocity",
+            "melee_master",
+            "pistol_master",
+            "energized",
+            "closer",
+            "amped_explosives",
+            "holy_shield",
+            "vampire",
+            "deadeye",
+            "combat_stims",
+            "aoe_heal"
         ],
         defaultItems: createDefaultItems({
             backpack: "backpack03",

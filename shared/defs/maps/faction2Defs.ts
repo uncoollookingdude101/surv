@@ -143,6 +143,11 @@ const mapDef: PartialMapDef = {
                     circleIdx: 0,
                     wait: 5,
                 },
+                {
+                    role: "leader",
+                    circleIdx: 0,
+                    wait: 5,
+                },
             ],
         },
         bagSizes: {
