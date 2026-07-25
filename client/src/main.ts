@@ -733,46 +733,44 @@ export class Application {
             };
             matchArgs.turnstileToken = token;
 
-            $.ajax({
-                type: "POST",
-                url: api.resolveUrl("/api/find_game"),
-                data: JSON.stringify(matchArgs),
-                contentType: "application/json; charset=utf-8",
-                timeout: 10 * 1000,
-                xhrFields: {
-                    withCredentials: proxy.anyLoginSupported(),
+            fetch(api.resolveUrl("/api/find_game"), {
+                method: "POST",
+                body: JSON.stringify(matchArgs),
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
                 },
-                success: (data: FindGameResponse) => {
-                    if (data.error === "invalid_captcha") {
-                        // captch may have failed because the enabled state has changed since site info was loaded
-                        // so force it to true
-                        this.siteInfo.info.captchaEnabled = true;
-                        retry();
-                        return;
-                    }
-
-                    if (data.error && data.error != "full") {
-                        cb(data.error);
-                        return;
-                    }
-
-                    if (data.banned) {
-                        cb(null, undefined, data as FindGameResponse & { banned: true });
-                        return;
-                    }
-
-                    const matchData = data.res ? data.res[0] : null;
-                    if (matchData?.hosts && matchData.addrs) {
-                        cb(null, matchData);
-                    } else {
-                        retry();
-                    }
-                },
-                error: function(_e) {
+                credentials: proxy.anyLoginSupported() ? "include" : "omit",
+                signal: helpers.abortSignal(10 * 1000),
+            }).then(res => res.json()).then((data: FindGameResponse) => {
+                if (data.error === "invalid_captcha") {
+                    // captch may have failed because the enabled state has changed since site info was loaded
+                    // so force it to true
+                    this.siteInfo.info.captchaEnabled = true;
                     retry();
-                },
+                    return;
+                }
+
+                if (data.error && data.error != "full") {
+                    cb(data.error);
+                    return;
+                }
+
+                if (data.banned) {
+                    cb(null, undefined, data as FindGameResponse & { banned: true });
+                    return;
+                }
+
+                const matchData = data.res ? data.res[0] : null;
+                if (matchData?.hosts && matchData.addrs) {
+                    cb(null, matchData);
+                } else {
+                    retry();
+                }
+            }).catch(() => {
+                retry();
             });
         };
+
         helpers.verifyTurnstile(
             this.siteInfo.info.captchaEnabled && !this.account.loggedIn,
             (token) => {
@@ -807,7 +805,6 @@ export class Application {
             this.game!.tryJoinGame(
                 url,
                 matchData.data,
-                this.account.questPriv,
                 onFailure,
             );
         };
@@ -990,7 +987,7 @@ window.onerror = function(msg, url, lineNo, columnNo, error) {
     if (!url.startsWith(location.href) || !/.js|.ts/.test(url)) return;
 
     // ignore scrappers
-    if (/googlebot|bingbot|yandexbot/gi.test(navigator.userAgent)) return;
+    if (/googlebot|bingbot|yandexbot|mediapartners-google/gi.test(navigator.userAgent)) return;
 
     const errObj = {
         msg,
@@ -1012,9 +1009,3 @@ window.onerror = function(msg, url, lineNo, columnNo, error) {
         errorLogManager.logWindowOnError(errObj);
     }
 };
-
-navigator.serviceWorker?.getRegistrations().then((registrations) => {
-    for (const registration of registrations) {
-        registration.unregister();
-    }
-});

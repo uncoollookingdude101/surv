@@ -2,7 +2,6 @@ import { GameConfig } from "../../gameConfig.ts";
 import type { DeepPartial } from "../../utils/util.ts";
 import { v2 } from "../../utils/v2.ts";
 import type { MapDef } from "../mapDefs.ts";
-import { MapId } from "../types/misc.ts";
 
 // @NOTE: Entries defined as single-element arrays, like fixedSpawns: [{ }],
 // are done this way so that util.mergeDeep(...) will function as expected
@@ -12,7 +11,7 @@ import { MapId } from "../types/misc.ts";
 // elements if that property is set.
 
 export const Main: MapDef = {
-    mapId: MapId.Main,
+    mapId: GameConfig.MapId.Main,
     desc: {
         name: "Normal",
         icon: "",
@@ -598,7 +597,7 @@ export const Main: MapDef = {
             { name: "m4a1", count: 1, weight: 1 },
             { name: "scorpion", count: 1, weight: 1 },
             { name: "scar", count: 1, weight: 1 },
-            { name: "flare", count: 1, weight: 1 },
+            { name: "flare_gun", count: 1, weight: 1 },
             { name: "garand", count: 1, weight: 0.75 },
             { name: "mosin", count: 1, weight: 0.5 },
             { name: "deagle", count: 1, weight: 1 },
@@ -634,6 +633,12 @@ export const Main: MapDef = {
             { name: "m4a1", count: 1, weight: 4 },
             { name: "scorpion", count: 1, weight: 5 }, // ?
             { name: "ots38_dual", count: 1, weight: 4.5 },
+        ],
+        tier_airdrop_crimson: [
+            { name: "deagle_dual", count: 1, weight: 1 },
+            { name: "ash12", count: 1, weight: 1 },
+            { name: "sw500", count: 1, weight: 1 },
+            { name: "barrett", count: 1, weight: 1 },
         ],
         tier_airdrop_mythic: [
             { name: "usas", count: 1, weight: 1 },
@@ -685,6 +690,7 @@ export const Main: MapDef = {
         tier_saloon: [
             { name: "vector45", count: 1, weight: 1 },
             { name: "mkg45", count: 1, weight: 1 },
+            { name: "tier_airdrop_crimson", count: 1, weight: 0.22 },
         ],
         tier_cattle_crate: [
             { name: "m1a1", count: 1, weight: 1 },
@@ -771,6 +777,14 @@ export const Main: MapDef = {
             { name: "bonus_45", count: 1, weight: 1 },
             { name: "high_velocity", count: 1, weight: 1 },
         ],
+        tier_crimson_perks: [
+            { name: "ap_rounds", count: 1, weight: 1 },
+            { name: "splinter", count: 1, weight: 1 },
+            { name: "steelskin", count: 1, weight: 1 },
+            { name: "takedown", count: 1, weight: 1 },
+            { name: "windwalk", count: 1, weight: 1 },
+            { name: "field_medic", count: 1, weight: 1 },
+        ],
         tier_potato_perks: [
             { name: "", count: 1, weight: 25 },
             { name: "tier_perks", count: 1, weight: 1 },
@@ -783,7 +797,6 @@ export const Main: MapDef = {
             { name: "m2010", count: 1, weight: 1 },
             { name: "p90", count: 1, weight: 1 },
             { name: "pkm", count: 1, weight: 1 },
-            { name: "m82", count: 1, weight: 1 },
         ],
         tier_chest_04b: [{ name: "glock_dual", count: 1, weight: 1 }],
         tier_airdrop_potato: [
@@ -807,6 +820,18 @@ export const Main: MapDef = {
             { name: "bayonet_rugged", count: 1, weight: 1 },
             { name: "karambit_drowned", count: 1, weight: 1 },
             { name: "karambit_prismatic", count: 1, weight: 1 },
+        ],
+        tier_revolvers: [
+            { name: "ot38", count: 1, weight: 5 },
+            { name: "colt45", count: 1, weight: 5 },
+            { name: "ots38", count: 1, weight: 2 },
+            { name: "sw500", count: 1, weight: 0.5 },
+        ],
+        tier_toilet_gold: [
+            { name: "", count: 1, weight: 0.95 },
+            { name: "awc", count: 1, weight: 0.02 },
+            { name: "garand", count: 1, weight: 0.02 },
+            { name: "m9", count: 1, weight: 0.01 },
         ],
         tier_knives: [{ name: "", count: 1, weight: 1 }],
         tier_explosives: [

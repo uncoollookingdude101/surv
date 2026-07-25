@@ -1,6 +1,5 @@
 import { generateUsername } from "unique-username-generator";
-import { MapId } from "../../../../shared/defs/types/misc.ts";
-import { TeamMode } from "../../../../shared/gameConfig.ts";
+import { MapId, TeamMode } from "../../../../shared/gameConfig.ts";
 import { util } from "../../../../shared/utils/util.ts";
 import type { MatchDataTable } from "../../api/db/schema.ts";
 import { createNewUser, generateId } from "../routes/user/auth/authUtils.ts";
@@ -12,29 +11,6 @@ const playersWithAccounts = Array.from({ length: 3000 }, (_, _idx) => ({
     userId: generateId(15),
 }));
 
-seed();
-async function seed() {
-    try {
-        for (const { slug, userId } of playersWithAccounts) {
-            await createNewUser({
-                id: userId,
-                authId: generateId(15),
-                username: slug,
-                linked: true,
-                slug: slug,
-            });
-            for (let j = 0; j < util.randomInt(50, 100); j++) {
-                const data = generateMatchHistory(userId, slug, util.randomInt(60, 80));
-                await db.insert(matchDataTable).values(data);
-            }
-            console.log({ slug, userId });
-        }
-        console.log("Seeded database");
-    } catch (error) {
-        console.error("Failed to seed database", error);
-    }
-}
-
 interface Player {
     killerIds: number[];
     killedBy: number | null;
@@ -43,6 +19,14 @@ interface Player {
     teamId: number;
     rank: number;
     teamCount: number;
+}
+
+function shuffle<T>(array: T[]): T[] {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function chunk<T>(array: T[], size: number): T[][] {
+    return Array.from({ length: Math.ceil(array.length / size) }, (_, i) => array.slice(i * size, i * size + size));
 }
 
 function generateMatchHistory(
@@ -95,14 +79,14 @@ function generateMatchHistory(
     for (const playerId of Object.keys(players).map(Number)) {
         if (alivePlayers.length <= 1) break;
 
-        const kills = weightedRandom([
+        const kills = util.weightedRandom([
             { value: 0, weight: 0.6 },
             { value: util.randomInt(1, 3), weight: 0.3 },
             {
                 value: util.randomInt(3, Math.min(10, alivePlayers.length - 1)),
                 weight: 0.05,
             },
-        ]);
+        ]).value;
 
         if (kills === 0) continue;
 
@@ -160,38 +144,34 @@ function generateMatchHistory(
 function getRandomData() {
     const date = new Date();
     return {
-        mapId: getRandomItem([MapId.Desert, MapId.Main, MapId.Woods]),
+        mapId: util.randomItem([MapId.Desert, MapId.Main, MapId.Woods]),
         gameId: crypto.randomUUID(),
         createdAt: new Date(date.setDate(date.getDate() - util.randomInt(0, 20))),
-        region: getRandomItem(["na", "eu", "as"]),
-        teamMode: weightedRandom([
+        region: util.randomItem(["na", "eu", "as"]),
+        teamMode: util.weightedRandom([
             { value: TeamMode.Solo, weight: 0.4 },
             { value: TeamMode.Duo, weight: 0.4 },
             { value: TeamMode.Squad, weight: 0.2 },
-        ]),
+        ]).value,
     };
 }
 
-// Helper functions
-function getRandomItem<const T>(array: T[]): T {
-    return array[Math.floor(Math.random() * array.length)];
-}
-
-function shuffle<T>(array: T[]): T[] {
-    return array.sort(() => Math.random() - 0.5);
-}
-
-function chunk<T>(array: T[], size: number): T[][] {
-    return Array.from({ length: Math.ceil(array.length / size) }, (_, i) => array.slice(i * size, i * size + size));
-}
-
-function weightedRandom<T>(options: { value: T; weight: number }[]): T {
-    const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
-    let random = Math.random() * totalWeight;
-
-    for (const option of options) {
-        random -= option.weight;
-        if (random <= 0) return option.value;
+try {
+    for (const { slug, userId } of playersWithAccounts) {
+        await createNewUser({
+            id: userId,
+            authId: generateId(15),
+            username: slug,
+            linked: true,
+            slug: slug,
+        });
+        for (let j = 0; j < util.randomInt(50, 100); j++) {
+            const data = generateMatchHistory(userId, slug, util.randomInt(60, 80));
+            await db.insert(matchDataTable).values(data);
+        }
+        console.log({ slug, userId });
     }
-    return options[0].value;
+    console.log("Seeded database");
+} catch (error) {
+    console.error("Failed to seed database", error);
 }

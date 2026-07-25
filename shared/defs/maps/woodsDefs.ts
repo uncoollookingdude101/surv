@@ -2,11 +2,10 @@ import { GameConfig } from "../../gameConfig.ts";
 import { util } from "../../utils/util.ts";
 import { v2 } from "../../utils/v2.ts";
 import type { MapDef } from "../mapDefs.ts";
-import { MapId } from "../types/misc.ts";
 import { Main, type PartialMapDef } from "./baseDefs.ts";
 
 const mapDef: PartialMapDef = {
-    mapId: MapId.Woods,
+    mapId: GameConfig.MapId.Woods,
     desc: {
         name: "Woods",
         icon: "img/gui/player-king-woods.svg",
@@ -203,6 +202,10 @@ const mapDef: PartialMapDef = {
                     retryOnFailure: true,
                 },
             ],
+            // since placespawns now create river masks
+            // they can block the lake from spawning...
+            // so remove them from woods for now
+            placeSpawns: [],
         },
         densitySpawns: [
             {

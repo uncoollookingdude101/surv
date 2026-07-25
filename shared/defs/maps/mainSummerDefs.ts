@@ -264,7 +264,7 @@ const mapDef = {
         tier_snipers: [
             { name: "sv98", count: 1, weight: 0.5 },
             { name: "m2010", count: 1, weight: 0.8 },
-            { name: "m82", count: 1, weight: 0.4 },
+            { name: "barrett", count: 1, weight: 0.4 },
             { name: "m96", count: 1, weight: 0.8 },
             { name: "blr", count: 1, weight: 2.5 },
             { name: "scout_elite", count: 1, weight: 1.5 },

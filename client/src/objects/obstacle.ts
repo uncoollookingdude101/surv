@@ -89,7 +89,8 @@ export class Obstacle implements AbstractObject {
         wasOpen: boolean;
         locked: boolean;
         casingSprite: ObstacleSprite | null;
-        canUse?: boolean;
+        canUse: boolean;
+        couldUse: boolean;
     };
 
     imgScale!: number;
@@ -189,6 +190,8 @@ export class Obstacle implements AbstractObject {
                     open: data.door.open,
                     wasOpen: data.door.open,
                     locked: data.door.locked,
+                    canUse: data.door.canUse,
+                    couldUse: data.door.canUse,
                     casingSprite: null,
                 };
                 const casingImgDef = def.door?.casingImg;
@@ -340,7 +343,7 @@ export class Obstacle implements AbstractObject {
                     const aabb = collider.toAabb(this.collider);
                     const extent = v2.mul(v2.sub(aabb.max, aabb.min), 0.5);
                     const center = v2.add(aabb.min, extent);
-                    const vel = v2.mul(v2.randomUnit(), util.random(5, 15));
+                    const vel = v2.randomUnit(util.random(5, 15));
                     particleBarn.addParticle(
                         def.button.useParticle,
                         this.layer,
@@ -387,9 +390,9 @@ export class Obstacle implements AbstractObject {
             }
             door.interpRot += angMove;
 
+            const def = MapObjectDefs.typeToDef(this.type, "obstacle");
             // Door begin state change sound
             if (door.seq != door.seqOld) {
-                const def = MapObjectDefs.typeToDef(this.type, "obstacle");
                 const sound = def.door?.sound.change || "";
                 if (sound != "") {
                     audioManager.playSound(sound, {
@@ -404,15 +407,26 @@ export class Obstacle implements AbstractObject {
 
             // Open/close sounds
             if (door.open != door.wasOpen) {
-                const C = MapObjectDefs.typeToDef(this.type, "obstacle");
-                const A = door.open ? C.door?.sound.open! : C.door?.sound.close!;
-                audioManager.playSound(A, {
+                const sound = door.open ? def.door?.sound.open! : def.door?.sound.close!;
+                audioManager.playSound(sound, {
                     channel: "sfx",
                     soundPos: this.pos,
                     layer: this.layer,
                     filter: "muffled",
                 });
                 door.wasOpen = door.open;
+            }
+
+            if (door.couldUse !== door.canUse) {
+                if (door.canUse && def.door?.sound.unlock) {
+                    audioManager.playSound(def.door?.sound.unlock, {
+                        channel: "sfx",
+                        soundPos: this.pos,
+                        layer: this.layer,
+                        filter: "muffled",
+                    });
+                }
+                door.couldUse = door.canUse;
             }
         }
         if (this.dead && !this.exploded) {
@@ -432,11 +446,9 @@ export class Obstacle implements AbstractObject {
                 const center = v2.add(aabb.min, extent);
                 const numParticles = Math.floor(util.random(5, 11));
                 for (let i = 0; i < numParticles; i++) {
-                    const vel = v2.mul(v2.randomUnit(), util.random(5, 15));
+                    const vel = v2.randomUnit(util.random(5, 15));
                     const particle = Array.isArray(this.explodeParticle)
-                        ? this.explodeParticle[
-                            Math.floor(Math.random() * this.explodeParticle.length)
-                        ]
+                        ? util.randomItem(this.explodeParticle)
                         : this.explodeParticle;
                     particleBarn.addParticle(particle, this.layer, center, vel);
                 }

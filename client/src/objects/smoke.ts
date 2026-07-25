@@ -60,7 +60,7 @@ const particles = ["part-smoke-02.img", "part-smoke-03.img"];
 export class SmokeParticle {
     active = false;
     zIdx = 0;
-    sprite = PIXI.Sprite.from(particles[Math.floor(Math.random() * particles.length)]);
+    sprite = PIXI.Sprite.from(util.randomItem(particles));
 
     pos!: Vec2;
     posTarget!: Vec2;
@@ -139,7 +139,7 @@ export class SmokeBarn {
             const p = this.m_particles[m];
             if (p.active) {
                 p.rad = math.lerp(dt * 3, p.rad, p.radTarget);
-                p.pos = math.v2lerp(dt * 3, p.pos, p.posTarget);
+                p.pos = v2.lerp(dt * 3, p.pos, p.posTarget);
                 p.rotVel *= 1 / (1 + dt * 0.1);
                 p.rot += p.rotVel * dt;
                 p.fadeTicker += p.fade ? dt : 0;

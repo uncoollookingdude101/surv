@@ -183,9 +183,9 @@ export class Building implements AbstractObject {
         this.hasPuzzle = data.hasPuzzle;
 
         if (this.hasPuzzle) {
-            this.puzzleErrSeqModified = data.puzzleErrSeq != this.puzzleErrSeq;
-            this.puzzleSolved = data.puzzleSolved;
-            this.puzzleErrSeq = data.puzzleErrSeq;
+            this.puzzleErrSeqModified = data.puzzle!.errSeq != this.puzzleErrSeq;
+            this.puzzleSolved = data.puzzle!.solved;
+            this.puzzleErrSeq = data.puzzle!.errSeq;
         }
 
         const def = MapObjectDefs.typeToDef(this.type, "building");
@@ -627,7 +627,7 @@ export class Building implements AbstractObject {
                     util.random(aabb.min.x, aabb.max.x),
                     util.random(aabb.min.y, aabb.max.y),
                 );
-                const vel = v2.mul(v2.randomUnit(), util.random(0, 15));
+                const vel = v2.randomUnit(util.random(0, 15));
                 particleBarn.addParticle(def.particle, this.layer, pos, vel);
             }
 
@@ -668,8 +668,37 @@ export class Building implements AbstractObject {
             if (debug.buildings?.bridge) {
                 renderBridge(this);
             }
-            if (debug.buildings.waterEdge) {
+            if (debug.buildings?.waterEdge) {
                 renderWaterEdge(this);
+            }
+            if (debug.buildings?.minimap) {
+                const def = MapObjectDefs.typeToDef(this.type, "building");
+                if (def.map && def.map.display) {
+                    const scale = def.map.scale ?? 1;
+                    if (def.map.shapes) {
+                        for (let i = 0; i < def.map.shapes.length; i++) {
+                            const shape = def.map.shapes[i];
+                            debugLines.addCollider(
+                                collider.transform(shape.collider, this.pos, this.rot, scale),
+                                shape.color,
+                                1,
+                            );
+                        }
+                    } else if (def.ceiling.zoomRegions.length && def.ceiling.zoomRegions[0].zoomIn) {
+                        debugLines.addCollider(
+                            collider.transform(def.ceiling.zoomRegions[0].zoomIn, this.pos, this.rot, scale),
+                            def.map.color!,
+                            1,
+                        );
+                    } else {
+                        const col = mapHelpers.getBoundingCollider(this.type);
+                        debugLines.addCollider(
+                            collider.transform(col, this.pos, this.rot, scale),
+                            def.map.color!,
+                            1,
+                        );
+                    }
+                }
             }
             if (debug.buildings?.ceiling) {
                 for (let i = 0; i < this.ceiling.zoomRegions.length; i++) {

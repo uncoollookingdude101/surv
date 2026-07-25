@@ -1,6 +1,6 @@
 import $ from "jquery";
-import { type MapDef, MapDefs } from "../../shared/defs/mapDefs.ts";
-import { TeamModeToString } from "../../shared/defs/types/misc.ts";
+import { type MapDefKey, MapDefs } from "../../shared/defs/mapDefs.ts";
+import { GameConfig } from "../../shared/gameConfig.ts";
 import type { SiteInfoRes } from "../../shared/types/api.ts";
 import { api } from "./api.ts";
 import type { ConfigManager } from "./config.ts";
@@ -19,7 +19,6 @@ export class SiteInfo {
 
     load() {
         const locale = this.localization.getLocale();
-        const siteInfoUrl = api.resolveUrl(`/api/site_info?language=${locale}`);
 
         const mainSelector = $("#server-opts");
         const teamSelector = $("#team-server-opts");
@@ -32,7 +31,8 @@ export class SiteInfo {
             teamSelector.append(elm);
         }
 
-        $.ajax(siteInfoUrl).done((data: SiteInfoRes) => {
+        const siteInfoUrl = api.resolveUrl(`/api/site_info?language=${locale}`);
+        fetch(siteInfoUrl).then(res => res.json()).then((data: SiteInfoRes) => {
             this.info = data || {};
             this.loaded = true;
             this.updatePageFromInfo();
@@ -44,11 +44,11 @@ export class SiteInfo {
         const modes = this.info.modes || [];
         for (let i = 0; i < modes.length; i++) {
             const mode = modes[i];
-            const mapDef = (MapDefs[mode.mapName as keyof typeof MapDefs] || MapDefs.main)
+            const mapDef = (MapDefs[mode.mapName as MapDefKey] || MapDefs.main)
                 .desc;
             const buttonText = mapDef.buttonText
                 ? mapDef.buttonText
-                : TeamModeToString[mode.teamMode];
+                : GameConfig.TeamModeToString[mode.teamMode];
             availableModes.push({
                 icon: mapDef.icon,
                 buttonCss: mapDef.buttonCss,
@@ -148,7 +148,7 @@ export class SiteInfo {
             }
             featuredYoutuberElem.css("display", displayYoutuber ? "block" : "none");
 
-            const mapDef = MapDefs[this.info.clientTheme] as MapDef;
+            const mapDef = MapDefs[this.info.clientTheme];
             if (mapDef) {
                 this.config.set("cachedBgImg", mapDef.desc.backgroundImg);
                 const bg = document.getElementById("background");

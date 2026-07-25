@@ -1,7 +1,7 @@
 import { type QuestDef, QuestDefs } from "../../../shared/defs/gameObjects/questDefs.ts";
 import type { ObstacleDef } from "../../../shared/defs/mapObjectsTyping.ts";
 import { GameObjectDefs, MapObjectDefs } from "../../../shared/defs/register.ts";
-import { TeamModeToString } from "../../../shared/defs/types/misc.ts";
+import type { TeamMode } from "../../../shared/gameConfig.ts";
 import { MsgType, UpdatePassMsg } from "../../../shared/net/net.ts";
 import { assert } from "../../../shared/utils/util.ts";
 import type { Game } from "./game.ts";
@@ -56,7 +56,7 @@ export class QuestManager {
 
         this.trackEvent("placement", {
             rank: teamRank,
-            mode: TeamModeToString[this.game.teamMode],
+            mode: this.game.teamMode,
         });
     }
 
@@ -86,7 +86,7 @@ export class QuestManager {
         if (progress.length === 0) return;
 
         if (!this.player.disconnected) {
-            this.player.sendMsg(MsgType.UpdatePass, new UpdatePassMsg());
+            this.player.client.sendInstantMsg(MsgType.UpdatePass, new UpdatePassMsg());
         }
 
         this.game.sendQuestProgress(this.player.userId, progress);
@@ -119,7 +119,7 @@ export interface QuestEventPayloads {
     kill: { weaponType: string; buildingType: string };
     damage: { amount: number; weaponType: string };
     survived: { seconds: number };
-    placement: { rank: number; mode: "solo" | "duo" | "squad" };
+    placement: { rank: number; mode: TeamMode };
     item_used: { itemType: string };
     destruction: { objectType: string };
 }

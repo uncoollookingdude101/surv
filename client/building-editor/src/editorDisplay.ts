@@ -1,9 +1,11 @@
 import * as PIXI from "pixi.js-legacy";
 
+import { MapDefs } from "../../../shared/defs/mapDefs.ts";
 import { MapObjectDefs } from "../../../shared/defs/register.ts";
 import { MapMsg } from "../../../shared/net/mapMsg.ts";
 import { type ObjectData, ObjectType } from "../../../shared/net/objectSerializeFns.ts";
 import type { LocalDataWithDirty } from "./../../../shared/net/updateMsg.ts";
+import { collider } from "../../../shared/utils/collider.ts";
 import { math } from "../../../shared/utils/math.ts";
 import { util } from "../../../shared/utils/util.ts";
 import { v2, type Vec2 } from "../../../shared/utils/v2.ts";
@@ -115,35 +117,35 @@ export class EditorDisplay {
         this.updatePlayer();
 
         this.activePlayer = this.playerBarn.getPlayerById(this.activeId)!;
-        this.activePlayer.m_setLocalData({
-            boost: 100,
-            boostDirty: true,
-            hasAction: false,
-            health: 100,
-            inventoryDirty: false,
-            scopedIn: false,
-            spectatorCountDirty: false,
-            weapsDirty: true,
-            curWeapIdx: 2,
-            weapons: [
-                {
-                    name: "",
-                    ammo: 0,
-                },
-                {
-                    name: "",
-                    ammo: 0,
-                },
-                {
-                    name: "bayonet_rugged",
-                    ammo: 0,
-                },
-                {
-                    name: "",
-                    ammo: 0,
-                },
-            ],
-        } as unknown as LocalDataWithDirty);
+        this.activePlayer.m_setLocalData(
+            {
+                boost: 100,
+                boostDirty: true,
+                health: 100,
+                inventoryDirty: false,
+                spectatorCountDirty: false,
+                weapsDirty: true,
+                curWeapIdx: 2,
+                weapons: [
+                    {
+                        type: "",
+                        ammo: 0,
+                    },
+                    {
+                        type: "",
+                        ammo: 0,
+                    },
+                    {
+                        type: "fists",
+                        ammo: 0,
+                    },
+                    {
+                        type: "",
+                        ammo: 0,
+                    },
+                ],
+            } satisfies Partial<LocalDataWithDirty> as LocalDataWithDirty,
+        );
 
         this.activePlayer.layer = this.activePlayer.m_netData.m_layer;
         this.renderer.setActiveLayer(this.activePlayer.layer);
@@ -223,12 +225,12 @@ export class EditorDisplay {
             dir: v2.create(0, -1),
         };
 
-        this.objectCreator.m_updateObjFull(
+        const p = this.objectCreator.m_updateObjFull(
             ObjectType.Player,
             this.activeId,
             obj as unknown as ObjectData<ObjectType.Player>,
             this.getCtx(),
-        );
+        ) as Player;
 
         this.playerBarn.setPlayerInfo({
             playerId: 98,
@@ -294,8 +296,6 @@ export class EditorDisplay {
             ceilingDamaged: false,
             ceilingDead: false,
             hasPuzzle: false,
-            puzzleSolved: false,
-            puzzleErrSeq: 0,
         };
         const obj = this.objectCreator.m_updateObjFull(
             ObjectType.Building,
@@ -332,15 +332,29 @@ export class EditorDisplay {
 
         if (def.mapGroundPatches) {
             for (const patch of def.mapGroundPatches) {
-                this.mapMsg.groundPatches.push({
-                    min: math.addAdjust(pos, patch.bound.min, ori),
-                    max: math.addAdjust(pos, patch.bound.max, ori),
-                    color: patch.color,
-                    roughness: patch.roughness ?? 0,
-                    offsetDist: patch.offsetDist ?? 0,
-                    order: patch.order ?? 0,
-                    useAsMapShape: patch.useAsMapShape ?? true,
-                });
+                if (patch.bound.type === collider.Type.Circle) {
+                    const worldCenter = math.addAdjust(pos, patch.bound.pos, ori);
+                    this.mapMsg.groundPatches.push({
+                        bound: collider.createCircle(worldCenter, patch.bound.rad),
+                        color: patch.color,
+                        roughness: patch.roughness ?? 0,
+                        offsetDist: patch.offsetDist ?? 0,
+                        order: patch.order ?? 0,
+                        useAsMapShape: patch.useAsMapShape ?? true,
+                    });
+                } else {
+                    this.mapMsg.groundPatches.push({
+                        bound: collider.createAabb(
+                            math.addAdjust(pos, patch.bound.min, ori),
+                            math.addAdjust(pos, patch.bound.max, ori),
+                        ),
+                        color: patch.color,
+                        roughness: patch.roughness ?? 0,
+                        offsetDist: patch.offsetDist ?? 0,
+                        order: patch.order ?? 0,
+                        useAsMapShape: patch.useAsMapShape ?? true,
+                    });
+                }
             }
         }
 
@@ -483,8 +497,12 @@ export class EditorDisplay {
 
     resetObj() {
         const cfg = this.config.get("buildingEditor")!;
-        const mapName = cfg.map;
+        let mapName = cfg.map;
         const type = cfg.object;
+
+        if (!(mapName in MapDefs)) {
+            mapName = "main";
+        }
 
         this.resourceManager.loadMapAssets(mapName);
 
@@ -505,7 +523,7 @@ export class EditorDisplay {
         this.clearAllObjs();
         const center = v2.create(this.map.width / 2, this.map.height / 2);
 
-        if (type) {
+        if (type && MapObjectDefs.typeExists(type)) {
             this.addAuto(type, center, 0, 0, 1);
         }
 
@@ -606,7 +624,7 @@ export class EditorDisplay {
         );
         this.particleBarn.m_update(dt, this.camera);
         this.decalBarn.m_update(dt, this.camera, this.renderer);
-        this.renderer.m_update(dt, this.camera, this.map);
+        this.renderer.m_update(dt, this.camera, this.map, debug.structures.layerMasks);
         this.activePlayer.playActionStartSfx = false;
 
         this.render(debug);

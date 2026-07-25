@@ -56,6 +56,12 @@ export const PerkProperties = {
     fabricate: {
         refillInterval: 30, // means refill every x seconds
         giveInterval: 0.08, // interval between each grenade being given until the backpack is full
+        // Odds to get each type of explosive
+        weights: {
+            frag: 60,
+            mirv: 35,
+            strobe: 5,
+        } as const,
     },
     gotw: {
         scale: 0.2,

@@ -7,6 +7,7 @@ import type { MapDef } from "../../../shared/defs/mapDefs.ts";
 import { GameObjectDefs } from "../../../shared/defs/register.ts";
 import { Action, GameConfig, GasMode, TeamMode } from "../../../shared/gameConfig.ts";
 import type { PlayerStatsMsg } from "../../../shared/net/playerStatsMsg.ts";
+import { SpectateAction } from "../../../shared/net/spectateMsg.ts";
 import type { MapIndicator, PlayerStatus } from "../../../shared/net/updateMsg.ts";
 import { coldet } from "../../../shared/utils/coldet.ts";
 import { math } from "../../../shared/utils/math.ts";
@@ -117,6 +118,7 @@ export class UiManager {
     rightCenter = $("#ui-right-center");
     leaderboardAlive = $("#ui-leaderboard-alive");
     playersAlive = $(".js-ui-players-alive");
+    playersAliveCounter = 0;
     leaderboardAliveFaction = $("#ui-leaderboard-alive-faction");
     playersAliveRed = $(".js-ui-players-alive-red");
     playersAliveBlue = $(".js-ui-players-alive-blue");
@@ -164,9 +166,7 @@ export class UiManager {
     resumeButton = $("#btn-game-resume");
 
     specStatsButton = $("#btn-spectate-view-stats");
-    specBegin = false;
-    specNext = false;
-    specPrev = false;
+    specAction = SpectateAction.None;
     specNextButton = $("#btn-spectate-next-player");
     specPrevButton = $("#btn-spectate-prev-player");
 
@@ -381,10 +381,10 @@ export class UiManager {
         });
 
         this.specNextButton.on("click", () => {
-            this.specNext = true;
+            this.specAction = SpectateAction.Next;
         });
         this.specPrevButton.on("click", () => {
-            this.specPrev = true;
+            this.specAction = SpectateAction.Prev;
         });
 
         // Touch specific buttons
@@ -901,7 +901,7 @@ export class UiManager {
             if (this.flairId != localPlayerInfo.teamId) {
                 this.flairId = localPlayerInfo.teamId;
                 // Assume red or blue for now
-                const flairColor = this.flairId == 1 ? "red" : "blue";
+                const flairColor = this.flairId == GameConfig.FactionTeam.Red ? "red" : "blue";
                 this.flairElems.css({
                     display: "block",
                     "background-image": `url(../img/gui/player-patch-${flairColor}.svg)`,
@@ -1289,7 +1289,7 @@ export class UiManager {
     }
 
     beginSpectating() {
-        this.specBegin = true;
+        this.specAction = SpectateAction.Begin;
     }
 
     hideStats() {
@@ -1520,7 +1520,7 @@ export class UiManager {
                             );
                             break;
                         case 3: {
-                            const R = playerInfo.teamId == 1
+                            const R = playerInfo.teamId == GameConfig.FactionTeam.Red
                                 ? "ui-stats-info-player-red-ribbon"
                                 : "ui-stats-info-player-blue-ribbon";
                             B.append(
@@ -1544,7 +1544,8 @@ export class UiManager {
                 });
             });
             this.statsOptions.append(restartButton);
-            if (gameOver || this.waitingForPlayers) {
+            const alive = this.playersAliveCounter + this.playersAliveRedCounter + this.playersAliveBlueCounter;
+            if (gameOver || alive === 0) {
                 restartButton.css({
                     width: device.uiLayout != device.UiLayout.Sm || device.tablet
                         ? 225
@@ -1820,6 +1821,7 @@ export class UiManager {
 
     updatePlayersAlive(alive: number) {
         this.playersAlive.html(alive);
+        this.playersAliveCounter = alive;
 
         this.leaderboardAlive.css("display", "block");
         this.leaderboardAliveFaction.css("display", "none");

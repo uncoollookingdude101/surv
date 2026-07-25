@@ -1,3 +1,4 @@
+import type { FactionTeam } from "../../gameConfig.ts";
 import type { AABB, Collider } from "../../utils/coldet.ts";
 import type { Vec2 } from "../../utils/v2.ts";
 import type { TerrainSpawnDef } from "../mapObjectsTyping.ts";
@@ -100,7 +101,7 @@ export interface BuildingDef {
     botRightObs?: string;
     ignoreMapSpawnReplacement?: boolean;
     mapGroundPatches?: Array<{
-        bound: AABB;
+        bound: Collider;
         color: number;
         order?: number;
         roughness?: number;
@@ -162,7 +163,7 @@ export interface BuildingDef {
         alpha: number;
         tint: number;
     }>;
-    teamId?: number;
+    teamId?: FactionTeam;
 }
 
 export interface FloorImage {

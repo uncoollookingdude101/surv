@@ -1,6 +1,6 @@
 {
   "name": "survev",
-  "version": "0.3.02",
+  "version": "0.3.11",
   "type": "module",
   "description": "Open Source Surviv.io Server",
   "scripts": {
@@ -16,27 +16,27 @@
     "lint:ci": "oxlint; dprint check"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=22.18.0"
   },
   "author": "Leia",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/hjson": "^2.4.6",
-    "@types/node": "^25.9.1",
-    "concurrently": "^9.2.1",
-    "dprint": "^0.54.0",
-    "oxlint": "^1.63.0",
-    "typescript": "^5.9.3"
+    "@types/node": "~22.12.0",
+    "concurrently": "^10.0.3",
+    "dprint": "^0.55.2",
+    "oxlint": "^1.74.0",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "enquirer": "^2.4.1",
     "hjson": "^3.2.2",
-    "tsx": "^4.22.3"
+    "tsx": "^4.23.1"
   },
   "workspaces": [
     "client",
     "server",
     "shared"
   ],
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@11.11.0"
 }

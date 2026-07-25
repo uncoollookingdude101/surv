@@ -1,5 +1,5 @@
 import { type GameObjectDef, type LootDef, WeaponTypeToDefs } from "../../../../shared/defs/gameObjectDefs.ts";
-import { type EmoteDef, EmotesDefs } from "../../../../shared/defs/gameObjects/emoteDefs.ts";
+import { EmotesDefs } from "../../../../shared/defs/gameObjects/emoteDefs.ts";
 import {
     type BackpackDef,
     type BoostDef,
@@ -14,7 +14,6 @@ import type { MeleeDef } from "../../../../shared/defs/gameObjects/meleeDefs.ts"
 import { PerkProperties } from "../../../../shared/defs/gameObjects/perkDefs.ts";
 import type { ThrowableDef } from "../../../../shared/defs/gameObjects/throwableDefs.ts";
 import { UnlockDefs } from "../../../../shared/defs/gameObjects/unlockDefs.ts";
-
 import { GameObjectDefs, MapObjectDefs } from "../../../../shared/defs/register.ts";
 import {
     type Action,
@@ -27,7 +26,6 @@ import {
 } from "../../../../shared/gameConfig.ts";
 import * as net from "../../../../shared/net/net.ts";
 import { ObjectType } from "../../../../shared/net/objectSerializeFns.ts";
-import type { GroupStatus } from "../../../../shared/net/updateMsg.ts";
 import { type Circle, coldet } from "../../../../shared/utils/coldet.ts";
 import { collider } from "../../../../shared/utils/collider.ts";
 import { math } from "../../../../shared/utils/math.ts";
@@ -36,11 +34,12 @@ import { v2, type Vec2 } from "../../../../shared/utils/v2.ts";
 import { Config } from "../../config.ts";
 import { validateUserName } from "../../utils/badWords.ts";
 import { IDAllocator } from "../../utils/IDAllocator.ts";
+import { Client } from "../client.ts";
 import type { Game, JoinTokenData } from "../game.ts";
 import { Group, Team } from "../group.ts";
 import { InventoryManager } from "../inventoryManager.ts";
 import { QuestManager } from "../questManager.ts";
-import { type ClientSocket, NoOpSocket } from "../socket.ts";
+import { NoOpSocket } from "../socket.ts";
 import { WeaponManager } from "../weaponManager.ts";
 import type { Building } from "./building.ts";
 import { BaseGameObject, type DamageParams, type GameObject } from "./gameObject.ts";
@@ -66,6 +65,8 @@ interface Emote {
      */
     itemType: string;
 }
+
+type FabricateThrowable = keyof typeof PerkProperties["fabricate"]["weights"];
 
 const boostHeals: Array<{ maxBoost: number; heal: number }> = [];
 {
@@ -134,39 +135,12 @@ export class PlayerBarn {
         this.playerStatusRate = net.getPlayerStatusUpdateRate(this.game.map.factionMode);
     }
 
-    randomPlayer(player?: Player) {
-        const livingPlayers = player
-            ? this.livingPlayers.filter((p) => p != player)
-            : this.livingPlayers;
-        return livingPlayers[util.randomInt(0, livingPlayers.length - 1)];
-    }
-
-    addPlayer(socket: ClientSocket<Player | undefined>, joinMsg: net.JoinMsg) {
-        const joinData = this.game.joinTokens.get(joinMsg.matchPriv);
-
-        if (!joinData || joinData.expiresAt < Date.now()) {
-            socket.close();
-            if (joinData) {
-                this.game.joinTokens.delete(joinMsg.matchPriv);
-            }
-            return;
-        }
-        this.game.joinTokens.delete(joinMsg.matchPriv);
-
-        if (Config.rateLimitsEnabled) {
-            const count = this.livingPlayers.filter(
-                (p) =>
-                    p.ip === socket.ip()
-                    || p.findGameIp == joinData.findGameIp
-                    || (joinData.userId !== null && p.userId === joinData.userId),
-            );
-            if (count.length >= 5) {
-                socket.closeWithReason("rate_limited");
-                return;
-            }
-        }
-
-        const result = this.getGroupAndTeam(joinData);
+    addPlayer(
+        client: Client,
+        joinMsg: net.JoinMsg,
+        joinData: JoinTokenData,
+    ) {
+        const result = this.getGroupAndTeam(joinData.groupData);
         const group = result?.group;
         // solo 50v50 just chooses the smallest team everytime no matter what
         const team = this.game.map.factionMode && !this.game.isTeamMode
@@ -194,7 +168,7 @@ export class PlayerBarn {
         if (Config.uniqueInGameNames) {
             let count = 0;
             const loggedOutPlayers = this.game.playerBarn.players.filter(
-                (p) => !p.userId,
+                (p) => !p.client.userId,
             );
             while (loggedOutPlayers.find((p) => p.name === finalName)) {
                 const postFix = `-${++count}`;
@@ -210,11 +184,10 @@ export class PlayerBarn {
             this.game,
             pos,
             layer,
+            client,
             finalName,
-            socket as ClientSocket<Player>,
-            joinMsg,
-            joinData.findGameIp,
-            joinData.userId,
+            joinMsg.bot,
+            joinMsg.isMobile,
             joinData.quests,
         );
 
@@ -258,9 +231,8 @@ export class PlayerBarn {
         this.game.objectRegister.register(player);
         this.players.push(player);
         this.livingPlayers.push(player);
-        if (!this.game.modeManager.isSolo) {
-            this.livingPlayers.sort((a, b) => a.teamId - b.teamId);
-        }
+        this.livingPlayers.sort((a, b) => a.teamId - b.teamId);
+
         this.aliveCountDirty = true;
 
         this.game.updateData();
@@ -272,6 +244,7 @@ export class PlayerBarn {
         team?: Team;
         pos?: Vec2;
         name?: string;
+        userId?: string;
     }): Player {
         let group = params.group;
         let team = params.team;
@@ -284,18 +257,19 @@ export class PlayerBarn {
             team = this.getSmallestTeam();
         }
 
-        const socket = new NoOpSocket<Player>();
+        const client = new Client(this.game, new NoOpSocket(), params.userId || null, "");
+        this.game.clientBarn.clients.push(client);
 
         const player = new Player(
             this.game,
             params.pos ?? v2.create(this.game.map.width / 2, this.game.map.height / 2),
             0,
-            params.name ?? `TEST-${this.testPlayerCount++}`,
-            socket,
-            new net.JoinMsg(),
-            "",
-            null,
+            client,
+            params.name ?? `TEST-${String.fromCharCode(65 + this.testPlayerCount++)}`,
+            false,
+            false,
         );
+        client.player = player;
 
         this.activatePlayer(player, group, team);
 
@@ -347,9 +321,44 @@ export class PlayerBarn {
                     );
                     if (promotablePlayers.length == 0) continue;
 
-                    const randomPlayer = promotablePlayers[
-                        util.randomInt(0, promotablePlayers.length - 1)
-                    ];
+                    // logic to combat people joining with multiple tabs to role farm
+                    const activePromotablePlayers = promotablePlayers.filter((player) => {
+                        const total = player.movingTicker + player.stayingStillTicker;
+                        if (total > 5) {
+                            // for players alive for more than 5 seconds, filter out the ones that have stayed still
+                            // for over 50% of the time
+                            const timeAfk = player.stayingStillTicker / total;
+                            if (timeAfk > 0.5) {
+                                return false;
+                            }
+                        }
+                        // also filter out players that haven't moved for the last 5 seconds
+                        if (player.timeWithoutMoving > 5) {
+                            return false;
+                        }
+
+                        // for people joining with the same account
+                        // only count their first join thats still connected
+                        if (player.userId) {
+                            const playersWithThisAccount = this.livingPlayers.filter(otherPlayer => {
+                                return !otherPlayer.disconnected && otherPlayer.userId === player.userId;
+                            });
+                            const thisIdx = playersWithThisAccount.indexOf(player);
+                            if (thisIdx !== 0) return false;
+                        }
+
+                        return true;
+                    });
+
+                    // if we don't have any active player to be promoted
+                    // then no harm in promoting possibly AFK players...
+                    const finalPlayers = activePromotablePlayers.length === 0
+                        ? promotablePlayers
+                        : activePromotablePlayers;
+
+                    if (!finalPlayers.length) continue;
+
+                    const randomPlayer = util.randomItem(finalPlayers);
                     randomPlayer.promoteToRole(scheduledRole.role);
                 }
             }
@@ -380,18 +389,14 @@ export class PlayerBarn {
             this.livingPlayers.sort((a, b) => a.teamId - b.teamId);
         }
 
+        for (const spectator of player.spectators) {
+            spectator.spectating = spectator.getNewPlayerToSpectate();
+        }
+
         player.obstacleOutfit?.destroy();
 
         this.game.checkGameOver();
         this.game.updateData();
-    }
-
-    sendMsgs() {
-        for (let i = 0; i < this.players.length; i++) {
-            const player = this.players[i];
-            if (player.disconnected) continue;
-            player.sendMsgs();
-        }
     }
 
     flush() {
@@ -415,7 +420,6 @@ export class PlayerBarn {
             player.inventoryDirty = false;
             player.weapsDirty = false;
             player.spectatorCountDirty = false;
-            player.activeIdDirty = false;
             player.groupStatusDirty = false;
             if (flushPlayerStatus) {
                 player.playerStatusDirty = false;
@@ -448,18 +452,6 @@ export class PlayerBarn {
         }
     }
 
-    isTeamGameOver(): boolean {
-        const groupAlives = [...this.groups.values()].filter(
-            (group) => !group.allDeadOrDisconnected,
-        );
-
-        if (groupAlives.length <= 1) {
-            return true;
-        }
-
-        return false;
-    }
-
     getAliveGroups(): Group[] {
         return [...this.groups.values()].filter(
             (group) => group.livingPlayers.length > 0,
@@ -485,7 +477,7 @@ export class PlayerBarn {
         return team;
     }
 
-    getGroupAndTeam({ groupData }: JoinTokenData):
+    getGroupAndTeam(groupData: JoinTokenData["groupData"]):
         | {
             group?: Group;
             team?: Team;
@@ -538,23 +530,6 @@ export class PlayerBarn {
         this.groups.push(group);
         this.groupsByHash.set(hash, group);
         return group;
-    }
-
-    nextTeam(currentTeam: Group) {
-        const aliveTeams = Array.from(this.groups.values()).filter(
-            (t) => !t.allDeadOrDisconnected,
-        );
-        const currentTeamIndex = aliveTeams.indexOf(currentTeam);
-        const newIndex = (currentTeamIndex + 1) % aliveTeams.length;
-        return aliveTeams[newIndex];
-    }
-
-    prevTeam(currentTeam: Group) {
-        const aliveTeams = Array.from(this.groups.values()).filter(
-            (t) => !t.allDeadOrDisconnected,
-        );
-        const currentTeamIndex = aliveTeams.indexOf(currentTeam);
-        return aliveTeams.at(currentTeamIndex - 1) ?? currentTeam;
     }
 
     getPlayerWithHighestKills(): Player | undefined {
@@ -625,7 +600,6 @@ export class Player extends BaseGameObject {
     inventoryDirty = true;
     weapsDirty = true;
     spectatorCountDirty = false;
-    activeIdDirty = true;
     hasFiredFlare = false;
     flareTimer = 0;
 
@@ -691,6 +665,11 @@ export class Player extends BaseGameObject {
     speed: number = 0;
     moveVel = v2.create(0, 0);
 
+    // used to filter out AFK players on 50v50 role promotions
+    movingTicker = 0;
+    stayingStillTicker = 0;
+    timeWithoutMoving = 0;
+
     shotSlowdownTimer: number = 0;
 
     freeSwitchTimer: number = 0;
@@ -698,10 +677,7 @@ export class Player extends BaseGameObject {
     indoors = false;
     insideZoomRegion = false;
 
-    private _zoom: number = 0;
-    // zoom used for the area in which the server will send objects to the client
-    private _cullingZoom: number = 0;
-    private _cullingZoomTicker = 0;
+    _zoom: number = 0;
 
     get zoom(): number {
         return this._zoom;
@@ -710,15 +686,6 @@ export class Player extends BaseGameObject {
     set zoom(zoom: number) {
         if (zoom === this._zoom) return;
         assert(zoom !== 0);
-        // when changing to a lower zoom level
-        // we want to delay changing the culling zoom
-        // so objects only disappear from the client after the scope animation
-        // has finished, instead of flashing out of existence
-        if (zoom < this._cullingZoom) {
-            this._cullingZoomTicker = 0.5;
-        } else {
-            this._cullingZoom = zoom;
-        }
         this._zoom = zoom;
         this.zoomDirty = true;
     }
@@ -742,76 +709,21 @@ export class Player extends BaseGameObject {
         return this.weaponManager.activeWeapon;
     }
 
-    private _disconnected = false;
-
-    get disconnected(): boolean {
-        return this._disconnected;
-    }
-
-    set disconnected(disconnected: boolean) {
-        if (this.disconnected === disconnected) return;
-
-        this._disconnected = disconnected;
-        this.setGroupStatuses();
-    }
-
-    disconnect(reason?: string) {
-        this.disconnected = true;
-        if (reason) {
-            this.socket.closeWithReason(reason);
-        } else {
-            this.socket.close();
-        }
-    }
-
     private _spectatorCount = 0;
-    set spectatorCount(spectatorCount: number) {
-        if (this._spectatorCount === spectatorCount) return;
-        this._spectatorCount = spectatorCount;
-        this._spectatorCount = math.clamp(this._spectatorCount, 0, 255); // byte size limit
-        this.spectatorCountDirty = true;
+
+    recalculateSpectatorCount() {
+        const newCount = [...this.spectators].filter(c => !c.specAnon).length;
+        if (this._spectatorCount !== newCount) {
+            this._spectatorCount = newCount;
+            this.spectatorCountDirty = true;
+        }
     }
 
     get spectatorCount(): number {
         return this._spectatorCount;
     }
 
-    /** true when player starts spectating new player, only stays true for that given tick */
-    startedSpectating: boolean = false;
-
-    private _spectating?: Player;
-
-    get spectating(): Player | undefined {
-        return this._spectating;
-    }
-
-    set spectating(player: Player | undefined) {
-        if (player === this) {
-            throw new Error(
-                `Player ${player.name} tried spectate themselves (how tf did this happen?)`,
-            );
-        }
-        if (this._spectating === player) return;
-
-        if (this._spectating) {
-            this._spectating.spectatorCount--;
-            this._spectating.spectators.delete(this);
-        }
-        if (player) {
-            player.spectatorCount++;
-            player.spectators.add(this);
-        }
-
-        this._spectating = player;
-        this.startedSpectating = true;
-    }
-
-    spectateCooldown = 0;
-    spectateCooldownCount = 0;
-    spectateMsgCount = 0;
-    spectateMsgTicker = 0;
-
-    spectators = new Set<Player>();
+    spectators = new Set<Client>();
 
     outfit = "outfitBase";
 
@@ -912,7 +824,7 @@ export class Player extends BaseGameObject {
     /** for the perk fabricate, fills inventory with frags every 12 seconds */
     fabricateRefillTicker = 0;
     fabricateGiveTicker = 0;
-    fabricateThrowablesLeft = 0;
+    fabricateThrowablesLeft: Array<FabricateThrowable> = [];
 
     // "Gabby Ghost" perk random emojis
     chattyTicker = 0;
@@ -969,7 +881,7 @@ export class Player extends BaseGameObject {
         msg.role = role;
         msg.assigned = true;
         msg.playerId = this.__id;
-        this.game.broadcastMsg(net.MsgType.RoleAnnouncement, msg);
+        this.game.clientBarn.broadcastMsg(net.MsgType.RoleAnnouncement, msg);
 
         switch (role) {
             case "leader":
@@ -982,6 +894,60 @@ export class Player extends BaseGameObject {
                 this.boost = 100;
                 this.giveHaste(GameConfig.HasteType.Windwalk, 5);
                 break;
+        }
+
+        // A list of the new perks to add must be built first
+        const newPerks = new Set<string>();
+
+        // Random perk addition logiic
+        if (role === "classless") {
+            const perkPool = PerkProperties.classless.perkPool;
+            const candidatePerks = perkPool.filter((perk) => !this.hasPerk(perk));
+            const newPerk = util.randomItem(candidatePerks);
+
+            if (newPerk) {
+                newPerks.add(newPerk);
+            }
+        } else if (roleDef.perks) {
+            // client can only show 4 perks in the UI
+            // if this role has 4 or more perks, drop all our droppable perks
+            if (roleDef.perks.length >= 4) {
+                for (const perk of this.perks) {
+                    if (perk.droppable) {
+                        this.dropLoot(perk.type);
+                        this.removePerk(perk.type);
+                    }
+                }
+            }
+            for (let i = 0; i < roleDef.perks.length; i++) {
+                const perkOrPerkFunc = roleDef.perks[i];
+                const perkType = typeof perkOrPerkFunc === "string"
+                    ? perkOrPerkFunc
+                    : perkOrPerkFunc();
+
+                newPerks.add(perkType);
+            }
+        }
+        // Then, remove perks from the old role
+        // But skip perks that are going to be readded to avoid double adding them or removing / readding pointlessly.
+        for (let i = 0; i < this.perks.length; i++) {
+            const perkType = this.perks[i].type;
+            if (this.perks[i].isFromRole) {
+                if (role != "classless" && !newPerks.has(perkType)) {
+                    this.removePerk(perkType);
+                    i--;
+                } else {
+                    newPerks.delete(perkType);
+                }
+            } else if (this.perks[i].droppable && newPerks.has(perkType)) {
+                this.dropLoot(perkType);
+                this.removePerk(perkType);
+                i--;
+            }
+        }
+
+        for (const perk of newPerks) {
+            this.addPerk(perk, false, undefined, true);
         }
 
         if (roleDef.defaultItems) {
@@ -1077,60 +1043,6 @@ export class Player extends BaseGameObject {
                 this.weaponManager.setWeapon(i, trueWeapon.type, trueWeapon.ammo);
             }
         }
-
-        // A list of the new perks to add must be built first
-        const newPerks = new Set<string>();
-
-        // Random perk addition logiic
-        if (role === "classless") {
-            const perkPool = PerkProperties.classless.perkPool;
-            const candidatePerks = perkPool.filter((perk) => !this.hasPerk(perk));
-            const newPerk = util.randomItem(candidatePerks);
-
-            if (newPerk) {
-                newPerks.add(newPerk);
-            }
-        } else if (roleDef.perks) {
-            // client can only show 4 perks in the UI
-            // if this role has 4 or more perks, drop all our droppable perks
-            if (roleDef.perks.length >= 4) {
-                for (const perk of this.perks) {
-                    if (perk.droppable) {
-                        this.dropLoot(perk.type);
-                        this.removePerk(perk.type);
-                    }
-                }
-            }
-            for (let i = 0; i < roleDef.perks.length; i++) {
-                const perkOrPerkFunc = roleDef.perks[i];
-                const perkType = typeof perkOrPerkFunc === "string"
-                    ? perkOrPerkFunc
-                    : perkOrPerkFunc();
-
-                newPerks.add(perkType);
-            }
-        }
-        // Then, remove perks from the old role
-        // But skip perks that are going to be readded to avoid double adding them or removing / readding pointlessly.
-        for (let i = 0; i < this.perks.length; i++) {
-            const perkType = this.perks[i].type;
-            if (this.perks[i].isFromRole) {
-                if (role != "classless" && !newPerks.has(perkType)) {
-                    this.removePerk(perkType);
-                    i--;
-                } else {
-                    newPerks.delete(perkType);
-                }
-            } else if (this.perks[i].droppable && newPerks.has(perkType)) {
-                this.dropLoot(perkType);
-                this.removePerk(perkType);
-                i--;
-            }
-        }
-
-        for (const perk of newPerks) {
-            this.addPerk(perk, false, undefined, true);
-        }
     }
 
     roleSelect(role: string): void {
@@ -1187,7 +1099,7 @@ export class Player extends BaseGameObject {
             msg.role = "kill_leader";
             msg.assigned = true;
             msg.playerId = this.__id;
-            this.game.broadcastMsg(net.MsgType.RoleAnnouncement, msg);
+            this.game.clientBarn.broadcastMsg(net.MsgType.RoleAnnouncement, msg);
         }
     }
 
@@ -1278,6 +1190,7 @@ export class Player extends BaseGameObject {
             }
             case "fabricate":
                 this.fabricateRefillTicker = 0;
+                this.fabricateThrowablesLeft = [];
                 break;
             case "firepower":
                 this.weaponManager.clampGunsAmmo();
@@ -1332,9 +1245,14 @@ export class Player extends BaseGameObject {
         return surface;
     }
 
-    socket: ClientSocket<Player>;
+    client: Client;
 
-    ack = 0;
+    get userId() {
+        return this.client.userId;
+    }
+    get disconnected() {
+        return this.client.disconnected;
+    }
 
     name: string;
     isMobile: boolean;
@@ -1368,6 +1286,7 @@ export class Player extends BaseGameObject {
     groupId = 0;
 
     loadout = {
+        outfit: "outfitBase",
         heal: "heal_basic",
         boost: "boost_basic",
         emotes: [...GameConfig.defaultEmoteLoadout],
@@ -1390,8 +1309,6 @@ export class Player extends BaseGameObject {
     kills = 0;
     timeAlive = 0;
 
-    msgsToSend: Array<{ type: number; msg: net.Msg }> = [];
-
     weaponManager = new WeaponManager(this);
     recoilTicker = 0;
 
@@ -1407,35 +1324,23 @@ export class Player extends BaseGameObject {
      */
     matchDataId: number;
 
-    userId: string | null = null;
-    ip: string;
-    // see comment on server/src/api/schema.ts
-    // about logging find_game IP's
-    findGameIp: string;
-
     constructor(
         game: Game,
         pos: Vec2,
         layer: number,
+        client: Client,
         name: string,
-        socket: ClientSocket<Player>,
-        joinMsg: net.JoinMsg,
-        findGameIp: string,
-        userId: string | null,
+        isBot: boolean,
+        isMobile: boolean,
         questIds?: string[],
     ) {
         super(game, pos);
 
-        this.matchDataId = game.playerBarn.nextMatchDataId++;
-
         this.layer = layer;
-
         this.name = name;
-        this.socket = socket;
-        socket.setUserData(this);
-        this.ip = socket.ip();
-        this.findGameIp = findGameIp;
-        this.userId = userId;
+        this.client = client;
+        this.isMobile = isMobile;
+        this.bot = Config.debug.allowBots && isBot;
 
         this.questManager.quests = (questIds ?? []).map((id) => ({
             id,
@@ -1443,11 +1348,9 @@ export class Player extends BaseGameObject {
             totalDelta: 0,
         }));
 
-        this.isMobile = joinMsg.isMobile;
+        this.matchDataId = game.playerBarn.nextMatchDataId++;
 
         this.weapons = this.weaponManager.weapons;
-
-        this.bot = Config.debug.allowBots && joinMsg.bot;
 
         let defaultItems = GameConfig.player.defaultItems;
 
@@ -1508,22 +1411,10 @@ export class Player extends BaseGameObject {
 
         this.weaponManager.showNextThrowable();
         this.recalculateScale();
-
-        this._cullingZoom = this.zoom;
     }
 
     update(dt: number): void {
         if (this.dead) {
-            this.spectateCooldown -= dt;
-
-            if (this.spectateMsgCount > 0) {
-                this.spectateMsgTicker += dt;
-                if (this.spectateMsgTicker > 3) {
-                    this.spectateMsgCount--;
-                    this.spectateMsgTicker = 0;
-                }
-            }
-
             if (!this.sentDeathEmote) {
                 this.sendDeathEmoteTicker -= dt;
                 if (this.sendDeathEmoteTicker <= 0) {
@@ -1567,8 +1458,7 @@ export class Player extends BaseGameObject {
             if (this.roleMenuTicker <= 0) {
                 this.roleMenuTicker = 0;
                 const roleChoices = this.game.map.mapDef.gameMode.perkModeRoles!;
-                const randomRole = roleChoices[util.randomInt(0, roleChoices.length - 1)];
-                this.roleSelect(randomRole);
+                this.roleSelect(util.randomItem(roleChoices));
             }
         }
 
@@ -1704,7 +1594,7 @@ export class Player extends BaseGameObject {
             const emotes = Object.keys(EmotesDefs);
 
             this.game.playerBarn.addEmote(
-                emotes[Math.floor(Math.random() * emotes.length)],
+                util.randomItem(emotes),
                 this.__id,
             );
         }
@@ -1905,16 +1795,17 @@ export class Player extends BaseGameObject {
         }
 
         if (this.hasPerk("fabricate")) {
-            if (this.fabricateThrowablesLeft > 0) {
+            if (this.fabricateThrowablesLeft.length > 0) {
                 this.fabricateGiveTicker -= dt;
                 if (this.fabricateGiveTicker < 0) {
                     this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                    this.invManager.give("frag", 1);
-                    this.fabricateThrowablesLeft--;
+
+                    const item = this.fabricateThrowablesLeft.shift()!;
+                    this.invManager.give(item, 1);
 
                     const msg = new net.PickupMsg();
                     msg.type = net.PickupMsgType.Success;
-                    msg.item = "frag";
+                    msg.item = item;
                     msg.count = 1;
 
                     if (
@@ -1923,7 +1814,7 @@ export class Player extends BaseGameObject {
                         this.weaponManager.showNextThrowable();
                     }
 
-                    this.msgsToSend.push({ type: net.MsgType.Pickup, msg });
+                    this.client.sendMsg(net.MsgType.Pickup, msg);
                 }
             }
 
@@ -2038,7 +1929,7 @@ export class Player extends BaseGameObject {
                 const current = this.invManager.get("strobe");
                 const throwablesToGive = Math.max(maxSize - current, 0);
 
-                this.fabricateThrowablesLeft = throwablesToGive;
+                this.fabricateThrowablesLeft = nextQueue;
                 this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
                 this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
             }
@@ -2085,16 +1976,25 @@ export class Player extends BaseGameObject {
 
         v2.set(this.posOld, this.pos);
 
-        v2.set(this.vel, v2.mul(this.vel, 1 / (1 + dt * 4)));
-        v2.set(this.pos, v2.add(this.pos, v2.mul(this.vel, dt)));
+        if (!v2.eq(this.vel, v2.create(0, 0), 0.01)) {
+            v2.set(this.vel, v2.mul(this.vel, 1 / (1 + dt * 4)));
+            v2.set(this.pos, v2.add(this.pos, v2.mul(this.vel, dt)));
+        }
 
         const hasTreeClimbing = this.hasPerk("tree_climbing");
 
         let steps: number;
-        if (movement.x !== 0 || movement.y !== 0) {
+
+        if (!v2.eq(movement, v2.create(0, 0))) {
             this.recalculateSpeed(hasTreeClimbing);
             steps = Math.round(math.max(this.speed * dt + 5, 5));
+
+            this.movingTicker += dt;
+            this.timeWithoutMoving = 0;
         } else {
+            this.timeWithoutMoving += dt;
+            this.stayingStillTicker += dt;
+
             this.speed = 0;
             steps = 1;
         }
@@ -2409,19 +2309,6 @@ export class Player extends BaseGameObject {
             this.zoom = finalZoom;
         }
 
-        if (this._cullingZoom !== this.zoom) {
-            this._cullingZoomTicker -= dt;
-            if (this._cullingZoomTicker <= 0) {
-                this._cullingZoom = this.zoom;
-            }
-        }
-        if (this.portrait !== this._cullingPortrait) {
-            this._cullingPortraitTicker -= dt;
-            if (this._cullingPortraitTicker <= 0) {
-                this._cullingPortrait = this.portrait;
-            }
-        }
-
         if (insideNoZoomRegion) {
             this.insideZoomRegion = false;
         }
@@ -2556,364 +2443,6 @@ export class Player extends BaseGameObject {
                 this.debug.moveObjMode.originalPos = undefined;
             }
         }
-    }
-
-    private _firstUpdate = true;
-    visibleObjects = new Set<GameObject>();
-    visibleMapIndicators = new Set<MapIndicator>();
-
-    msgStream = new net.MsgStream(new ArrayBuffer(65536));
-    sendMsgs(): void {
-        const msgStream = this.msgStream;
-        const game = this.game;
-        const playerBarn = game.playerBarn;
-        msgStream.stream.index = 0;
-
-        if (this._firstUpdate) {
-            const joinedMsg = new net.JoinedMsg();
-            joinedMsg.teamMode = this.game.teamMode;
-            joinedMsg.playerId = this.__id;
-            joinedMsg.started = game.started;
-            joinedMsg.teamMode = game.teamMode;
-            joinedMsg.emotes = this.loadout.emotes;
-            this.sendMsg(net.MsgType.Joined, joinedMsg);
-
-            const mapStream = game.map.mapStream.stream;
-
-            msgStream.stream.writeBytes(mapStream, 0, mapStream.byteIndex);
-        }
-
-        if (playerBarn.aliveCountDirty || this._firstUpdate) {
-            const aliveMsg = new net.AliveCountsMsg();
-            this.game.modeManager.updateAliveCounts(aliveMsg.teamAliveCounts);
-            msgStream.serializeMsg(net.MsgType.AliveCounts, aliveMsg);
-        }
-
-        const updateMsg = new net.UpdateMsg();
-
-        updateMsg.ack = this.ack;
-
-        if (game.gas.dirty || this._firstUpdate) {
-            updateMsg.gasDirty = true;
-            updateMsg.gasData = game.gas;
-        }
-
-        if (game.gas.timeDirty || this._firstUpdate) {
-            updateMsg.gasTDirty = true;
-            updateMsg.gasT = game.gas.gasT;
-        }
-
-        let player: Player;
-        if (this.spectating == undefined) {
-            // not spectating anyone
-            player = this;
-        } else if (this.spectating.dead) {
-            // was spectating someone but they died so find new player to spectate
-            player = this.spectating.killedBy && !this.spectating.killedBy.dead
-                ? this.spectating.killedBy
-                : playerBarn.randomPlayer();
-            if (player === this) {
-                player = playerBarn.randomPlayer();
-            }
-            this.spectating = player;
-        } else {
-            // spectating someone currently who is still alive
-            player = this.spectating;
-        }
-        // temporary guard while the spectating code is not fixed
-        if (!player) {
-            player = this;
-        }
-
-        const radius = player._cullingZoom + 4;
-        let width = player._cullingZoom + 4;
-        // client zoom tries to keep a 16/9 aspect ratio, mirror it here
-        let height = width / (16 / 9);
-        if (this._cullingPortrait) {
-            let tmp = width;
-            width = height;
-            height = tmp;
-        }
-        const rect = collider.createAabbExtents(player.pos, v2.create(width, height));
-
-        const newVisibleObjects = game.grid.intersectColliderSet(rect);
-        // client crashes if active player is not visible
-        // so make sure its always added to visible objects
-        newVisibleObjects.add(this);
-        newVisibleObjects.add(player);
-
-        for (const obj of this.visibleObjects) {
-            if (!newVisibleObjects.has(obj)) {
-                updateMsg.delObjIds.push(obj.__id);
-            }
-        }
-
-        for (const obj of newVisibleObjects) {
-            if (
-                !this.visibleObjects.has(obj)
-                || game.objectRegister.dirtyFull[obj.__id]
-            ) {
-                updateMsg.fullObjects.push(obj);
-            } else if (game.objectRegister.dirtyPart[obj.__id]) {
-                updateMsg.partObjects.push(obj);
-            }
-        }
-
-        this.visibleObjects = newVisibleObjects;
-
-        updateMsg.activePlayerId = player.__id;
-        if (this.startedSpectating) {
-            updateMsg.activePlayerIdDirty = true;
-
-            // build the active player data object manually
-            // To avoid setting the spectating player fields to dirty
-            updateMsg.activePlayerData = {
-                healthDirty: true,
-                health: player.health,
-                boostDirty: true,
-                boost: player.boost,
-                zoomDirty: true,
-                zoom: player.zoom,
-                actionDirty: true,
-                action: player.action,
-                inventoryDirty: true,
-                inventory: player.inventory,
-                scope: player.scope,
-                weapsDirty: true,
-                curWeapIdx: player.curWeapIdx,
-                weapons: player.weapons,
-                spectatorCountDirty: true,
-                spectatorCount: player.spectatorCount,
-            };
-            this.startedSpectating = false;
-        } else {
-            updateMsg.activePlayerIdDirty = player.activeIdDirty;
-            updateMsg.activePlayerData = player;
-        }
-
-        updateMsg.playerInfos = player._firstUpdate
-            ? playerBarn.players
-            : playerBarn.newPlayers;
-
-        updateMsg.deletedPlayerIds = playerBarn.deletedPlayers;
-
-        if (playerBarn.playerStatusTicker > playerBarn.playerStatusRate) {
-            let statuses = player.getPlayerStatus();
-            updateMsg.playerStatus = statuses;
-            updateMsg.playerStatusDirty = true;
-        }
-
-        if (player.groupStatusDirty) {
-            const teamPlayers = player.group!.players;
-
-            let statuses: GroupStatus[] = [];
-            for (const p of teamPlayers) {
-                statuses.push({
-                    health: p.health,
-                    disconnected: p.disconnected,
-                });
-            }
-            updateMsg.groupStatus = statuses;
-            updateMsg.groupStatusDirty = true;
-        }
-
-        const shouldSendEmote = (emote: Emote) => {
-            const emotePlayer = game.objectRegister.getById(emote.playerId) as
-                | Player
-                | undefined;
-
-            const emoteDef = GameObjectDefs.typeToDef(emote.type);
-
-            if (emotePlayer) {
-                if (!emote.isPing && !player.visibleObjects.has(emotePlayer)) {
-                    return false;
-                }
-
-                // regular emotes: always send if visible
-                if (!emote.isPing && !(emoteDef as EmoteDef).teamOnly) {
-                    return true;
-                }
-
-                // part of the same group
-                if (emotePlayer?.groupId === player.groupId) {
-                    return true;
-                }
-
-                // part of the same team
-                if (emotePlayer?.teamId === player.teamId && !emote.isPing) {
-                    return true;
-                }
-
-                // faction team leader
-                if (
-                    (emotePlayer.role === "leader" || emotePlayer.role === "captain")
-                    && emotePlayer.teamId === player.teamId
-                ) {
-                    return true;
-                }
-            }
-
-            // always send map events pings
-            if (emote.isPing && emoteDef.type === "ping" && emoteDef.mapEvent) {
-                return true;
-            }
-
-            return false;
-        };
-
-        for (let i = 0; i < playerBarn.emotes.length; i++) {
-            const emote = playerBarn.emotes[i];
-            if (shouldSendEmote(emote)) {
-                updateMsg.emotes.push(emote);
-            }
-        }
-
-        const extendedRadius = 1.1 * radius;
-        const radiusSquared = extendedRadius * extendedRadius;
-
-        const bullets = game.bulletBarn.newBullets;
-        for (let i = 0; i < bullets.length; i++) {
-            const bullet = bullets[i];
-            if (
-                v2.lengthSqr(v2.sub(bullet.pos, player.pos)) < radiusSquared
-                || v2.lengthSqr(v2.sub(bullet.clientEndPos, player.pos)) < radiusSquared
-                || coldet.intersectSegmentCircle(
-                    bullet.pos,
-                    bullet.clientEndPos,
-                    player.pos,
-                    extendedRadius,
-                )
-            ) {
-                updateMsg.bullets.push(bullet);
-            }
-        }
-
-        for (let i = 0; i < game.explosionBarn.newExplosions.length; i++) {
-            const explosion = game.explosionBarn.newExplosions[i];
-            const rad = explosion.rad + extendedRadius;
-            if (v2.lengthSqr(v2.sub(explosion.pos, player.pos)) < rad * rad) {
-                updateMsg.explosions.push(explosion);
-            }
-        }
-
-        const planes = this.game.planeBarn.planes;
-        for (let i = 0; i < planes.length; i++) {
-            const plane = planes[i];
-            if (
-                coldet.testCircleAabb(plane.pos, plane.rad, rect.min, rect.max)
-                && coldet.testPointAabb(
-                    plane.pos,
-                    this.game.planeBarn.planeBounds.min,
-                    this.game.planeBarn.planeBounds.max,
-                )
-            ) {
-                updateMsg.planes.push(plane);
-            }
-        }
-        const newAirstrikeZones = this.game.planeBarn.newAirstrikeZones;
-        for (let i = 0; i < newAirstrikeZones.length; i++) {
-            const zone = newAirstrikeZones[i];
-            updateMsg.airstrikeZones.push(zone);
-        }
-
-        const indicators = this.game.mapIndicatorBarn.mapIndicators;
-        for (let i = 0; i < indicators.length; i++) {
-            const indicator = indicators[i];
-            if (indicator.dirty || !this.visibleMapIndicators.has(indicator)) {
-                updateMsg.mapIndicators.push(indicator);
-                this.visibleMapIndicators.add(indicator);
-            }
-            if (indicator.dead) {
-                this.visibleMapIndicators.delete(indicator);
-            }
-        }
-
-        if (playerBarn.killLeaderDirty || this._firstUpdate) {
-            updateMsg.killLeaderDirty = true;
-            updateMsg.killLeaderId = playerBarn.killLeader?.__id ?? 0;
-            updateMsg.killLeaderKills = playerBarn.killLeader?.kills ?? 0;
-        }
-
-        msgStream.serializeMsg(net.MsgType.Update, updateMsg);
-
-        for (let i = 0; i < this.msgsToSend.length; i++) {
-            const msg = this.msgsToSend[i];
-            msgStream.serializeMsg(msg.type, msg.msg);
-        }
-
-        this.msgsToSend.length = 0;
-
-        const globalMsgStream = this.game.msgsToSend.stream;
-        msgStream.stream.writeBytes(globalMsgStream, 0, globalMsgStream.byteIndex);
-
-        this.sendData(msgStream.getBuffer());
-        this._firstUpdate = false;
-    }
-
-    spectate(spectateMsg: net.SpectateMsg): void {
-        if (!this.dead) return;
-
-        if (this.spectateCooldown >= 0.75) {
-            this.spectateCooldownCount++;
-
-            if (this.spectateCooldownCount > 10) {
-                this.disconnect();
-                this.game.logger.error(
-                    `Game ${this.game.id} - Player ${this.name} disconnected for spamming SpectateMsg (cooldown)`,
-                );
-            }
-            return;
-        }
-        this.spectateCooldown = 1;
-
-        this.spectateMsgCount++;
-
-        if (this.spectateMsgCount > 50) {
-            this.disconnect();
-            this.game.logger.error(
-                `Game ${this.game.id} - Player ${this.name} Player ${this.name} disconnected for spamming SpectateMsg (count)`,
-            );
-            return;
-        }
-
-        // livingPlayers is used here instead of a more "efficient" option because its sorted while other options are not
-        const spectatablePlayers = this.game.playerBarn.livingPlayers.filter(
-            (p) =>
-                this != p
-                && !p.disconnected
-                && (this.game.modeManager.getPlayerAlivePlayersContext(this).length === 0
-                    || p.teamId == this.teamId),
-        );
-
-        let playerToSpec: Player | undefined;
-        switch (true) {
-            case spectateMsg.specBegin:
-                const groupExistsOrAlive = this.game.isTeamMode && this.group!.livingPlayers.length > 0;
-                const teamExistsOrAlive = this.game.map.factionMode && this.team!.livingPlayers.length > 0;
-                const aliveKiller = this.getAliveKiller();
-                const shouldSpecRandom = groupExistsOrAlive || teamExistsOrAlive || !aliveKiller;
-
-                if (!shouldSpecRandom) {
-                    playerToSpec = aliveKiller;
-                    break;
-                }
-
-                const players = this.game.map.factionMode && groupExistsOrAlive
-                    ? this.group!.livingPlayers
-                    : spectatablePlayers;
-
-                playerToSpec = util.randomItem(players);
-                break;
-            case spectateMsg.specNext:
-            case spectateMsg.specPrev:
-                const nextOrPrev = +spectateMsg.specNext - +spectateMsg.specPrev;
-                playerToSpec = util.wrappedArrayIndex(
-                    spectatablePlayers,
-                    spectatablePlayers.indexOf(this.spectating!) + nextOrPrev,
-                );
-                break;
-        }
-        this.spectating = playerToSpec;
     }
 
     /**
@@ -3096,7 +2625,7 @@ export class Player extends BaseGameObject {
         if (this.game.modeManager.showStatsMsg(this)) {
             const statsMsg = new net.PlayerStatsMsg();
             statsMsg.playerStats = this;
-            this.msgsToSend.push({ type: net.MsgType.PlayerStats, msg: statsMsg });
+            this.client.sendMsg(net.MsgType.PlayerStats, statsMsg);
         } else {
             const gameOverMsg = new net.GameOverMsg();
 
@@ -3106,13 +2635,10 @@ export class Player extends BaseGameObject {
             gameOverMsg.teamId = this.teamId;
             gameOverMsg.winningTeamId = winningTeamId;
             gameOverMsg.gameOver = !!winningTeamId;
-            this.msgsToSend.push({ type: net.MsgType.GameOver, msg: gameOverMsg });
+            this.client.sendMsg(net.MsgType.GameOver, gameOverMsg);
 
             for (const spectator of this.spectators) {
-                spectator.msgsToSend.push({
-                    type: net.MsgType.GameOver,
-                    msg: gameOverMsg,
-                });
+                spectator.sendMsg(net.MsgType.GameOver, gameOverMsg);
             }
         }
     }
@@ -3144,7 +2670,7 @@ export class Player extends BaseGameObject {
         this.cancelAction();
 
         this.weaponManager.throwThrowable();
-        this.weaponManager.setCurWeapIndex(GameConfig.WeaponSlot.Melee);
+        this.weaponManager.setCurWeapIndex(GameConfig.WeaponSlot.Melee, true);
 
         if (this.weapons[GameConfig.WeaponSlot.Melee].type === "pan") {
             this.wearingPan = true;
@@ -3166,7 +2692,7 @@ export class Player extends BaseGameObject {
             downedMsg.killCreditId = params.source.__id;
         }
 
-        this.game.broadcastMsg(net.MsgType.Kill, downedMsg);
+        this.game.clientBarn.broadcastMsg(net.MsgType.Kill, downedMsg);
 
         // lone survivr can be given on knock or kill
         if (this.game.map.factionMode) {
@@ -3315,7 +2841,7 @@ export class Player extends BaseGameObject {
 
                 if (!lonePerks) {
                     if (rolePerks.length > 0 && perkPool.length > 0) {
-                        const perkToReplace = rolePerks[util.randomInt(0, rolePerks.length - 1)].type;
+                        const perkToReplace = util.randomItem(rolePerks).type;
                         const candidatePerks = perkPool.filter(
                             (p) => !killCreditSource.hasPerk(p),
                         );
@@ -3378,7 +2904,7 @@ export class Player extends BaseGameObject {
             this.lastDamagedBy.randomWeaponSwap(params);
         }
 
-        this.game.broadcastMsg(net.MsgType.Kill, killMsg);
+        this.game.clientBarn.broadcastMsg(net.MsgType.Kill, killMsg);
 
         if (this.role) {
             const roleMsg = new net.RoleAnnouncementMsg();
@@ -3387,7 +2913,7 @@ export class Player extends BaseGameObject {
             roleMsg.killed = true;
             roleMsg.playerId = this.__id;
             roleMsg.killerId = params.source?.__id ?? 0;
-            this.game.broadcastMsg(net.MsgType.RoleAnnouncement, roleMsg);
+            this.game.clientBarn.broadcastMsg(net.MsgType.RoleAnnouncement, roleMsg);
         }
 
         if (this.isKillLeader && this.role !== "the_hunted") {
@@ -3397,7 +2923,7 @@ export class Player extends BaseGameObject {
             roleMsg.killed = true;
             roleMsg.playerId = this.__id;
             roleMsg.killerId = params.source?.__id ?? 0;
-            this.game.broadcastMsg(net.MsgType.RoleAnnouncement, roleMsg);
+            this.game.clientBarn.broadcastMsg(net.MsgType.RoleAnnouncement, roleMsg);
         }
 
         if (this.game.map.mapDef.gameMode.killLeaderEnabled) {
@@ -3434,12 +2960,6 @@ export class Player extends BaseGameObject {
                 this.removeRole();
             }
         }
-
-        //
-        // Give spectators someone new to spectate
-        //
-
-        this.game.modeManager.assignNewSpectate(this);
 
         this.game.deadBodyBarn.addDeadBody(this.pos, this.__id, this.layer, params.dir);
 
@@ -3506,7 +3026,7 @@ export class Player extends BaseGameObject {
 
         if (this.outfit) {
             const def = GameObjectDefs.typeToDef(this.outfit, "outfit");
-            if (!def.noDropOnDeath && !def.noDrop) {
+            if (!def.noDropOnDeath && !def.noDrop && this.outfit !== this.loadout.outfit) {
                 this.game.lootBarn.addLoot(this.outfit, this.pos, this.layer, 1, {
                     pushSpeed: util.random(7.5, 11),
                     dir: v2.randomUnit(),
@@ -3570,24 +3090,20 @@ export class Player extends BaseGameObject {
     }
 
     getAliveKiller(): Player | undefined {
-        let attempts = 0;
-        const findAliveKiller = (killer: Player | undefined): Player | undefined => {
-            attempts++;
-            if (attempts > 80) return undefined;
+        let aliveKiller: Player | undefined = this.killedBy;
+        const checkedPlayers = new Set<Player>();
 
-            if (!killer) return undefined;
-            if (!killer.dead) return killer;
-            if (
-                killer.killedBy
-                && killer.killedBy !== this
-                && killer.killedBy !== killer
-            ) {
-                return findAliveKiller(killer.killedBy);
-            }
+        for (let i = 0; i < 80; i++) {
+            if (!aliveKiller) return undefined;
+            if (aliveKiller === this) return undefined;
+            if (aliveKiller.killedBy === aliveKiller) return undefined;
+            if (checkedPlayers.has(aliveKiller)) return undefined;
 
-            return undefined;
-        };
-        return findAliveKiller(this.killedBy);
+            if (!aliveKiller.dead) return aliveKiller;
+            checkedPlayers.add(aliveKiller);
+
+            aliveKiller = aliveKiller.killedBy;
+        }
     }
 
     canDespawn() {
@@ -3812,8 +3328,7 @@ export class Player extends BaseGameObject {
     shootStart = false;
     shootHold = false;
     portrait = false;
-    private _cullingPortrait = false;
-    private _cullingPortraitTicker = 0;
+
     touchMoveActive = false;
     touchMoveDir = v2.create(1, 0);
     touchMoveLen = 255;
@@ -3834,8 +3349,6 @@ export class Player extends BaseGameObject {
     }
 
     handleInput(msg: net.InputMsg): void {
-        this.ack = msg.seq;
-
         if (this.dead) return;
         if (this.game.map.perkMode && !this.role) return;
 
@@ -3846,11 +3359,6 @@ export class Player extends BaseGameObject {
         this.moveUp = msg.moveUp;
         this.moveDown = msg.moveDown;
 
-        // same logic for `_cullingZoom`, see comment on `set zoom`
-        if (this.portrait != msg.portrait) {
-            this._cullingPortraitTicker = 0.5;
-        }
-        this.portrait = msg.portrait;
         this.touchMoveActive = msg.touchMoveActive;
         this.touchMoveDir = v2.normalizeSafe(msg.touchMoveDir);
         this.touchMoveLen = msg.touchMoveLen;
@@ -4093,7 +3601,7 @@ export class Player extends BaseGameObject {
             const obstacle = objs[i];
             if (obstacle.__type !== ObjectType.Obstacle) continue;
             if (!obstacle.dead && util.sameLayer(obstacle.layer, this.layer)) {
-                if (obstacle.isButton && obstacle.button.isVat) {
+                if (obstacle.isButton && obstacle.button!.isVat) {
                     const distance = v2.distance(this.pos, obstacle.pos);
                     if (distance + this.rad < obstacle.interactionRad * obstacle.scale) {
                         obstacles.push({
@@ -4493,10 +4001,7 @@ export class Player extends BaseGameObject {
         }
 
         obj.destroy();
-        this.msgsToSend.push({
-            type: net.MsgType.Pickup,
-            msg: pickupMsg,
-        });
+        this.client.sendMsg(net.MsgType.Pickup, pickupMsg);
     }
 
     // in original game, only called on snowball or potato collision
@@ -4535,7 +4040,7 @@ export class Player extends BaseGameObject {
 
         if (playerLootTypes.length == 0) return;
 
-        const item = playerLootTypes[util.randomInt(0, playerLootTypes.length - 1)];
+        const item = util.randomItem(playerLootTypes);
         const weapIdx = this.weapons.findIndex((w) => w.type == item);
 
         const dropMsg = new net.DropItemMsg();
@@ -4572,7 +4077,7 @@ export class Player extends BaseGameObject {
             : ([_type, def]) => !def.noPotatoSwap;
 
         const weaponChoices = enumerableDefs.filter(filterCb);
-        const [chosenWeaponType, chosenWeaponDef] = weaponChoices[util.randomInt(0, weaponChoices.length - 1)];
+        const [chosenWeaponType, chosenWeaponDef] = util.randomItem(weaponChoices);
 
         let index;
         if (this.activeWeapon === oldWeapon) {
@@ -4597,7 +4102,7 @@ export class Player extends BaseGameObject {
             }
         }
 
-        const slotDef = GameObjectDefs.typeToDef(this.weapons[index].type) as
+        const slotDef = GameObjectDefs.typeToDefSafe(this.weapons[index].type) as
             | GunDef
             | MeleeDef
             | ThrowableDef;
@@ -4755,11 +4260,10 @@ export class Player extends BaseGameObject {
     }
 
     dropInventoryItem(item: InventoryItem) {
-        const itemDef = GameObjectDefs.typeToDef(item);
-
         if (!this.invManager.has(item)) return;
         const inventoryCount = this.invManager.get(item);
 
+        const itemDef = GameObjectDefs.typeToDef(item);
         switch (itemDef.type) {
             case "ammo": {
                 let amountToDrop = math.max(1, Math.floor(inventoryCount / 2));
@@ -4808,7 +4312,7 @@ export class Player extends BaseGameObject {
         const isItemInLoadout = (item: string, category: string) => {
             if (useDefaultUnlocks && !defaltUnlocks.includes(item)) return false;
 
-            const def = GameObjectDefs.typeToDef(item);
+            const def = GameObjectDefs.typeToDefSafe(item);
             if (!def || def.type !== category) return false;
 
             return true;
@@ -4819,6 +4323,7 @@ export class Player extends BaseGameObject {
             && loadout.outfit !== "outfitBase"
         ) {
             this.setOutfit(loadout.outfit);
+            this.loadout.outfit = this.outfit;
         }
 
         if (isItemInLoadout(loadout.melee, "melee") && loadout.melee != "fists") {
@@ -5056,10 +4561,10 @@ export class Player extends BaseGameObject {
             player._lastBreathTicker = 5;
 
             player.giveHaste(GameConfig.HasteType.Inspire, 5);
-            if (player.teamId == 1 && player.__id != this.__id) {
+            if (player.teamId == GameConfig.FactionTeam.Red && player.__id != this.__id) {
                 this.game.playerBarn.addEmote("emote_bugle_final_red", player.__id);
             }
-            if (player.teamId == 2 && player.__id != this.__id) {
+            if (player.teamId == GameConfig.FactionTeam.Blue && player.__id != this.__id) {
                 this.game.playerBarn.addEmote("emote_bugle_final_blue", player.__id);
             }
             player.recalculateScale();
@@ -5077,10 +4582,10 @@ export class Player extends BaseGameObject {
 
         for (const player of affectedPlayers) {
             player.giveHaste(GameConfig.HasteType.Inspire, 3);
-            if (player.teamId == 1 && player.__id != this.__id) {
+            if (player.teamId == GameConfig.FactionTeam.Red && player.__id != this.__id) {
                 this.game.playerBarn.addEmote("emote_bugle_inspiration_red", player.__id);
             }
-            if (player.teamId == 2 && player.__id != this.__id) {
+            if (player.teamId == GameConfig.FactionTeam.Blue && player.__id != this.__id) {
                 this.game.playerBarn.addEmote(
                     "emote_bugle_inspiration_blue",
                     player.__id,
@@ -5134,9 +4639,9 @@ export class Player extends BaseGameObject {
         }
 
         if (this.game.map.potatoMode && this.game.map.factionMode) {
-            if (this.teamId === 1) {
+            if (this.teamId === GameConfig.FactionTeam.Red) {
                 emote = "emote_tomato";
-            } else if (this.teamId === 2) {
+            } else if (this.teamId === GameConfig.FactionTeam.Blue) {
                 emote = "emote_potato";
             }
         }
@@ -5290,4 +4795,3 @@ export class Player extends BaseGameObject {
         this.socket.send(buffer);
     }
 }
-console.log("Calling equip method...");

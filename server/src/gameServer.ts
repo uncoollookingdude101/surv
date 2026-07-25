@@ -8,7 +8,7 @@ import pkgJson from "../../package.json" with { type: "json" };
 import { GameConfig } from "../../shared/gameConfig.ts";
 import * as net from "../../shared/net/net.ts";
 import { Config } from "./config.ts";
-import { GameProcessManager, type GameSocketData } from "./game/gameProcessManager.ts";
+import { GameProcessManager, type GameSocketData, ProcState } from "./game/gameProcessManager.ts";
 import { apiPrivateRouter } from "./utils/apiRouter.ts";
 import { GIT_VERSION } from "./utils/gitRevision.ts";
 import { logErrorToWebhook, ServerLogger } from "./utils/logger.ts";
@@ -38,35 +38,21 @@ class GameServer {
     readonly manager = new GameProcessManager();
 
     async findGame(body: FindGamePrivateBody): Promise<FindGamePrivateRes> {
-        const parsed = zFindGamePrivateBody.safeParse(body);
-
-        if (!parsed.success) {
-            this.logger.warn("/api/find_game: Invalid body");
-            return {
-                error: "failed_to_parse_body",
-            };
-        }
-        const data = parsed.data;
-
-        if (data.version !== GameConfig.protocolVersion) {
-            return {
-                error: "invalid_protocol",
-            };
+        if (body.version !== GameConfig.protocolVersion) {
+            return { error: "invalid_protocol" };
         }
 
-        if (data.region !== this.regionId) {
-            return {
-                error: "invalid_region",
-            };
+        if (body.region !== this.regionId) {
+            return { error: "invalid_region" };
         }
 
         const game = await this.manager.findGame({
-            region: data.region,
-            version: data.version,
-            autoFill: data.autoFill,
-            mapName: data.mapName,
-            teamMode: data.teamMode,
-            playerData: data.playerData,
+            region: body.region,
+            version: body.version,
+            autoFill: body.autoFill,
+            mapName: body.mapName,
+            teamMode: body.teamMode,
+            playerData: body.playerData,
         });
 
         return {
@@ -196,23 +182,16 @@ app.get("/private/status", (res, req) => {
         gameCount: server.manager.processes.length,
         games: server.manager.processes.map(p => {
             return {
-                id: p.gameData.id,
-                aliveCount: p.gameData.aliveCount,
-                map: p.gameData.mapName,
-                teamMode: p.gameData.teamMode,
-                stopped: p.gameData.stopped,
-                canJoin: p.gameData.canJoin,
+                state: ProcState[p.state],
+                reusedCount: p.reusedCount,
+                avaliableSlots: p.avaliableSlots,
+                gameData: p.gameData,
             };
         }),
     });
 });
 
-app.options("/api/find_game", (res) => {
-    uwsHelpers.cors(res);
-    res.end();
-});
-
-app.post("/api/find_game", (res, req) => {
+app.post("/api/find_game", async (res, req) => {
     res.onAborted(() => {
         res.aborted = true;
     });
@@ -222,42 +201,13 @@ app.post("/api/find_game", (res, req) => {
         return;
     }
 
-    const findGameBodyLimit = 1024 * 1024; // 1 MB
+    try {
+        const body = await uwsHelpers.getJsonBody(res, zFindGamePrivateBody);
 
-    res.collectBody(findGameBodyLimit, async (fullBody) => {
-        try {
-            if (res.aborted) return;
-
-            if (!fullBody) {
-                res.writeStatus("413 Content Too Large");
-                res.write("413 Content Too Large");
-                res.end();
-                server.logger.warn("/api/find_game: Body exceeded size limit");
-                return;
-            }
-
-            let body: unknown;
-            try {
-                body = JSON.parse(Buffer.from(fullBody).toString("utf8"));
-            } catch (_error) {
-                res.writeStatus("400 Bad Request");
-                res.write("400 Bad Request");
-                res.end();
-                server.logger.warn("/api/find_game: Error retrieving body");
-                return;
-            }
-
-            const parsed = zFindGamePrivateBody.safeParse(body);
-            if (!parsed.success) {
-                uwsHelpers.returnJson(res, { error: "failed_to_parse_body" });
-                return;
-            }
-
-            uwsHelpers.returnJson(res, await server.findGame(parsed.data));
-        } catch (error) {
-            server.logger.warn("API find_game error: ", error);
-        }
-    });
+        uwsHelpers.returnJson(res, await server.findGame(body));
+    } catch (error) {
+        server.logger.warn("/api/find_game error: ", error);
+    }
 });
 
 const gameHTTPRateLimit = new HTTPRateLimit(5, 1000);
@@ -285,6 +235,7 @@ app.ws<GameSocketData>("/play", {
 
         if (gameHTTPRateLimit.isRateLimited(ip) || gameWsRateLimit.isIpRateLimited(ip)) {
             res.cork(() => {
+                server.logger.warn("Websocket upgrade closed: Rate limited");
                 res.writeStatus("429 Too Many Requests");
                 res.write("429 Too Many Requests");
                 res.end();
@@ -296,20 +247,20 @@ app.ws<GameSocketData>("/play", {
         const gameId = searchParams.get("gameId");
 
         if (!gameId) {
-            server.logger.warn("game_id_missing");
+            server.logger.warn("Websocket upgrade closed: no game ID");
             uwsHelpers.forbidden(res);
             return;
         }
         const proc = server.manager.getById(gameId);
 
         if (!proc) {
-            server.logger.warn("invalid_game_id");
+            server.logger.warn("Websocket upgrade closed: invalid game ID");
             uwsHelpers.forbidden(res);
             return;
         }
 
         if (!proc.gameData.canJoin) {
-            server.logger.warn("game_started");
+            server.logger.warn("Websocket upgrade closed: game already started");
             uwsHelpers.forbidden(res);
             return;
         }

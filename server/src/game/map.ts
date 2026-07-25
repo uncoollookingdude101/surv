@@ -2,8 +2,7 @@ import { styleText } from "node:util";
 import { type MapDef, MapDefs } from "../../../shared/defs/mapDefs.ts";
 import type { BuildingDef, ObstacleDef, StructureDef } from "../../../shared/defs/mapObjectsTyping.ts";
 import { MapObjectDefs } from "../../../shared/defs/register.ts";
-import type { MapId } from "../../../shared/defs/types/misc.ts";
-import { GameConfig, TeamMode } from "../../../shared/gameConfig.ts";
+import { GameConfig, MapId, TeamMode } from "../../../shared/gameConfig.ts";
 import * as net from "../../../shared/net/net.ts";
 import { MsgStream, MsgType } from "../../../shared/net/net.ts";
 import { ObjectType } from "../../../shared/net/objectSerializeFns.ts";
@@ -207,7 +206,7 @@ export class GameMap {
     msg!: net.MapMsg;
     terrain!: ReturnType<typeof generateTerrain>;
     riverDescs!: MapRiverData[];
-    riverMasks!: Array<{ pos: Vec2; rad: number }>;
+    riverMasks!: Array<Collider>;
     normalRivers!: Array<River & { looped: false }>;
     lakes!: Array<River & { looped: true }>;
     lakeObjs!: Array<string>;
@@ -217,7 +216,7 @@ export class GameMap {
     grassArea!: number;
 
     placeSpawns!: string[];
-    placesToSpawn!: Vec2[];
+    placesToSpawn!: { pos: Vec2; type: string; ori: number }[];
 
     /** 0 for horizontal split, 1 for vertical split*/
     factionModeSplitOri: 0 | 1 = 0;
@@ -229,8 +228,10 @@ export class GameMap {
      * Like auto opening doors, regrowing potatos, etc
      */
     dynamicObstacles!: Obstacle[];
+
     buildings!: Building[];
-    buildingsWithEmitters!: Building[];
+    dynamicBuildings!: Building[];
+
     structures!: Structure[];
     bridges!: Structure[];
     grid!: MapGrid;
@@ -307,11 +308,12 @@ export class GameMap {
 
     init(seed?: number) {
         this.seed = seed ?? util.randomInt(0, 2 ** 32 - 1);
+        this.game.logger.debug("Generating map with seed", this.seed);
 
         this.obstacles = [];
         this.dynamicObstacles = [];
         this.buildings = [];
-        this.buildingsWithEmitters = [];
+        this.dynamicBuildings = [];
         this.structures = [];
         this.bridges = [];
         this.riverDescs = [];
@@ -331,19 +333,12 @@ export class GameMap {
         this.placeSpawns = [...this.mapDef.mapGen.customSpawnRules.placeSpawns];
         this.msg.places = [...this.mapDef.mapGen.places];
 
-        this.placesToSpawn = this.mapDef.mapGen.places
-            .filter((p) => !p.dontSpawnObjects)
-            .map((place) => {
-                return v2.create(
-                    place.pos.x * this.width,
-                    // places Y axis is inverted lol
-                    Math.abs(place.pos.y - 1) * this.height,
-                );
-            });
-
         this.riverMasks = [];
+        this.placesToSpawn = [];
 
         this.generateRiverMasks();
+
+        this.generatePlaceSpawns();
 
         if (this.factionMode) {
             this.factionModeSplitOri = util.randomInt(0, 1) as 0 | 1;
@@ -420,8 +415,8 @@ export class GameMap {
 
         this.init(seed);
 
-        for (const player of this.game.playerBarn.players) {
-            player.sendData(this.mapStream.getBuffer());
+        for (const client of this.game.clientBarn.clients) {
+            client.sendData(this.mapStream.getBuffer());
         }
     }
 
@@ -430,47 +425,8 @@ export class GameMap {
             this.dynamicObstacles[i].update(dt);
         }
 
-        for (let i = 0; i < this.buildingsWithEmitters.length; i++) {
-            const building = this.buildingsWithEmitters[i];
-
-            const oldOccupiedState = building.occupied;
-
-            building.occupied = false;
-
-            const livingPlayers = this.game.playerBarn.livingPlayers;
-            const players = livingPlayers.length < 20
-                ? livingPlayers
-                : this.game.grid.intersectCollider(building.emitterBounds);
-
-            for (let i = 0; i < players.length; i++) {
-                const player = players[i];
-                if (player.__type !== ObjectType.Player) continue;
-                if (player.dead) continue;
-                if (!util.sameLayer(player.layer, building.layer)) continue;
-                for (let j = 0; j < building.zoomRegions.length; j++) {
-                    const region = building.zoomRegions[j];
-
-                    if (!region.zoomIn) continue;
-                    if (
-                        coldet.testCircleAabb(
-                            player.pos,
-                            player.rad,
-                            region.zoomIn.min,
-                            region.zoomIn.max,
-                        )
-                    ) {
-                        building.occupied = true;
-                        break;
-                    }
-                }
-                if (building.occupied) {
-                    break;
-                }
-            }
-
-            if (building.occupied !== oldOccupiedState) {
-                building.setPartDirty();
-            }
+        for (let i = 0; i < this.dynamicBuildings.length; i++) {
+            this.dynamicBuildings[i].update(dt);
         }
 
         for (let i = this.unlocks.length - 1; i >= 0; i--) {
@@ -576,10 +532,10 @@ export class GameMap {
 
         for (const mask of this.mapDef.mapGen.map.rivers.masks) {
             if (mask.pos) {
-                this.riverMasks.push({
-                    pos: v2.create(mask.pos.x * this.width, mask.pos.y * this.height),
-                    rad: mask.rad,
-                });
+                this.riverMasks.push(collider.createCircle(
+                    v2.create(mask.pos.x * this.width, mask.pos.y * this.height),
+                    mask.rad,
+                ));
             } else {
                 const spawnMin = v2.create(
                     this.shoreInset + mask.rad,
@@ -601,22 +557,87 @@ export class GameMap {
 
                     for (const mask2 of this.riverMasks) {
                         if (
-                            coldet.testCircleCircle(pos, mask.rad, mask2.pos, mask2.rad)
+                            coldet.test(mask2, collider.createCircle(pos, mask.rad))
                         ) {
                             return false;
                         }
                     }
 
-                    this.riverMasks.push({
+                    this.riverMasks.push(collider.createCircle(
                         pos,
-                        rad: mask.rad,
-                    });
+                        mask.rad,
+                    ));
 
                     return true;
                 });
             }
         }
+
         this.timerEnd("Generating river masks");
+    }
+
+    generatePlaceSpawns() {
+        if (!this.placeSpawns.length) return;
+        this.timerStart();
+
+        const rand = util.seededRand(this.seed);
+
+        const placePositions = this.mapDef.mapGen.places
+            .filter((p) => !p.dontSpawnObjects)
+            .map((place) => {
+                return v2.create(
+                    place.pos.x * this.width,
+                    // places Y axis is inverted lol
+                    Math.abs(place.pos.y - 1) * this.height,
+                );
+            });
+
+        // Reserve positions for place spawns by adding river masks
+        // TODO: rewrite this in favor of a more generic way of reserving positions
+        for (const type of this.mapDef.mapGen.customSpawnRules.placeSpawns) {
+            const bound = collider.toAabb(mapHelpers.getBoundingCollider(type));
+
+            this.trySpawn(`place_${type}`, () => {
+                const placeIdx = util.randomInt(0, placePositions.length - 1, rand);
+                const placePos = placePositions[placeIdx];
+
+                const ori = this.getOriAndScale(type, rand).ori;
+
+                const rotated = collider.transform(bound, v2.create(0, 0), math.oriToRad(ori), 1.15);
+
+                const width = rotated.max.x - rotated.min.x;
+                const height = rotated.max.y - rotated.min.y;
+
+                const half = collider.transform(rotated, v2.create(0, 0), 0, 0.5);
+                const randomPos = v2.add(placePos, util.randomPointInAabb(half, rand));
+                const pos = math.v2Clamp(
+                    randomPos,
+                    v2.create(this.shoreInset + width, this.shoreInset + height),
+                    v2.create(
+                        this.width - this.shoreInset - width,
+                        this.height - this.shoreInset - height,
+                    ),
+                );
+
+                const collision = collider.transform(bound, pos, math.oriToRad(ori), 1.15);
+
+                for (let i = 0; i < this.riverMasks.length; i++) {
+                    if (coldet.test(this.riverMasks[i], collision)) return false;
+                }
+
+                this.placesToSpawn.push({ pos, type, ori });
+
+                this.grid.addCollider({
+                    type: "building",
+                    collision,
+                    layer: 0,
+                });
+                this.riverMasks.push(collision);
+                placePositions.splice(placeIdx, 1);
+                return true;
+            });
+        }
+        this.timerEnd("Generating place spawns");
     }
 
     generateTerrain(): void {
@@ -633,6 +654,7 @@ export class GameMap {
 
             this.trySpawn(`lake`, () => {
                 const lake = riverCreator.createLake(lakeDef);
+                if (!lake) return false;
 
                 for (const other of this.riverDescs) {
                     if (!other.looped || !other.aabb) continue;
@@ -647,6 +669,19 @@ export class GameMap {
                     ) {
                         return false;
                     }
+                }
+                if (lakeDef.riverMaskRad) {
+                    const mask = collider.createCircle(
+                        lake.center,
+                        lakeDef.riverMaskRad,
+                    );
+                    for (const otherMask of this.riverMasks) {
+                        if (coldet.test(mask, otherMask)) {
+                            return false;
+                        }
+                    }
+
+                    this.riverMasks.push(mask);
                 }
 
                 this.riverDescs.push(lake);
@@ -669,7 +704,7 @@ export class GameMap {
             const isFactionRiver = this.factionMode;
 
             this.trySpawn(`river_${widths[i]}`, () => {
-                const riverPoints = riverCreator.create(isFactionRiver);
+                const riverPoints = riverCreator.create(widths[i], isFactionRiver);
                 if (riverPoints.length < 12) return false;
 
                 this.riverDescs.push({
@@ -1031,6 +1066,8 @@ export class GameMap {
             for (const river of this.terrain.rivers) {
                 const riverArea = this.riverAreas.get(river)!.water / 1000;
 
+                // HACK: desert lake shouldn't spawn stones and bushes
+                if (river.looped && this.desertMode) continue;
                 for (const type in riverObjs) {
                     const amount = math.min(riverArea * riverObjs[type], 30);
 
@@ -1395,19 +1432,19 @@ export class GameMap {
         return true;
     }
 
-    getOriAndScale(type: string): { ori: number; scale: number } {
+    getOriAndScale(type: string, rand = Math.random): { ori: number; scale: number } {
         let ori = 0;
         let scale = 1;
 
         const def = MapObjectDefs.typeToDef(type);
         if (def.type === "building" || def.type === "structure") {
-            if ("oris" in def) {
-                ori = def.oris![util.randomInt(0, def.oris!.length - 1)];
+            if ("oris" in def && def.oris?.length) {
+                ori = util.randomItem(def.oris, rand);
             } else {
-                ori = def.ori ?? util.randomInt(0, 3);
+                ori = def.ori ?? util.randomInt(0, 3, rand);
             }
         } else if (def.type === "obstacle") {
-            scale = util.random(def.scale.createMin, def.scale.createMax);
+            scale = util.random(def.scale.createMin, def.scale.createMax, rand);
         }
 
         return { ori, scale };
@@ -1578,58 +1615,13 @@ export class GameMap {
         };
 
         if (this.placesToSpawn.length && this.placeSpawns.includes(type)) {
-            let attempts = 0;
-            const spawnedOnPlace = this.trySpawn(
-                type,
-                () => {
-                    attempts++;
+            const placeIdx = this.placesToSpawn.findIndex(p => p.type === type);
+            if (placeIdx !== -1) {
+                const place = this.placesToSpawn[placeIdx];
+                this.genAuto(type, place.pos, 0, place.ori, 1);
 
-                    const placeIdx = Math.floor(Math.random() * this.placeSpawns.length);
-                    const place = this.placesToSpawn[placeIdx];
-
-                    const { ori, scale } = this.getOriAndScale(type);
-                    const rot = math.oriToRad(ori);
-                    const bound = collider.transform(
-                        bounds,
-                        v2.create(0, 0),
-                        rot,
-                        scale,
-                    ) as AABB;
-
-                    const width = bound.max.x - bound.min.x;
-                    const height = bound.max.y - bound.min.y;
-                    const placePos = v2.add(
-                        place,
-                        v2.mulElems(
-                            v2.mul(v2.randomUnit(), 0.5),
-                            v2.create(width + attempts * 2, height + attempts * 2),
-                        ),
-                    );
-
-                    const pos = math.v2Clamp(
-                        placePos,
-                        v2.create(this.shoreInset + width, this.shoreInset + height),
-                        v2.create(
-                            this.width - this.shoreInset - width,
-                            this.height - this.shoreInset - height,
-                        ),
-                    );
-
-                    if (!this.canSpawn(type, pos, ori, scale)) return false;
-                    this.genAuto(type, pos, 0, ori, scale);
-
-                    this.placesToSpawn.splice(placeIdx, 1);
-                    util.removeFrom(this.placeSpawns, type);
-
-                    return true;
-                },
-                200,
-                false,
-            );
-
-            // if couldn't spawn it near a map place
-            // try spawning somewhere else on grass
-            if (spawnedOnPlace) {
+                this.placesToSpawn.splice(placeIdx, 1);
+                util.removeFrom(this.placeSpawns, type);
                 return;
             }
         }
@@ -1701,26 +1693,26 @@ export class GameMap {
             scale = oriAndScale.scale;
 
             const t = util.random(0, 1);
-            let finalRiver = river ?? rivers[util.randomInt(0, rivers.length - 1)];
+            const selectedRiver = river ?? util.randomItem(rivers);
 
-            let pos = finalRiver.spline.getPos(t);
+            let pos = selectedRiver.spline.getPos(t);
 
             if (def.terrain?.nearbyRiver) {
                 const otherSide = Math.random() < 0.5;
 
-                const offset = finalRiver.waterWidth * 2 * (otherSide ? -1 : 1);
-                let norm = finalRiver.spline.getNormal(t);
+                const offset = selectedRiver.waterWidth * 2 * (otherSide ? -1 : 1);
+                let norm = selectedRiver.spline.getNormal(t);
                 v2.set(pos, v2.add(pos, v2.mul(norm, offset)));
 
-                const finalT = finalRiver.spline.getClosestTtoPoint(pos);
-                const finalNorm = finalRiver.spline.getNormal(finalT);
+                const finalT = selectedRiver.spline.getClosestTtoPoint(pos);
+                const finalNorm = selectedRiver.spline.getNormal(finalT);
 
                 const riverOri = (math.radToOri(Math.atan2(finalNorm.y, finalNorm.x))
                     + (otherSide ? 2 : 0))
                     % 4;
                 ori = (def.terrain.nearbyRiver.facingOri + riverOri) % 4;
             } else {
-                const norm = finalRiver.spline.getNormal(t);
+                const norm = selectedRiver.spline.getNormal(t);
                 ori = math.radToOri(Math.atan2(norm.y, norm.x));
             }
             if (type === "bunker_structure_05") {
@@ -1755,11 +1747,11 @@ export class GameMap {
         if (!rivers.length) return;
 
         this.trySpawn(type, () => {
-            river = river ?? rivers[util.randomInt(0, rivers.length - 1)];
+            const selectedRiver = river ?? util.randomItem(rivers);
             const t = util.random(0, 1);
             const def = MapObjectDefs.typeToDef(type);
 
-            let width = river.getWaterWidth(t);
+            let width = selectedRiver.getWaterWidth(t);
             if (def.type === "obstacle") {
                 let circle = def.collision.type === collider.Type.Circle
                     ? def.collision
@@ -1767,12 +1759,12 @@ export class GameMap {
                 width -= circle.rad + 1;
             }
             if (def.terrain?.riverShore) {
-                width += river.shoreWidth / 4;
+                width += selectedRiver.shoreWidth / 4;
             }
             const offset = util.random(-width, width);
             const pos = v2.add(
-                river.spline.getPos(t),
-                v2.mul(river.spline.getNormal(t), offset),
+                selectedRiver.spline.getPos(t),
+                v2.mul(selectedRiver.spline.getNormal(t), offset),
             );
 
             const { ori, scale } = this.getOriAndScale(type);
@@ -1789,17 +1781,17 @@ export class GameMap {
         if (!rivers.length) return;
 
         this.trySpawn(type, () => {
-            river = river ?? rivers[util.randomInt(0, rivers.length - 1)];
+            const selectedRiver = river ?? util.randomItem(rivers);
             const t = util.random(0, 1);
 
-            let width = river.getWaterWidth(t);
+            let width = selectedRiver.getWaterWidth(t);
 
-            let offset = util.random(width, width + river.shoreWidth);
+            let offset = util.random(width, width + selectedRiver.shoreWidth);
             if (Math.random() < 0.5) offset *= -1;
 
             const pos = v2.add(
-                river.spline.getPos(t),
-                v2.mul(river.spline.getNormal(t), offset),
+                selectedRiver.spline.getPos(t),
+                v2.mul(selectedRiver.spline.getNormal(t), offset),
             );
 
             const { ori, scale } = this.getOriAndScale(type);
@@ -1829,7 +1821,7 @@ export class GameMap {
 
         this.trySpawn(type, () => {
             const t = util.random(0.1, 0.9);
-            const river = this.normalRivers[util.randomInt(0, this.normalRivers.length - 1)];
+            const river = util.randomItem(this.normalRivers);
             let pos = river.spline.getPos(t);
 
             const otherSide = Math.random() < 0.5;
@@ -1975,8 +1967,8 @@ export class GameMap {
 
         this.game.objectRegister.register(building);
         this.buildings.push(building);
-        if (building.hasOccupiedEmitters) {
-            this.buildingsWithEmitters.push(building);
+        if (building.hasOccupiedEmitters || building.hasPuzzle) {
+            this.dynamicBuildings.push(building);
         }
 
         if (def.map?.display && layer === 0 && !hideFromMap) {
@@ -2020,15 +2012,29 @@ export class GameMap {
         }
 
         for (const patch of def.mapGroundPatches ?? []) {
-            this.msg.groundPatches.push({
-                min: math.addAdjust(pos, patch.bound.min, ori),
-                max: math.addAdjust(pos, patch.bound.max, ori),
-                color: patch.color,
-                roughness: patch.roughness ?? 0,
-                offsetDist: patch.offsetDist ?? 0,
-                order: patch.order ?? 0,
-                useAsMapShape: patch.useAsMapShape ?? true,
-            });
+            if (patch.bound.type === collider.Type.Circle) {
+                const worldCenter = math.addAdjust(pos, patch.bound.pos, ori);
+                this.msg.groundPatches.push({
+                    bound: collider.createCircle(worldCenter, patch.bound.rad),
+                    color: patch.color,
+                    roughness: patch.roughness ?? 0,
+                    offsetDist: patch.offsetDist ?? 0,
+                    order: patch.order ?? 0,
+                    useAsMapShape: patch.useAsMapShape ?? true,
+                });
+            } else {
+                this.msg.groundPatches.push({
+                    bound: collider.createAabb(
+                        math.addAdjust(pos, patch.bound.min, ori),
+                        math.addAdjust(pos, patch.bound.max, ori),
+                    ),
+                    color: patch.color,
+                    roughness: patch.roughness ?? 0,
+                    offsetDist: patch.offsetDist ?? 0,
+                    order: patch.order ?? 0,
+                    useAsMapShape: patch.useAsMapShape ?? true,
+                });
+            }
         }
 
         this.addBounds(building, !!parentId);

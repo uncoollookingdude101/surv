@@ -17,6 +17,7 @@ import { Editor } from "./debug/editor.ts";
 /* STRIP_FROM_PROD_CLIENT:END */
 
 import { GameObjectDefs } from "../../shared/defs/register.ts";
+import { SpectateAction } from "../../shared/net/spectateMsg.ts";
 import { device } from "./device.ts";
 import { EmoteBarn } from "./emote.ts";
 import { errorLogManager } from "./errorLogs.ts";
@@ -98,7 +99,6 @@ export class Game {
     m_playing!: boolean;
     m_gameOver!: boolean;
     m_spectating!: boolean;
-    m_spectateCooldown!: number;
     m_inputMsgTimeout!: number;
     m_prevInputMsg!: net.InputMsg;
     m_playingTicker!: number;
@@ -143,7 +143,6 @@ export class Game {
     tryJoinGame(
         url: string,
         matchPriv: string,
-        questPriv: string,
         onConnectFail: () => void,
     ) {
         if (!this.connecting && !this.connected && !this.initialized) {
@@ -170,7 +169,6 @@ export class Game {
                     const joinMessage = new net.JoinMsg();
                     joinMessage.protocol = GameConfig.protocolVersion;
                     joinMessage.matchPriv = matchPriv;
-                    joinMessage.questPriv = questPriv;
                     joinMessage.name = name;
                     joinMessage.useTouch = device.touch;
                     joinMessage.isMobile = device.mobile || window.mobile!;
@@ -314,7 +312,6 @@ export class Game {
         this.m_playing = false;
         this.m_gameOver = false;
         this.m_spectating = false;
-        this.m_spectateCooldown = 0;
         this.m_inputMsgTimeout = 0;
         this.m_prevInputMsg = new net.InputMsg();
         this.m_playingTicker = 0;
@@ -717,28 +714,21 @@ export class Game {
             }
         }
 
-        this.m_spectateCooldown -= dt;
-        const specBegin = this.m_uiManager.specBegin;
-        const specNext = (this.m_uiManager.specNext ||= this.m_spectating && this.m_input.keyPressed(Key.Right));
-        const specPrev = (this.m_uiManager.specPrev ||= this.m_spectating && this.m_input.keyPressed(Key.Left));
-        const specForce = this.m_input.keyPressed(Key.Right) || this.m_input.keyPressed(Key.Left);
+        let specAction = this.m_uiManager.specAction;
+        if (specAction === SpectateAction.None && this.m_spectating) {
+            if (this.m_input.keyPressed(Key.Right)) {
+                specAction = SpectateAction.Next;
+            } else if (this.m_input.keyPressed(Key.Left)) {
+                specAction = SpectateAction.Prev;
+            }
+        }
 
-        if (
-            specBegin
-            || (this.m_spectating && this.m_spectateCooldown < 0 && (specNext || specPrev))
-        ) {
-            this.m_spectateCooldown = 1;
-
+        if (specAction !== SpectateAction.None) {
             const specMsg = new net.SpectateMsg();
-            specMsg.specBegin = specBegin;
-            specMsg.specNext = specNext;
-            specMsg.specPrev = specPrev;
-            specMsg.specForce = specForce;
+            specMsg.action = specAction;
             this.m_sendMessage(net.MsgType.Spectate, specMsg, 128);
 
-            this.m_uiManager.specBegin = false;
-            this.m_uiManager.specNext = false;
-            this.m_uiManager.specPrev = false;
+            this.m_uiManager.specAction = SpectateAction.None;
         }
 
         this.m_uiManager.reloadTouched = false;
@@ -924,7 +914,7 @@ export class Game {
             this.m_camera,
             this.m_renderer,
         );
-        this.m_renderer.m_update(dt, this.m_camera, this.m_map);
+        this.m_renderer.m_update(dt, this.m_camera, this.m_map, debug?.structures?.layerMasks);
 
         for (let i = 0; i < this.m_emoteBarn.newPings.length; i++) {
             const ping = this.m_emoteBarn.newPings[i];
@@ -1073,6 +1063,26 @@ export class Game {
     }
 
     m_processGameUpdate(msg: net.UpdateMsg) {
+        // Latency determination
+        // calculate this before the rest of this function
+        // so client-side lag caused by the rest of the code wont count
+        // on the server latency and update interval measurements
+        const now = Date.now();
+        this.m_updateRecvCount++;
+        if (msg.ack == this.seq && this.seqInFlight) {
+            this.seqInFlight = false;
+            const ping = now - this.seqSendTime;
+            this.debugHUD.pingGraph.addEntry(ping);
+            this.pings.push(ping);
+        }
+        if (this.lastUpdateTime > 0) {
+            const interval = now - this.lastUpdateTime;
+            this.m_camera.m_interpInterval = interval / 1000;
+            this.debugHUD.updateIntervalGraph.addEntry(interval);
+            this.updateIntervals.push(interval);
+        }
+        this.lastUpdateTime = now;
+
         const ctx: Ctx = {
             audioManager: this.m_audioManager,
             renderer: this.m_renderer,
@@ -1225,23 +1235,6 @@ export class Game {
                 this.m_map.getMapDef().gameMode,
             );
         }
-
-        // Latency determination
-        const now = Date.now();
-        this.m_updateRecvCount++;
-        if (msg.ack == this.seq && this.seqInFlight) {
-            this.seqInFlight = false;
-            const ping = now - this.seqSendTime;
-            this.debugHUD.pingGraph.addEntry(ping);
-            this.pings.push(ping);
-        }
-        if (this.lastUpdateTime > 0) {
-            const interval = now - this.lastUpdateTime;
-            this.m_camera.m_interpInterval = interval / 1000;
-            this.debugHUD.updateIntervalGraph.addEntry(interval);
-            this.updateIntervals.push(interval);
-        }
-        this.lastUpdateTime = now;
     }
 
     // Socket functions
@@ -1289,6 +1282,7 @@ export class Game {
                 );
                 this.m_resourceManager.loadMapAssets(this.m_map.mapName);
                 this.m_map.renderMap(this.m_pixi.renderer, this.m_canvasMode);
+                this.m_renderer.resize(this.m_map, this.m_camera);
                 this.m_bulletBarn.onMapLoad(this.m_map);
                 this.m_particleBarn.onMapLoad(this.m_map);
                 this.m_uiManager.onMapLoad(this.m_map, this.m_camera);
@@ -1356,7 +1350,7 @@ export class Game {
                 // Display the kill / downed notification for the active player
                 if (msg.killCreditId == this.m_activeId) {
                     const completeKill = msg.killerId == this.m_activeId;
-                    const suicide = msg.killerId == msg.targetId || msg.killCreditId == msg.targetId;
+                    const suicide = msg.killCreditId == msg.targetId;
                     const killText = this.m_ui2Manager.getKillText(
                         killerName,
                         targetName,
