@@ -1627,6 +1627,14 @@ export class Player extends BaseGameObject {
             this.weaponManager.scheduledReload = true;
         }
 
+        if (this.hasPerk("perma_stims")) {
+            this.combatStimsActive = true;
+        } else if (this._combatStimsTicker > 0) {
+            this._combatStimsTicker -= dt;
+            this.combatStimsActive = this._combatStimsTicker > 0;
+        } else {
+            this.combatStimsActive = false;
+        }
         // handle heal and boost actions
 
         if (this.actionType !== GameConfig.Action.None) {
@@ -1645,7 +1653,7 @@ export class Player extends BaseGameObject {
                             target.health += itemDef.heal;
                             if (this.hasPerk("combat_stims")) {
                                 this.combatStimsActive = true;
-                                this._combatStimsTicker = 10;
+                                this._combatStimsTicker = 5;
                             }
                         });
                     }
@@ -1654,7 +1662,7 @@ export class Player extends BaseGameObject {
                             target.boost += itemDef.boost;
                             if (this.hasPerk("combat_stims")) {
                                 this.combatStimsActive = true;
-                                this._combatStimsTicker = 10;
+                                this._combatStimsTicker = 5;
                             }
                         });
                     }
@@ -1807,7 +1815,6 @@ export class Player extends BaseGameObject {
                     msg.type = net.PickupMsgType.Success;
                     msg.item = item;
                     msg.count = 1;
-
                     if (
                         !this.weaponManager.weapons[GameConfig.WeaponSlot.Throwable].type
                     ) {
@@ -1820,114 +1827,30 @@ export class Player extends BaseGameObject {
 
             this.fabricateRefillTicker -= dt;
             if (this.fabricateRefillTicker <= 0) {
-                const maxSize = this.invManager.getMaxCapacity("frag");
-                const current = this.invManager.get("frag");
-                const throwablesToGive = Math.max(maxSize - current, 0);
+                const counts: Record<FabricateThrowable, number> = {
+                    frag: 0,
+                    mirv: 0,
+                    strobe: 0,
+                };
 
-                this.fabricateThrowablesLeft = throwablesToGive;
-                this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
-            }
-        }
-
-        if (this.hasPerk("fabricate_s")) {
-            if (this.fabricateThrowablesLeft > 0) {
-                this.fabricateGiveTicker -= dt;
-                if (this.fabricateGiveTicker < 0) {
-                    this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                    this.invManager.give("smoke", 1);
-                    this.fabricateThrowablesLeft--;
-
-                    const msg = new net.PickupMsg();
-                    msg.type = net.PickupMsgType.Success;
-                    msg.item = "smoke";
-                    msg.count = 1;
-
-                    if (
-                        !this.weaponManager.weapons[GameConfig.WeaponSlot.Throwable].type
-                    ) {
-                        this.weaponManager.showNextThrowable();
-                    }
-
-                    this.msgsToSend.push({ type: net.MsgType.Pickup, msg });
+                let remaining = 8;
+                while (remaining > 0) {
+                    const item = util.weightedRandomObject(PerkProperties.fabricate.weights) as FabricateThrowable;
+                    counts[item]++;
+                    remaining--;
                 }
-            }
 
-            this.fabricateRefillTicker -= dt;
-            if (this.fabricateRefillTicker <= 0) {
-                const maxSize = this.invManager.getMaxCapacity("smoke");
-                const current = this.invManager.get("smoke");
-                const throwablesToGive = Math.max(maxSize - current, 0);
-
-                this.fabricateThrowablesLeft = throwablesToGive;
-                this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
-            }
-        }
-
-        if (this.hasPerk("fabricate_m")) {
-            if (this.fabricateThrowablesLeft > 0) {
-                this.fabricateGiveTicker -= dt;
-                if (this.fabricateGiveTicker < 0) {
-                    this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                    this.invManager.give("mirv", 1);
-                    this.fabricateThrowablesLeft--;
-
-                    const msg = new net.PickupMsg();
-                    msg.type = net.PickupMsgType.Success;
-                    msg.item = "mirv";
-                    msg.count = 1;
-
-                    if (
-                        !this.weaponManager.weapons[GameConfig.WeaponSlot.Throwable].type
-                    ) {
-                        this.weaponManager.showNextThrowable();
+                const nextQueue: Array<FabricateThrowable> = [];
+                for (const item of Object.keys(PerkProperties.fabricate.weights) as FabricateThrowable[]) {
+                    const canGive = math.max(
+                        this.invManager.getMaxCapacity(item) - this.invManager.get(item),
+                        0,
+                    );
+                    const giveCount = math.min(counts[item], canGive);
+                    for (let i = 0; i < giveCount; i++) {
+                        nextQueue.push(item);
                     }
-
-                    this.msgsToSend.push({ type: net.MsgType.Pickup, msg });
                 }
-            }
-
-            this.fabricateRefillTicker -= dt;
-            if (this.fabricateRefillTicker <= 0) {
-                const maxSize = this.invManager.getMaxCapacity("mirv");
-                const current = this.invManager.get("mirv");
-                const throwablesToGive = Math.max(maxSize - current, 0);
-
-                this.fabricateThrowablesLeft = throwablesToGive;
-                this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                this.fabricateRefillTicker = PerkProperties.fabricate.refillInterval;
-            }
-        }
-
-        if (this.hasPerk("fabricate_str")) {
-            if (this.fabricateThrowablesLeft > 0) {
-                this.fabricateGiveTicker -= dt;
-                if (this.fabricateGiveTicker < 0) {
-                    this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
-                    this.invManager.give("strobe", 1);
-                    this.fabricateThrowablesLeft--;
-
-                    const msg = new net.PickupMsg();
-                    msg.type = net.PickupMsgType.Success;
-                    msg.item = "strobe";
-                    msg.count = 1;
-
-                    if (
-                        !this.weaponManager.weapons[GameConfig.WeaponSlot.Throwable].type
-                    ) {
-                        this.weaponManager.showNextThrowable();
-                    }
-
-                    this.msgsToSend.push({ type: net.MsgType.Pickup, msg });
-                }
-            }
-
-            this.fabricateRefillTicker -= dt;
-            if (this.fabricateRefillTicker <= 0) {
-                const maxSize = this.invManager.getMaxCapacity("strobe");
-                const current = this.invManager.get("strobe");
-                const throwablesToGive = Math.max(maxSize - current, 0);
 
                 this.fabricateThrowablesLeft = nextQueue;
                 this.fabricateGiveTicker = PerkProperties.fabricate.giveInterval;
@@ -2463,27 +2386,35 @@ export class Player extends BaseGameObject {
             : undefined;
 
         // teammates can't deal damage to each other
-        if (playerSource && params.source !== this) {
-            if (playerSource.teamId === this.teamId && !this.disconnected) {
-                // Combat Stimulants Healing
-                const gameSourceDef = GameObjectDefs.typeToDefSafe(params.gameSourceType ?? "");
-                if (
-                    playerSource._combatStimsTicker > 0
-                    && gameSourceDef?.type === "gun"
-                ) {
-                    const healAmount = params.amount! * PerkProperties.combat_stims.healPercent;
-                    if (healAmount > 0) {
-                        this.health = math.min(
-                            this.health + healAmount,
-                            GameConfig.player.health,
-                        );
-                        this.healEffectTicker = 0.5;
-                        this.setDirty();
-                    }
+if (playerSource && params.source !== this) {
+    if (playerSource.teamId === this.teamId && !this.disconnected) {
+        // Combat Stims / Perma Stims Teammate Healing
+        const gameSourceDef = GameObjectDefs.typeToDefSafe(params.gameSourceType ?? "");
+        
+        const hasPermaStims = playerSource.hasPerk("perma_stims");
+        const hasActiveCombatStims = playerSource._combatStimsTicker > 0;
+
+        // Triggers if perma_stims is owned OR if combat_stims ticker is active
+            if ((hasPermaStims || hasActiveCombatStims) && gameSourceDef?.type === "gun") {
+                // Select heal percentage from PerkProperties
+                const healPercent = hasPermaStims 
+                    ? PerkProperties.perma_stims.healPercent 
+                    : PerkProperties.combat_stims.healPercent;
+
+                const healAmount = params.amount! * healPercent;
+
+                if (healAmount > 0) {
+                    this.health = math.min(
+                        this.health + healAmount,
+                        GameConfig.player.health,
+                    );
+                    this.healEffectTicker = 0.5;
+                    this.setDirty();
                 }
-                return;
             }
+            return;
         }
+    }
 
         let finalDamage = params.amount!;
 
@@ -2523,6 +2454,10 @@ export class Player extends BaseGameObject {
             }
 
             if (this.hasPerk("holy_shield")) {
+                reduceDamage(PerkProperties.steelskin.damageReduction);
+            }
+
+            if (this.hasPerk("small_arms")) {
                 reduceDamage(PerkProperties.steelskin.damageReduction);
             }
 
@@ -2580,8 +2515,16 @@ export class Player extends BaseGameObject {
                     amount: finalDamage,
                     weaponType: params.gameSourceType ?? "",
                 });
-                if (playerSource.hasPerk("vampire") && !playerSource.dead) {
-                    const lifestealPercent = 0.33;
+            if (!playerSource.dead) {
+                let lifestealPercent = 0;
+
+                if (playerSource.hasPerk("bloodthirst")) {
+                    lifestealPercent = (PerkProperties.bloodthirst?.lifestealPercent as number) ?? 1.0;
+                } else if (playerSource.hasPerk("vampire")) {
+                    lifestealPercent = (PerkProperties.vampire?.lifestealPercent as number) ?? 0.33;
+                }
+
+                if (lifestealPercent > 0) {
                     const healAmount = finalDamage * lifestealPercent;
 
                     if (healAmount > 0) {
@@ -2595,8 +2538,9 @@ export class Player extends BaseGameObject {
                     }
                 }
             }
-            this.lastDamagedBy = playerSource;
         }
+        this.lastDamagedBy = playerSource;
+    }
 
         this.health -= finalDamage;
 
@@ -4783,15 +4727,5 @@ export class Player extends BaseGameObject {
         }
 
         this.speed = math.clamp(this.speed, 1, 10000);
-    }
-
-    sendMsg(type: net.MsgType, msg: net.AbstractMsg, bytes = 128): void {
-        const stream = new net.MsgStream(new ArrayBuffer(bytes));
-        stream.serializeMsg(type, msg);
-        this.sendData(stream.getBuffer());
-    }
-
-    sendData(buffer: Uint8Array<ArrayBuffer>): void {
-        this.socket.send(buffer);
     }
 }

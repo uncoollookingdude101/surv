@@ -192,7 +192,7 @@ export const ObjectSerializeFns: {
 } = {
     [ObjectType.Player]: {
         serializedPartialSize: 6,
-        serializedFullSize: 64, // calculating this one is... yeah...
+        serializedFullSize: 32, // calculating this one is... yeah...
         /* STRIP_FROM_PROD_CLIENT:START */
         serializePart: (s, data) => {
             s.writeMapPos(data.pos);

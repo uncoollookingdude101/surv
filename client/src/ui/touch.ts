@@ -654,7 +654,7 @@ class LineSprites {
                     activePlayer.m_pos,
                     v2.mul(activePlayer.m_dir, offset),
                 );
-                const scale = (1.0 / 32.0) * 0.375;
+                const scale = (1.0 / 32.0) * 0.5;
                 dot.position.set(pos.x, pos.y);
                 dot.scale.set(scale, scale);
                 dot.visible = i < dotCount;
@@ -665,7 +665,7 @@ class LineSprites {
             const R = v2.sub(p1, p0);
             this.container.position.set(p0.x, p0.y);
             this.container.scale.set(R.x, R.y);
-            this.container.alpha = 0.3;
+            this.container.alpha = 1.0;
             renderer.addPIXIObj(this.container, activePlayer.layer, 19, 0);
         }
         this.container.visible = visible;

@@ -455,13 +455,26 @@ export class Bullet {
                     continue;
                 }
 
+                const hasWindwalk = obj.hasPerk("windwalk");
+                const hasBloodthirst = obj.hasPerk("bloodthirst");
+
+                // Check if the player already has ANY speed haste active from these perks
+                const hasActiveHaste = 
+                    obj.hasteType === GameConfig.HasteType.Bloodthirst || 
+                    obj.hasteType === GameConfig.HasteType.Windwalk;
+
                 if (
-                    obj.hasPerk("windwalk")
-                    && obj.hasteType != GameConfig.HasteType.Windwalk // can't stack windwalk
+                    (hasWindwalk || hasBloodthirst)
+                    && !hasActiveHaste // Block if EITHER haste effect is already active
                     && v2.distance(this.pos, obj.pos) <= 5
-                    && this.player?.teamId !== obj.teamId // bullet shooter or its teammates cant give the shooter winwalk
+                    && this.player?.teamId !== obj.teamId
                 ) {
-                    obj.giveHaste(GameConfig.HasteType.Windwalk, 3);
+                    // Bloodthirst takes priority if a player has both perks
+                    if (hasBloodthirst) {
+                        obj.giveHaste(GameConfig.HasteType.Bloodthirst, 3);
+                    } else if (hasWindwalk) {
+                        obj.giveHaste(GameConfig.HasteType.Windwalk, 3);
+                    }
                 }
 
                 let panCollision = null;
@@ -598,6 +611,17 @@ export class Bullet {
                 if (this.apRounds) {
                     obstacleMult *= PerkProperties.ap_rounds.obstacleMult;
                 }
+                
+                const dmgToObstacle = finalDamage * obstacleMult;
+
+                // --- CONSOLE LOG FOR DAMAGE ---
+                console.log(
+                    `[BULLET HIT -> OBSTACLE] Gun: ${this.shotSourceType} | ` +
+                    `Raw Dmg: ${finalDamage.toFixed(1)} | ` +
+                    `Obstacle Mult: ${obstacleMult.toFixed(2)}x | ` +
+                    `Final Dmg Dealt: ${dmgToObstacle.toFixed(1)}`
+                );
+                // --------------------------------------
 
                 this.bulletManager.damages.push({
                     obj: col.obj!,
@@ -628,6 +652,19 @@ export class Bullet {
                     if (hasTargeting && targetPerksCount > 0) {
                         multiplier = 1.1 + (targetPerksCount - 1) * 0.1;
                     }
+
+                    const dmgToPlayer = multiplier * finalDamage;
+
+                    // --- CONSOLE LOG FOR PLAYER RECEIVED DAMAGE ---
+                    console.log(
+                        `[BULLET HIT -> PLAYER] Gun: ${this.shotSourceType} | ` +
+                        `Target ID: ${col.player?.__id} | ` +
+                        `Raw Falloff Dmg: ${finalDamage.toFixed(1)} | ` +
+                        `Targeting Mult: ${multiplier.toFixed(2)}x | ` +
+                        `Final Dmg Received: ${dmgToPlayer.toFixed(1)}`
+                    );
+                    // ----------------------------------------------
+
                     this.bulletManager.damages.push({
                         obj: col.player!,
                         gameSourceType: this.shotSourceType,

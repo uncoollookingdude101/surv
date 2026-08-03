@@ -36,6 +36,7 @@ throwableList.sort((a, b) => {
 
 export class WeaponManager {
     player: Player;
+    m1HoldTime = 0;
 
     private _curWeapIdx = 2;
 
@@ -126,6 +127,7 @@ export class WeaponManager {
         this.bursts.length = 0;
         this.meleeAttacks.length = 0;
         this.scheduledReload = false;
+        this.m1HoldTime = 0; // <--- Reset ramp-up on weapon swap
 
         this.player.recoilTicker = 0;
 
@@ -181,8 +183,16 @@ export class WeaponManager {
             this.player.wearingPan = true;
         }
 
-        if (GameConfig.WeaponType[idx] === "gun" && this.weapons[idx].ammo <= 0) {
-            this.scheduledReload = true;
+        if (GameConfig.WeaponType[idx] === "gun") {
+            const nextWeaponDef = GameObjectDefs.typeToDefSafe(this.weapons[idx].type) as GunDef;
+            if (nextWeaponDef) {
+                // Only true_endless_ammo perk auto-fills clip instantly
+                if (this.isTrueInfinite(nextWeaponDef)) {
+                    this.weapons[idx].ammo = this.getAmmoStats(nextWeaponDef).maxClip;
+                } else if (this.weapons[idx].ammo <= 0) {
+                    this.scheduledReload = true;
+                }
+            }
         }
 
         if (idx === this.curWeapIdx && WeaponSlot[idx] == "gun") {
@@ -298,6 +308,14 @@ export class WeaponManager {
             this.weapons[i].cooldown -= dt;
             this.weapons[i].recoilTime -= dt;
         }
+        // --- TRACK M1 HOLD TIME FOR RAMP-UP ---
+        const activeDef = GameObjectDefs.typeToDefSafe(this.activeWeapon);
+        if (player.shootHold && activeDef?.type === "gun" && this.weapons[this.curWeapIdx].ammo > 0) {
+            this.m1HoldTime += dt;
+        } else {
+            this.m1HoldTime = 0;
+        }
+        // --------------------------------------
 
         const itemDef = GameObjectDefs.typeToDef(this.activeWeapon);
 
@@ -440,7 +458,17 @@ export class WeaponManager {
     isInfinite(weaponDef: GunDef): boolean {
         return (
             !weaponDef.ignoreEndlessAmmo
-            && (weaponDef.ammoInfinite || this.player.hasPerk("endless_ammo"))
+            && (
+                weaponDef.ammoInfinite 
+                || this.player.hasPerk("endless_ammo")
+                || this.player.hasPerk("true_endless_ammo")
+            )
+        );
+    }
+    isTrueInfinite(weaponDef: GunDef): boolean {
+        return (
+            !weaponDef.ignoreEndlessAmmo
+            && this.player.hasPerk("true_endless_ammo")
         );
     }
     getTrueReloadTime(weaponDef: GunDef, useAlt = false): number {
@@ -454,7 +482,7 @@ export class WeaponManager {
     /**
      * Try to schedule a reload action if all conditions are met
      */
-    tryReload() {
+tryReload() {
         if (
             this.player.actionType === GameConfig.Action.Reload
             || this.player.actionType === GameConfig.Action.ReloadAlt
@@ -471,6 +499,9 @@ export class WeaponManager {
         ) {
             return;
         }
+        if (this.isTrueInfinite(weaponDef)) {
+            return;
+        }
 
         const isInfinite = this.isInfinite(weaponDef);
 
@@ -481,9 +512,6 @@ export class WeaponManager {
                 invAmmo = this.player.invManager.get(weaponDef.ammo);
                 if (invAmmo <= 0) return;
             } else {
-                // not a valid ammo type and not an infinite ammo gun (e.g bugle)
-                // so dont try to reload it
-                // since bugle reloads are managed in a timer elsewhere
                 return;
             }
         }
@@ -499,10 +527,6 @@ export class WeaponManager {
         let useAlt = false;
         let action: number = GameConfig.Action.Reload;
 
-        // schedule an alt reload if ammo is 0 and we have more inventory ammo
-        // than a single reload
-        // so if you have a mosin with 0 ammo and 1 ammo in the inventory it will
-        // schedule the single bullet reload instead of longer 5 bullets reload
         if (
             weaponDef.reloadTimeAlt
             && this.weapons[this.curWeapIdx].ammo === 0
@@ -511,10 +535,8 @@ export class WeaponManager {
             useAlt = true;
             action = GameConfig.Action.ReloadAlt;
         }
-        //  Use the perk-aware reload time
-        const duration = this.getTrueReloadTime(weaponDef, useAlt);
 
-        this.player.doAction(this.activeWeapon, action, duration);
+        const duration = this.getTrueReloadTime(weaponDef, useAlt);
 
         this.player.doAction(this.activeWeapon, action, duration);
     }
@@ -523,7 +545,7 @@ export class WeaponManager {
      * called when reload action completed, actually updates all state variables
      */
     reload(curWeapIdx = this.curWeapIdx, fullReload = false): void {
-        if (!this.weapons[curWeapIdx].type) return; // prevent rare bug
+        if (!this.weapons[curWeapIdx].type) return; 
         const weapon = this.weapons[curWeapIdx];
         const weaponDef = GameObjectDefs.typeToDef(weapon.type, "gun");
         const ammoStats = this.getAmmoStats(weaponDef);
@@ -549,8 +571,7 @@ export class WeaponManager {
         if (amountToReload <= 0) return;
 
         const isInfinite = this.isInfinite(weaponDef);
-        // isValid check because some ammo types are not "valid" as in "they are in the player backpack"
-        // eg potato and bugle ammo
+
         if (!isInfinite && this.player.invManager.isValid(weaponDef.ammo)) {
             amountToReload = this.player.invManager.take(weaponDef.ammo, amountToReload);
             if (amountToReload <= 0) return;
@@ -558,12 +579,10 @@ export class WeaponManager {
 
         weapon.ammo += amountToReload;
 
-        // reload again if we still have ammo in the inventory but didnt fill the weapon
-        // for single reload shotguns
-        if (
-            weapon.ammo < ammoStats.maxClip
-            && (isInfinite || this.player.invManager.has(weaponDef.ammo as InventoryItem))
-        ) {
+        const hasReserve = this.player.invManager.isValid(weaponDef.ammo)
+            && this.player.invManager.has(weaponDef.ammo as InventoryItem);
+
+        if (weapon.ammo < ammoStats.maxClip && (isInfinite || hasReserve)) {
             this.player.reloadAgain = true;
         }
 
@@ -694,7 +713,13 @@ export class WeaponManager {
         const itemDef = GameObjectDefs.typeToDef(this.activeWeapon, "gun");
 
         const weapon = this.weapons[this.curWeapIdx];
-        this.scheduledReload = weapon.ammo <= 1;
+        const trueInfinite = this.isTrueInfinite(itemDef);
+
+        if (!trueInfinite) {
+            this.scheduledReload = weapon.ammo <= 1;
+        } else if (weapon.ammo <= 0) {
+            weapon.ammo = this.getAmmoStats(itemDef).maxClip;
+        }
 
         if (weapon.ammo <= 0) return;
 
@@ -703,9 +728,20 @@ export class WeaponManager {
         if (this.player.hasPerk("energized")) {
             fireDelayMult = PerkProperties.energized.fireDelayMult;
         }
+        // Apply dynamic Ramp-Up multiplier
+        if (this.player.hasPerk("rampup")) {
+            const rampConfig = PerkProperties.rampup;
+
+            // Calculate progress (0.0 to 1.0)
+            const rampProgress = Math.min(this.m1HoldTime / rampConfig.maxHoldTime, 1.0);
+
+            // Interpolate multiplier from 1.0 down to minFireDelayMult
+            const rampMult = 1.0 - (1.0 - rampConfig.minFireDelayMult) * rampProgress;
+
+            fireDelayMult *= rampMult;
+        }
         weapon.cooldown = itemDef.fireDelay * fireDelayMult;
         weapon.recoilTime = itemDef.recoilTime;
-
         // Check firing location
         if (itemDef.outsideOnly && this.player.indoors && !forceFire) {
             const msg = new net.PickupMsg();
@@ -721,7 +757,9 @@ export class WeaponManager {
 
         this.player.cancelAction();
 
-        weapon.ammo--;
+        if (!trueInfinite) {
+            weapon.ammo--;
+        }
         this.player.weapsDirty = true;
 
         const collisionLayer = util.toGroundLayer(this.player.layer);
@@ -792,6 +830,7 @@ export class WeaponManager {
         const hasApRounds = this.player.hasPerk("ap_rounds");
         const hasHighVelocity = this.player.hasPerk("high_velocity");
         const hasCombatStims = this.player.combatStimsActive;
+        const hasPermaStims = this.player.hasPerk("perma_stims");
         const hasDeadEye = this.player.hasPerk("deadeye");
         const shouldApplyChambered = this.player.hasPerk("chambered")
             && itemDef.ammo !== "12gauge"
@@ -808,12 +847,28 @@ export class WeaponManager {
             damageMult *= saturated;
         }
 
-        if (this.player.combatStimsActive) {
+        if (hasPermaStims) {
+            damageMult *= PerkProperties.perma_stims.bonusDamageMult;
+        } else if (this.player.combatStimsActive) {
             damageMult *= PerkProperties.combat_stims.bonusDamageMult;
         }
 
         if (shouldApplyChambered) {
-            damageMult *= 1.32;
+            damageMult *= 1.28;
+        }
+
+        if (this.player.hasPerk("rampup")) {
+            const rampConfig = PerkProperties.rampup;
+
+            // Calculate progress (0.0 to 1.0)
+            const rampProgress = Math.min(this.m1HoldTime / rampConfig.maxHoldTime, 1.0);
+
+            // Interpolate damage multiplier from 1.0 up to maxDamageMult
+            // e.g., maxDamageMult = 1.5 scales damage from 100% to 150%
+            const maxDamageMult = (rampConfig.maxDamageMult as number) ?? 1.5;
+            const damageRamp = 1.0 + (maxDamageMult - 1.0) * rampProgress;
+
+            damageMult *= damageRamp;
         }
 
         //
@@ -927,7 +982,7 @@ export class WeaponManager {
                 splinter: hasSplinter,
                 apRounds: hasApRounds,
                 highVelocity: hasHighVelocity,
-                combatStims: hasCombatStims,
+                combatStims: hasCombatStims || hasPermaStims,
                 lastShot: weapon.ammo <= 0,
                 reflectObjId: this.player.obstacleOutfit?.__id,
                 onHitFx: hasExplosive || isDP12 ? "explosion_rounds" : undefined,
@@ -1174,14 +1229,25 @@ export class WeaponManager {
             const hit = hits[i];
             const obj = hit.obj;
 
+// Define damage multipliers for each perk
+            const meleeMasterMult = (PerkProperties.melee_master?.meleeDamageMult as number) ?? 1;
+            const bloodthirstMult = (PerkProperties.bloodthirst?.meleeDamageMult as number) ?? 1;
+
+            // Start with base multiplier of 1
+            let damageMult = 1;
+
+            // Stack multipliers together if player has the perks!
+            if (this.player.hasPerk("bloodthirst")) {
+                damageMult *= bloodthirstMult;
+            }
+
+            if (this.player.hasPerk("melee_master")) {
+                damageMult *= meleeMasterMult;
+            }
+
             if (obj.__type === ObjectType.Obstacle) {
                 obj.damage({
-                    amount: meleeDef.damage
-                        * meleeDef.obstacleDamage
-                        * (this.player.hasPerk("melee_master")
-                            ? ((PerkProperties.melee_master?.meleeDamageMult as number)
-                                ?? 1)
-                            : 1),
+                    amount: meleeDef.damage * meleeDef.obstacleDamage * damageMult,
                     gameSourceType: this.activeWeapon,
                     damageType: GameConfig.DamageType.Player,
                     source: this.player,
@@ -1191,11 +1257,7 @@ export class WeaponManager {
                 if (obj.interactable) obj.interact(this.player);
             } else if (obj.__type === ObjectType.Player) {
                 obj.damage({
-                    amount: meleeDef.damage
-                        * (this.player.hasPerk("melee_master")
-                            ? ((PerkProperties.melee_master?.meleeDamageMult as number)
-                                ?? 1)
-                            : 1),
+                    amount: meleeDef.damage * damageMult,
                     gameSourceType: this.activeWeapon,
                     damageType: GameConfig.DamageType.Player,
                     source: this.player,

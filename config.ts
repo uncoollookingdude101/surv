@@ -30,8 +30,8 @@ export function getConfig(isProduction: boolean, dir: string) {
         proxies: {},
         modes: [
             { mapName: "main_summer", teamMode: TeamMode.Solo, enabled: true },
-            { mapName: "main", teamMode: TeamMode.Duo, enabled: false },
-            { mapName: "main_summer", teamMode: TeamMode.Squad, enabled: true },
+            { mapName: "cobalt", teamMode: TeamMode.Solo, enabled: true },
+            { mapName: "faction2", teamMode: TeamMode.Squad, enabled: true },
         ],
         clientTheme: "main",
         passType: "pass_survivr1",

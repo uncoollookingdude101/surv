@@ -860,6 +860,21 @@ const SkinDefs = {
             rot: 0.5 * Math.PI,
         },
     }),
+    helmet02_moon6: defineSkin("helmet02", {
+        name: "Tsukuyomi no Kabuto",
+        perk: "vampire",
+        skinImg: {
+            baseTint: 0xffffff,
+            baseTintRed: 0xffffff,
+            baseTintBlue: 0xffffff,
+            baseSprite: "player-helmet-moon.img",
+            spriteScale: 0.3,
+        },
+        lootImg: {
+            sprite: "player-helmet-moon.img",
+            rot: 0.5 * Math.PI,
+        },
+    }),
     helmet02_moontest: defineSkin("helmet02", {
         name: "Tsukuyomi no Kabuto",
         role: "the_tested",

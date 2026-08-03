@@ -149,7 +149,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             "tree_climbing",
             "field_medic",
             "chambered",
-            "fabricate_m",
             "ap_rounds",
             "inspiration",
             "scavenger",
@@ -157,13 +156,15 @@ export const RoleDefs: Record<string, RoleDef> = {
             "melee_master",
             "pistol_master",
             "energized",
-            "closer",
             "amped_explosives",
-            "holy_shield",
             "vampire",
             "deadeye",
             "combat_stims",
-            "aoe_heal"
+            "aoe_heal",
+            "rampup",
+            "true_endless_ammo", 
+            "bloodthirst", 
+            "perma_stims",
         ],
         defaultItems: createDefaultItems({
             weapons: [
@@ -425,7 +426,6 @@ export const RoleDefs: Record<string, RoleDef> = {
             "tree_climbing",
             "field_medic",
             "chambered",
-            "fabricate_m",
             "ap_rounds",
             "inspiration",
             "scavenger",
@@ -433,9 +433,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             "melee_master",
             "pistol_master",
             "energized",
-            "closer",
             "amped_explosives",
-            "holy_shield",
             "vampire",
             "deadeye",
             "combat_stims",
@@ -519,10 +517,18 @@ export const RoleDefs: Record<string, RoleDef> = {
         type: "role",
         announce: false,
         killFeed: { assign: false },
+        defaultItems: createDefaultItems({
+            outfit: "outfitClassless",
+            inventory: {},
+        }),
         sound: {
             assign: "spawn_01",
         },
         perks: ["vampire", "lifeline", "holy_shield"],
+        visorImg: {
+            baseSprite: "player-visor-classless.img",
+            spriteScale: 0.3,
+        },
     },
     bombastic: {
         type: "role",
@@ -531,7 +537,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         sound: {
             assign: "spawn_01",
         },
-        perks: ["amped_explosives", "fabricate_m", "flak_jacket"],
+        perks: ["amped_explosives", "fabricate", "flak_jacket"],
     },
     deadeyes: {
         type: "role",
@@ -561,7 +567,7 @@ export const RoleDefs: Record<string, RoleDef> = {
     the_tested: {
         type: "role",
         announce: true,
-        killFeed: { assign: true, dead: true, color: "#ff8400" },
+        killFeed: { assign: false, dead: false, color: "#ff8400" },
         sound: {
             assign: "leader_assigned_01",
             dead: "leader_dead_01",
@@ -572,7 +578,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             pulse: true,
             pulseTint: 0xff8400,
         },
-        perks: ["hunted", "lifeline", "energized"],
+        perks: ["rampup", "true_endless_ammo", "bloodthirst", "perma_stims", "energized"],
     },
     methicc: {
         type: "role",
@@ -711,7 +717,7 @@ export const RoleDefs: Record<string, RoleDef> = {
         announce: false,
         killFeed: { assign: false },
         sound: {},
-        perks: ["tree_climbing", "small_arms", "fabricate_s", "leadership"],
+        perks: ["tree_climbing", "small_arms", "leadership"],
         defaultItems: createDefaultItems({
             weapons: [
                 { type: "", ammo: 0 },
@@ -737,7 +743,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             pulse: true,
             pulseTint: 0xff0000,
         },
-        perks: ["endless_ammo", "steelskin", "fabricate_m", "leadership", "flak_jacket"],
+        perks: ["endless_ammo", "steelskin", "fabricate", "leadership", "flak_jacket"],
         defaultItems: createDefaultItems({
             weapons: [
                 { type: "m134_s", ammo: 200 },

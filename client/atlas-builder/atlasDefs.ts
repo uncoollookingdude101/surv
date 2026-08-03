@@ -1,7 +1,7 @@
 import type { Atlas } from "../../shared/defs/mapDefs.ts";
 import { BeachAtlas } from "./defs/beach.ts";
 import { CobaltAtlas } from "./defs/cobalt.ts";
-import { CustomAtlas } from "./defs/custom";
+import { CustomAtlas } from "./defs/custom.ts";
 import { DesertAtlas } from "./defs/desert.ts";
 import { FactionAtlas } from "./defs/faction.ts";
 import { GradientAtlas } from "./defs/gradient.ts";

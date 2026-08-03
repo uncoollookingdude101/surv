@@ -34,5 +34,6 @@ export const CustomAtlas: AtlasDef = {
         "proj/proj-40mm-01.svg",
         "proj/proj-rocket-m72-01.svg",
         "map/map-case-bomb-01.svg",
+        "particles/part-blossom-01b.svg",
     ],
 };

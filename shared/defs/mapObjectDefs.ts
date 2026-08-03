@@ -12681,7 +12681,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
             sprite: "map-case-hatchet-01.img",
             residue: "map-case-hatchet-res-01.img",
         },
-        loot: [autoLoot("p90", 1), autoLoot("endless_ammo", 1)],
+        loot: [autoLoot("p90", 1)],
         hitParticle: "blackChip",
     }),
     case_04: createCase({
@@ -12864,9 +12864,8 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-case-bomb-01.img" },
         loot: [
             autoLoot("backpack03", 1),
-            autoLoot("explosives", 10),
+            autoLoot("explosives", 20),
             autoLoot("4xscope", 1),
-            autoLoot("amped_explosives", 1),
             tierLoot("tier_explosives", 1, 1),
         ],
         hitParticle: "blackChip",
@@ -13749,6 +13748,9 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
             autoLoot("skorpion_dual", 1),
             autoLoot("m72", 1),
             autoLoot("m202", 1),
+            autoLoot("ash12", 1),
+            autoLoot("sw500", 1),
+            autoLoot("barrett", 1),
             autoLoot("mirv", 15),
             autoLoot("strobe", 15),
             autoLoot("bb", 15),
@@ -14406,7 +14408,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         img: { sprite: "map-class-crate-03.img" },
     }),
     class_crate_mythicms: createClassCrate({
-        loot: [tierLoot("tier_class_crate_mythic", 1, 1), autoLoot("30xscope", 1)],
+        loot: [tierLoot("tier_class_crate_mythic", 1, 1), autoLoot("15xscope", 1)],
         img: { sprite: "map-class-crate-03.img" },
     }),
     mil_crate_01: createCrate({
@@ -15041,6 +15043,9 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
     safe_01de: createSafe({
         loot: [tierLoot("tier_crimson_perks", 1, 1), autoLoot("strobe", 1), autoLoot("strobe", 1)],
     }),
+    safe_01ms: createSafe({
+        loot: [autoLoot("rampup", 1), autoLoot("pkm", 1)],
+    }),
     screen_01: {
         type: "obstacle",
         obstacleType: "furniture",
@@ -15096,7 +15101,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         scale: { createMin: 1, createMax: 1, destroy: 0.9 },
         destructible: true,
         health: 2500,
-        loot: [autoLoot("potato_smg", 1), autoLoot("splitter", 1), autoLoot("closer", 1)],
+        loot: [autoLoot("potato_smg", 1), autoLoot("splitter", 1)],
         img: {
             residue: "map-smoke-res.img",
             tint: 0xff944d,
@@ -15106,7 +15111,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
         scale: { createMin: 1, createMax: 1, destroy: 0.9 },
         destructible: true,
         health: 2500,
-        loot: [autoLoot("potato_lmg", 1), autoLoot("closer", 1)],
+        loot: [autoLoot("potato_lmg", 1)],
         img: {
             residue: "map-smoke-res.img",
             tint: 0xff944d,
@@ -38684,7 +38689,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 1,
             },
             {
-                type: "metal_wall_ext_thicker_30",
+                type: "metal_wall_ext_thicker_1_5",
                 pos: v2.create(6.75, 11.5),
                 scale: 1,
                 ori: 1,
@@ -38726,7 +38731,7 @@ export const RawMapObjectDefs: Record<string, MapObjectDef> = {
                 ori: 1,
             },
             {
-                type: "metal_wall_ext_thicker_30",
+                type: "metal_wall_ext_thicker_1_5",
                 pos: v2.create(-6.75, -11.5),
                 scale: 1,
                 ori: 1,

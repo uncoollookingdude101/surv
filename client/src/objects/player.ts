@@ -1153,6 +1153,10 @@ export class Player implements AbstractObject {
                     particle: "windwalk",
                     sound: "ability_stim_01",
                 },
+                [HasteType.Bloodthirst]: {
+                    particle: "bloodthirst",
+                    sound: "ability_stim_01",
+                },
                 [HasteType.Takedown]: {
                     particle: "takedown",
                     sound: "ability_stim_01",

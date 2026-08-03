@@ -8,7 +8,7 @@ export const PerkProperties = {
         scale: 0.1,
     },
     energized: {
-        fireDelayMult: 0.75,
+        fireDelayMult: 0.8,
     },
     steelskin: {
         scale: 0.25,
@@ -22,13 +22,13 @@ export const PerkProperties = {
         mirvBonus: 2,
     },
     amped_explosives: {
-        throwableRangeMult: 1.75,
+        throwableRangeMult: 1.5,
         throwableSpeedMult: 2,
         shrapnelCountMult: 2,
         shrapnelDamageMult: 1.5,
         shrapnelSpeedMult: 1.4,
-        explosionDamageMult: 1.25,
-        explosionRadMult: 1.25,
+        explosionDamageMult: 1.5,
+        explosionRadMult: 1.5,
         projSpeedMult: 1.5,
     },
     small_arms: {
@@ -75,7 +75,7 @@ export const PerkProperties = {
         speedBoost: 1.25,
     },
     combat_stims: {
-        bonusDamageMult: 1.14,
+        bonusDamageMult: 1.1,
         healPercent: 0.33,
     },
     tree_climbing: {
@@ -98,7 +98,7 @@ export const PerkProperties = {
         meleeDamageMult: 1.5,
     },
     pistol_master: {
-        damageMult: 1.4,
+        damageMult: 1.3,
         spreadMul: 0.6,
         speedMult: 1.2,
         distanceMult: 1.2,
@@ -115,6 +115,22 @@ export const PerkProperties = {
         speedMult: 1.2,
         distanceMult: 1.2,
     },
+    rampup: {
+        maxHoldTime: 1.5,       
+        minFireDelayMult: 0.65,
+        maxDamageMult: 1.25
+    },
+    bloodthirst: {
+        meleeDamageMult: 1.3,
+        lifestealPercent: 0.5
+    },
+    vampire: {
+        lifestealPercent: 0.33
+    },
+    perma_stims: {
+        bonusDamageMult: 1.18, 
+        healPercent: 0.7,     
+    },
     // map of ammo type to perk that boosts that ammo
     ammoBonuses: {
         "9mm": ["treat_9mm", "bonus_9mm"],
@@ -123,7 +139,7 @@ export const PerkProperties = {
         "12gauge": ["treat_12g"],
         "45acp": ["bonus_45"],
     } as Record<string, string[]>,
-    ammoBonusDamageMult: 1.2,
+    ammoBonusDamageMult: 1.08,
     // Classless perk list (effectively all class perks in Cobalt, minus martyrdom)
     classless: {
         perkPool: [
@@ -538,48 +554,6 @@ export const PerkDefs: Record<string, PerkDef> = {
             pickup: "perk_pickup_01",
         },
     },
-    fabricate_s: {
-        name: "Fabricate",
-        type: "perk",
-        lootImg: {
-            sprite: "loot-perk-fabricate.img",
-            tint: 0xffffff,
-            border: "loot-circle-outer-03.img",
-            borderTint: 0xffffff,
-            scale: 0.275,
-        },
-        sound: {
-            pickup: "perk_pickup_01",
-        },
-    },
-    fabricate_m: {
-        name: "Fabricate",
-        type: "perk",
-        lootImg: {
-            sprite: "loot-perk-fabricate.img",
-            tint: 0xffffff,
-            border: "loot-circle-outer-03.img",
-            borderTint: 0xffffff,
-            scale: 0.275,
-        },
-        sound: {
-            pickup: "perk_pickup_01",
-        },
-    },
-    fabricate_str: {
-        name: "Fabricate",
-        type: "perk",
-        lootImg: {
-            sprite: "loot-perk-fabricate.img",
-            tint: 0xffffff,
-            border: "loot-circle-outer-03.img",
-            borderTint: 0xffffff,
-            scale: 0.275,
-        },
-        sound: {
-            pickup: "perk_pickup_01",
-        },
-    },
     self_revive: {
         name: "Revivify",
         type: "perk",
@@ -972,6 +946,62 @@ export const PerkDefs: Record<string, PerkDef> = {
         lootImg: {
             sprite: "loot-perk-deadeye.img",
             tint: 0xffffff,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    rampup: {
+        name: "Ramp-up",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-firepower.img",
+            tint: 0xffd700,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    true_endless_ammo: {
+        name: "Endless Ammo",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-endless-ammo.img",
+            tint: 0xffd700,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    bloodthirst: {
+        name: "Bloodthirst",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-vampire.img",
+            tint: 0xffd700,
+            border: "loot-circle-outer-03.img",
+            borderTint: 0xffffff,
+            scale: 0.275,
+        },
+        sound: {
+            pickup: "perk_pickup_01",
+        },
+    },
+    perma_stims: {
+        name: "Perma-Stimulants",
+        type: "perk",
+        lootImg: {
+            sprite: "loot-perk-combat-stims.img",
+            tint: 0xffd700,
             border: "loot-circle-outer-03.img",
             borderTint: 0xffffff,
             scale: 0.275,

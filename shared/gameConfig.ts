@@ -45,6 +45,7 @@ export enum GasMode {
 export enum HasteType {
     None,
     Windwalk,
+    Bloodthirst,
     Takedown,
     Inspire,
     Count,
