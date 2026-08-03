@@ -116,20 +116,20 @@ export const PerkProperties = {
         distanceMult: 1.2,
     },
     rampup: {
-        maxHoldTime: 1.5,       
+        maxHoldTime: 1.5,
         minFireDelayMult: 0.65,
-        maxDamageMult: 1.25
+        maxDamageMult: 1.25,
     },
     bloodthirst: {
         meleeDamageMult: 1.3,
-        lifestealPercent: 0.5
+        lifestealPercent: 0.5,
     },
     vampire: {
-        lifestealPercent: 0.33
+        lifestealPercent: 0.33,
     },
     perma_stims: {
-        bonusDamageMult: 1.18, 
-        healPercent: 0.7,     
+        bonusDamageMult: 1.18,
+        healPercent: 0.7,
     },
     // map of ammo type to perk that boosts that ammo
     ammoBonuses: {

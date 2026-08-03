@@ -162,8 +162,8 @@ export const RoleDefs: Record<string, RoleDef> = {
             "combat_stims",
             "aoe_heal",
             "rampup",
-            "true_endless_ammo", 
-            "bloodthirst", 
+            "true_endless_ammo",
+            "bloodthirst",
             "perma_stims",
         ],
         defaultItems: createDefaultItems({
@@ -437,7 +437,7 @@ export const RoleDefs: Record<string, RoleDef> = {
             "vampire",
             "deadeye",
             "combat_stims",
-            "aoe_heal"
+            "aoe_heal",
         ],
         defaultItems: createDefaultItems({
             weapons: [

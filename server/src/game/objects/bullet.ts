@@ -459,9 +459,8 @@ export class Bullet {
                 const hasBloodthirst = obj.hasPerk("bloodthirst");
 
                 // Check if the player already has ANY speed haste active from these perks
-                const hasActiveHaste = 
-                    obj.hasteType === GameConfig.HasteType.Bloodthirst || 
-                    obj.hasteType === GameConfig.HasteType.Windwalk;
+                const hasActiveHaste = obj.hasteType === GameConfig.HasteType.Bloodthirst
+                    || obj.hasteType === GameConfig.HasteType.Windwalk;
 
                 if (
                     (hasWindwalk || hasBloodthirst)
@@ -611,15 +610,15 @@ export class Bullet {
                 if (this.apRounds) {
                     obstacleMult *= PerkProperties.ap_rounds.obstacleMult;
                 }
-                
+
                 const dmgToObstacle = finalDamage * obstacleMult;
 
                 // --- CONSOLE LOG FOR DAMAGE ---
                 console.log(
-                    `[BULLET HIT -> OBSTACLE] Gun: ${this.shotSourceType} | ` +
-                    `Raw Dmg: ${finalDamage.toFixed(1)} | ` +
-                    `Obstacle Mult: ${obstacleMult.toFixed(2)}x | ` +
-                    `Final Dmg Dealt: ${dmgToObstacle.toFixed(1)}`
+                    `[BULLET HIT -> OBSTACLE] Gun: ${this.shotSourceType} | `
+                        + `Raw Dmg: ${finalDamage.toFixed(1)} | `
+                        + `Obstacle Mult: ${obstacleMult.toFixed(2)}x | `
+                        + `Final Dmg Dealt: ${dmgToObstacle.toFixed(1)}`,
                 );
                 // --------------------------------------
 
@@ -657,11 +656,11 @@ export class Bullet {
 
                     // --- CONSOLE LOG FOR PLAYER RECEIVED DAMAGE ---
                     console.log(
-                        `[BULLET HIT -> PLAYER] Gun: ${this.shotSourceType} | ` +
-                        `Target ID: ${col.player?.__id} | ` +
-                        `Raw Falloff Dmg: ${finalDamage.toFixed(1)} | ` +
-                        `Targeting Mult: ${multiplier.toFixed(2)}x | ` +
-                        `Final Dmg Received: ${dmgToPlayer.toFixed(1)}`
+                        `[BULLET HIT -> PLAYER] Gun: ${this.shotSourceType} | `
+                            + `Target ID: ${col.player?.__id} | `
+                            + `Raw Falloff Dmg: ${finalDamage.toFixed(1)} | `
+                            + `Targeting Mult: ${multiplier.toFixed(2)}x | `
+                            + `Final Dmg Received: ${dmgToPlayer.toFixed(1)}`,
                     );
                     // ----------------------------------------------
 

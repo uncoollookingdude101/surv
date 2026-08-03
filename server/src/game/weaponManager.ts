@@ -459,7 +459,7 @@ export class WeaponManager {
         return (
             !weaponDef.ignoreEndlessAmmo
             && (
-                weaponDef.ammoInfinite 
+                weaponDef.ammoInfinite
                 || this.player.hasPerk("endless_ammo")
                 || this.player.hasPerk("true_endless_ammo")
             )
@@ -482,7 +482,7 @@ export class WeaponManager {
     /**
      * Try to schedule a reload action if all conditions are met
      */
-tryReload() {
+    tryReload() {
         if (
             this.player.actionType === GameConfig.Action.Reload
             || this.player.actionType === GameConfig.Action.ReloadAlt
@@ -545,7 +545,7 @@ tryReload() {
      * called when reload action completed, actually updates all state variables
      */
     reload(curWeapIdx = this.curWeapIdx, fullReload = false): void {
-        if (!this.weapons[curWeapIdx].type) return; 
+        if (!this.weapons[curWeapIdx].type) return;
         const weapon = this.weapons[curWeapIdx];
         const weaponDef = GameObjectDefs.typeToDef(weapon.type, "gun");
         const ammoStats = this.getAmmoStats(weaponDef);
@@ -1229,7 +1229,7 @@ tryReload() {
             const hit = hits[i];
             const obj = hit.obj;
 
-// Define damage multipliers for each perk
+            // Define damage multipliers for each perk
             const meleeMasterMult = (PerkProperties.melee_master?.meleeDamageMult as number) ?? 1;
             const bloodthirstMult = (PerkProperties.bloodthirst?.meleeDamageMult as number) ?? 1;
 

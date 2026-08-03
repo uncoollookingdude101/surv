@@ -2386,35 +2386,35 @@ export class Player extends BaseGameObject {
             : undefined;
 
         // teammates can't deal damage to each other
-if (playerSource && params.source !== this) {
-    if (playerSource.teamId === this.teamId && !this.disconnected) {
-        // Combat Stims / Perma Stims Teammate Healing
-        const gameSourceDef = GameObjectDefs.typeToDefSafe(params.gameSourceType ?? "");
-        
-        const hasPermaStims = playerSource.hasPerk("perma_stims");
-        const hasActiveCombatStims = playerSource._combatStimsTicker > 0;
+        if (playerSource && params.source !== this) {
+            if (playerSource.teamId === this.teamId && !this.disconnected) {
+                // Combat Stims / Perma Stims Teammate Healing
+                const gameSourceDef = GameObjectDefs.typeToDefSafe(params.gameSourceType ?? "");
 
-        // Triggers if perma_stims is owned OR if combat_stims ticker is active
-            if ((hasPermaStims || hasActiveCombatStims) && gameSourceDef?.type === "gun") {
-                // Select heal percentage from PerkProperties
-                const healPercent = hasPermaStims 
-                    ? PerkProperties.perma_stims.healPercent 
-                    : PerkProperties.combat_stims.healPercent;
+                const hasPermaStims = playerSource.hasPerk("perma_stims");
+                const hasActiveCombatStims = playerSource._combatStimsTicker > 0;
 
-                const healAmount = params.amount! * healPercent;
+                // Triggers if perma_stims is owned OR if combat_stims ticker is active
+                if ((hasPermaStims || hasActiveCombatStims) && gameSourceDef?.type === "gun") {
+                    // Select heal percentage from PerkProperties
+                    const healPercent = hasPermaStims
+                        ? PerkProperties.perma_stims.healPercent
+                        : PerkProperties.combat_stims.healPercent;
 
-                if (healAmount > 0) {
-                    this.health = math.min(
-                        this.health + healAmount,
-                        GameConfig.player.health,
-                    );
-                    this.healEffectTicker = 0.5;
-                    this.setDirty();
+                    const healAmount = params.amount! * healPercent;
+
+                    if (healAmount > 0) {
+                        this.health = math.min(
+                            this.health + healAmount,
+                            GameConfig.player.health,
+                        );
+                        this.healEffectTicker = 0.5;
+                        this.setDirty();
+                    }
                 }
+                return;
             }
-            return;
         }
-    }
 
         let finalDamage = params.amount!;
 
@@ -2515,32 +2515,32 @@ if (playerSource && params.source !== this) {
                     amount: finalDamage,
                     weaponType: params.gameSourceType ?? "",
                 });
-            if (!playerSource.dead) {
-                let lifestealPercent = 0;
+                if (!playerSource.dead) {
+                    let lifestealPercent = 0;
 
-                if (playerSource.hasPerk("bloodthirst")) {
-                    lifestealPercent = (PerkProperties.bloodthirst?.lifestealPercent as number) ?? 1.0;
-                } else if (playerSource.hasPerk("vampire")) {
-                    lifestealPercent = (PerkProperties.vampire?.lifestealPercent as number) ?? 0.33;
-                }
+                    if (playerSource.hasPerk("bloodthirst")) {
+                        lifestealPercent = (PerkProperties.bloodthirst?.lifestealPercent as number) ?? 1.0;
+                    } else if (playerSource.hasPerk("vampire")) {
+                        lifestealPercent = (PerkProperties.vampire?.lifestealPercent as number) ?? 0.33;
+                    }
 
-                if (lifestealPercent > 0) {
-                    const healAmount = finalDamage * lifestealPercent;
+                    if (lifestealPercent > 0) {
+                        const healAmount = finalDamage * lifestealPercent;
 
-                    if (healAmount > 0) {
-                        playerSource.health = math.min(
-                            playerSource.health + healAmount,
-                            GameConfig.player.health,
-                        );
+                        if (healAmount > 0) {
+                            playerSource.health = math.min(
+                                playerSource.health + healAmount,
+                                GameConfig.player.health,
+                            );
 
-                        playerSource.healEffectTicker = 0.5;
-                        playerSource.setDirty();
+                            playerSource.healEffectTicker = 0.5;
+                            playerSource.setDirty();
+                        }
                     }
                 }
             }
+            this.lastDamagedBy = playerSource;
         }
-        this.lastDamagedBy = playerSource;
-    }
 
         this.health -= finalDamage;
 

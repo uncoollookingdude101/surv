@@ -566,18 +566,18 @@ const mapDef = {
             weights: [{ weight: 1, widths: [16, 14, 12, 10, 8, 6, 4] }],
             spawnCabins: false,
             masks: [
-                    {
-                        pos: v2.create(0.5, 0.5),
-                        rad: 150,
-                    },
-                    {
-                        rad: 150,
-                        genOnShore: true,
-                    },
-                    {
-                        rad: 150,
-                        genOnShore: true,
-                    },
+                {
+                    pos: v2.create(0.5, 0.5),
+                    rad: 150,
+                },
+                {
+                    rad: 150,
+                    genOnShore: true,
+                },
+                {
+                    rad: 150,
+                    genOnShore: true,
+                },
             ],
         },
         customSpawnRules: {
@@ -613,7 +613,7 @@ const mapDef = {
                     retryOnFailure: true,
                 },
             ],
-            placeSpawns: ["desert_town_01","desert_town_02"],
+            placeSpawns: ["desert_town_01", "desert_town_02"],
         },
         densitySpawns: [
             {
@@ -707,7 +707,7 @@ const mapDef = {
                 gun_mount_06: "gun_mount_06ms",
                 crate_07as: "crate_07as2",
                 saloon_structure_01: "saloon_structure_01ms",
-                safe_01de: "safe_01ms"
+                safe_01de: "safe_01ms",
             },
         ],
         importantSpawns: [
